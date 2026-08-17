@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-section="home">
+<head>
+<script>(function(){try{var t=localStorage.getItem("sidcinema-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SidVerse</title>
+<meta name="description" content="Films watched, books read, places travelled, food eaten, favourites kept and pages written down. Six habits, one place.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="https://img.freepik.com/premium-vector/sid-letter-logo-design-technology-company-sid-logo-design-black-white-color-combination-sid-logo-sid-vector-sid-design-sid-icon-sid-alphabet-sid-typography-logo-design_229120-161627.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/shell.css">
+<link rel="stylesheet" href="assets/css/home.css">
+<script defer src="assets/js/site.config.js"></script>
+<script defer src="assets/js/shell.js" data-root="."></script>
+<script defer src="assets/js/home.js"></script>
+<link rel="stylesheet" href="assets/css/universal.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/motion.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="shell hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow" data-hero-eyebrow></p>
+      <h1 class="hero__title">Many things,<br>one <em>Verse</em>.</h1>
+      <p class="hero__lede" data-hero-lede></p>
+      <div class="hero__meta">
+        <a class="hero__jump" href="#rooms">
+          Open the box
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+        <span class="hero__count" data-hero-count></span>
+      </div>
+    </div>
+
+    <figure class="hero__cut">
+      <img data-portrait src="assets/images/portrait-cutout.png" alt="" width="880" height="1186">
+    </figure>
+  </div>
+
+  <nav class="index shell" aria-label="Jump to a room">
+    <span class="index__label">Inside</span>
+    <span data-index-chips></span>
+  </nav>
+</header>
+
+<main>
+  <section class="rooms shell" id="rooms">
+    <div class="rooms__head">
+      <h2 class="rooms__title">What is inside</h2>
+    </div>
+    <div class="rooms__grid" data-rooms></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="shell foot__inner">
+    <p class="foot__line" data-foot-line></p>
+    <div class="foot__links" data-foot-links></div>
+    <p class="foot__meta" data-foot-meta></p>
+  </div>
+</footer>
+
+  <script defer src="assets/js/motion.js"></script>
+</body>
+</html>

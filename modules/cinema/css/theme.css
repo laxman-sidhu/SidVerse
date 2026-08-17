@@ -1,0 +1,137 @@
+/* Cinema — retargeted onto the Pitara palette.
+
+   Loaded after style.css so these win. Nothing below re-styles a rule: it only
+   re-points the variables style.css was already written against, which is why
+   4,000 lines of it still work untouched.
+
+   The dark block is restated rather than left to style.css. Both are one
+   attribute deep, so the later file wins at equal specificity — without it the
+   light mapping above would outrank style.css's own dark tokens and the sidebar
+   toggle would appear to do nothing. */
+
+:root {
+  --paper:        var(--p-bg);
+  --card:         var(--p-surface);
+  --tint:         var(--p-surface-2);
+  --tint-2:       var(--p-surface-3);
+  --line:         var(--p-line);
+  --line-soft:    var(--p-line-soft);
+  --ink:          var(--p-ink);
+  --ink-soft:     var(--p-ink-soft);
+  --muted:        var(--p-muted);
+  --seen:         var(--p-ok);
+  --seen-deep:    var(--p-ok-deep);
+  --seen-tint:    var(--p-ok-tint);
+  --seen-wash:    var(--p-ok-tint);
+  --seen-bar:     var(--p-ok);
+  --seen-rgb:     var(--p-ok-rgb);
+  --gold:         var(--p-wait);
+  --gold-tint:    var(--p-wait-tint);
+  --gold-line:    var(--p-wait-tint);
+  --gold-ink:     var(--p-wait-deep);
+  --accent:       var(--p-accent-deep);
+  --accent-deep:  color-mix(in srgb, var(--p-accent-deep) 78%, var(--p-ink));
+  --accent-tint:  var(--p-accent-tint);
+  --accent-rgb:   var(--p-accent-rgb);
+  --danger:       var(--p-danger);
+  --shade-rgb:    var(--p-ink-rgb);
+  --wash-top:     var(--p-surface);
+  --glass:        rgba(var(--p-surface-rgb), .84);
+  --shimmer:      var(--p-surface-3);
+  --on-ink:       var(--p-bg);
+  --on-accent:    var(--p-on-accent);
+  --on-seen:      #ffffff;
+  --fade-rgb:     var(--p-surface-rgb);
+  --radius-sm:    var(--p-radius-sm);
+  --radius:       var(--p-radius);
+  --radius-lg:    var(--p-radius-lg);
+  --shadow-sm:    var(--p-shadow-sm);
+  --shadow:       var(--p-shadow);
+  --shadow-lg:    var(--p-shadow-lg);
+  --font-display: var(--p-display);
+  --font-body:    var(--p-body);
+  --font-mono:    var(--p-mono);
+  --ease:         var(--p-ease);
+}
+
+/* Same mapping, dark values. They come from tokens.css, so the sidebar and the
+   page turn over together. */
+[data-theme="dark"] {
+  --paper:        var(--p-bg);
+  --card:         var(--p-surface);
+  --tint:         var(--p-surface-2);
+  --tint-2:       var(--p-surface-3);
+  --line:         var(--p-line);
+  --line-soft:    var(--p-line-soft);
+  --ink:          var(--p-ink);
+  --ink-soft:     var(--p-ink-soft);
+  --muted:        var(--p-muted);
+  --seen:         var(--p-ok);
+  --seen-deep:    var(--p-ok-deep);
+  --seen-tint:    var(--p-ok-tint);
+  --seen-wash:    var(--p-ok-tint);
+  --seen-bar:     var(--p-ok);
+  --seen-rgb:     var(--p-ok-rgb);
+  --gold:         var(--p-wait);
+  --gold-tint:    var(--p-wait-tint);
+  --gold-line:    var(--p-wait-tint);
+  --gold-ink:     var(--p-wait-deep);
+  --accent:       var(--p-accent-deep);
+  --accent-deep:  color-mix(in srgb, var(--p-accent-deep) 78%, var(--p-ink));
+  --accent-tint:  var(--p-accent-tint);
+  --accent-rgb:   var(--p-accent-rgb);
+  --danger:       var(--p-danger);
+  --shade-rgb:    var(--p-ink-rgb);
+  --wash-top:     var(--p-surface);
+  --glass:        rgba(var(--p-surface-rgb), .84);
+  --shimmer:      var(--p-surface-3);
+  --on-ink:       var(--p-bg);
+  --on-accent:    var(--p-on-accent);
+  --on-seen:      #ffffff;
+  --fade-rgb:     var(--p-surface-rgb);
+  --radius-sm:    var(--p-radius-sm);
+  --radius:       var(--p-radius);
+  --radius-lg:    var(--p-radius-lg);
+  --shadow-sm:    var(--p-shadow-sm);
+  --shadow:       var(--p-shadow);
+  --shadow-lg:    var(--p-shadow-lg);
+  --font-display: var(--p-display);
+  --font-body:    var(--p-body);
+  --font-mono:    var(--p-mono);
+  --ease:         var(--p-ease);
+  --seen-wash:    #152a24;
+  --gold-line:    #4a3a1c;
+  --glass:        rgba(var(--p-bg-rgb), .86);
+  --on-accent:    #2a0f18;
+  --on-seen:      #062018;
+  --shade-rgb:    0, 0, 0;
+  color-scheme: dark;
+}
+
+/* The page is unscaled, so it clears the rail in plain pixels and the footer
+   reaches back by the same amount. */
+@media (min-width: 721px) {
+  .footer {
+    margin-left: calc(-1 * var(--p-rail-clear));
+    padding-left: var(--p-rail-clear);
+  }
+}
+
+/* The module's own bar is its internal navigation and stays sticky. */
+.topbar { top: 0; }
+
+
+/* Below the zoom breakpoint the page is unscaled but still padded, so the
+   footer reaches back in plain units there. */
+@media (max-width: 1023.98px) and (min-width: 721px) {
+  .footer {
+    margin-left: calc(-1 * var(--p-rail-clear));
+    padding-left: var(--p-rail-clear);
+  }
+}
+
+
+/* The toast said its message in --p-danger on a --p-danger tint: 2.41:1. The
+   plate keeps the tint; the words take ink so they can be read. */
+.toast__text { color: var(--p-ink); }
+.toast__icon { color: var(--p-danger); }

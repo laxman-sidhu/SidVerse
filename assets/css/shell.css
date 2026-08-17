@@ -1,0 +1,327 @@
+/* Pitara — the app shell.
+
+   Collapsed, the sidebar is a floating pill of icons centred against the left
+   edge. The hamburger at the top-left expands it into a full panel. Each module
+   keeps its own bar for moving around inside itself; this is the one that moves
+   between them. */
+
+.psb, .psb__rail, .psb__scrim, .psb__burger {
+  font-family: var(--p-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- the hamburger ----------------------------------------------------- */
+
+.psb__burger {
+  position: fixed;
+  /* Centred on the bar's own height, so it lines up with the wordmark and the
+     bar's buttons rather than sitting a few pixels low. */
+  top: calc((var(--p-bar-h) - 42px) / 2);
+  left: 16px;
+  z-index: 2400;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--p-nav-line);
+  border-radius: 13px;
+  background: rgba(var(--p-surface-rgb), .86);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  color: var(--p-ink);
+  cursor: pointer;
+  box-shadow: var(--p-shadow-sm);
+  transition: transform .25s var(--p-ease), background .25s var(--p-ease), box-shadow .25s var(--p-ease);
+}
+
+.psb__burger:hover { transform: scale(1.06); box-shadow: var(--p-shadow); }
+/* The bars rotate into a cross and swing outside the viewBox while they
+   do, so the box must not clip. */
+.psb__burger svg { width: 19px; height: 19px; overflow: visible; }
+
+/* Three lines that fold into a cross while the panel is open. transform-box
+   makes each bar rotate about its own centre; without it, "center" means the
+   centre of the whole viewBox and the cross lands half outside the icon. */
+.psb__bar {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform .32s var(--p-ease), opacity .2s var(--p-ease);
+}
+
+body.psb-open .psb__bar--top { transform: translateY(5px) rotate(45deg); }
+body.psb-open .psb__bar--mid { opacity: 0; transform: scaleX(.3); }
+body.psb-open .psb__bar--bot { transform: translateY(-5px) rotate(-45deg); }
+
+/* ---- the collapsed rail ------------------------------------------------ */
+
+.psb__rail {
+  position: fixed;
+  top: 50%;
+  left: 14px;
+  translate: 0 -50%;
+  z-index: 2200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 9px 7px;
+  border: 1px solid var(--p-nav-line);
+  border-radius: var(--p-pill);
+  /* No backdrop-filter here: a blur layer under children that fade their own
+     opacity leaves stale paint behind — the dark smudge that stayed on screen
+     after hovering a dot. A near-solid surface needs no blur. */
+  background: rgba(var(--p-surface-rgb), .97);
+  box-shadow: var(--p-shadow);
+  transition: opacity .24s var(--p-ease), transform .32s var(--p-ease);
+}
+
+body.psb-open .psb__rail {
+  opacity: 0;
+  transform: translateX(-16px) scale(.94);
+  pointer-events: none;
+}
+
+.psb__dot {
+  --row: var(--p-accent);
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--p-muted);
+  text-decoration: none;
+  transition: background .2s var(--p-ease), color .2s var(--p-ease), transform .2s var(--p-ease);
+}
+
+.psb__dot svg { width: 19px; height: 19px; }
+.psb__dot:hover { background: color-mix(in srgb, var(--row) 13%, transparent); color: var(--row); transform: scale(1.08); }
+.psb__dot.is-current { background: color-mix(in srgb, var(--row) 15%, transparent); color: var(--row); }
+
+/* The name appears beside the icon on hover, so an icon rail is still legible
+   to somebody who has not learnt the icons yet. */
+.psb__tip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  translate: 0 -50%;
+  padding: 6px 11px;
+  border-radius: var(--p-radius-sm);
+  background: var(--p-deep);
+  color: var(--p-on-deep);
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s var(--p-ease), translate .18s var(--p-ease);
+}
+
+.psb__dot:hover .psb__tip { opacity: 1; translate: 3px -50%; }
+.psb__sep { width: 22px; height: 1px; background: var(--p-nav-line); margin: 3px 0; }
+
+/* ---- the expanded panel ------------------------------------------------ */
+
+.psb {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 2300;
+  width: 268px;
+  display: flex;
+  flex-direction: column;
+  background: var(--p-nav-bg);
+  color: var(--p-nav-ink);
+  border-right: 1px solid var(--p-nav-line);
+  box-shadow: var(--p-shadow-lg);
+  /* Closed, the panel is clipped down to the pill's own footprint — a rounded
+     slot where the rail sits — so opening reads as the pill growing into the
+     sidebar rather than a drawer arriving from off-screen. */
+  clip-path: inset(30% 74% 30% 4px round 999px);
+  opacity: 0;
+  visibility: hidden;
+  transition: clip-path .42s var(--p-ease), opacity .28s var(--p-ease), visibility .42s;
+}
+
+body.psb-open .psb {
+  clip-path: inset(0 0 0 0 round 0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* The panel's contents hold still while the clip grows, then settle in. */
+.psb__brand, .psb__nav, .psb__foot {
+  opacity: 0;
+  translate: -8px 0;
+  transition: opacity .26s var(--p-ease), translate .3s var(--p-ease);
+}
+
+body.psb-open .psb__brand { opacity: 1; translate: 0 0; transition-delay: .12s; }
+body.psb-open .psb__nav   { opacity: 1; translate: 0 0; transition-delay: .17s; }
+body.psb-open .psb__foot  { opacity: 1; translate: 0 0; transition-delay: .22s; }
+
+.psb__brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 20px 20px 16px;
+  margin-top: 46px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.psb__diamond {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--p-accent), var(--p-accent-deep));
+  color: #fff;
+  font-family: var(--p-display);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.psb__name { font-family: var(--p-display); font-weight: 600; font-size: 19px; letter-spacing: -.01em; }
+
+.psb__nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 12px;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.psb__label {
+  margin: 12px 8px 6px;
+  font-family: var(--p-mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--p-muted);
+}
+
+.psb__link {
+  --row: var(--p-accent);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--p-radius-sm);
+  text-decoration: none;
+  color: var(--p-ink-soft);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background .18s var(--p-ease), color .18s var(--p-ease);
+}
+
+.psb__link:hover { background: var(--p-surface-3); color: var(--p-ink); }
+.psb__link.is-current { background: color-mix(in srgb, var(--row) 12%, transparent); color: var(--row); font-weight: 600; }
+
+.psb__icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--row) 12%, transparent);
+  color: var(--row);
+}
+
+.psb__icon svg { width: 17px; height: 17px; }
+.psb__text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Each module wears its own accent in both the rail and the panel. */
+.psb__dot[data-section="cinema"],     .psb__link[data-section="cinema"]     { --row: #e29cb1; }
+.psb__dot[data-section="books"],      .psb__link[data-section="books"]      { --row: #af97d6; }
+.psb__dot[data-section="travel"],     .psb__link[data-section="travel"]     { --row: #92b4d8; }
+.psb__dot[data-section="food"],      .psb__link[data-section="food"]      { --row: #e5a29b; }
+.psb__dot[data-section="favourites"], .psb__link[data-section="favourites"] { --row: #8fbcda; }
+.psb__dot[data-section="journal"],    .psb__link[data-section="journal"]    { --row: #cfa0c4; }
+
+/* ---- theme toggle ------------------------------------------------------ */
+
+.psb__foot { padding: 12px; border-top: 1px solid var(--p-nav-line); }
+
+.psb__theme {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--p-nav-line);
+  border-radius: var(--p-radius-sm);
+  background: transparent;
+  color: var(--p-ink-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s var(--p-ease), color .2s var(--p-ease);
+}
+
+.psb__theme:hover { background: var(--p-surface-3); color: var(--p-ink); }
+.psb__glyph { position: relative; width: 18px; height: 18px; flex: 0 0 auto; }
+
+.psb__glyph svg {
+  position: absolute;
+  inset: 0;
+  width: 18px;
+  height: 18px;
+  transition: transform .4s var(--p-ease), opacity .28s var(--p-ease);
+}
+
+.psb__sun { transform: rotate(-70deg) scale(.4); opacity: 0; }
+.psb__moon { transform: none; opacity: 1; }
+[data-theme="dark"] .psb__sun { transform: none; opacity: 1; }
+[data-theme="dark"] .psb__moon { transform: rotate(70deg) scale(.4); opacity: 0; }
+
+/* The rail carries the same switch, as a dot. */
+.psb__dot--theme { color: var(--p-muted); background: transparent; border: none; cursor: pointer; padding: 0; font: inherit; }
+
+/* ---- scrim ------------------------------------------------------------- */
+
+.psb__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 2250;
+  background: rgba(0, 0, 0, .38);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s var(--p-ease);
+}
+
+body.psb-open .psb__scrim { opacity: 1; pointer-events: auto; }
+
+/* ---- the page beside it ------------------------------------------------
+   The rail floats, so pages only need to clear its width — the panel overlays
+   rather than pushing, which keeps every module's own layout untouched. */
+
+body { padding-left: var(--p-rail-clear); }
+
+@media (max-width: 720px) {
+  /* The rail is replaced by the floating burger on a phone. The burger is
+     fixed and overlays, so the page no longer reserves a band above itself —
+     that band was pushing every module's bar 66px down the screen. */
+  body { padding-left: 0; }
+  .psb__rail { display: none; }
+
+  /* Instead the burger tucks into the bar's own left slot, which every bar
+     already keeps clear. */
+  .psb__burger { top: 11px; left: 11px; width: 40px; height: 40px; }
+}
+
+/* A page with no bar of its own still needs the burger to clear its content. */
+@media (max-width: 720px) {
+  body:not(:has(.topbar, .navbar, .nav, .site-topbar)) { padding-top: 62px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .psb, .psb__rail, .psb__scrim, .psb__bar, .psb__glyph svg, .psb__burger,
+  .psb__brand, .psb__nav, .psb__foot { transition: none; }
+}

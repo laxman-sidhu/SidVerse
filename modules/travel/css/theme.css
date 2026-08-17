@@ -1,0 +1,488 @@
+/* Travel — retargeted onto the Pitara palette. Loaded after style.css so these
+   win.
+
+   The pastel families are re-pointed rather than collapsed onto one accent:
+   they are how one card is told from another on this dashboard, and flattening
+   them would be a rewrite, not a theme.
+
+   HONEST LIMIT: style.css is 7,400 lines and carries roughly 380 colours
+   written as literal hex or rgba() rather than through a variable. Those cannot
+   be reached from here, so DARK MODE ON THIS MODULE IS PARTIAL — the shell, the
+   cards and the type follow, but some washes and dark sections keep their light
+   values. See docs/SETUP.md. */
+
+:root {
+  --bg:               var(--p-bg);
+  --bg-2:             var(--p-bg-2);
+  --paper:            var(--p-surface);
+  --paper-2:          var(--p-surface-2);
+  --ink:              var(--p-ink);
+  --ink-soft:         var(--p-ink-soft);
+  --muted:            var(--p-muted);
+  --line:             var(--p-line);
+  --line-soft:        var(--p-line-soft);
+  --navy-deep:        var(--p-ink);
+  --navy:             #2b3048;
+  --navy-mid:         #454b68;
+  --star-gold:        var(--p-star);
+  --star-empty:       var(--p-line);
+  --mint:             var(--p-accent-deep);
+  --mint-soft:        var(--p-accent-soft);
+  --mint-pale:        var(--p-accent-tint);
+  /* These were literals, identical in the light and dark blocks — so the dark
+     theme inherited pale pink surfaces (#faedf1) that stayed near-white on
+     dark paper, and the gallery's heading stayed pink while the module accent
+     was blue. All six now read from the accent, which flips with the theme. */
+  --pink:             var(--p-accent-ink);
+  --pink-soft:        var(--p-accent);
+  --pink-pale:        var(--p-accent-tint);
+  --rose:             var(--p-accent-ink);
+  --rose-soft:        var(--p-accent);
+  --rose-pale:        var(--p-accent-tint);
+  --sky:              var(--p-accent-ink);
+  --sky-soft:         var(--p-accent-soft);
+  --sky-pale:         var(--p-accent-tint);
+  --coral:            #e5a29b;
+  --coral-soft:       #f2c9c4;
+  --coral-pale:       #faeeec;
+  --butter:           #d0a95c;
+  --butter-soft:      #e9d2a6;
+  --butter-pale:      #f6efdf;
+  --lavender:         #af97d6;
+  --lavender-soft:    #d1c2e8;
+  --lavender-pale:    #f1ecf9;
+  --mauve:            #cfa0c4;
+  --mauve-soft:       #e3c6dc;
+  --mauve-pale:       #f6edf4;
+  --lime:             #8db98b;
+  --lime-soft:        #c3dbc2;
+  --lime-pale:        #e9f2e8;
+  --sage:             #84b3a8;
+  --sage-soft:        #c0d8d1;
+  --sage-pale:        #e8f1ee;
+  --leaf:             #6f9d87;
+  --leaf-soft:        #b8d5c6;
+  --leaf-pale:        #e6efe9;
+  --leaf-bright:      #84b39b;
+  --mocha:            #a8896b;
+  --mocha-soft:       #d6c4b0;
+  --mocha-pale:       #f3ece2;
+  --terracotta:       #cd8a6a;
+  --terracotta-soft:  #e6c0aa;
+  --amber:            #d0a95c;
+  --amber-soft:       #e9d2a6;
+  --forest:           #5d7f79;
+  --forest-mid:       #4c6b64;
+  --forest-deep:      #3a534d;
+  --gold:             var(--p-star);
+  --plum:             #9c7eae;
+  --radius-sm:        var(--p-radius-sm);
+  --radius:           var(--p-radius);
+  --radius-lg:        var(--p-radius-lg);
+  --radius-xl:        var(--p-radius-xl);
+  --shadow-sm:        var(--p-shadow-sm);
+  --shadow-md:        var(--p-shadow);
+  --shadow-lg:        var(--p-shadow-lg);
+  --ease-out:         var(--p-ease);
+  --ease-in-out:      var(--p-ease);
+  --font-display:     var(--p-display);
+  --font-sans-display:var(--p-body);
+  --font-body:        var(--p-body);
+  --font-mono:        var(--p-mono);
+  --font-hand:        var(--p-hand);
+  --font-hand-alt:    var(--p-hand);
+  --font-accent:      var(--p-display);
+  --container:        var(--p-shell);
+  --container-wide:   1440px;
+}
+
+[data-theme="dark"] {
+  /* Every *-pale below is a background tint. They were copied from the light
+     block unchanged, so on dark paper they rendered as near-white chips. Each
+     is now the same hue blended into the dark surface. */
+
+  --bg:               var(--p-bg);
+  --bg-2:             var(--p-bg-2);
+  --paper:            var(--p-surface);
+  --paper-2:          var(--p-surface-2);
+  --ink:              var(--p-ink);
+  --ink-soft:         var(--p-ink-soft);
+  --muted:            var(--p-muted);
+  --line:             var(--p-line);
+  --line-soft:        var(--p-line-soft);
+  --navy-deep:        var(--p-ink);
+  --navy:             #2b3048;
+  --navy-mid:         #454b68;
+  --star-gold:        var(--p-star);
+  --star-empty:       var(--p-line);
+  --mint:             var(--p-accent-deep);
+  --mint-soft:        var(--p-accent-soft);
+  --mint-pale:        var(--p-accent-tint);
+  /* These were literals, identical in the light and dark blocks — so the dark
+     theme inherited pale pink surfaces (#faedf1) that stayed near-white on
+     dark paper, and the gallery's heading stayed pink while the module accent
+     was blue. All six now read from the accent, which flips with the theme. */
+  --pink:             var(--p-accent-ink);
+  --pink-soft:        var(--p-accent);
+  --pink-pale:        var(--p-accent-tint);
+  --rose:             var(--p-accent-ink);
+  --rose-soft:        var(--p-accent);
+  --rose-pale:        var(--p-accent-tint);
+  --sky:              var(--p-accent-ink);
+  --sky-soft:         var(--p-accent-soft);
+  --sky-pale:         var(--p-accent-tint);
+  --coral:            #e5a29b;
+  --coral-soft:       #f2c9c4;
+  --coral-pale: color-mix(in srgb, #faeeec 16%, var(--p-surface));
+  --butter:           #d0a95c;
+  --butter-soft:      #e9d2a6;
+  --butter-pale: color-mix(in srgb, #f6efdf 16%, var(--p-surface));
+  --lavender:         #af97d6;
+  --lavender-soft:    #d1c2e8;
+  --lavender-pale: color-mix(in srgb, #f1ecf9 16%, var(--p-surface));
+  --mauve:            #cfa0c4;
+  --mauve-soft:       #e3c6dc;
+  --mauve-pale: color-mix(in srgb, #f6edf4 16%, var(--p-surface));
+  --lime:             #8db98b;
+  --lime-soft:        #c3dbc2;
+  --lime-pale: color-mix(in srgb, #e9f2e8 16%, var(--p-surface));
+  --sage:             #84b3a8;
+  --sage-soft:        #c0d8d1;
+  --sage-pale: color-mix(in srgb, #e8f1ee 16%, var(--p-surface));
+  --leaf:             #6f9d87;
+  --leaf-soft:        #b8d5c6;
+  --leaf-pale: color-mix(in srgb, #e6efe9 16%, var(--p-surface));
+  --leaf-bright:      #84b39b;
+  --mocha:            #a8896b;
+  --mocha-soft:       #d6c4b0;
+  --mocha-pale: color-mix(in srgb, #f3ece2 16%, var(--p-surface));
+  --terracotta:       #cd8a6a;
+  --terracotta-soft:  #e6c0aa;
+  --amber:            #d0a95c;
+  --amber-soft:       #e9d2a6;
+  --forest:           #5d7f79;
+  --forest-mid:       #4c6b64;
+  --forest-deep:      #3a534d;
+  --gold:             var(--p-star);
+  --plum:             #9c7eae;
+  --radius-sm:        var(--p-radius-sm);
+  --radius:           var(--p-radius);
+  --radius-lg:        var(--p-radius-lg);
+  --radius-xl:        var(--p-radius-xl);
+  --shadow-sm:        var(--p-shadow-sm);
+  --shadow-md:        var(--p-shadow);
+  --shadow-lg:        var(--p-shadow-lg);
+  --ease-out:         var(--p-ease);
+  --ease-in-out:      var(--p-ease);
+  --font-display:     var(--p-display);
+  --font-sans-display:var(--p-body);
+  --font-body:        var(--p-body);
+  --font-mono:        var(--p-mono);
+  --font-hand:        var(--p-hand);
+  --font-hand-alt:    var(--p-hand);
+  --font-accent:      var(--p-display);
+  --container:        var(--p-shell);
+  --container-wide:   1440px;
+  --navy-deep: #0d0f18;
+  --navy:      #151824;
+  --navy-mid:  #232739;
+  color-scheme: dark;
+}
+
+/* The bar is deliberately transparent over the hero photograph and only takes a
+   surface once the page has scrolled — dashboard.js adds .scrolled. universal.css
+   gives every module's bar a surface, so that first state is restored here. */
+.navbar:not(.scrolled) {
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.navbar:not(.scrolled) .logo,
+.navbar:not(.scrolled) .nav-links a { color: var(--p-on-deep); }
+
+.navbar { top: 0; }
+
+/* ---- the hero reaches the screen edge ----------------------------------
+   The page is padded to clear the rail, which cropped the hero photograph at
+   the rail's edge. The band's SURFACE reaches back; the padding puts its
+   CONTENT exactly where it was, so it stays centred with the rest of the
+   page. */
+.hero {
+  margin-left: calc(-1 * var(--p-rail-clear));
+  padding-left: var(--p-rail-clear);
+}
+
+/* Everything on the photograph is light; everything on paper is ink. */
+.hero, .hero .hero-grid { color: var(--p-on-deep); }
+body { color: var(--ink); }
+h1, h2, h3 { color: inherit; }
+
+/* The hero band bleeds to the screen edge behind the floating rail, so it
+   reaches back by the rail's width and pads its content by the same. */
+@media (min-width: 721px) {
+  .hero {
+    margin-left: calc(-1 * var(--p-rail-clear));
+    padding-left: var(--p-rail-clear);
+  }
+}
+
+@media (max-width: 720px) {
+  .hero { margin-left: 0; padding-left: 0; }
+}
+
+
+/* ---- layout repairs -----------------------------------------------------
+   Everything below fixes geometry, not colour. style.css was written before
+   the shared shell existed, so it measures several things against the window
+   when it should measure them against the column the page actually gets. */
+
+/* The 100vw breakout. `.section-head` and `.full-bleed` widened themselves to
+   the viewport and pulled back by -50vw — which assumes the page starts at the
+   screen edge. It starts 74px in, past the rail, so every heading and every
+   card grid on this page hung ~111px off the right. They are ordinary blocks
+   now and inherit the container's width. */
+.section-head,
+.full-bleed {
+  width: auto;
+  max-width: none;
+  position: static;
+  left: auto;
+  right: auto;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* The card grids. `auto-fit` collapses empty tracks, so a row with two cards
+   in it stretched them to half the page — which is why every grid capped its
+   children at 230–310px and centred them, leaving the ragged gaps. `auto-fill`
+   keeps the tracks, so a card is the same width whether the row is full or
+   not, and the caps come off. */
+.visited-grid  { grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); }
+.wishlist-grid { grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); }
+.goals-grid-new { grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); }
+.activity-grid { grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); }
+.trek-grid     { grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); }
+
+.visited-grid > *,
+.wishlist-grid > *,
+.goals-grid-new > *,
+.activity-grid > *,
+.trek-grid > * {
+  max-width: none;
+  width: auto;
+  margin: 0;
+  min-width: 0;
+}
+
+/* A grid holding a single empty-state message should not stripe it into one
+   track. */
+.visited-grid .empty-state,
+.wishlist-grid .empty-state,
+.goals-grid-new .empty-state,
+.activity-grid .empty-state,
+.trek-grid .empty-state { grid-column: 1 / -1; max-width: none; }
+
+/* The bar padded itself and then the shared rule padded its inner row again,
+   so this module's brand sat 48px further in than every other module's. */
+.navbar, .navbar.scrolled { padding-inline: 0; }
+.nav-inner { max-width: none; }
+
+/* One content width, the same as every other room. */
+.container-full { max-width: var(--p-shell); padding-inline: var(--p-gutter); }
+
+/* The hero photograph is scaled 1.05 for its slow zoom, which pushed the page
+   sideways until the band clipped it. */
+.hero { overflow: hidden; }
+
+/* Section rhythm, so the bands are not 4rem apart in one place and 8 in the
+   next. */
+section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
+.section-head { margin-bottom: clamp(1.2rem, 2vw, 1.8rem); }
+
+/* A long subtitle was held on one line, so it either overflowed or forced the
+   heading block wider than the column. */
+.section-head p { white-space: normal; max-width: 62ch; }
+
+/* The diagnostic panel only shows when a sheet tab fails, which is exactly
+   when it has to be readable. Terracotta on white measured 2.8:1, and its
+   header put white on the same terracotta. */
+.diag-panel { border-color: var(--p-danger); }
+.diag-head { background: var(--p-danger); color: #3d1620; }
+.diag-head strong { color: inherit; }
+.diag-err, .diag-tip strong { color: #a4522f; }
+[data-theme="dark"] .diag-err, [data-theme="dark"] .diag-tip strong { color: #f0b48f; }
+
+/* On a phone the panel had no height limit and covered the whole hero. */
+@media (max-width: 720px) {
+  .diag-panel { right: 12px; left: 12px; max-width: none; max-height: 52vh; overflow-y: auto; }
+}
+
+
+/* ---- section bands ------------------------------------------------------
+   "Journey in numbers" painted itself a pale blue wash of its own, so it read
+   as a different page. It takes the same paper as every other band. */
+#wrapped.tw-section, #wrapped { background: transparent; }
+
+/* The contact band is the one that should stand apart: it is the only place on
+   the page asking for something. A deep plate, full width, in both themes. */
+#contact.contact-section {
+  background:
+    radial-gradient(90% 120% at 8% 0%, rgba(var(--p-accent-rgb), .26), transparent 62%),
+    radial-gradient(70% 100% at 96% 100%, color-mix(in srgb, var(--p-pink) 22%, transparent), transparent 66%),
+    linear-gradient(165deg, var(--p-deep) 0%, var(--p-deep-2) 100%);
+  color: var(--p-on-deep);
+  border-block: 1px solid color-mix(in srgb, var(--p-accent) 24%, transparent);
+}
+
+#contact.contact-section h2,
+#contact.contact-section .contact-blurb,
+#contact.contact-section .italic-accent { color: var(--p-on-deep); }
+
+#contact.contact-section .contact-eyebrow { color: var(--p-on-deep-soft); }
+
+/* The cards inside it stay light, so the form is still a form. */
+#contact.contact-section .contact-perks li {
+  background: rgba(255, 255, 255, .07);
+  border-color: rgba(255, 255, 255, .14);
+  color: var(--p-on-deep);
+}
+
+#contact.contact-section .contact-perks li:hover { background: rgba(255, 255, 255, .12); }
+#contact.contact-section .contact-perks li strong { color: var(--p-on-deep); }
+#contact.contact-section .contact-perks li span,
+#contact.contact-section .contact-perks li small { color: var(--p-on-deep-soft); }
+#contact.contact-section .contact-sign { color: var(--p-on-deep-soft); }
+
+
+/* ---- goal states --------------------------------------------------------
+   Done and in-progress were painted with fixed light greens and ambers, which
+   stayed light-on-light when the page went dark. They read from the ok/wait
+   tokens now, which already carry both themes. */
+
+.goal-card.completed {
+  background: color-mix(in srgb, var(--p-ok) 15%, var(--p-surface));
+  border-color: color-mix(in srgb, var(--p-ok) 52%, var(--p-line));
+  box-shadow: var(--p-shadow-sm);
+}
+
+.goal-card.completed::before { background: var(--p-ok-deep); }
+.goal-card.completed h4 { color: var(--p-ink); }
+.goal-card.completed .goal-meta .pct { color: var(--p-ok-deep); }
+.goal-card.completed .goal-check { background: var(--p-ok-deep); color: var(--p-on-accent); }
+
+.goal-card.in-progress {
+  background: color-mix(in srgb, var(--p-wait) 15%, var(--p-surface));
+  border-color: color-mix(in srgb, var(--p-wait) 52%, var(--p-line));
+  box-shadow: var(--p-shadow-sm);
+}
+
+.goal-card.in-progress:hover {
+  background: color-mix(in srgb, var(--p-wait) 24%, var(--p-surface));
+  border-color: color-mix(in srgb, var(--p-wait) 66%, var(--p-line));
+}
+
+.goal-card.in-progress::before { background: var(--p-wait-deep); }
+.goal-card.in-progress h4 { color: var(--p-ink); }
+.goal-card.in-progress .goal-meta .pct { color: var(--p-wait-deep); }
+
+.goal-badge.b-progress { background: color-mix(in srgb, var(--p-wait) 30%, var(--p-surface)); color: var(--p-wait-deep); }
+.goal-badge.b-pending { background: var(--p-surface-3); color: var(--p-muted); }
+
+/* Activities and places mark "done" the same way. */
+.activity-card.done, .place-card.visited, .trek-card.done {
+  background: color-mix(in srgb, var(--p-ok) 13%, var(--p-surface));
+  border-color: color-mix(in srgb, var(--p-ok) 46%, var(--p-line));
+}
+
+
+/* ---- the six counters ---------------------------------------------------
+   Each tile takes one hue from the site's pastel family rather than a fixed
+   pale wash, so the row reads as a set and stays legible on dark paper. */
+
+.kpi-card {
+  --kpi: var(--p-accent);
+  background: color-mix(in srgb, var(--kpi) 13%, var(--p-surface));
+  border: 1px solid color-mix(in srgb, var(--kpi) 40%, var(--p-line));
+  box-shadow: var(--p-shadow-sm);
+  transition: transform .25s var(--p-ease), box-shadow .25s var(--p-ease);
+}
+
+.kpi-card:hover { transform: translateY(-3px); box-shadow: var(--p-shadow); }
+
+.kpi-card:nth-child(1) { --kpi: var(--p-pink); }
+.kpi-card:nth-child(2) { --kpi: var(--p-sky); }
+.kpi-card:nth-child(3) { --kpi: var(--p-mint); }
+.kpi-card:nth-child(4) { --kpi: var(--p-butter); }
+.kpi-card:nth-child(5) { --kpi: var(--p-lilac); }
+.kpi-card:nth-child(6) { --kpi: var(--p-lavender); }
+
+.kpi-card .kpi-ic {
+  background: color-mix(in srgb, var(--kpi) 26%, var(--p-surface));
+  border: 1px solid color-mix(in srgb, var(--kpi) 44%, transparent);
+}
+
+.kpi-card .kpi-label { color: var(--p-muted); }
+.kpi-card .kpi-num, .kpi-card .kpi-value { color: var(--p-ink); }
+.kpi-card .kpi-sub { color: var(--p-ink-soft); }
+.kpi-card .kpi-go { color: var(--p-ink-soft); }
+
+
+/* ---- the bar and the fold ----------------------------------------------
+   The bar padded itself 1.4rem at rest and 0.85rem once scrolled, and both
+   values moved the wordmark sideways as well as up. Only the height changes
+   now; the brand stays put. */
+/* Only the block padding is reset. Setting padding-inline here too outranked
+   the shared band rule for `.scrolled` but not for the resting state, which is
+   what slid the wordmark 74px sideways on scroll. */
+.navbar, .navbar.scrolled { padding-block: 0; }
+.navbar .nav-inner { min-height: var(--p-bar-h); transition: none; }
+
+/* The opening screen is the whole screen, not most of it. */
+.hero { min-height: 100vh; min-height: 100svh; }
+
+/* The rooms below it use the full page rather than a centred column: with the
+   shell cap the wishlist and place cards sat in the middle third of a wide
+   monitor with bare paper either side. */
+.container { max-width: none; padding-inline: clamp(1.1rem, 3vw, 2.6rem); }
+
+/* Prose still reads in a column — a 1900px line of body copy is unreadable. */
+.section-head .title-block { max-width: 720px; margin-inline: auto; }
+.hero .hero-text { max-width: 620px; }
+
+/* The gallery's bar had no inner row, so it never picked up the shared
+   geometry and its wordmark sat at the screen edge. */
+.navbar .nav-links .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--p-control-sm);
+  padding: 0 15px;
+  border-radius: var(--p-pill);
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+  color: var(--p-ink-soft);
+  text-decoration: none;
+  font-size: var(--p-text-sm);
+  font-weight: 600;
+}
+
+.navbar .nav-links .back-link:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); border-color: transparent; }
+
+/* The gallery loads gallery.css after this module's own bar rules, and it sets
+   its own padding and flex on .navbar. The band geometry is restated here so
+   both pages measure the same. */
+body:has(.gallery-grid) .navbar {
+  display: block;
+  padding: 0;
+  margin-left: calc(-1 * var(--p-rail-clear));
+  padding-left: var(--p-rail-clear);
+}
+body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center; min-height: var(--p-bar-h); }
+
+/* The old wordmark drew a dot before the name; the shared mark has its own
+   icon tile, so the dot is a leftover. */
+.logo::before, .logo .dot { display: none; }

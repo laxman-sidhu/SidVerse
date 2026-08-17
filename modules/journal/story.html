@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-section="journal">
+<head>
+<script>(function(){try{var t=localStorage.getItem("sidcinema-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SidVerse — SidNotes</title>
+<link rel="icon" href="https://img.freepik.com/premium-vector/sid-letter-logo-design-technology-company-sid-logo-design-black-white-color-combination-sid-logo-sid-vector-sid-design-sid-icon-sid-alphabet-sid-typography-logo-design_229120-161627.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+<link rel="stylesheet" href="css/journal.css">
+<link rel="stylesheet" href="css/theme.css">
+<script defer src="../../assets/js/site.config.js"></script>
+<script defer src="../../assets/js/shell.js" data-root="../.."></script>
+<link rel="stylesheet" href="../../assets/css/universal.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/motion.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="wordmark" href="index.html"></a>
+      <div class="topbar__tools">
+        <a class="btn ghost" href="index.html">&larr; all stories</a>
+        <button class="btn primary" id="pdfBtn" style="display:none;">&darr; Download PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="story-headline" id="headline" style="display:none;">
+    <div class="kicker" id="hlDate"></div>
+    <h1 id="hlTitle"></h1>
+    <div class="rule"></div>
+  </div>
+
+  <div id="stage" class="reader-stage">
+    <div class="loading" id="loading">turning the page...</div>
+  </div>
+
+<script src="js/core.js"></script>
+<script>
+(async function () {
+  const J = window.JOURNAL;
+  const stage = document.getElementById("stage");
+  const loading = document.getElementById("loading");
+  const pdfBtn = document.getElementById("pdfBtn");
+  const id = new URLSearchParams(location.search).get("id");
+  if (!id) { loading.textContent = "No story selected."; return; }
+
+  let postTitle = "Story";
+  try {
+    const res = await fetch("data/posts/" + encodeURIComponent(id) + ".json?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("not found");
+    const post = await res.json();
+
+    postTitle = post.title || "Story";
+    document.title = postTitle + " — Journal";
+    document.getElementById("hlTitle").textContent = postTitle;
+    document.getElementById("hlDate").textContent = J.formatDate(post.date);
+    document.getElementById("headline").style.display = "block";
+    loading.remove();
+
+    (post.pages || []).forEach(page => J.renderPageRO(stage, page));
+    if (!post.pages || !post.pages.length) {
+      stage.innerHTML = '<div class="loading">This story has no pages yet.</div>';
+    } else {
+      pdfBtn.style.display = "inline-flex";
+    }
+  } catch (error) {
+    loading.textContent = "Story not found.";
+    return;
+  }
+
+  // The PDF libraries are fetched on the click, so a reader who never exports
+  // never pays for them.
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const tag = document.createElement("script");
+      tag.src = src;
+      tag.onload = resolve;
+      tag.onerror = () => reject(new Error("load " + src));
+      document.head.appendChild(tag);
+    });
+  }
+
+  let libsLoaded = false;
+  async function ensureLibs() {
+    if (libsLoaded) return;
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+    libsLoaded = true;
+  }
+
+  pdfBtn.onclick = async () => {
+    const label = pdfBtn.textContent;
+    pdfBtn.disabled = true;
+    pdfBtn.textContent = "Preparing...";
+    try {
+      await ensureLibs();
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+
+      // Each page is drawn scaled to fit the screen. Capturing it that way would
+      // bake the scale into the PDF, so the transforms come off for the capture
+      // and go back on afterwards.
+      const pages = [...stage.querySelectorAll(".page")];
+      const holders = [...stage.querySelectorAll(".page-holder")];
+      const scalers = [...stage.querySelectorAll(".page-scaler")];
+      const saved = holders.map((holder, i) => ({
+        w: holder.style.width, h: holder.style.height,
+        overflow: holder.style.overflow, transform: scalers[i].style.transform
+      }));
+      holders.forEach((holder, i) => {
+        holder.style.overflow = "visible";
+        holder.style.width = "auto";
+        holder.style.height = "auto";
+        scalers[i].style.transform = "none";
+      });
+
+      const { jsPDF } = window.jspdf;
+      let pdf = null;
+      for (let i = 0; i < pages.length; i++) {
+        pdfBtn.textContent = "Page " + (i + 1) + "/" + pages.length;
+        const canvas = await html2canvas(pages[i], { scale: 2, backgroundColor: null, useCORS: true, logging: false });
+        const w = canvas.width, h = canvas.height;
+        const image = canvas.toDataURL("image/jpeg", 0.92);
+        const orientation = w > h ? "l" : "p";
+        if (!pdf) pdf = new jsPDF({ orientation, unit: "px", format: [w, h] });
+        else pdf.addPage([w, h], orientation);
+        pdf.addImage(image, "JPEG", 0, 0, w, h);
+      }
+
+      holders.forEach((holder, i) => {
+        holder.style.width = saved[i].w;
+        holder.style.height = saved[i].h;
+        holder.style.overflow = saved[i].overflow;
+        scalers[i].style.transform = saved[i].transform;
+      });
+      window.dispatchEvent(new Event("resize"));
+      pdf.save((postTitle || "journal").replace(/[^a-z0-9]+/gi, "-").toLowerCase() + ".pdf");
+    } catch (error) {
+      alert("Sorry, the PDF could not be generated. " + (error.message || ""));
+    }
+    pdfBtn.disabled = false;
+    pdfBtn.textContent = label;
+  };
+})();
+</script>
+  <script defer src="../../assets/js/motion.js"></script>
+</body>
+</html>

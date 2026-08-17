@@ -1,0 +1,172 @@
+/* Journal — the reader's stylesheet.
+
+   Structure only; the colours come from the Pitara palette through
+   css/theme.css, which is loaded after this file. */
+
+
+/* Fallback palette. css/theme.css re-points every one of these. */
+:root{
+  /* paper + ink */
+  --paper:#fbf8ff; --paper-edge:#e8def8; --ink:#514669; --ink-soft:#a498c4;
+  --grid:#eae1f8;
+  /* accent family (names kept from the original system):
+     --lav = lavender accent, --lav-deep = primary (buttons), --lilac = pale lilac,
+     --blush = pink, --mint = soft sage, --peri = periwinkle, --soft = pale tint */
+  --lav:#c3adee; --lav-deep:#9377d6; --lilac:#ddccf7;
+  --blush:#efe0f6; --mint:#d9e6ec; --peri:#cbcdf6; --soft:#f3ebfd;
+  --shadow:rgba(81,70,105,.16);
+  --tape:rgba(195,173,238,.82);
+  --primary-hover:#8163c9;
+  /* fonts */
+  --hand:'Caveat', cursive; --cute:'Gaegu', cursive; --body:'Nunito', sans-serif;
+  --script:'Great Vibes', cursive; --serif:'Cormorant Garamond', serif;
+  /* page-art glow corners (homepage background) */
+  --glow1:#f1e6ff; --glow2:#eae0fb; --glow3:#f4e9ff; --glow4:#e9e7f8; --glow-base:#f6f0fe;
+  --pdf-bg:#fbf8ff;
+}
+
+
+
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; min-height:100%;}
+body{
+  font-family:var(--body); color:var(--ink); overflow-x:hidden;
+  background:
+    radial-gradient(circle at 15% 8%,  var(--glow1) 0%, transparent 46%),
+    radial-gradient(circle at 88% 6%,  var(--glow2) 0%, transparent 44%),
+    radial-gradient(circle at 92% 90%, var(--glow3) 0%, transparent 48%),
+    radial-gradient(circle at 6% 92%,  var(--glow4) 0%, transparent 44%),
+    var(--glow-base);
+}
+a{color:inherit; text-decoration:none;}
+
+.btn{font-family:var(--body); font-weight:700; font-size:13px; border:1px solid var(--paper-edge);
+  background: var(--p-surface); color:var(--ink); padding:8px 13px; border-radius:999px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; transition:.15s; box-shadow:0 2px 6px var(--shadow);}
+.btn:hover{transform:translateY(-1px); box-shadow:0 5px 12px var(--shadow);}
+.btn.ghost{background:transparent; box-shadow:none;}
+.btn.primary{background:var(--lav-deep); border-color:var(--lav-deep); color: var(--p-on-deep);}
+.btn.primary:hover{background:var(--primary-hover);}
+
+/* ===== journal page + elements ===== */
+.page{position:relative; width:760px; min-height:1000px; background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:26px 26px; border-radius:8px;
+  box-shadow:0 18px 50px var(--shadow), inset 0 0 0 1px var(--paper-edge);
+  overflow:hidden;}
+.page.dot{background-image:radial-gradient(var(--grid) 1.4px, transparent 1.4px); background-size:24px 24px;}
+.page.plain{background-image:none;}
+/* image backgrounds: the full decorative page art is always shown (nothing cropped) */
+.page.bg{background-color:var(--paper); background-repeat:no-repeat; background-position:center; background-size:100% 100%;}
+.page::before{content:""; position:absolute; left:0; top:0; bottom:0; width:34px;
+  background:linear-gradient(90deg, var(--shadow), transparent); pointer-events:none; opacity:.5;}
+.page.bg::before{display:none;}
+/* holder reserves the scaled footprint so nothing overflows on mobile */
+.page-holder{position:relative; overflow:hidden; margin:0 auto;}
+.page-scaler{transform-origin:top left; position:absolute; top:0; left:0;}
+
+.el{position:absolute; user-select:none;}
+.el-text .text-body{font-family:var(--cute); font-size:20px; line-height:1.45; color:var(--ink);
+  outline:none; min-width:60px; min-height:24px; padding:8px 10px; white-space:pre-wrap; word-break:break-word; border-radius:6px;}
+/* inline formatting inside a text box */
+.el-text .text-body b, .el-text .text-body strong{font-weight:700;}
+.el-text .text-body i, .el-text .text-body em{font-style:italic;}
+.el-text .text-body u{text-decoration:underline;}
+
+/* ---- photos: selectable looks (card default, plain, shadow, frame, border) ----
+   SHADOW is now an independent add-on (.has-shadow), so any look can cast a shadow,
+   and removing it removes the shadow entirely. Looks themselves no longer hard-code
+   a shadow — .has-shadow supplies it. PLAIN keeps full transparency (no box) so a
+   cut-out PNG shows only its subject. */
+.el-photo{border-radius:3px;}
+.el-photo img{display:block; width:100%; height:auto; border-radius:1px; pointer-events:none;}
+.el-photo .cap{font-family:var(--hand); font-size:18px; color:var(--ink-soft); text-align:center; margin-top:4px; outline:none; min-height:18px; display:none;}
+
+.el-photo.style-card{padding:8px 8px 28px; background: color-mix(in srgb, rgb(255 253 251) 10%, var(--p-surface));}
+.el-photo.style-card .cap{display:block;}
+.el-photo.style-frame{padding:8px 8px 28px;}
+.el-photo.style-frame .cap{display:block;}
+.el-photo.style-card.nocap, .el-photo.style-frame.nocap{padding-bottom:8px;}
+.el-photo.style-card.nocap .cap, .el-photo.style-frame.nocap .cap{display:none;}
+
+/* plain = bare image, transparency preserved (no background, no padding, no box) */
+.el-photo.style-plain{padding:0; background:none !important;}
+.el-photo.style-plain img{border-radius:2px;}
+
+/* legacy "shadow" look (older posts): a bare image; shadow comes from .has-shadow which
+   we add automatically for these so they look unchanged. */
+.el-photo.style-shadow{padding:0; background:none; border-radius:3px;}
+.el-photo.style-shadow img{border-radius:3px;}
+
+.el-photo.style-border{padding:6px; background: var(--p-surface); border:1px solid var(--paper-edge); border-radius:7px;}
+.el-photo.style-border img{border-radius:3px;}
+
+/* the independent shadow toggle */
+.el-photo.has-shadow{box-shadow:0 9px 24px var(--shadow);}
+.el-photo.style-border.has-shadow{box-shadow:0 6px 16px var(--shadow);}
+
+.el-sticker .s-emoji{font-size:54px; line-height:1; display:block; filter:drop-shadow(0 3px 4px var(--shadow));}
+.el-imgsticker img{display:block; width:100%; height:auto; pointer-events:none; filter:drop-shadow(0 4px 6px var(--shadow));}
+.el-doodle{color:var(--ink);}
+.el-doodle svg{display:block; width:100%; height:auto; overflow:visible; filter:drop-shadow(0 2px 3px var(--shadow));}
+.el-washi .tape{width:120px;height:30px; border-radius:2px; opacity:.86; box-shadow:0 2px 6px var(--shadow); position:relative; overflow:hidden;}
+.el-washi .tape:after{content:""; position:absolute; inset:0; background-image: repeating-linear-gradient(45deg, rgba(var(--p-surface-rgb),.32) 0 6px, transparent 6px 12px);}
+.el-washi .tape.plain:after{content:none;}
+
+/* ===== homepage ===== */
+.site-head{padding:50px 22px 10px; text-align:center;}
+.site-head h1{font-family:var(--serif); font-size:84px; margin:0 0 2px; color:var(--ink); font-weight:400; line-height:1;}
+.site-head .rule{width:60px; height:2px; border-radius:3px; background:var(--lav); margin:12px auto 0; opacity:.8;}
+.site-head p{color:var(--ink-soft); margin:14px 0 0; font-size:17px; font-family:var(--serif); font-style:italic; font-weight:500;}
+
+/* homepage identity fonts are the SAME for all three clients: Daun Penh (falling back to
+   Cormorant Garamond where not installed) on the heading and the status texts, with
+   Playfair Display on the story-card titles — set directly in the base rules below. */
+
+
+/* min(260px,100%) lets a track shrink under 260px on a narrow screen; a bare
+   minmax(260px,1fr) cannot, and universal.css makes <body> a flex column, so
+   this grid is a flex item whose min-width:auto held it at its 3x260px
+   min-content and pushed the page sideways at 768px. */
+/* Tracks are sized, not 1fr, so justify-content can centre the whole group.
+   With 1fr tracks the row always filled the box and two posts sat hard left
+   inside a centred 1100px container, which is what read as left-shifted. */
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),300px));
+  justify-content:center; align-items:start; gap:36px 28px; padding:42px 22px 96px;
+  max-width:var(--p-shell); margin:0 auto; min-width:0; width:100%;}
+.card{width:100%; max-width:none; background: color-mix(in srgb, rgb(255 253 251) 10%, var(--p-surface)); padding:13px 13px 18px; border-radius:8px;
+  box-shadow:0 10px 28px var(--shadow); transition:.2s cubic-bezier(.2,.7,.3,1); cursor:pointer; display:block;}
+.card:nth-child(4n+1){transform:rotate(-1.1deg);}
+.card:nth-child(4n+3){transform:rotate(1deg);}
+.card:hover{transform:translateY(-7px) rotate(0deg); box-shadow:0 20px 44px var(--shadow);}
+.card .thumb{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:5px; background:var(--soft); display:block;}
+.card .thumb.placeholder{display:flex; align-items:center; justify-content:center; font-size:46px; color:var(--lilac);}
+.card .c-date{font-size:11px; font-weight:700; letter-spacing:1px; color:var(--lav-deep); margin:13px 3px 0; text-transform:uppercase;}
+.card .c-title{font-family:var(--serif); font-weight:500; font-size:25px; line-height:1.1; color:var(--ink); margin:4px 3px 0;
+  overflow-wrap:anywhere;
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2;
+  overflow:hidden; min-height:2.24em;}
+.empty{text-align:center; color:var(--ink-soft); max-width:380px; margin:70px auto; padding:0 20px;}
+.empty .big{font-family:var(--serif); font-size:52px; color:var(--ink); margin-bottom:8px;}
+
+/* ===== reader ===== */
+.reader-top{padding:16px 20px 0; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+.story-headline{text-align:center; padding:14px 22px 2px;}
+.story-headline .kicker{font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--lav-deep); font-weight:700;}
+.story-headline h1{font-family:var(--serif); font-weight:600; font-size:clamp(40px,8vw,64px); margin:8px 0 0; color:var(--ink); line-height:1.04;}
+.story-headline .rule{width:60px; height:2px; border-radius:3px; background:var(--lav); margin:16px auto 0; opacity:.8;}
+.reader-stage{padding:18px 10px 90px; display:flex; flex-direction:column; align-items:center; gap:26px; overflow-x:hidden;}
+.loading{text-align:center; color:var(--ink-soft); padding:80px 20px; font-family:var(--serif); font-size:34px;}
+
+/* ===== mobile ===== */
+@media(max-width:600px){
+  .site-head{padding:34px 16px 6px;}
+  .site-head h1{font-size:56px;}
+  .site-head p{font-size:14px;}
+  .cards{gap:18px 12px; padding:26px 14px 80px;}
+  .card{width:calc(50% - 8px); max-width:none; padding:8px 8px 12px; border-radius:8px;}
+  .card:nth-child(4n+1),.card:nth-child(4n+3){transform:none;}
+  .card .c-title{font-size:20px;}
+  .card .c-date{font-size:10px; margin-top:8px;}
+  .reader-stage{padding:14px 16px 80px; gap:20px;}
+}

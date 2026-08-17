@@ -1,0 +1,198 @@
+/* Books — retargeted onto the Pitara palette. Loaded after style.css so these
+   win. Only variables are re-pointed; no rule below is re-styled. */
+
+:root {
+  --paper:          var(--p-bg);
+  --card:           var(--p-surface);
+  --ink:            var(--p-ink);
+  --muted:          var(--p-muted);
+  --line:           var(--p-line);
+  --plum:           var(--p-accent-deep);
+  --plum-deep:      color-mix(in srgb, var(--p-accent-deep) 78%, var(--p-ink));
+  --lilac:          var(--p-accent-soft);
+  --blossom:        var(--p-accent-soft);
+  --read:           var(--p-ok);
+  --read-tint:      var(--p-ok-tint);
+  --queued:         var(--p-accent-deep);
+  --queued-tint:    var(--p-accent-tint);
+  --queued-ink:     var(--p-accent-deep);
+  --version:        var(--p-wait);
+  --version-ink:    var(--p-wait-deep);
+  --version-tint:   var(--p-wait-tint);
+  --star:           var(--p-star);
+  --tint-1:         var(--p-surface-2);
+  --tint-2:         var(--p-surface-3);
+  --radius:         var(--p-radius-sm);
+  --radius-lg:      var(--p-radius-lg);
+  --shadow-sm:      var(--p-shadow-sm);
+  --shadow:         var(--p-shadow);
+  --shadow-lg:      var(--p-shadow-lg);
+  --ease:           var(--p-ease);
+  --font-display:   var(--p-display);
+  --font-body:      var(--p-body);
+  --wash: linear-gradient(160deg,
+            rgba(var(--p-accent-rgb), .10),
+            rgba(var(--p-accent-rgb), .04) 55%,
+            rgba(var(--p-bg-rgb), 0) 100%);
+}
+
+[data-theme="dark"] {
+  --paper:          var(--p-bg);
+  --card:           var(--p-surface);
+  --ink:            var(--p-ink);
+  --muted:          var(--p-muted);
+  --line:           var(--p-line);
+  --plum:           var(--p-accent-deep);
+  --plum-deep:      color-mix(in srgb, var(--p-accent-deep) 78%, var(--p-ink));
+  --lilac:          var(--p-accent-soft);
+  --blossom:        var(--p-accent-soft);
+  --read:           var(--p-ok);
+  --read-tint:      var(--p-ok-tint);
+  --queued:         var(--p-accent-deep);
+  --queued-tint:    var(--p-accent-tint);
+  --queued-ink:     var(--p-accent-deep);
+  --version:        var(--p-wait);
+  --version-ink:    var(--p-wait-deep);
+  --version-tint:   var(--p-wait-tint);
+  --star:           var(--p-star);
+  --tint-1:         var(--p-surface-2);
+  --tint-2:         var(--p-surface-3);
+  --radius:         var(--p-radius-sm);
+  --radius-lg:      var(--p-radius-lg);
+  --shadow-sm:      var(--p-shadow-sm);
+  --shadow:         var(--p-shadow);
+  --shadow-lg:      var(--p-shadow-lg);
+  --ease:           var(--p-ease);
+  --font-display:   var(--p-display);
+  --font-body:      var(--p-body);
+  --wash: linear-gradient(160deg,
+            rgba(var(--p-accent-rgb), .10),
+            rgba(var(--p-accent-rgb), .04) 55%,
+            rgba(var(--p-bg-rgb), 0) 100%);
+  color-scheme: dark;
+}
+
+
+
+.topbar { top: 0; }
+
+
+
+/* ---- the hero portrait -------------------------------------------------
+   The same shape Swaad's hero uses: a cut-out floating on soft colour, so a
+   background-removed photograph drops straight in. Replace
+   assets/images/reading.svg with your own and nothing else changes. */
+
+.hero__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .68fr);
+  gap: clamp(20px, 4vw, 56px);
+  align-items: center;
+}
+
+.hero__col { min-width: 0; }
+.hero__lede, .hero__title, .hero__sub { text-align: left; }
+
+.reader-cut {
+  position: relative;
+  justify-self: center;
+  /* Bigger, and pushed off the text column so the search row and the chip
+     rail below it are never crowded or clipped by the picture. */
+  width: min(640px, 100%);
+  margin-left: clamp(16px, 3vw, 44px);
+  margin-right: clamp(0px, 1.5vw, 18px);
+  overflow: visible;
+}
+
+/* The dashed orbit and the "mid-chapter" chip are gone: they made the picture
+   read as a decorated card rather than a photograph on the page. */
+
+.reader-cut__blobs { position: absolute; inset: -6% 0; z-index: 0; }
+
+/* One round wash behind the photograph, the same treatment the home portrait
+   uses, so both rooms introduce themselves the same way. */
+.rblob { position: absolute; border-radius: 50%; filter: blur(26px); }
+
+.rblob--plum {
+  /* A full circle that still fits its column: sized off height, with width
+     following the aspect ratio, so it closes around the plate without
+     reaching past the row and widening the page. */
+  /* Capped to the column: a circle sized off a tall container was wider than
+     the row and gave the page 38px of horizontal scroll at 1440. */
+  height: 112%; width: auto; aspect-ratio: 1; max-width: 100%;
+  left: 50%; top: 50%; translate: -50% -50%;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(var(--p-accent-rgb), .40) 0%,
+    rgba(143, 188, 218, .22) 52%,
+    rgba(var(--p-accent-rgb), 0) 70%);
+  opacity: 1;
+}
+
+.rblob--sky, .rblob--warm { display: none; }
+
+.reader-cut__img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+}
+
+/* A photograph, framed as a soft round-cornered plate rather than a card with
+   a white border. No border, no lifted card shadow — just a quiet drop. */
+.reader-cut__img--photo {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: 50% 26%;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 26px 60px -24px rgba(var(--p-ink-rgb), .40);
+  filter: none;
+}
+
+@media (max-width: 860px) {
+  .hero__main { grid-template-columns: 1fr; }
+  .reader-cut { width: min(330px, 78%); order: -1; margin-inline: 0; }
+}
+
+
+/* One content width. The hero read in a 1180px column while the shelves below
+   it read in the site's own, so the two never lined up on a wide screen. */
+:root, [data-theme="dark"] { --shell: var(--p-shell); }
+.shell { padding-inline: var(--p-gutter); }
+
+/* ---- the hero -----------------------------------------------------------
+   The column reads centred: eyebrow, phrase, line, search, genres, all on one
+   axis, so the eye runs straight down the middle rather than stepping. */
+.hero__lede, .hero__col { text-align: center; }
+.hero__lede { margin-inline: auto; }
+.hero__sub { margin-inline: auto; max-width: 52ch; }
+.hero__title { margin-inline: auto; }
+.searchbox { margin-inline: auto; }
+
+/* The genre row is one line that scrolls, with the ends faded so it reads as
+   more-to-come rather than as a cut. */
+.chiprow {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: flex-start;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+  padding-inline: 34px;
+}
+
+.chiprow::-webkit-scrollbar { display: none; }
+.chiprow > * { flex: 0 0 auto; }
+
+/* A soft-cornered plate, not a circle: the round crop cut the corners off the
+   shelves behind and made the photograph read as an avatar. */
+.reader-cut__img--photo {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--p-radius-xl);
+  object-position: 50% 30%;
+  box-shadow: 0 30px 64px -26px rgba(var(--p-ink-rgb), .42);
+}
+
+.reader-cut { overflow: clip; }
+.reader-cut__blobs { inset: -3% 0; }
+.rblob--plum { border-radius: var(--p-radius-xl); filter: blur(30px); }

@@ -1,0 +1,223 @@
+/* Favourites — retargeted onto the Pitara palette. Loaded after the museum's own
+   stylesheets so these win.
+
+   The five pastel washes stay, because they are how one collection is told from
+   another — but they are re-pointed onto the new palette's hues so this room
+   belongs to the same house as the rest. */
+
+:root {
+  --cream:            var(--p-bg);
+  --white:            var(--p-surface);
+  --ink:              var(--p-ink);
+  --ink-soft:         var(--p-ink-soft);
+  --ink-faint:        var(--p-muted);
+  --lavender:         #af97d6;
+  --lavender-soft:    #f1ecf9;
+  --mint:             #b3a4d4;
+  --mint-soft:        #f0ebf8;
+  --baby-blue:        #8fbcda;
+  --baby-blue-soft:   #eaf3f9;
+  --peach:            #e5a29b;
+  --peach-soft:       #faeeec;
+  --butter:           #cfa0c4;
+  --butter-soft:      #f6edf4;
+  --surface:          rgba(var(--p-surface-rgb), .74);
+  --surface-strong:   rgba(var(--p-surface-rgb), .93);
+  --glass-border:     rgba(var(--p-surface-rgb), .62);
+  --shadow-soft:      var(--p-shadow-sm);
+  --shadow-lift:      var(--p-shadow-lg);
+  --shadow-modal:     var(--p-shadow-lg);
+  --shadow-glow-lavender:var(--p-shadow);
+  --radius-sm:        var(--p-radius-sm);
+  --radius-md:        var(--p-radius);
+  --radius-lg:        var(--p-radius-lg);
+  --radius-xl:        var(--p-radius-xl);
+  --radius-pill:      var(--p-pill);
+  --font-display:     var(--p-display);
+  --font-body:        var(--p-body);
+  --ease-out:         var(--p-ease);
+  --content-max:      var(--p-shell);
+  --content-wide:     1440px;
+  --gutter:           var(--p-gutter);
+  --grad-page: linear-gradient(170deg,
+                 var(--p-bg) 0%,
+                 var(--p-surface-2) 40%,
+                 var(--p-accent-tint) 100%);
+  --grad-hero-text: linear-gradient(96deg,
+                      #af97d6 0%, #8fbcda 34%, #b3a4d4 66%, #cfa0c4 100%);
+}
+
+[data-theme="dark"] {
+  --cream:            var(--p-bg);
+  --white:            var(--p-surface);
+  --ink:              var(--p-ink);
+  --ink-soft:         var(--p-ink-soft);
+  --ink-faint:        var(--p-muted);
+  --lavender:         #af97d6;
+  --lavender-soft:    #f1ecf9;
+  --mint:             #b3a4d4;
+  --mint-soft:        #f0ebf8;
+  --baby-blue:        #8fbcda;
+  --baby-blue-soft:   #eaf3f9;
+  --peach:            #e5a29b;
+  --peach-soft:       #faeeec;
+  --butter:           #cfa0c4;
+  --butter-soft:      #f6edf4;
+  --surface:          rgba(var(--p-surface-rgb), .74);
+  --surface-strong:   rgba(var(--p-surface-rgb), .93);
+  --glass-border:     rgba(var(--p-surface-rgb), .62);
+  --shadow-soft:      var(--p-shadow-sm);
+  --shadow-lift:      var(--p-shadow-lg);
+  --shadow-modal:     var(--p-shadow-lg);
+  --shadow-glow-lavender:var(--p-shadow);
+  --radius-sm:        var(--p-radius-sm);
+  --radius-md:        var(--p-radius);
+  --radius-lg:        var(--p-radius-lg);
+  --radius-xl:        var(--p-radius-xl);
+  --radius-pill:      var(--p-pill);
+  --font-display:     var(--p-display);
+  --font-body:        var(--p-body);
+  --ease-out:         var(--p-ease);
+  --content-max:      var(--p-shell);
+  --content-wide:     1440px;
+  --gutter:           var(--p-gutter);
+  --grad-page: linear-gradient(165deg,
+                 var(--p-bg) 0%,
+                 var(--p-surface-2) 46%,
+                 var(--p-bg-2) 100%);
+  --grad-hero-text: linear-gradient(96deg,
+                      #af97d6 0%, #8fbcda 34%, #b3a4d4 66%, #cfa0c4 100%);
+  --grad-page: linear-gradient(165deg,
+                 var(--p-bg) 0%,
+                 var(--p-bg-2) 50%,
+                 var(--p-surface) 100%);
+  color-scheme: dark;
+}
+
+/* The museum's bar was `fixed`, with `body` padded by --nav-height to clear it.
+   Fixed at top:0 would sit over the site chrome, so it becomes `sticky`: the
+   same behaviour once you scroll, but it starts in flow and takes its own
+   space, which is why the body padding goes with it. */
+.nav {
+  position: sticky;
+  top: 0;
+  padding-top: 0;
+}
+
+body { padding-top: 0; }
+
+/* The hero measured itself against a bar that no longer overlaps it. */
+.hero {
+  min-height: calc(100vh - var(--nav-height));
+  min-height: calc(100svh - var(--nav-height));
+}
+
+@media (max-width: 860px) {
+  /* The phone menu is a full-screen overlay padded past a bar that is no longer
+     fixed, and it painted its own copy of the old wash. */
+  .nav__links {
+    padding-top: calc(var(--safe-top) + 1rem);
+    background: linear-gradient(165deg,
+      rgba(var(--p-bg-rgb), .96) 0%,
+      rgba(var(--p-surface-rgb), .96) 48%,
+      rgba(var(--p-bg-rgb), .96) 100%);
+  }
+}
+
+
+/* The decorative rings are `position: absolute` with no positioned ancestor, so
+   they anchor to the page box and drift over the content — that stray smudge
+   left behind on hover. They are ornament, and the wash below already carries
+   the same idea. */
+.glow-ring, .sparkle { display: none !important; }
+
+/* The drifting colour blobs were the museum's own weather, and the one thing
+   that still made this page read as a different site. The paper carries a
+   faint wash of the module's accent instead. */
+.blob { display: none !important; }
+
+
+
+
+
+/* ---- readability and rhythm --------------------------------------------
+   The hero title was a four-stop pastel gradient on pastel paper, which put
+   the museum's own name at roughly 2:1. It keeps the gradient — it is the
+   module's signature — but starts from the ink so the letterforms hold. */
+:root {
+  --grad-hero-text: linear-gradient(96deg,
+                      var(--p-ink) 0%, var(--p-accent-ink) 46%, var(--p-accent-deep) 100%);
+}
+
+[data-theme="dark"] {
+  --grad-hero-text: linear-gradient(96deg,
+                      var(--p-ink) 0%, var(--p-accent-ink) 52%, var(--p-accent) 100%);
+}
+
+/* A full screen of empty paper before the first exhibit. The hero says what
+   the room is; it does not need the whole fold to do it. */
+.hero {
+  min-height: 0;
+  padding-block: clamp(3rem, 7vw, 5.5rem) clamp(3.5rem, 7vw, 6rem);
+}
+
+.hero__scroll-hint { position: static; transform: none; margin: 2.2rem auto 0; }
+
+
+/* ---- the gallery menu ---------------------------------------------------
+   At .86 alpha the panel read as a ghost over whatever was behind it. */
+.nav__dropdown-panel {
+  background: color-mix(in srgb, var(--p-surface) 97%, transparent);
+  border-color: var(--p-line);
+  box-shadow: var(--p-shadow-lg);
+}
+
+.nav__dropdown-item { color: var(--p-ink); }
+.nav__dropdown-item:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
+
+
+/* ---- a collection page --------------------------------------------------
+   The title wall sat a full screen down the page; it opens closer to the bar
+   now, with the search bar drawn as one clear control rather than a bare
+   underline. */
+.exhibition-head { padding-block: clamp(26px, 4vw, 46px) clamp(20px, 3vw, 34px); }
+.title-wall { margin: 0; }
+.title-wall__eyebrow { color: var(--p-accent-ink); }
+.title-wall__count { color: var(--p-muted); margin-top: 8px; }
+
+.exhibition-toolbar { display: flex; justify-content: center; margin-top: clamp(18px, 2.4vw, 28px); }
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(520px, 100%);
+  min-height: var(--p-control-lg);
+  padding: 0 8px 0 16px;
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-pill);
+  background: var(--p-surface);
+  box-shadow: var(--p-shadow-sm);
+  transition: border-color .2s var(--p-ease), box-shadow .2s var(--p-ease);
+}
+
+.search:focus-within { border-color: var(--p-accent); box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .2); }
+
+.search__icon { position: static; flex: 0 0 auto; color: var(--p-muted); }
+
+.search__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--p-text-md);
+  color: var(--p-ink);
+}
+
+.search__input:focus { outline: none; box-shadow: none; }
+.search__clear { flex: 0 0 auto; border-radius: 50%; background: var(--p-surface-3); color: var(--p-ink-soft); }
+.search__clear:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
+.search-count { margin-top: 12px; color: var(--p-muted); font-size: var(--p-text-sm); }

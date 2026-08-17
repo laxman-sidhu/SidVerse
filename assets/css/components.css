@@ -1,0 +1,1330 @@
+/* Pitara — the shared component language.
+   =========================================================================
+
+   Loaded LAST on every page, after the module's own stylesheet, its theme.css
+   and universal.css.
+
+   universal.css already unified the *surfaces* — bar backgrounds, footers,
+   scrollbars, selection. This file unifies the *dimensions*: how tall a bar is,
+   how tall a button is, what radius a field has, how big a heading is.
+
+   That was the gap the modules fell through. Every one of them mapped its
+   colours onto the shared tokens correctly and still felt like a different
+   site, because a navbar was 44px in one room and 66px in the next, a button
+   25px here and 47px there, and a hero 32px on one page and 76px on another.
+
+   RULES THIS FILE FOLLOWS
+   - It sets dimension, type and shape. It does NOT set background or text
+     colour on module components, so each room keeps its own identity.
+   - It matches classes several modules already share (.topbar, .navbar, .nav,
+     .btn, .card). A module that uses a different class is simply not matched
+     and keeps its own look — the same contract universal.css uses.
+   - No class or id is renamed, so nothing JavaScript queries is disturbed.
+   ========================================================================= */
+
+
+/* ---- 1. the type scale -------------------------------------------------
+   Every module now renders at 100% browser zoom, so these are real sizes on
+   screen rather than values waiting to be scaled down by a `zoom` rule. */
+
+body {
+  font-size: var(--p-text);
+  line-height: var(--p-leading);
+}
+
+/* Favourites asked for 1.08rem above 1920px and clamped its body type up to
+   1.08rem, which is where its 17.28px came from — the largest body text on the
+   site against Cinema's 15px. */
+[data-section="favourites"] {
+  --text-body: clamp(0.94rem, .25vw + .88rem, 1rem);
+  --text-hero: var(--p-display-1);
+  --text-h2:   var(--p-h2);
+  --text-h3:   var(--p-h3);
+}
+
+/* Hero titles. These ranged 32px (Books) to 76px (Favourites) on screen. */
+.hero__title,
+.hero-headline,
+.hero__line,
+.site-head h1 {
+  font-family: var(--p-display);
+  font-size: var(--p-display-1);
+  line-height: var(--p-leading-tight);
+  letter-spacing: -.02em;
+}
+
+/* Section headings, one step down from the hero. */
+.section__title,
+.rooms__title,
+.section-title {
+  font-size: var(--p-h2);
+  line-height: var(--p-leading-snug);
+}
+
+
+/* ---- 2. bars -----------------------------------------------------------
+   Measured 44 / 49 / 55 / 63 / 66px across the five modules that have one.
+   The bar is the first thing seen on every page, so its height is the single
+   most visible inconsistency on the site. */
+
+.topbar,
+.navbar,
+.nav,
+.site-topbar {
+  min-height: var(--p-bar-h);
+  height: auto;
+  display: flex;
+  align-items: center;
+  padding-block: 0;
+}
+
+.topbar > *,
+.navbar > *,
+.nav > *,
+.site-topbar > * {
+  min-height: 0;
+}
+
+/* The inner rail of a bar spans the band and centres its contents. */
+.topbar__inner,
+.navbar .nav-inner,
+.nav__inner,
+.nav .container {
+  min-height: var(--p-bar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--p-space-md);
+}
+
+
+/* ---- 3. buttons --------------------------------------------------------
+   Heights measured 25, 27, 29, 32, 38, 39 and 47px, across radii of 999px,
+   50px, 12px and 50%. Colour is left to the module; only the box is unified. */
+
+.btn,
+.button,
+.pill,
+.chipbtn,
+.mtab,
+.modeswitch__btn,
+.searchbox__go,
+.nav__link,
+.form-control[type="submit"],
+button.btn {
+  min-height: var(--p-control-h);
+  border-radius: var(--p-pill);
+  font-family: var(--p-body);
+  font-size: var(--p-text-sm);
+  font-weight: 600;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--p-space-xs);
+  cursor: pointer;
+  transition: background var(--p-t-fast, .18s) var(--p-ease),
+              border-color var(--p-t-fast, .18s) var(--p-ease),
+              color var(--p-t-fast, .18s) var(--p-ease),
+              transform var(--p-t-fast, .18s) var(--p-ease);
+}
+
+/* Vertical padding is pinned so min-height actually decides the height;
+   horizontal padding is a zero-specificity default a module may override to
+   make room for a leading glyph. */
+.btn, .button, .pill, .chipbtn, .mtab, .modeswitch__btn,
+.searchbox__go, .nav__link { padding-block: 0; }
+
+:where(.btn, .button, .pill, .chipbtn, .mtab, .modeswitch__btn,
+       .searchbox__go, .nav__link) { padding-inline: var(--p-space-md); }
+
+/* Small, dense controls — filter chips, tab strips, table actions. These are
+   meant to read as secondary, so they get the small height rather than the
+   standard one. */
+.chipbtn,
+.pill,
+.mtab,
+.modeswitch__btn {
+  min-height: var(--p-control-sm);
+  font-weight: 500;
+}
+
+:where(.chipbtn, .pill, .mtab, .modeswitch__btn) { padding-inline: var(--p-space-sm); }
+
+/* Square icon buttons keep a circle, but stop being 25px. */
+/* :not(--label) matters: Cinema's nav uses .icon-btn.icon-btn--label for
+   glyph-plus-text pills. Squaring those to 40px clipped every label. */
+.icon-btn:not(.icon-btn--label),
+.iconbtn:not(.iconbtn--label),
+.icon-button:not(.icon-button--label) {
+  width: var(--p-control-h);
+  height: var(--p-control-h);
+  min-height: 0;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.icon-btn svg, .iconbtn svg, .icon-button svg {
+  width: 18px; height: 18px; flex: 0 0 auto;
+}
+
+/* The labelled variant is a normal pill that happens to lead with a glyph. */
+.icon-btn--label {
+  width: auto;
+  min-height: var(--p-control-h);
+  padding-inline: 14px;
+  border-radius: var(--p-pill);
+  gap: 7px;
+  white-space: nowrap;
+}
+.icon-btn--label .icon-btn__text { font-size: var(--p-text-sm); font-weight: 600; }
+
+/* States. Every button on the site now answers to the pointer the same way. */
+.btn:hover,
+.button:hover,
+.chipbtn:hover,
+.pill:hover,
+.mtab:hover { transform: translateY(-1px); }
+
+.btn:active,
+.button:active,
+.chipbtn:active,
+.pill:active,
+.mtab:active { transform: translateY(0); }
+
+.btn:disabled,
+.button:disabled,
+button:disabled,
+.btn[aria-disabled="true"] {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* A visible focus ring on every control, which several modules removed. */
+.btn:focus-visible,
+.button:focus-visible,
+.chipbtn:focus-visible,
+.pill:focus-visible,
+.mtab:focus-visible,
+.icon-btn:focus-visible,
+.iconbtn:focus-visible {
+  outline: 2px solid var(--p-accent);
+  outline-offset: 2px;
+}
+
+
+/* ---- 4. fields ---------------------------------------------------------
+   universal.css gave these their colours. This gives them their box, so a
+   search field in Books is the same object as a search field in Swaad. */
+
+input[type="text"], input[type="search"], input[type="number"],
+input[type="email"], input[type="password"], input[type="url"],
+input[type="date"], select, textarea, .form-control {
+  min-height: var(--p-control-h);
+  padding-block: 0;
+  border-radius: var(--p-radius-sm);
+  border: 1px solid var(--p-line);
+  font-family: var(--p-body);
+  font-size: var(--p-text-md);
+  line-height: 1.4;
+  transition: border-color .18s var(--p-ease), box-shadow .18s var(--p-ease);
+}
+
+:where(input[type="text"], input[type="search"], input[type="number"],
+        input[type="email"], input[type="password"], input[type="url"],
+        input[type="date"], select, .form-control) {
+  padding-inline: var(--p-space-md);
+}
+
+textarea {
+  padding: var(--p-space-sm) var(--p-space-md);
+  line-height: var(--p-leading);
+  min-height: 96px;
+}
+
+input:focus, select:focus, textarea:focus, .form-control:focus {
+  outline: none;
+  border-color: var(--p-accent);
+  box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .22);
+}
+
+/* Swaad's sort control was the one native, unstyled <select> left on the site.
+   Restyling the box alone leaves the OS arrow, so the arrow is drawn here. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a7288' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+
+/* The longhands are repeated here on purpose. A module that sets the
+   `background` shorthand after the base rule resets background-repeat to its
+   initial `repeat`, and an arrow declared on its own then tiles across the
+   control — which is what happened to Books' scope picker in dark only. */
+[data-theme="dark"] select {
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239a92a8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+/* Books and Cinema wrap their selects in a picker that already draws its own
+   chevron. Those keep theirs — a second arrow would sit on top of the first.
+   This sits after the dark rule so it holds in both themes, and leaves
+   padding-right alone because the wrapper positions its arrow with it. */
+.scopepick select, .picker select, .select-wrap select {
+  background-image: none;
+}
+
+
+/* ---- 5. text on an accent ----------------------------------------------
+   In light the accents are mid-tones and carry white. In dark they are lifted
+   pastels: white on them measures 1.86:1. --p-on-accent flips to ink for dark
+   in tokens.css; this points the components that fill with an accent at it.
+   Books' Search button was the visible case. */
+
+.btn--primary, .btn-primary, .btn.primary,
+.searchbox__go, .postcard-btn {
+  color: var(--p-on-accent);
+}
+
+/* An accent used as TEXT on paper is only 2.0–2.3:1. Links take the darkened
+   (light) or lifted (dark) version of the same hue instead. */
+.pfoot__link,
+a.link,
+.link--accent { color: var(--p-accent-ink); }
+
+
+/* ---- 6. badges and tags ------------------------------------------------ */
+
+.badge, .tag, .chip, .pill--tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--p-pill);
+  font-family: var(--p-body);
+  font-size: var(--p-text-2xs);
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+
+/* ---- 7. cards ----------------------------------------------------------
+   Shape and motion only. What a card *contains* is the module's business —
+   a poster grid and a food photo want different layouts and should keep them. */
+
+.card, .mcard, .fav-card, .bookcard, .moviecard, .dish-card {
+  border-radius: var(--p-radius);
+  transition: transform .2s var(--p-ease), box-shadow .2s var(--p-ease);
+}
+
+.card:hover, .mcard:hover, .fav-card:hover,
+.bookcard:hover, .moviecard:hover, .dish-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--p-shadow-lg);
+}
+
+/* Photographs in cards crop rather than squash, whatever the source gives. */
+.card img, .mcard img, .fav-card img,
+.bookcard img, .moviecard img, .dish-card img {
+  object-fit: cover;
+}
+
+
+/* ---- 8. empty, loading and error states --------------------------------
+   These read as browser output rather than as part of the site — Swaad
+   surfaced a bare "Failed to fetch", Books an unstyled "Nothing here" in a
+   large blank panel. One shape for all three, in every module. */
+
+.state, .empty, .empty-state, .loading, .error-state {
+  display: grid;
+  place-items: center;
+  gap: var(--p-space-xs);
+  padding: var(--p-space-2xl) var(--p-space-lg);
+  text-align: center;
+}
+
+.state__icon, .empty__icon, .empty .big {
+  font-size: 30px;
+  line-height: 1;
+  margin-bottom: var(--p-space-2xs);
+  opacity: .85;
+}
+
+.state__title, .empty__title, .empty h3, .empty-state h3 {
+  font-family: var(--p-display);
+  font-size: var(--p-h3);
+  font-weight: 600;
+  color: var(--p-ink);
+  margin: 0;
+}
+
+.state__note, .empty__note, .empty p, .empty-state p, .loading {
+  font-size: var(--p-text-md);
+  color: var(--p-ink-soft);
+  max-width: 46ch;
+  margin: 0;
+}
+
+/* A quiet pulse while data is on its way, instead of a static line of text. */
+@keyframes p-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+.loading, .is-loading { animation: p-pulse 1.6s var(--p-ease) infinite; }
+
+
+/* ---- 9. tables ---------------------------------------------------------
+   Readability over decoration: a ruled baseline, a quiet header, no zebra. */
+
+table { border-collapse: collapse; width: 100%; font-size: var(--p-text-md); }
+
+th {
+  text-align: left;
+  font-family: var(--p-body);
+  font-size: var(--p-text-xs);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--p-muted);
+  padding: var(--p-space-sm) var(--p-space-md);
+  border-bottom: 1px solid var(--p-line);
+}
+
+td {
+  padding: var(--p-space-sm) var(--p-space-md);
+  border-bottom: 1px solid var(--p-line-soft);
+  color: var(--p-ink);
+}
+
+tbody tr:hover td { background: var(--p-surface-2); }
+
+
+/* ---- 10. motion --------------------------------------------------------
+   Everything that moves, moves at one of two speeds. */
+
+:root { --p-t-fast: .18s; --p-t: .24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ---- 11. responsive ----------------------------------------------------
+   The bar relaxes its height on a phone, where 64px of chrome is a lot of a
+   small screen, and controls grow to a comfortable touch target. */
+
+@media (max-width: 720px) {
+  .topbar, .navbar, .nav, .site-topbar,
+  .topbar__inner, .navbar .nav-inner, .nav__inner, .nav .container {
+    min-height: 56px;
+  }
+
+  .btn, .button, .searchbox__go, .nav__link {
+    min-height: 44px;
+  }
+
+  .icon-btn, .iconbtn, .icon-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Nothing on a phone may push the page sideways. */
+  body { overflow-x: hidden; }
+}
+
+/* Long words and URLs in user-written content break rather than overflow. */
+p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
+
+
+/* ---- 12. the label floor ----------------------------------------------
+   Eyebrows and mono labels are a deliberate device on this site — small,
+   uppercase, widely tracked. They are not licence to go to 9.6px. Eleven is
+   the floor, and tracking does the rest of the work. */
+
+.eyebrow, .hero__eyebrow, .coll__eyebrow, .contact-eyebrow, .gallery-eyebrow,
+.psb__label, .facets__label, .suggestions__label, .gsp-label, .hfc-label,
+.hero__by, .c-date, .gallery-video-badge, .form-group label,
+.room__note, .index__label, .note__stamp, .foot__meta, .sort span,
+.facets--inline .facets__label {
+  font-size: var(--p-text-2xs);
+  letter-spacing: .1em;
+  line-height: 1.45;
+}
+
+/* The video badge sat at 9.6px in ink-on-brown, 1.31:1. It is a label over a
+   photograph, so it carries its own dark plate in both themes. */
+.gallery-video-badge {
+  background: rgba(17, 14, 23, .74);
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: var(--p-pill);
+  backdrop-filter: blur(6px);
+}
+
+/* Dates and metadata read as secondary, never as decoration. */
+.c-date { color: var(--p-accent-ink); font-weight: 600; }
+
+
+/* ---- 13. the primary button -------------------------------------------
+   A primary button is the module's accent, filled, with text that can be read
+   on it. It could not simply take --p-accent as its ground: white on a light
+   accent measures 2.0–2.3:1. --p-accent-ink is the same hue pushed to where it
+   clears 4.5:1 against white (light) and against ink (dark), so one pair of
+   tokens covers both themes.
+
+   Swaad's Unlock button is the case this fixes: its --plum ground had been
+   remapped to a near-white surface, leaving pale text on pale paper. */
+
+.btn--primary, .btn-primary, .btn.primary,
+.searchbox__go, .postcard-btn, button[type="submit"].btn {
+  background: var(--p-accent-ink);
+  border-color: var(--p-accent-ink);
+  color: var(--p-on-accent);
+}
+
+.btn--primary:hover, .btn-primary:hover, .btn.primary:hover,
+.searchbox__go:hover, .postcard-btn:hover, button[type="submit"].btn:hover {
+  background: color-mix(in srgb, var(--p-accent-ink) 86%, var(--p-ink));
+  border-color: color-mix(in srgb, var(--p-accent-ink) 86%, var(--p-ink));
+  color: var(--p-on-accent);
+}
+
+/* A secondary button is the same shape, drawn rather than filled. */
+.btn--secondary, .btn-secondary, .btn--ghost, .btn-ghost {
+  background: transparent;
+  border: 1px solid var(--p-line);
+  color: var(--p-ink);
+}
+
+.btn--secondary:hover, .btn-secondary:hover,
+.btn--ghost:hover, .btn-ghost:hover {
+  background: var(--p-surface-3);
+  border-color: var(--p-accent);
+}
+
+
+/* ---- 14. the rail notch ------------------------------------------------
+   `body` is padded by the rail's width, so a band that bleeds to the screen
+   edge has to reach back past that padding. Travel's hero does; the section
+   under it does not, which left a small lighter notch at the left edge where
+   the two met. Bands that bleed are given the reach in one place. */
+
+@media (min-width: 721px) {
+  .bleed,
+  .hero--bleed,
+  .section--bleed,
+  /* Travel paints a full-width wash on each band. Without the reach-back the
+     page's own paper showed as a lighter notch in the rail's column wherever
+     two bands met. */
+  [data-section="travel"] .hero,
+  [data-section="travel"] .goals-section,
+  [data-section="travel"] .activities-section,
+  [data-section="travel"] .places-section,
+  [data-section="travel"] .stats-section,
+  [data-section="travel"] .treks-section,
+  [data-section="travel"] .heritage-section,
+  [data-section="travel"] .contact-section,
+  [data-section="travel"] .journey-section,
+  [data-section="travel"] #wrapped {
+    margin-left: calc(-1 * var(--p-rail-clear));
+    padding-left: var(--p-rail-clear);
+  }
+}
+
+/* The page background sits behind everything, so the notch cannot show
+   through as paper of a different colour. */
+html { background: var(--p-bg); }
+
+
+/* ---- 15. dropdowns stay inside the window -----------------------------
+   Favourites' Galleries panel is centred on its trigger with
+   `left: 50%; translateX(-50%)`, and its trigger is the last item in a
+   right-aligned bar. At 768–1024px that pushed 248px of panel past the right
+   edge and gave the page a horizontal scrollbar — while the panel was
+   `visibility: hidden`, so the scrollbar appeared with nothing visible causing
+   it. An absolutely positioned box still extends the scroll area.
+
+   The panel now hangs from the trigger's right edge and is capped to the
+   window, so it opens inward and never widens the page. */
+
+.nav__dropdown-panel {
+  left: auto;
+  right: 0;
+  transform: translateY(-8px);
+  max-width: calc(100vw - 2 * var(--p-space-md));
+}
+
+.nav__dropdown.is-open .nav__dropdown-panel,
+.nav__dropdown:hover .nav__dropdown-panel,
+.nav__dropdown:focus-within .nav__dropdown-panel {
+  transform: translateY(0);
+}
+
+/* A hidden overlay must not be reachable by the pointer either. */
+.nav__dropdown-panel[style*="hidden"],
+.nav__dropdown-panel { pointer-events: none; }
+
+.nav__dropdown.is-open .nav__dropdown-panel,
+.nav__dropdown:hover .nav__dropdown-panel,
+.nav__dropdown:focus-within .nav__dropdown-panel { pointer-events: auto; }
+
+
+/* ---- 16. decorative art never widens the page -------------------------
+   Books' hero blobs are painted past the layout box on purpose. They are
+   decoration, so they are clipped rather than allowed to add scroll width. */
+
+/* These used to carry `overflow: clip` to stop decorative blobs widening the
+   page. It also squared off the round wash behind each portrait — the halo was
+   clipped to the figure's box and read as a rectangle, which is the one thing
+   the halo exists to avoid. The page is protected by `overflow-x: clip` on
+   <body> instead, which costs nothing here. */
+.keeper__blobs { overflow: clip; }
+
+.rblob, .hero__blob, .blob { pointer-events: none; }
+
+
+/* ---- 17. states get a mark ---------------------------------------------
+   Both Books and Swaad render `.empty > .empty__title + .empty__note`, which
+   section 8 already sized and coloured. What made them read as browser output
+   rather than as part of the site was that they were words alone in a large
+   blank panel. A quiet dot of the module's accent gives the block a centre. */
+
+.empty:not(:has(.empty__icon)):not(:has(.big))::before,
+.state:not(:has(.state__icon))::before {
+  content: "";
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%,
+      var(--p-accent-tint) 38%,
+      transparent 39%),
+    conic-gradient(from 140deg,
+      rgba(var(--p-accent-rgb), .45),
+      rgba(var(--p-accent-rgb), .10) 55%,
+      rgba(var(--p-accent-rgb), .45));
+  margin-bottom: var(--p-space-xs);
+}
+
+/* The panel a state sits in should read as paper, not as a bordered void. */
+.empty, .empty-state, .state {
+  border-radius: var(--p-radius);
+  color: var(--p-ink-soft);
+}
+
+
+/* ---- 18. flex-item shrink guard ---------------------------------------
+   universal.css makes <body> a flex column so the injected footer pins to the
+   bottom. That silently makes every top-level block a flex item, and a flex
+   item's `min-width: auto` refuses to shrink below its min-content width — so
+   a grid with fixed minimum tracks pushes the page sideways instead of
+   reflowing. Journal's card grid did exactly that at 768px. */
+
+body > * { min-width: 0; }
+
+
+/* ---- 19. one background, everywhere ------------------------------------
+   The page background is set once, on <body>, in base.css. Every band below is
+   cleared so that one wash runs the whole length of every page.
+
+   This is what fixed the seams: Home showed an edge where the hero band met
+   the rooms band, Cinema was one colour at the top and another at the bottom,
+   and Travel painted five different hues down the page — lavender, cream,
+   yellow, green, beige — none of which met the sidebar's colour. Cards, bars
+   and modals keep their surfaces; only the full-width bands go. */
+
+.hero, .rooms,
+[data-section] .hero,
+[data-section] .goals-section,
+[data-section] .activities-section,
+[data-section] .places-section,
+[data-section] .stats-section,
+[data-section] .treks-section,
+[data-section] .heritage-section,
+[data-section] .contact-section,
+[data-section] .journey-section,
+[data-section] .gallery-section,
+[data-section] .discover,
+[data-section] .coll,
+[data-section] .log,
+[data-section] .keeper,
+[data-section] .reader-cut,
+[data-section] main,
+[data-section] .page,
+[data-section] section {
+  background: transparent;
+}
+
+/* A band that carries a photograph keeps it — only flat colour washes go. */
+[data-section="travel"] .hero {
+  background:
+    linear-gradient(105deg,
+      rgba(var(--p-deep-rgb), .82) 0%,
+      rgba(var(--p-deep-rgb), .58) 46%,
+      rgba(var(--p-deep-rgb), .30) 100%),
+    var(--hero-photo, none) center / cover no-repeat;
+}
+
+/* Surfaces that are meant to read as raised keep their paper. */
+[data-section] .card, [data-section] .mcard, [data-section] .fav-card,
+[data-section] .bookcard, [data-section] .moviecard, [data-section] .dish-card,
+[data-section] .topcard, [data-section] .modal, [data-section] .sheet,
+[data-section] .panel, [data-section] .empty {
+  background: var(--p-surface);
+}
+
+
+/* ---- 20. the page sits in the space beside the rail --------------------
+   The rail floats over the left edge. Content is centred in what is left of
+   the window, while the background and the footer run underneath it, so the
+   colour reaches the screen edge and nothing shows a lighter column. */
+
+body { padding-left: var(--p-rail-clear); }
+
+@media (max-width: 720px) { body { padding-left: 0; } }
+
+
+/* ---- 21. one navbar ----------------------------------------------------
+   The five rooms each shipped a different bar: Cinema `.topbar > .wrap`,
+   Books a JS-built `.topbar > .nav__inner`, Travel `nav.navbar > .nav-inner`,
+   Swaad a `.topbar` with no inner wrapper at all, and Favourites
+   `header.nav > .container`. Same job, five structures, five looks.
+
+   This gives all five one shell, one row, one brand treatment and one
+   alignment: brand hard left on the content's own left edge, everything else
+   pushed right. */
+
+.topbar, .navbar, .nav, .site-topbar {
+  background: color-mix(in srgb, var(--p-surface) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid var(--p-line-soft, var(--p-line));
+  box-shadow: none;
+}
+
+/* The row. Swaad has no inner element, so the bar itself becomes the row and
+   gets the same shell width — which is why it is listed on both rules. */
+.topbar__inner, .navbar .nav-inner, .nav__inner,
+.nav > .container, .topbar > .wrap {
+  width: 100%;
+  /* No shell cap: the bar spans the window, brand at the far left and tools at
+     the far right, rather than sitting in a centred column with empty rails on
+     a wide screen. */
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: clamp(18px, 2.2vw, 34px);
+  display: flex;
+  align-items: center;
+  gap: var(--p-space-sm);
+  min-height: var(--p-bar-h);
+}
+
+/* Brand sits first and pushes the rest of the bar to the right edge. */
+.wordmark, .navbar .logo, .brand, .nav__brand {
+  margin-right: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--p-display);
+  font-size: var(--p-text-lg);
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1;
+  color: var(--p-ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.wordmark__mark, .navbar .logo .dot, .brand__mark, .nav__brand-mark {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--p-accent-ink);
+}
+
+.wordmark__text, .brand__mark { font: inherit; color: inherit; }
+
+/* The link groups ride on the right. */
+.nav__links, .navbar .nav-links, .topbar__tools, .nav__tools, .nav__menu {
+  display: flex;
+  align-items: center;
+  gap: var(--p-space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar .nav-links a, .nav__links .nav__link, .nav__menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--p-control-sm);
+  padding-inline: 12px;
+  border-radius: var(--p-pill);
+  font-size: var(--p-text-sm);
+  font-weight: 600;
+  color: var(--p-ink-soft);
+  text-decoration: none;
+  transition: background .18s var(--p-ease), color .18s var(--p-ease);
+}
+
+.navbar .nav-links a:hover, .nav__links .nav__link:hover, .nav__menu a:hover {
+  background: var(--p-accent-tint);
+  color: var(--p-ink);
+}
+
+.navbar .nav-links a.active, .nav__link.is-current,
+[aria-current="page"] {
+  background: var(--p-accent-tint);
+  color: var(--p-accent-ink);
+}
+
+/* Travel's bar is fixed, the others are sticky. Either way the band spans the
+   window and its content starts after the rail — see the band rule in
+   universal.css, which this used to fight by insetting fixed bars by 74px. */
+.topbar, .navbar, .nav, .site-topbar { left: 0; right: 0; }
+
+@media (max-width: 720px) {
+  .topbar__inner, .navbar .nav-inner, .nav__inner,
+  .nav > .container, .topbar > .wrap {
+    padding-inline: var(--p-space-md);
+  }
+}
+
+
+/* ---- 22. the footer signature ------------------------------------------ */
+
+/* "Made with love by ME" is a sign-off, not a call to action. It reads as one
+   sentence in one weight — no pill, no underline, no hover, and it does not
+   pretend to be a link. */
+.pfoot__me {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--p-ink-soft);
+  background: none;
+  padding: 0;
+  border: 0;
+  cursor: default;
+  pointer-events: none;
+  letter-spacing: .01em;
+}
+
+.pfoot__me:hover { text-decoration: none; color: var(--p-ink-soft); }
+
+.pfoot__made {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--p-muted);
+  font-size: var(--p-text-sm);
+}
+
+.pfoot__link:hover { text-decoration: none; color: var(--p-accent-ink); }
+
+
+/* ---- 23. composed controls --------------------------------------------
+   A search box is one control built from several elements: a shell that draws
+   the pill, a borderless input inside it, and a button or a scope picker at
+   the ends. Section 4 gave every <input> its own border and radius, which drew
+   a second box inside the pill — the "extra box" on Cinema's search bar.
+
+   Anything living inside a composed shell gives up its own frame. */
+
+.searchbox input, .searchbox select,
+.search input, .search select,
+.collbar__search input, .filterbar input,
+.gallery-search input {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  min-height: 0;
+}
+
+.searchbox input:focus, .search input:focus,
+.collbar__search input:focus, .gallery-search input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* The shell takes the focus ring on the whole control instead. */
+.searchbox:focus-within, .search:focus-within, .collbar__search:focus-within {
+  border-color: var(--p-accent);
+  box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .18);
+}
+
+/* Cinema's submit is a glyph with no label, so it reads as a quiet icon
+   button. Books' carries the word "Search" and stays a filled primary. */
+[data-section="cinema"] .searchbox__go {
+  background: transparent;
+  border: 0;
+  color: var(--p-muted);
+  width: var(--p-control-h);
+  padding: 0;
+}
+
+[data-section="cinema"] .searchbox__go:hover {
+  background: var(--p-accent-tint);
+  color: var(--p-accent-ink);
+}
+
+/* The scope picker is a secondary choice, not the loudest thing in the row. */
+.scopepick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-inline: 4px;
+  border-radius: var(--p-pill);
+  background: var(--p-accent-tint);
+  color: var(--p-accent-ink);
+}
+
+.scopepick select {
+  color: var(--p-accent-ink);
+  font-weight: 600;
+  font-size: var(--p-text-sm);
+}
+
+.scopepick__label {
+  font-family: var(--p-mono);
+  font-size: var(--p-text-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--p-ink-soft);
+  padding-left: 8px;
+}
+
+
+/* ---- 24. Travel ---------------------------------------------------------
+   Travel's bands are addressed by id, not class, so section 19's class-based
+   rule never reached them and each kept painting its own hue. Ids outrank
+   classes, so they are cleared by id here. */
+
+#places, #goals, #activities, #treks, #monuments, #contact, #journey,
+#stats, #heritage, #map, #gallery {
+  background: transparent;
+}
+
+/* The hero fills the window below the bar and no more, so the first screen is
+   the picture and the headline rather than a band of arbitrary height. */
+[data-section="travel"] .hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  height: calc(100vh - var(--p-bar-h));
+  display: flex;
+  align-items: center;
+  padding-block: 0;
+}
+
+[data-section="travel"] .hero .hero-grid { width: 100%; }
+
+@media (max-width: 720px) {
+  [data-section="travel"] .hero { height: auto; min-height: 78vh; padding-block: 64px; }
+}
+
+/* Everything sitting on the hero's dark photograph takes the on-deep text. */
+[data-section="travel"] .hero,
+[data-section="travel"] .hero h1,
+[data-section="travel"] .hero p,
+[data-section="travel"] .hero .hero-eyebrow,
+[data-section="travel"] .hero a { color: var(--p-on-deep); }
+
+[data-section="travel"] .hero .hero-tagline { color: var(--p-on-deep-soft); }
+
+/* ...except the buttons. The rule above is an anchor selector, so it also
+   caught the two hero CTAs — and the filled one is drawn on paper, which left
+   white text on a white pill. A filled button carries its own text colour. */
+[data-section="travel"] .hero a.btn-primary { color: var(--p-ink); }
+[data-section="travel"] .hero a.btn-primary:hover { background: var(--p-accent-ink); color: var(--p-on-accent); }
+[data-section="travel"] .hero a.btn-accent { background: var(--p-accent-ink); color: var(--p-on-accent); }
+[data-section="travel"] .hero a.btn-accent:hover { background: var(--p-ink); color: var(--p-bg); }
+
+
+/* ---- 25. cards read the same in both themes ---------------------------
+   Cinema's cards are the reference: a surface, a drawn edge, a soft drop, and
+   a lift on hover. Several rooms drew a card as paper-on-paper, which
+   disappears the moment the paper goes dark. */
+
+.card, .mcard, .fav-card, .bookcard, .moviecard, .dish-card,
+.topcard, .place-card, .trek-card, .goal-card, .activity-card,
+.monument-card, .gallery-card, .stat-card {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  box-shadow: var(--p-shadow-sm);
+  color: var(--p-ink);
+  overflow: hidden;
+}
+
+.card:hover, .mcard:hover, .fav-card:hover, .bookcard:hover,
+.moviecard:hover, .dish-card:hover, .place-card:hover, .trek-card:hover,
+.goal-card:hover, .activity-card:hover, .monument-card:hover,
+.gallery-card:hover, .stat-card:hover {
+  border-color: var(--p-accent);
+  box-shadow: var(--p-shadow-lg);
+}
+
+/* Text inside a card follows the card, never a fixed ink. */
+.card h1, .card h2, .card h3, .card h4, .card p, .card span, .card li,
+.place-card h3, .place-card p, .trek-card h3, .trek-card p,
+.goal-card h3, .goal-card p, .activity-card h3, .activity-card p,
+.monument-card h3, .monument-card p, .stat-card h3, .stat-card p {
+  color: inherit;
+}
+
+.card .muted, .card small, .place-card small, .trek-card small {
+  color: var(--p-muted);
+}
+
+/* The hero headline is built from per-word spans for its reveal, so the text
+   colour has to reach the spans, not just the heading. */
+[data-section="travel"] .hero h1 .word,
+[data-section="travel"] .hero .hero-headline * { color: inherit; }
+
+/* If the animation library is blocked or offline, the words must still show:
+   the reveal animation ends at opacity 1, but its 0 start would otherwise be
+   the resting state for anyone who never loads it. */
+[data-section="travel"] .hero h1 .word { opacity: 1; }
+
+/* Full-bleed rows reach past the shell by design; they are clipped to the page
+   so they cannot extend the paint area past the window. */
+[data-section="travel"] .full-bleed { max-width: 100%; }
+[data-section="travel"] .hero-bg { max-width: 100%; left: 0; right: 0; }
+
+
+/* ---- 26. Swaad ---------------------------------------------------------
+   Its search field drew its own pill. Section 23 strips the frame from fields
+   inside a composed control, so the wrapper has to draw the pill instead or
+   the field disappears entirely. */
+
+[data-section="food"] .search {
+  display: flex;
+  align-items: center;
+  min-height: var(--p-control-h);
+  padding-left: 38px;
+  padding-right: var(--p-space-md);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-pill);
+  background: var(--p-surface);
+}
+
+[data-section="food"] .search input { width: 100%; color: var(--p-ink); }
+[data-section="food"] .search input::placeholder { color: var(--p-muted); }
+[data-section="food"] .search__icon { stroke: var(--p-muted); }
+
+/* The hero sits on the page wash, not on a photograph, so its text is ink. */
+[data-section="food"] .hero__line,
+[data-section="food"] .hero__sub { color: var(--p-ink); }
+[data-section="food"] .eyebrow,
+[data-section="food"] .hero__by { color: var(--p-muted); }
+
+
+/* ---- 27. the gallery ---------------------------------------------------
+   A masonry wall of photographs. The tiles carry the work, so the chrome
+   stays quiet: a soft radius, a drawn edge that only shows while a picture is
+   still arriving, and a lift on hover. */
+
+[data-section="travel"] .gallery-item {
+  border-radius: var(--p-radius);
+  border: 1px solid var(--p-line);
+  background:
+    linear-gradient(105deg,
+      var(--p-surface-2) 30%,
+      var(--p-surface-3) 50%,
+      var(--p-surface-2) 70%) 0 0 / 280% 100%;
+  animation: gal-shimmer 1.9s var(--p-ease) infinite;
+}
+
+/* Once the picture is in, the placeholder shimmer and the edge step aside. */
+[data-section="travel"] .gallery-item:has(img[src]:not([src=""])),
+[data-section="travel"] .gallery-item.is-loaded {
+  animation: none;
+  border-color: transparent;
+  background: var(--p-surface-2);
+}
+
+@keyframes gal-shimmer {
+  from { background-position: 280% 0; }
+  to   { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-section="travel"] .gallery-item { animation: none; }
+}
+
+[data-section="travel"] .gallery-item:hover {
+  box-shadow: var(--p-shadow-lg);
+  z-index: 2;
+}
+
+/* A little more room to breathe than the old 130px tracks gave. The album runs
+   the full width of the page: a cap here left the photographs in a column with
+   bare paper either side. */
+[data-section="travel"] .gallery-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  gap: var(--p-space-sm);
+  max-width: none;
+  padding-inline: var(--p-gutter);
+}
+
+[data-section="travel"] .gallery-item img,
+[data-section="travel"] .gallery-item video { background: transparent; }
+
+/* Headlines balance their lines rather than leaving one word stranded. */
+.hero__title, .hero-headline, .hero__line, .site-head h1 {
+  text-wrap: balance;
+}
+
+/* A bar's tool group never widens the page: it gives up gaps, then scrolls. */
+.topbar__tools, .nav__tools, .nav__links, .navbar .nav-links {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* ...unless it holds a menu. Scrolling clips on both axes, so the Galleries
+   panel was being cut to the 32px height of the row it hangs from. A bar with
+   a dropdown in it stays visible and wraps instead. */
+.topbar__tools:has(.nav__dropdown), .nav__links:has(.nav__dropdown),
+.nav__tools:has(.nav__dropdown), .navbar .nav-links:has(.nav__dropdown) {
+  overflow: visible;
+  flex-wrap: wrap;
+}
+.topbar__tools::-webkit-scrollbar, .nav__tools::-webkit-scrollbar,
+.nav__links::-webkit-scrollbar, .navbar .nav-links::-webkit-scrollbar { display: none; }
+
+/* The contact block sits on the page wash now that its own dark band is gone,
+   so everything in it reads as ink rather than as text on a dark panel. */
+[data-section="travel"] .contact-section .vibe-line,
+[data-section="travel"] .contact-section .vibe-line span,
+[data-section="travel"] .contact-section h2,
+[data-section="travel"] .contact-section p { color: var(--p-ink); }
+[data-section="travel"] .contact-section .vibe-icon { color: var(--p-accent-ink); }
+[data-section="travel"] .contact-section .contact-eyebrow { color: var(--p-muted); }
+
+
+/* ---- 28. eyebrows and small accent text --------------------------------
+   An eyebrow is small, so it needs the accent at text strength. --p-accent is
+   a fill colour and lands at 2.1-4.2:1 against paper; --p-accent-ink is the
+   same hue at readable weight. */
+
+.eyebrow, .hero__eyebrow, .collhead__eyebrow, .contact-eyebrow,
+.gallery-eyebrow, .coll__eyebrow, .hero__count {
+  color: var(--p-accent-ink);
+}
+
+/* Travel's bar carried white links and a cream sign-off, which was right when
+   both sat on its own dark band. The bar is translucent paper now. */
+[data-section="travel"] .navbar .nav-links a,
+[data-section="travel"] .navbar .logo { color: var(--p-ink); }
+[data-section="travel"] .navbar .nav-links a:hover { color: var(--p-accent-ink); }
+[data-section="travel"] .signoff-text { color: var(--p-ink); }
+
+/* The hero is the exception: it keeps a dark photographic band, so the bar
+   above it stays light while the page is scrolled to the top. It had been set
+   to ink, which put a near-black link on a near-black photograph at 1.3:1.
+   Scoped to the page that actually has that band: the gallery shares this bar
+   but opens on paper, and an unscoped rule turned its wordmark white. */
+[data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .nav-links a,
+[data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .logo,
+[data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .logo em,
+[data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .pmark__name { color: var(--p-on-deep); }
+
+/* The tile is a pale plate in every other room; over a dark photograph it
+   reads as glass instead. */
+[data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .pmark__tile {
+  background: rgba(255, 255, 255, .16);
+  border-color: rgba(255, 255, 255, .3);
+  color: var(--p-on-deep);
+}
+[data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .nav-links a:hover { color: var(--p-on-deep); opacity: .78; }
+
+/* Travel's hero is the one band that stays dark in both themes, so its eyebrow
+   is the exception to the rule above: on-deep, not accent-ink. */
+[data-section="travel"] .hero .eyebrow,
+[data-section="travel"] .hero .hero-eyebrow {
+  color: var(--p-on-deep-soft);
+}
+
+
+/* ---- 29. Books hero band ----------------------------------------------
+   The band was sized to the text column, so enlarging the picture left it
+   tight top and bottom. It breathes now, and the picture is the thing the
+   room introduces itself with. */
+
+[data-section="books"] .hero {
+  padding-block: clamp(36px, 6vw, 88px);
+}
+
+[data-section="books"] .hero__main {
+  align-items: center;
+  /* More air between the reading column and the photograph, so the search bar
+     is not crowding the plate. */
+  gap: clamp(32px, 6vw, 104px);
+}
+
+/* The reading column reads centred on one axis: eyebrow, phrase, line, search
+   and genres all sit over the same middle. */
+[data-section="books"] .hero__col { width: 100%; }
+[data-section="books"] .hero__main,
+[data-section="books"] .hero__main > * { text-align: center; }
+[data-section="books"] .hero__lede,
+[data-section="books"] .hero__sub,
+[data-section="books"] .hero__title { margin-inline: auto; }
+
+[data-section="books"] .searchbox { max-width: 540px; margin-inline: auto; }
+
+/* The genre row runs a little wider than the search bar above it, so the
+   scroller reads as the wider thing it is. */
+[data-section="books"] .chiprow { max-width: 620px; margin-inline: auto; }
+
+/* The plate and its wash are never clipped — that is what squared the circle
+   off before. The wash is a decoration, so it is simply not allowed to
+   contribute scroll width instead. */
+[data-section="books"] .reader-cut,
+[data-section="books"] .reader-cut__blobs { overflow: visible; }
+
+[data-section="books"] .reader-cut__blobs {
+  contain: paint;
+  overflow: clip;
+  overflow-clip-margin: 120px;
+}
+
+
+/* ---- 23. renames and band alignment -----------------------------------
+   Cinema drew its own page wash on a fixed 760px slab, which sat over the
+   site's wash and left a hard seam where it ended. The body carries the wash
+   for every room now. */
+[data-section="cinema"] .wash { display: none; }
+
+/* No bar caps itself: the footers match the bars, so a sign-off starts at the
+   same x as the wordmark above it. */
+.nav__inner.container, .foot__inner, .pfoot__inner {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: var(--p-gutter);
+}
+
+/* Brand hard left, everything else to the right. The left padding clears the
+   floating burger, which is fixed and would otherwise sit over the wordmark as
+   soon as the page scrolls and the bar slides under it. */
+.pmark { margin-right: auto; }
+
+.topbar__inner, .navbar .nav-inner, .nav__inner, .topbar > .wrap, .nav > .container {
+  padding-left: calc(var(--p-rail-clear) + var(--p-space-xs));
+}
+
+[data-section="food"] .topbar { padding-left: calc(var(--p-rail-clear) + var(--p-space-xs)); }
+.navbar .nav-inner > .nav-links { margin-left: auto; }
+
+/* Travel's bar is fixed, so `left: 0` already puts it at the window edge and
+   the band's negative margin would pull it 74px past it. */
+[data-section="travel"] .navbar { margin-left: 0; }
+
+/* Food's bar lays itself out directly, with no inner row, and set `padding` as
+   a shorthand — which cancelled the rail pull-back. */
+[data-section="food"] .topbar {
+  padding-block: 0;
+  min-height: var(--p-bar-h);
+  padding-left: calc(var(--p-rail-clear) + var(--p-gutter));
+  padding-right: var(--p-gutter);
+}
+
+/* The burger sits over the rail, so a bar's first item must clear it.
+   `.topbar > .wrap` is listed because Cinema's bar row carries both classes and
+   the two-class selector outranks `.topbar__inner`, which left its wordmark
+   under the burger on a phone. */
+@media (max-width: 720px) {
+  .topbar__inner, .navbar .nav-inner, .nav__inner,
+  .topbar > .wrap, .nav > .container,
+  .foot__inner, .pfoot__inner {
+    padding-left: 62px;
+  }
+  [data-section="food"] .topbar { padding-left: 62px; }
+}
+
+/* Journal has no bar of its own, so its masthead carries the name. */
+[data-section="journal"] .site-head h1 { font-size: var(--p-h1); }
+
+
+/* ---- 24. one navbar link, everywhere ----------------------------------
+   Cinema drew its four destinations as bordered white pills with a shadow;
+   Books drew the same kind of list as quiet tinted text. Books was right, so
+   Cinema's bar links take that treatment and the two rooms match. */
+
+.topbar__tools .icon-btn--label {
+  min-height: var(--p-control-sm);
+  height: auto;
+  padding: 0 13px;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--p-ink-soft);
+  font-size: var(--p-text-sm);
+  font-weight: 600;
+  border-radius: var(--p-pill);
+  transition: background .18s var(--p-ease), color .18s var(--p-ease);
+}
+
+.topbar__tools .icon-btn--label:hover {
+  background: var(--p-accent-tint);
+  color: var(--p-ink);
+  transform: none;
+  box-shadow: none;
+}
+
+.topbar__tools .icon-btn--label.is-current,
+.topbar__tools .icon-btn--label[aria-current="page"] {
+  background: var(--p-accent-tint);
+  color: var(--p-accent-ink);
+  font-weight: 600;
+}
+
+.topbar__tools .icon-btn--label svg { width: 17px; height: 17px; }
+
+/* The round tool buttons beside them keep their outline: they are buttons, not
+   destinations. */
+.topbar__tools > .icon-btn:not(.icon-btn--label) {
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+}
+
+
+/* ---- 25. one content scale --------------------------------------------
+   Cinema's posters and Books' shelves were laid out before the shared shell
+   existed, so each picked its own track size and the two rooms read at
+   different zooms. One scale, so a card is the same size in every room. */
+
+[data-section="cinema"] .grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: clamp(16px, 1.6vw, 22px);
+}
+
+[data-section="books"] .grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+  gap: clamp(16px, 1.6vw, 22px);
+}
+
+/* The books hero photograph was half the row; it reads as a portrait beside
+   the words now, not the subject of the page. */
+[data-section="books"] .reader-cut { width: min(400px, 100%); align-self: start; margin-top: clamp(0px, 1vw, 18px); }
+
+/* Food's keeper sits closer to the words rather than hard against the edge. */
+[data-section="food"] .hero { padding-right: clamp(24px, 6vw, 110px); }
+[data-section="food"] .keeper { margin-inline-start: auto; }

@@ -1,0 +1,216 @@
+/* Pitara — the one palette.
+
+   Every module maps its own variables onto these tokens, so a colour is
+   changed here once and the whole site follows. Two themes; [data-theme] is
+   set on <html> by the sidebar toggle and remembered per device. */
+
+:root {
+  /* Paper and ink — soft lavender-white paper, deep plum ink */
+  --p-bg:          #fbf8fe;
+  --p-bg-2:        #f4eefa;
+  --p-surface:     #ffffff;
+  --p-surface-2:   #faf6fd;
+  --p-surface-3:   #f2ebfa;
+  --p-ink:         #2e2740;
+  --p-ink-soft:    #5b5273;
+  --p-muted:       #6f6688;
+  --p-line:        #e9e0f4;
+  --p-line-soft:   #f3edfa;
+
+  /* Bare channels, for rgba() with a variable alpha */
+  --p-ink-rgb:     46, 39, 64;
+  --p-bg-rgb:      251, 248, 254;
+  --p-surface-rgb: 255, 255, 255;
+
+  /* The pastel family the whole site is drawn from: the washes on the paper
+     and the tints inside cards, so a page reads pastel even when it is bare. */
+  --p-pink:        #f2a3c0;
+  --p-lilac:       #c3aef0;
+  --p-lavender:    #b09ce6;
+  --p-mint:        #8ecfae;
+  --p-butter:      #f0d68a;
+  --p-sky:         #8fc4ea;
+
+  /* Meaning, not decoration. Green is done, amber is waiting, red is wrong. */
+  --p-ok:          #6fbb94;
+  --p-ok-deep:     #31734f;
+  --p-ok-tint:     #e7f6ee;
+  --p-ok-rgb:      111, 187, 148;
+  --p-wait:        #e0b455;
+  --p-wait-deep:   #8a6420;
+  --p-wait-tint:   #fbf2dc;
+  --p-danger:      #e2798c;
+  --p-star:        #e6bb5d;
+
+  /* The accent is the only thing a module changes. Set by [data-section]. */
+  --p-accent:      #b09ce6;
+  --p-accent-deep: #7a5fc0;
+  --p-accent-soft: #d5c9f2;
+  --p-accent-tint: #f1ecfb;
+  --p-accent-rgb:  176, 156, 230;
+  --p-on-accent:   #ffffff;
+
+  /* The accent is too light to read as text on paper. This is the same hue
+     pushed dark enough to be a link or a label. */
+  --p-accent-ink:  #6a4fae;
+
+  /* ---- Type scale ------------------------------------------------------
+     One 16px root, one ratio. Fluid sizes clamp so a heading is never larger
+     than its line can carry on a phone, and never smaller than it is legible. */
+  --p-text-2xs: 11px;
+  --p-text-xs:  12px;
+  --p-text-sm:  13.5px;
+  --p-text-md:  15px;
+  --p-text:     16px;
+  --p-text-lg:  18px;
+  --p-text-xl:  21px;
+
+  --p-h4:  clamp(1.05rem, 1.1vw + .8rem, 1.25rem);
+  --p-h3:  clamp(1.2rem,  1.5vw + .85rem, 1.5rem);
+  --p-h2:  clamp(1.5rem,  2.2vw + .9rem,  2.1rem);
+  --p-h1:  clamp(2.1rem,  3.4vw + 1rem,   3.4rem);
+  --p-display-1: clamp(2.3rem, 3.6vw + 1rem, 3.6rem);
+
+  --p-leading-tight: 1.15;
+  --p-leading-snug:  1.35;
+  --p-leading:       1.6;
+
+  /* ---- Spacing ---------------------------------------------------------- */
+  --p-space-2xs: 4px;
+  --p-space-xs:  8px;
+  --p-space-sm:  12px;
+  --p-space-md:  16px;
+  --p-space-lg:  24px;
+  --p-space-xl:  36px;
+  --p-space-2xl: 56px;
+  --p-space-3xl: 84px;
+
+  /* ---- Controls ---------------------------------------------------------
+     Every bar, button and field on the site measures from these. */
+  --p-bar-h:      64px;
+  --p-control-h:  40px;
+  --p-control-sm: 32px;
+  --p-control-lg: 48px;
+  --p-control-pad:   0 16px;
+  --p-control-pad-sm: 0 12px;
+
+  /* Type */
+  --p-display: "Outfit", "Segoe UI", system-ui, sans-serif;
+  --p-body:    "Manrope", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --p-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --p-hand:    "Caveat", "Segoe Script", cursive;
+
+  /* Shape */
+  --p-radius-sm: 12px;
+  --p-radius:    18px;
+  --p-radius-lg: 24px;
+  --p-radius-xl: 32px;
+  --p-pill:      999px;
+
+  /* Shadows are tinted with the ink, never neutral grey */
+  --p-shadow-sm: 0 1px 2px rgba(var(--p-ink-rgb), .04), 0 2px 10px rgba(var(--p-ink-rgb), .05);
+  --p-shadow:    0 2px 6px rgba(var(--p-ink-rgb), .05), 0 14px 32px -14px rgba(var(--p-ink-rgb), .16);
+  --p-shadow-lg: 0 4px 14px rgba(var(--p-ink-rgb), .06), 0 30px 60px -20px rgba(var(--p-ink-rgb), .22);
+
+  --p-ease: cubic-bezier(.22, 1, .36, 1);
+
+  /* The sidebar is site chrome and keeps its own two colours, so it does not
+     invert when --p-ink does. */
+  --p-nav-bg:   #ffffff;
+  --p-nav-ink:  #2e2740;
+  --p-nav-line: #e9e0f4;
+
+  /* Sections that are dark ON PURPOSE in both themes — Travel's hero band,
+     Cinema's shelf strips. White text sits on these in light mode and must
+     keep sitting on them in dark, so they darken rather than invert. */
+  --p-deep:      #342c47;
+  --p-deep-2:    #453b5c;
+  --p-deep-rgb:  52, 44, 71;
+  --p-on-deep:   #ffffff;
+  --p-on-deep-soft: rgba(255, 255, 255, .74);
+
+  /* Layout — one content width for the whole site. */
+  --p-shell: 1400px;
+  --p-gutter: clamp(1.1rem, 3.4vw, 2.4rem);
+  /* What the floating rail occupies. Pages pad by it; fixed bars start at it. */
+  --p-rail-clear: 74px;
+}
+
+/* Dark paper — a deep plum night rather than flat black. */
+[data-theme="dark"] {
+  --p-bg:          #15121c;
+  --p-bg-2:        #1b1724;
+  --p-surface:     #221d2d;
+  --p-surface-2:   #292336;
+  --p-surface-3:   #332c42;
+  --p-ink:         #f2eff8;
+  --p-ink-soft:    #c6bfd4;
+  --p-muted:       #a79eb9;
+  --p-line:        #3a3350;
+  --p-line-soft:   #2d2739;
+
+  --p-ink-rgb:     242, 239, 248;
+  --p-bg-rgb:      21, 18, 28;
+  --p-surface-rgb: 34, 29, 45;
+
+  --p-pink:        #f0aac5;
+  --p-lilac:       #cbb8f3;
+  --p-lavender:    #bfaced;
+  --p-mint:        #9ad9bb;
+  --p-butter:      #f0dc9d;
+  --p-sky:         #a2d0f0;
+
+  --p-ok:          #86ceaa;
+  --p-ok-deep:     #a6dcc2;
+  --p-ok-tint:     #1c2f27;
+  --p-ok-rgb:      134, 206, 170;
+  --p-wait:        #e8c579;
+  --p-wait-deep:   #f2d79c;
+  --p-wait-tint:   #2e2718;
+  --p-danger:      #ef97a7;
+  --p-star:        #ecc873;
+
+  /* Dark accents are lifted pastels, so what sits on them must be ink. */
+  --p-on-accent:   #191426;
+  --p-accent:      #bfaced;
+  --p-accent-deep: #d5c9f5;
+  --p-accent-soft: #cdbef2;
+  --p-accent-tint: #272033;
+  --p-accent-rgb:  191, 172, 237;
+  --p-accent-ink:  #cbbcf0;
+
+  --p-nav-bg:   #1c1826;
+  --p-nav-ink:  #f2eff8;
+  --p-nav-line: #352e46;
+
+  --p-deep:      #100d17;
+  --p-deep-2:    #1c1826;
+  --p-deep-rgb:  16, 13, 23;
+  --p-on-deep:   #f2eff8;
+  --p-on-deep-soft: rgba(242, 239, 248, .72);
+
+  --p-shadow-sm: 0 1px 2px rgba(0, 0, 0, .44), 0 2px 10px rgba(0, 0, 0, .34);
+  --p-shadow:    0 2px 6px rgba(0, 0, 0, .5), 0 14px 32px -14px rgba(0, 0, 0, .74);
+  --p-shadow-lg: 0 4px 14px rgba(0, 0, 0, .54), 0 30px 60px -20px rgba(0, 0, 0, .88);
+
+  color-scheme: dark;
+}
+
+/* One accent per module — lavender, rose, violet, meadow, apricot, sky,
+   orchid. Nothing else about a module's colour differs. */
+[data-section="home"]       { --p-accent:#b09ce6; --p-accent-deep:#7a5fc0; --p-accent-soft:#d5c9f2; --p-accent-tint:#f1ecfb; --p-accent-rgb:176,156,230; --p-accent-ink:#6a4fae; }
+[data-section="cinema"]     { --p-accent:#f2a3c0; --p-accent-deep:#c85f8c; --p-accent-soft:#fac9dc; --p-accent-tint:#fdeef5; --p-accent-rgb:242,163,192; --p-accent-ink:#b34c79; }
+[data-section="books"]      { --p-accent:#b598e8; --p-accent-deep:#8259c9; --p-accent-soft:#d9c9f5; --p-accent-tint:#f3edfc; --p-accent-rgb:181,152,232; --p-accent-ink:#7146bb; }
+[data-section="travel"]     { --p-accent:#7fcaa8; --p-accent-deep:#3f9370; --p-accent-soft:#bde7d2; --p-accent-tint:#e9f7f0; --p-accent-rgb:127,202,168; --p-accent-ink:#276448; }
+[data-section="food"]      { --p-accent:#f5b78d; --p-accent-deep:#cb7639; --p-accent-soft:#fbd7bb; --p-accent-tint:#fdf1e8; --p-accent-rgb:245,183,141; --p-accent-ink:#9d5626; }
+[data-section="favourites"] { --p-accent:#8fc4ea; --p-accent-deep:#4b8bc0; --p-accent-soft:#c3dff4; --p-accent-tint:#ecf5fc; --p-accent-rgb:143,196,234; --p-accent-ink:#356d9c; }
+[data-section="journal"]    { --p-accent:#dfa4d6; --p-accent-deep:#ab5c9e; --p-accent-soft:#f0cbeb; --p-accent-tint:#fbeff9; --p-accent-rgb:223,164,214; --p-accent-ink:#984b8c; }
+
+/* Lifted on dark paper: the pastels wash out against it. */
+[data-theme="dark"][data-section="home"]       { --p-accent:#c6b5f0; --p-accent-deep:#ddd2f8; --p-accent-soft:#d3c6f5; --p-accent-tint:#282034; --p-accent-rgb:198,181,240; --p-accent-ink:#d0c2f4; }
+[data-theme="dark"][data-section="cinema"]     { --p-accent:#f4b6cd; --p-accent-deep:#f9d4e2; --p-accent-soft:#f7c8da; --p-accent-tint:#33222b; --p-accent-rgb:244,182,205; --p-accent-ink:#f7c4d6; }
+[data-theme="dark"][data-section="books"]      { --p-accent:#c8b0f0; --p-accent-deep:#ded0f9; --p-accent-soft:#d4c1f5; --p-accent-tint:#2a2239; --p-accent-rgb:200,176,240; --p-accent-ink:#d2c0f5; }
+[data-theme="dark"][data-section="travel"]     { --p-accent:#93d8b6; --p-accent-deep:#bde9d1; --p-accent-soft:#aee0c7; --p-accent-tint:#1c2e26; --p-accent-rgb:147,216,182; --p-accent-ink:#a5e0c3; }
+[data-theme="dark"][data-section="food"]      { --p-accent:#f7c6a4; --p-accent-deep:#fbdcc4; --p-accent-soft:#f9d3b7; --p-accent-tint:#332619; --p-accent-rgb:247,198,164; --p-accent-ink:#fad2b3; }
+[data-theme="dark"][data-section="favourites"] { --p-accent:#a3d1f0; --p-accent-deep:#c8e4f8; --p-accent-soft:#b8dcf5; --p-accent-tint:#1d2b36; --p-accent-rgb:163,209,240; --p-accent-ink:#b5daf5; }
+[data-theme="dark"][data-section="journal"]    { --p-accent:#e6b8de; --p-accent-deep:#f2d5ec; --p-accent-soft:#edc9e6; --p-accent-tint:#2f2232; --p-accent-rgb:230,184,222; --p-accent-ink:#eec7e7; }

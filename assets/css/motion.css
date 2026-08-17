@@ -1,0 +1,204 @@
+/* Pitara — motion.
+   =========================================================================
+   Entrances, reveals and interaction polish.
+
+   THE SAFETY RULE THAT SHAPES THIS WHOLE FILE
+   Nothing is hidden unless JavaScript is present to reveal it again. Every
+   rule that sets `opacity: 0` is scoped to `html[data-motion]`, and that
+   attribute is set by motion.js on load. If the script fails, is blocked, or
+   the browser is old, no element is ever hidden and the page simply appears —
+   which is how a reveal effect should degrade.
+
+   The whole file also stands down under prefers-reduced-motion.
+   ========================================================================= */
+
+
+/* ---- 1. section reveal -------------------------------------------------
+   Content lifts in as it comes into view, once, and then stays put. */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  html[data-motion] [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity   .62s var(--p-ease-out, cubic-bezier(.22, .8, .28, 1)),
+      transform .62s var(--p-ease-out, cubic-bezier(.22, .8, .28, 1));
+    will-change: opacity, transform;
+  }
+
+  html[data-motion] [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Rows of cards arrive in sequence rather than all at once. The delay is
+     capped so a long grid never leaves the reader waiting. */
+  html[data-motion] [data-reveal][style*="--i"] {
+    transition-delay: calc(var(--i) * 55ms);
+  }
+}
+
+
+/* ---- 2. the hero ------------------------------------------------------
+   The front door gets a longer, softer entrance than the rest of the page:
+   the eyebrow, the headline, the lede and the buttons arrive in order, and
+   the portrait settles in behind them. */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  html[data-motion] .hero__grid > div > *,
+  html[data-motion] .hero__col > * {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: p-rise .78s var(--p-ease-out, cubic-bezier(.22, .8, .28, 1)) forwards;
+  }
+
+  html[data-motion] .hero__grid > div > *:nth-child(1) { animation-delay: .06s; }
+  html[data-motion] .hero__grid > div > *:nth-child(2) { animation-delay: .14s; }
+  html[data-motion] .hero__grid > div > *:nth-child(3) { animation-delay: .22s; }
+  html[data-motion] .hero__grid > div > *:nth-child(4) { animation-delay: .30s; }
+
+  html[data-motion] .hero__cut,
+  html[data-motion] .reader-cut {
+    opacity: 0;
+    animation: p-settle 1.05s var(--p-ease-out, cubic-bezier(.22, .8, .28, 1)) .12s forwards;
+  }
+}
+
+@keyframes p-rise {
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes p-settle {
+  from { opacity: 0; transform: translateY(24px) scale(.975); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ---- 3. the portrait follows the pointer ------------------------------
+   A few pixels of parallax, driven by motion.js. Small enough to feel like
+   depth rather than a gimmick, and it never moves far enough to disturb the
+   layout because it is a transform. */
+
+.hero__cut img,
+.hero__halo {
+  transition: translate .5s cubic-bezier(.22, .8, .28, 1);
+}
+
+@media (hover: none) {
+  .hero__cut img, .hero__halo { translate: none !important; }
+}
+
+
+/* ---- 4. interaction polish --------------------------------------------
+   The same easing everywhere, so the whole site moves like one object. */
+
+:root {
+  --p-ease-out: cubic-bezier(.22, .8, .28, 1);
+  --p-ease-soft: cubic-bezier(.4, 0, .2, 1);
+}
+
+a, button, .card, .room, .chipbtn, .pill, .mtab,
+.icon-btn, .iconbtn, .nav__link {
+  transition:
+    background-color .2s var(--p-ease-soft),
+    border-color     .2s var(--p-ease-soft),
+    color            .2s var(--p-ease-soft),
+    box-shadow       .24s var(--p-ease-out),
+    transform        .24s var(--p-ease-out);
+}
+
+/* Cards lift toward the reader and their picture eases in with them. */
+.card, .room, .mcard, .fav-card, .bookcard, .moviecard, .dish-card,
+.place-card, .trek-card, .goal-card, .activity-card, .monument-card {
+  will-change: transform;
+}
+
+.card img, .room img, .mcard img, .fav-card img,
+.bookcard img, .moviecard img, .dish-card img {
+  transition: transform .55s var(--p-ease-out);
+}
+
+.card:hover img, .room:hover img, .mcard:hover img,
+.fav-card:hover img, .bookcard:hover img,
+.moviecard:hover img, .dish-card:hover img {
+  transform: scale(1.035);
+}
+
+/* A pressed control acknowledges the press. */
+.btn:active, .button:active, .room:active { transform: translateY(1px) scale(.995); }
+
+
+/* ---- 5. the home room cards -------------------------------------------
+   Each card carries its room's accent. On hover the accent surfaces rather
+   than the card changing into something else. */
+
+.room::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow .24s var(--p-ease-out);
+}
+
+.room:hover::after {
+  box-shadow: inset 0 0 0 1.5px rgba(var(--p-accent-rgb), .55);
+}
+
+.room:hover { transform: translateY(-4px); }
+
+
+/* ---- 6. focus, for people who navigate by keyboard -------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--p-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* A skip target for the keyboard, visible only when focused. */
+.p-skip {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  translate: -50% -180%;
+  z-index: 999;
+  padding: 10px 18px;
+  border-radius: var(--p-pill);
+  background: var(--p-accent-ink);
+  color: var(--p-on-accent);
+  font: 600 14px var(--p-body);
+  text-decoration: none;
+  transition: translate .22s var(--p-ease-out);
+}
+
+.p-skip:focus { translate: -50% 0; }
+
+
+/* ---- 7. theme change ---------------------------------------------------
+   Light and dark cross-fade rather than snapping. The transition is applied
+   only while the toggle is working, so it never slows an ordinary hover. */
+
+html.is-theming, html.is-theming * {
+  transition:
+    background-color .32s var(--p-ease-soft),
+    border-color     .32s var(--p-ease-soft),
+    color            .32s var(--p-ease-soft) !important;
+}
+
+
+/* ---- 8. scrolling ------------------------------------------------------ */
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  html[data-motion] [data-reveal] { opacity: 1; transform: none; }
+  html[data-motion] .hero__grid > div > *,
+  html[data-motion] .hero__col > *,
+  html[data-motion] .hero__cut,
+  html[data-motion] .reader-cut { opacity: 1; animation: none; transform: none; }
+}

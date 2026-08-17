@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" data-section="journal">
+<head>
+<script>(function(){try{var t=localStorage.getItem("sidcinema-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SidVerse — SidNotes</title>
+<meta name="description" content="Scrapbook pages. Longer thoughts, laid out by hand.">
+<link rel="icon" href="https://img.freepik.com/premium-vector/sid-letter-logo-design-technology-company-sid-logo-design-black-white-color-combination-sid-logo-sid-vector-sid-design-sid-icon-sid-alphabet-sid-typography-logo-design_229120-161627.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+<link rel="stylesheet" href="css/journal.css">
+<link rel="stylesheet" href="css/theme.css">
+<script defer src="../../assets/js/site.config.js"></script>
+<script defer src="../../assets/js/shell.js" data-root="../.."></script>
+<link rel="stylesheet" href="../../assets/css/universal.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/motion.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="wordmark" href="index.html"></a>
+    </div>
+  </header>
+
+  <div class="site-head">
+    <h1 class="langline--center" data-phrase></h1>
+    <div class="rule"></div>
+    <p>Notes, journeys, and moments worth remembering.</p>
+  </div>
+
+  <div id="cards" class="cards"></div>
+  <div id="loading" class="loading">opening the journal...</div>
+
+<script src="js/core.js"></script>
+<script>
+/* Read-only. Stories are published from the editor, which lives elsewhere; all
+   this page ever does is fetch data/index.json and draw a card per entry. */
+(async function () {
+  const J = window.JOURNAL;
+  const cards = document.getElementById("cards");
+  const loading = document.getElementById("loading");
+
+  try {
+    const res = await fetch("data/index.json?t=" + Date.now(), { cache: "no-store" });
+    const list = res.ok ? await res.json() : [];
+    loading.style.display = "none";
+
+    if (!Array.isArray(list) || list.length === 0) {
+      cards.innerHTML = '<div class="empty"><div class="big">No stories yet</div>'
+        + "<div>Publish one from the editor and it appears here.</div></div>";
+      return;
+    }
+
+    list.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    cards.innerHTML = list.map(post => {
+      const thumb = post.thumb
+        ? '<img class="thumb" src="' + J.escapeHtml(post.thumb) + '" alt="">'
+        : '<div class="thumb placeholder">&#10047;</div>';
+      return '<a class="card" href="story.html?id=' + encodeURIComponent(post.id) + '">'
+        + thumb
+        + '<div class="c-date">' + J.escapeHtml(J.formatDate(post.date)) + "</div>"
+        + '<div class="c-title">' + J.escapeHtml(post.title || "Untitled") + "</div></a>";
+    }).join("");
+  } catch (error) {
+    loading.innerHTML = "Could not load stories yet.";
+  }
+})();
+</script>
+  <script defer src="../../assets/js/motion.js"></script>
+</body>
+</html>

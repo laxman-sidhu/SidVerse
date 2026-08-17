@@ -1,0 +1,112 @@
+/* Journal — retargeted onto the Pitara palette. Loaded after journal.css so
+   these win. The scrapbook pages themselves are untouched by the theme: a story
+   carries its own colours inside its JSON, which is the point of publishing it
+   that way. */
+
+:root {
+  --paper:          var(--p-bg);
+  --paper-edge:     var(--p-line);
+  --ink:            var(--p-ink);
+  --ink-soft:       var(--p-muted);
+  --grid:           var(--p-line-soft);
+  --lav:            var(--p-accent-soft);
+  --lav-deep:       var(--p-accent-deep);
+  --lilac:          var(--p-accent-tint);
+  --blush:          var(--p-accent-tint);
+  --mint:           var(--p-surface-3);
+  --peri:           var(--p-surface-2);
+  --soft:           var(--p-surface-2);
+  --shadow:         rgba(var(--p-ink-rgb), .14);
+  --tape:           rgba(var(--p-accent-rgb), .32);
+  --primary-hover:  color-mix(in srgb, var(--p-accent-deep) 78%, var(--p-ink));
+  --hand:           var(--p-hand);
+  --cute:           var(--p-hand);
+  --body:           var(--p-body);
+  --script:         'Great Vibes', cursive;
+  --serif:          var(--p-display);
+  --glow1:          var(--p-accent-tint);
+  --glow2:          var(--p-surface-2);
+  --glow3:          var(--p-accent-tint);
+  --glow4:          var(--p-surface-3);
+  --glow-base:      var(--p-bg);
+  --pdf-bg: var(--p-bg);
+}
+
+[data-theme="dark"] {
+  --paper:          var(--p-bg);
+  --paper-edge:     var(--p-line);
+  --ink:            var(--p-ink);
+  --ink-soft:       var(--p-muted);
+  --grid:           var(--p-line-soft);
+  --lav:            var(--p-accent-soft);
+  --lav-deep:       var(--p-accent-deep);
+  --lilac:          var(--p-accent-tint);
+  --blush:          var(--p-accent-tint);
+  --mint:           var(--p-surface-3);
+  --peri:           var(--p-surface-2);
+  --soft:           var(--p-surface-2);
+  --shadow:         rgba(var(--p-ink-rgb), .14);
+  --tape:           rgba(var(--p-accent-rgb), .32);
+  --primary-hover:  color-mix(in srgb, var(--p-accent-deep) 78%, var(--p-ink));
+  --hand:           var(--p-hand);
+  --cute:           var(--p-hand);
+  --body:           var(--p-body);
+  --script:         'Great Vibes', cursive;
+  --serif:          var(--p-display);
+  --glow1:          var(--p-accent-tint);
+  --glow2:          var(--p-surface-2);
+  --glow3:          var(--p-accent-tint);
+  --glow4:          var(--p-surface-3);
+  --glow-base:      var(--p-bg);
+  /* The PDF is always exported on white, whatever the screen is showing. */
+  --pdf-bg: #ffffff;
+  color-scheme: dark;
+}
+
+
+/* The polaroid cards read wrong on the dark paper: the frame follows the
+   surface, the ink follows the theme, and the date keeps its accent. */
+.card {
+  background: var(--p-surface) !important;
+  border: 1px solid var(--p-line);
+  box-shadow: var(--p-shadow) !important;
+}
+
+.card .c-title { color: var(--p-ink) !important; }
+.card .c-date  { color: var(--p-accent-ink) !important; }
+.site-head h1  { color: var(--p-ink); font-size: clamp(46px, 7vw, 68px); }
+.site-head p   { color: var(--p-ink-soft); }
+
+
+/* ---- the card wall ------------------------------------------------------
+   `auto-fill` builds a full row of tracks whether or not there are posts to
+   fill them, so two stories sat hard left inside a centred grid. `auto-fit`
+   collapses the empty tracks, and the row centres on what is actually there. */
+.cards {
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 300px));
+  justify-content: center;
+  padding-block: clamp(28px, 4vw, 46px) clamp(60px, 8vw, 96px);
+}
+
+/* The heading block reads as the page's masthead rather than a bare line. */
+.site-head { padding: clamp(34px, 5vw, 58px) 22px 6px; }
+.site-head h1 { font-family: var(--p-display); font-weight: 600; letter-spacing: -.03em; }
+.site-head p { font-family: var(--p-body); font-style: normal; font-size: var(--p-text-md); }
+
+.card .c-title { font-family: var(--p-display); font-weight: 600; font-size: 21px; letter-spacing: -.015em; }
+.card .c-date { font-family: var(--p-mono); font-weight: 500; letter-spacing: .12em; }
+
+/* The loading line sits in the flow, so it must not hold a screen of height
+   open after the cards have arrived. */
+.loading { padding: 48px 20px; font-family: var(--p-display); font-size: 20px; }
+
+/* The room had no bar of its own; it takes the shared one now. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 1px solid var(--p-line);
+}
+
+.topbar .btn { min-height: var(--p-control-sm); padding-inline: 14px; font-size: var(--p-text-sm); }
+.site-head { padding-top: clamp(28px, 4vw, 46px); }

@@ -1,0 +1,391 @@
+/* Pitara — the front page only. */
+
+.hero {
+  position: relative;
+  padding: clamp(30px, 4.6vw, 62px) 0 clamp(26px, 3.4vw, 44px);
+  overflow: hidden;
+}
+
+.hero__grid {
+  position: relative;
+  max-width: var(--p-shell);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  /* Off the rail rather than hard against it, and the words read centred
+     inside the column they are given. */
+  padding-left: clamp(0px, 3vw, 54px);
+}
+
+.hero__copy { text-align: center; }
+.hero__lede { margin-inline: auto; }
+.hero__meta { justify-content: center; }
+
+.hero__title {
+  margin: 14px 0 0;
+  font-size: clamp(2.3rem, 3.8vw + 1rem, 3.9rem);
+  font-weight: 600;
+  letter-spacing: -.032em;
+  line-height: 1.05;
+}
+
+.hero__title em {
+  font-style: normal;
+  background: linear-gradient(100deg, var(--p-lavender), var(--p-pink) 46%, var(--p-mint));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__lede {
+  margin-top: 16px;
+  max-width: 50ch;
+  font-size: clamp(.98rem, 1.1vw, 1.06rem);
+  color: var(--p-ink-soft);
+}
+
+.hero__meta {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.hero__count { font-family: var(--p-hand); font-size: 1.4rem; color: var(--p-accent-ink); }
+
+.hero__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--p-control-h);
+  padding: 0 22px;
+  border-radius: var(--p-pill);
+  background: var(--p-accent-ink);
+  color: var(--p-on-accent);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px -8px rgba(var(--p-accent-rgb), .9);
+  transition: transform .25s var(--p-ease), box-shadow .25s var(--p-ease);
+}
+
+.hero__jump:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -10px rgba(var(--p-accent-rgb), .95); }
+
+/* ---- the portrait -------------------------------------------------------
+   A cut-out floating on colour rather than sitting in a frame. One static
+   elliptical glow behind it: the earlier version was a circle wider than its
+   column, so what showed through read as a rectangular slab, and it tracked
+   the pointer, which made the whole hero restless. */
+
+.hero__cut {
+  position: relative;
+  justify-self: center;
+  width: min(440px, 100%);
+  aspect-ratio: 880 / 1186;
+  margin: 0;
+  overflow: visible;
+}
+
+/* A whole circle behind the figure. The glow used to be painted on .hero__cut,
+   whose box is 880x1186 — so a circle sized off its width was clipped top and
+   bottom by the mask on the image, which is what squared its sides off. It sits
+   on its own square box now, so it is round at every viewport. */
+.hero__cut::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 47%;
+  width: 128%;
+  height: auto;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(var(--p-accent-rgb), .52) 0%,
+      rgba(var(--p-accent-rgb), .38) 24%,
+      color-mix(in srgb, var(--p-pink) 34%, transparent) 46%,
+      color-mix(in srgb, var(--p-mint) 22%, transparent) 66%,
+      rgba(var(--p-accent-rgb), 0) 78%);
+  filter: blur(22px);
+}
+
+.hero__cut img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 22px 36px rgba(var(--p-ink-rgb), .22));
+  -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
+}
+
+@media (max-width: 860px) {
+  .hero__grid { grid-template-columns: 1fr; padding-left: 0; gap: 4px; }
+  /* The portrait led on a phone and pushed the headline below the fold. It
+     follows the words now, and at a size that leaves room for them. */
+  .hero__cut { order: 2; width: min(240px, 58%); justify-self: center; }
+  .hero__copy { order: 1; }
+  .hero__title { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .hero__lede { font-size: .95rem; }
+}
+
+
+/* ---- the index strip ----------------------------------------------------
+   Six links, one line. On a wide screen the whole box is legible before the
+   reader has scrolled at all; it is the table of contents, not decoration. */
+
+.index {
+  margin-top: clamp(24px, 3.4vw, 40px);
+  padding-top: 20px;
+  border-top: 1px solid var(--p-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  align-items: center;
+}
+
+.index__label {
+  font-family: var(--p-mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--p-muted);
+  margin-right: 4px;
+}
+
+.index [data-index-chips] { display: contents; }
+
+.index__chip {
+  --room: var(--p-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: var(--p-control-sm);
+  padding: 0 13px;
+  border-radius: var(--p-pill);
+  border: 1px solid var(--p-line);
+  background: rgba(var(--p-surface-rgb), .72);
+  color: var(--p-ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s var(--p-ease), border-color .2s var(--p-ease), color .2s var(--p-ease), transform .2s var(--p-ease);
+}
+
+.index__chip:hover {
+  background: color-mix(in srgb, var(--room) 16%, var(--p-surface));
+  border-color: color-mix(in srgb, var(--room) 46%, var(--p-line));
+  color: var(--p-ink);
+  transform: translateY(-1px);
+}
+
+.index__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--room); flex: 0 0 auto; }
+
+.index__chip[data-section="cinema"]     { --room: #f2a3c0; }
+.index__chip[data-section="books"]      { --room: #b598e8; }
+.index__chip[data-section="travel"]     { --room: #7fcaa8; }
+.index__chip[data-section="food"]      { --room: #f5b78d; }
+.index__chip[data-section="favourites"] { --room: #8fc4ea; }
+.index__chip[data-section="journal"]    { --room: #dfa4d6; }
+
+
+/* ---- the six ----------------------------------------------------------- */
+
+.rooms {
+  padding-block: clamp(20px, 3vw, 34px) clamp(52px, 8vw, 90px);
+  scroll-margin-top: 26px;
+}
+
+.rooms__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--p-line);
+}
+
+.rooms__title { font-size: clamp(1.5rem, 3vw, 2rem); }
+.rooms__note { font-size: 13.5px; color: var(--p-muted); max-width: 46ch; }
+
+/* Six rooms, so the column count is set rather than left to auto-fit: three
+   across gives two full rows, where auto-fit gave four then a ragged two. */
+.rooms__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 1.8vw, 24px);
+}
+
+@media (max-width: 1080px) { .rooms__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px)  { .rooms__grid { grid-template-columns: 1fr; } }
+
+.room {
+  --room: var(--p-accent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius-lg);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform .3s var(--p-ease), box-shadow .3s var(--p-ease), border-color .3s var(--p-ease);
+}
+
+.room:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--p-shadow-lg);
+  border-color: color-mix(in srgb, var(--room) 42%, var(--p-line));
+}
+
+.room[data-section="cinema"]     { --room: #f2a3c0; }
+.room[data-section="books"]      { --room: #b598e8; }
+.room[data-section="travel"]     { --room: #7fcaa8; }
+.room[data-section="food"]      { --room: #f5b78d; }
+.room[data-section="favourites"] { --room: #8fc4ea; }
+.room[data-section="journal"]    { --room: #dfa4d6; }
+
+.room__shot {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--room) 16%, var(--p-surface-2));
+}
+
+.room__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale .5s var(--p-ease);
+}
+
+.room:hover .room__shot img { scale: 1.045; }
+
+.room__badge {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--p-surface);
+  color: color-mix(in srgb, var(--room) 72%, var(--p-ink));
+  box-shadow: var(--p-shadow-sm);
+}
+
+.room__badge svg { width: 19px; height: 19px; }
+
+.room__body { display: flex; flex-direction: column; flex: 1; padding: 18px 20px 16px; }
+.room__label { font-family: var(--p-display); font-size: 1.28rem; font-weight: 600; }
+.room__blurb { margin-top: 7px; font-size: 14px; color: var(--p-ink-soft); flex: 1; }
+
+.room__foot {
+  margin-top: 16px;
+  padding-top: 13px;
+  border-top: 1px solid var(--p-line-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.room__note {
+  font-family: var(--p-mono);
+  font-size: 10px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--p-muted);
+}
+
+.room__go {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--room) 16%, transparent);
+  color: color-mix(in srgb, var(--room) 72%, var(--p-ink));
+  transition: background .25s var(--p-ease), transform .25s var(--p-ease), color .25s var(--p-ease);
+}
+
+.room:hover .room__go {
+  background: color-mix(in srgb, var(--room) 72%, var(--p-ink));
+  color: var(--p-surface);
+  transform: translateX(3px);
+}
+
+.room__go svg { width: 15px; height: 15px; }
+
+
+/* ---- footer ------------------------------------------------------------ */
+
+.foot {
+  margin-top: auto;
+  padding: 30px 0;
+  border-top: 1px solid var(--p-line);
+  background: var(--p-surface-2);
+  color: var(--p-ink-soft);
+}
+
+.foot__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.foot__line { font-family: var(--p-hand); font-size: 1.2rem; color: var(--p-ink); }
+.foot__meta { font-size: 12.5px; color: var(--p-muted); }
+.foot__links { display: flex; gap: 10px; }
+
+.foot__link {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--p-line);
+  color: inherit;
+  transition: background .2s var(--p-ease), color .2s var(--p-ease), border-color .2s var(--p-ease);
+}
+
+.foot__link:hover { background: var(--p-accent-ink); color: var(--p-on-accent); border-color: transparent; }
+.foot__link svg { width: 17px; height: 17px; }
+
+/* Instagram paints its own gradient, so hover lifts the tile, not the glyph. */
+.foot__link--instagram:hover { background: var(--p-surface); border-color: var(--p-accent); }
+.foot__link .ig { width: 18px; height: 18px; }
+
+
+/* ---- the opening -------------------------------------------------------
+   The hero settles in from above on load: eyebrow, headline, lede, buttons,
+   then the portrait, each a beat after the one before. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__eyebrow, .hero__title, .hero__lede, .hero__meta, .hero__cut, .index {
+    animation: hero-drop .8s var(--p-ease) both;
+  }
+
+  .hero__eyebrow { animation-delay: .04s; }
+  .hero__title   { animation-delay: .12s; }
+  .hero__lede    { animation-delay: .22s; }
+  .hero__meta    { animation-delay: .32s; }
+  .hero__cut     { animation-delay: .18s; }
+  .index         { animation-delay: .44s; }
+}
+
+@keyframes hero-drop {
+  from { opacity: 0; transform: translateY(-22px); }
+  to   { opacity: 1; transform: none; }
+}
