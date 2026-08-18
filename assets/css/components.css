@@ -1328,3 +1328,579 @@ body { padding-left: var(--p-rail-clear); }
 /* Food's keeper sits closer to the words rather than hard against the edge. */
 [data-section="food"] .hero { padding-right: clamp(24px, 6vw, 110px); }
 [data-section="food"] .keeper { margin-inline-start: auto; }
+
+
+/* ---- 26. one search bar ------------------------------------------------
+   Cinema labelled its scope picker "Search by" and drew the select as a bare
+   filled pill, which lost its own text on hover. Books ended its bar with a
+   worded Search button. Both are the same control now: a magnifier that
+   submits on the left, the field, then a plain dropdown on the right. */
+
+.scopepick {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: var(--p-control-sm);
+  padding: 0 30px 0 13px;
+  border-radius: var(--p-pill);
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+  color: var(--p-ink);
+}
+
+.scopepick:hover { border-color: var(--p-accent); }
+.scopepick:focus-within { border-color: var(--p-accent); box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .2); }
+
+.scopepick select, .scopepick__select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--p-text-sm);
+  font-weight: 600;
+  color: var(--p-ink);
+  cursor: pointer;
+}
+
+.scopepick select:focus, .scopepick__select:focus { outline: none; box-shadow: none; }
+
+.scopepick__caret {
+  position: absolute;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--p-muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Books draws its own caret; it is repositioned rather than duplicated, and
+   the module's left divider on the picker is dropped since the pill now has a
+   border of its own. */
+[data-section="books"] .scopepick { border-left: 1px solid var(--p-line); }
+
+[data-section="books"] .scopepick::after {
+  right: 12px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right-color: var(--p-muted);
+  border-bottom-color: var(--p-muted);
+  /* The module already rotates this with `transform`; adding `rotate` on top
+     compounded to 90deg and drew an L. One transform, stated once. */
+  rotate: none;
+  translate: none;
+  transform: translateY(-70%) rotate(45deg);
+}
+
+[data-section="books"] .scopepick select { padding: 0; color: var(--p-ink); font-size: var(--p-text-sm); }
+
+/* The magnifier is the submit control now. */
+[data-section="books"] .searchbox__go {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--p-muted);
+  cursor: pointer;
+  transition: background .18s var(--p-ease), color .18s var(--p-ease);
+}
+
+[data-section="books"] .searchbox__go:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
+[data-section="books"] .searchbox__go svg { width: 19px; height: 19px; position: static; }
+
+
+/* ---- 27. the bar divider ----------------------------------------------
+   The rule between the destinations and the round tools was drawn as a border
+   on the tools group, so it sat hard against the first button. It is a gap
+   with a centred rule instead. */
+[data-section="books"] .nav__tools {
+  border-left: 0;
+  padding-left: 0;
+  margin-left: var(--p-space-md);
+  gap: var(--p-space-xs);
+}
+
+[data-section="books"] .nav__tools::before {
+  content: "";
+  width: 1px;
+  height: 22px;
+  flex: 0 0 auto;
+  margin-right: var(--p-space-md);
+  background: var(--p-line);
+}
+
+
+/* ---- 28. the footer line ----------------------------------------------
+   The quote is the one piece of writing on the page that is not mine, so it is
+   set apart: the display face, a little larger, in ink rather than grey. */
+.pfoot__line, .foot__line, .footer__line {
+  font-family: var(--p-display);
+  font-size: clamp(.95rem, 1.1vw, 1.08rem);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -.005em;
+  color: var(--p-ink-soft);
+  max-width: 68ch;
+}
+
+
+/* ---- 29. the phone ------------------------------------------------------
+   Grids that read as one column on a phone waste most of the screen when the
+   card is a chip or a thumbnail. These pack two or three across instead. */
+
+@media (max-width: 720px) {
+  /* The footer band: the sign-off centres and the quote gets the full width
+     rather than an inherited left inset from the rail. */
+  .pfoot__inner, .foot__inner, .footer__inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding-inline: var(--p-space-md);
+  }
+
+  .pfoot__line, .foot__line, .footer__line { text-align: center; max-width: none; }
+  .pfoot__made, .foot__meta { justify-content: center; }
+  .pfoot__links { justify-content: center; }
+
+  /* Journal: two stories a row, with more picture and smaller type. */
+  [data-section="journal"] .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-inline: 12px;
+  }
+
+  /* The module sized its card at `50% - 8px` of the ROW for its own flex
+     layout; inside a grid track that halves it again. The track is the width
+     now. */
+  [data-section="journal"] .cards .card { width: 100%; padding: 9px 9px 13px; }
+  [data-section="journal"] .card .thumb { aspect-ratio: 4 / 5; }
+  [data-section="journal"] .card .c-title { font-size: 16px; line-height: 1.2; }
+  [data-section="journal"] .card .c-date { font-size: 10.5px; margin-top: 9px; }
+
+  /* Cinema: two posters a row. */
+  [data-section="cinema"] .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+  /* Food: the field and the sort control share one row. */
+  [data-section="food"] .controls__row, [data-section="food"] .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  [data-section="food"] .search { flex: 1 1 auto; min-width: 0; }
+  [data-section="food"] .sort { flex: 0 0 auto; }
+  [data-section="food"] .sort span { display: none; }
+
+  /* Travel: chips and tiles pack across rather than stacking. */
+  [data-section="travel"] .wishlist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  [data-section="travel"] .goals-grid-new { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  [data-section="travel"] .activity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+  [data-section="travel"] .wishlist-grid .wish-card,
+  [data-section="travel"] .activity-grid .activity-card { padding: 10px; }
+  [data-section="travel"] .wishlist-grid .wish-card h5,
+  [data-section="travel"] .activity-grid .activity-card h5 { font-size: 12.5px; }
+
+  /* Books: the destinations sit closer together so all three fit the bar. */
+  [data-section="books"] .nav__links { gap: 2px; }
+  [data-section="books"] .nav__links .nav__link { padding-inline: 8px; gap: 5px; font-size: 12.5px; }
+  [data-section="books"] .nav__tools { margin-left: var(--p-space-xs); }
+  [data-section="books"] .nav__tools::before { margin-right: var(--p-space-xs); }
+}
+
+
+/* ---- 30. smoothness ----------------------------------------------------
+   Cheap wins that keep scrolling steady: the browser is told which properties
+   actually animate, off-screen cards are not laid out until they scroll near,
+   and images reserve their space so nothing jumps as they arrive. */
+
+.room, .card, .place-card, .goal-card, .activity-card, .trek-card, .wish-card,
+.gallery-item, .kpi-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
+}
+
+/* `transition: all` makes the browser watch every property; these elements
+   only ever move and fade. */
+.room, .card, .kpi-card, .gallery-item { will-change: auto; }
+
+/* A placeholder tint behind every <img> was the rectangle showing through the
+   two cut-out portraits — a PNG with a transparent background sits ON that
+   tint, so its own box was painted. Only images that fill their box get it. */
+.room__shot img, .card img, .gallery-item img, .place-card img, .c-thumb img {
+  background-color: color-mix(in srgb, var(--p-accent) 8%, var(--p-surface-2));
+}
+
+
+/* ---- 31. the page menu (phones) ---------------------------------------
+   One button on the right of the bar holding whatever that page's own bar
+   held. The burger on the left is unchanged: rooms on the left, this page on
+   the right. */
+
+.pmenu { position: relative; margin-left: auto; flex: 0 0 auto; }
+
+.pmenu__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+  color: var(--p-ink);
+  cursor: pointer;
+}
+
+.pmenu__btn svg { width: 20px; height: 20px; }
+.pmenu.is-open .pmenu__btn { background: var(--p-accent-tint); border-color: var(--p-accent); color: var(--p-accent-ink); }
+
+.pmenu__sheet {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 80;
+  min-width: 214px;
+  max-height: 70vh;
+  overflow-y: auto;
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border-radius: var(--p-radius);
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+  box-shadow: var(--p-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -6px;
+  transition: opacity .18s var(--p-ease), translate .18s var(--p-ease), visibility .18s;
+}
+
+.pmenu.is-open .pmenu__sheet { opacity: 1; visibility: visible; translate: 0 0; }
+
+/* The groups keep their own markup; only their arrangement changes. */
+.pmenu__sheet > * {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  overflow: visible;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.pmenu__sheet > *::before { display: none; }
+
+.pmenu__sheet a,
+.pmenu__sheet button,
+.pmenu__sheet .icon-btn,
+.pmenu__sheet .nav__link {
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: var(--p-text-md);
+}
+
+/* Round tool buttons become full rows in the sheet. */
+.pmenu__sheet .icon-btn:not(.icon-btn--label) { width: 100%; border-radius: 10px; }
+
+@media (min-width: 721px) { .pmenu { display: none; } }
+
+/* Worded links are hidden in the bar on a phone; inside the sheet there is
+   room for them. */
+@media (max-width: 720px) {
+  /* In the bar these controls shrink to an icon and hide their words. In the
+     sheet they are rows, so the words come back. */
+  .pmenu__sheet .icon-btn--label,
+  .pmenu__sheet .nav__link { display: flex !important; width: 100% !important; }
+
+  /* A module's own collapsed menu is redundant inside the sheet — its items
+     are already rows here. It is hidden rather than removed, because the
+     module's script still wires it up after this runs. */
+  .pmenu__sheet .navmenu,
+  .pmenu__sheet .nav__dropdown-toggle { display: none !important; }
+
+  /* Same for the module's own phone hamburger out in the bar: the page menu
+     replaces it, and two of them side by side is one too many. */
+  .nav__toggle, .navmenu__btn, .navbar__toggle, .menu-toggle { display: none !important; }
+
+  /* Favourites' off-canvas panel starts its links at opacity 0 and only
+     reveals them when the panel gets .is-open. Inside the sheet there is no
+     panel to open, so they are shown outright. */
+  .pmenu__sheet .nav__link,
+  .pmenu__sheet .nav__links > * {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    transition-delay: 0s !important;
+  }
+
+  /* Favourites slides its link list in from off-canvas on a phone. Inside the
+     sheet it is a plain list again. */
+  .pmenu__sheet .nav__links {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    translate: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* A nested dropdown panel flattens into the list. */
+  .pmenu__sheet .nav__dropdown { display: contents; }
+  .pmenu__sheet .nav__dropdown-panel {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    translate: none;
+    transform: none;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    display: grid;
+    gap: 2px;
+    /* The closed panel is collapsed to zero height and clipped; in the sheet
+       it is just part of the list. */
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .pmenu__sheet .icon-btn__text,
+  .pmenu__sheet .nav__link span { display: inline !important; white-space: nowrap; }
+
+  .pmenu__sheet a,
+  .pmenu__sheet button {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start !important;
+    gap: 10px;
+    padding-inline: 12px !important;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .pmenu__sheet svg { flex: 0 0 auto; }
+  .pmenu__label { font-size: var(--p-text-md); font-weight: 600; }
+}
+
+/* A row that is still too long ellipsises rather than pushing the sheet wide. */
+@media (max-width: 720px) {
+  .pmenu__sheet a, .pmenu__sheet button { overflow: hidden; }
+  .pmenu__sheet .icon-btn__text, .pmenu__label { overflow: hidden; text-overflow: ellipsis; }
+}
+
+
+/* ---- 32. the rest of the phone ----------------------------------------- */
+
+@media (max-width: 720px) {
+  /* Books: two spines a row, and the phrase reads on the same axis as
+     everything under it. */
+  [data-section="books"] .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  [data-section="books"] .hero__main,
+  [data-section="books"] .hero__main > *,
+  [data-section="books"] .hero__lede,
+  [data-section="books"] .hero__col { text-align: center; }
+  /* The module sets text-align on the title itself, which inheritance from the
+     wrapper cannot beat. */
+  [data-section="books"] .hero__title,
+  [data-section="books"] .hero__eyebrow { text-align: center !important; margin-inline: auto; }
+
+  /* Food: two dishes a row; the field and its sort share the first line and
+     the cuisine chips take the next. */
+  [data-section="food"] .grid,
+  [data-section="food"] .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+  [data-section="food"] .controls { display: grid; gap: 10px; }
+  [data-section="food"] .controls__row:first-child,
+  [data-section="food"] .controls > .row { display: flex; align-items: center; gap: 10px; }
+  [data-section="food"] .chips, [data-section="food"] .cuisines {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  [data-section="food"] .chips::-webkit-scrollbar { display: none; }
+  [data-section="food"] .chips > * { flex: 0 0 auto; }
+
+  /* The three figures fit one line. */
+  [data-section="food"] .hero__stat { font-size: var(--p-text-md); gap: 6px; }
+  [data-section="food"] .hero__text { text-align: center; }
+  [data-section="food"] .hero__by { justify-content: center; }
+
+  /* Travel: places and treks two a row. */
+  [data-section="travel"] .visited-grid,
+  [data-section="travel"] .trek-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  /* A search field's own dropdown centres its word. */
+  .scopepick, .scopepick select, .scopepick__select { text-align: center; text-align-last: center; }
+
+  /* The home lede sits in the middle of the screen rather than inheriting an
+     inset from the row above it. */
+  .hero__copy { padding-inline: var(--p-space-md); }
+  .hero__lede { margin-inline: auto; max-width: none; }
+
+  /* The button and its count share one line. */
+  .hero__meta { flex-wrap: nowrap; gap: 10px; justify-content: center; }
+  .hero__jump { padding: 0 15px; font-size: 13px; min-height: 36px; white-space: nowrap; }
+  .hero__count { font-size: 1.05rem; white-space: nowrap; }
+}
+
+
+/* ---- 33. the books search bar (phones) --------------------------------
+   The module wraps this bar into two lines on a phone and reorders the
+   magnifier to the end, which left an empty circle floating beside the
+   dropdown. One row: magnifier, field, scope. */
+
+@media (max-width: 720px) {
+  [data-section="books"] .searchbox {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px 5px 4px;
+    min-height: var(--p-control-lg);
+  }
+
+  [data-section="books"] .searchbox__go { order: 0; width: 36px; height: 36px; }
+  /* The module hides the glyph when it reorders this button on a phone. */
+  [data-section="books"] .searchbox__go svg,
+  [data-section="books"] .searchbox__icon {
+    display: block !important;
+    position: static !important;
+    width: 19px;
+    height: 19px;
+    opacity: 1;
+    color: var(--p-ink-soft);
+    stroke: currentColor;
+  }
+  [data-section="books"] .searchbox__input { order: 1; flex: 1 1 auto; min-width: 0; }
+  [data-section="books"] .scopepick { order: 2; flex: 0 0 auto; padding-right: 26px; padding-left: 10px; border-left: 0; }
+  [data-section="books"] .scopepick select { font-size: var(--p-text-sm); }
+
+  /* The hero picture leads on a phone; it does not need two thirds of the
+     screen to do it. */
+  [data-section="books"] .reader-cut { width: min(230px, 60%) !important; margin-inline: auto; }
+}
+
+/* The bottom two rows are buttons, so the module styles them bigger and
+   centred. In the sheet they are rows like any other. */
+@media (max-width: 720px) {
+  .pmenu__sheet .icon-btn:not(.icon-btn--label) {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    height: auto;
+    min-height: 42px;
+  }
+  .pmenu__sheet .pmenu__label,
+  .pmenu__sheet .icon-btn__text {
+    font-size: var(--p-text-md);
+    font-weight: 600;
+    color: var(--p-ink-soft);
+    letter-spacing: 0;
+    /* The module centres the text inside its round buttons; in a row it reads
+       from the left, beside the icon, like every other row. */
+    text-align: left;
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pmenu__sheet a, .pmenu__sheet button { gap: 12px; }
+  .pmenu__sheet a:hover, .pmenu__sheet button:hover { background: var(--p-accent-tint); }
+  /* Wide enough for the longest row, and the module's own inner padding on
+     these buttons is dropped so every label starts at the same x. */
+  .pmenu__sheet { min-width: 258px; }
+  .pmenu__sheet .icon-btn > svg { margin: 0 !important; }
+  /* The refresh button carries a second, state-swap glyph. In a row it is
+     dead width that pushed the label out of line with the others. */
+  .pmenu__sheet .icon-btn > svg ~ svg { display: none !important; }
+  .pmenu__sheet .icon-btn { gap: 12px !important; }
+}
+
+/* A module's round tool button keeps a fixed width, which centred its label in
+   the row. In the sheet it is a full-width row. */
+@media (max-width: 720px) {
+  .pmenu__sheet .icon-btn {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    padding-inline: 12px !important;
+  }
+}
+
+
+/* ---- 34. consistency between the two sizes -----------------------------
+   Several things had been stated for phones only and so changed appearance
+   between the two. They are stated once, for both. */
+
+/* Food's "Add a dish" is a filled button at every width. */
+[data-section="food"] .btn-add {
+  background: var(--p-accent-ink);
+  color: var(--p-on-accent);
+  border: 0;
+  border-radius: var(--p-pill);
+  padding: 0 18px;
+  min-height: var(--p-control-h);
+  font-weight: 600;
+}
+
+[data-section="food"] .btn-add:hover { background: var(--p-ink); color: var(--p-bg); }
+[data-section="food"] .btn-add__plus { color: inherit; }
+
+/* Two dishes a row on a phone. The module's own grid rule is more specific
+   than a bare class, so the section is named here too. */
+@media (max-width: 720px) {
+  [data-section="food"] .cards,
+  [data-section="food"] .grid,
+  [data-section="food"] #cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px;
+  }
+
+  /* The three figures read centred under a centred headline. */
+  [data-section="food"] .hero__stat { justify-content: center; }
+
+  /* Books' hero photograph carries the page on a phone. */
+  [data-section="books"] .reader-cut { width: min(304px, 78%) !important; }
+
+  /* Travel's stamp card is a footnote on a phone, not a panel. */
+  [data-section="travel"] .hero-float-card {
+    margin: 14px auto 0 !important;
+    padding: 10px 16px !important;
+    width: max-content;
+    max-width: 92%;
+    text-align: center;
+  }
+  [data-section="travel"] .hero-float-card .hfc-value { font-size: 1.15rem; }
+  [data-section="travel"] .hero-float-card .hfc-label,
+  [data-section="travel"] .hero-float-card .hfc-sub { font-size: var(--p-text-2xs); }
+}

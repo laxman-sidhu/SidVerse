@@ -22,7 +22,7 @@ export async function init() {
   const put = (sel, text) => { const n = $(sel); if (n) n.textContent = text; };
   put("#brandMark", SITE.name);
   put("#footAuthor", `Made with 💖 by ${SITE.author}`);
-  put("#heroBy", `Kept by ${SITE.author} — mid-bite, somewhere in ${SITE.city}`);
+  put("#heroBy", "Photographed, rated and written down.");
   skeletons(8);
   measureTopbar();
   bindControls();
@@ -196,18 +196,18 @@ function paintHero() {
   const n = state.all.length;
   const dates = state.all.map(d => d.dateObj).filter(Boolean).sort((a, b) => a - b);
   const since = dates.length ? ` · since ${dates[0].toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : "";
-  $("#heroEyebrow").textContent = `Tasting log · ${SITE.city}${since}`;
 
   if (!n) {
-    $("#heroStat").textContent = "The log is empty. Add the first dish worth remembering.";
+    $("#heroStat").textContent = "Nothing logged yet.";
     return;
   }
 
   const cuisines = new Set(state.all.map(d => d.cuisine || "Other")).size;
   const avg = state.all.reduce((s, d) => s + d.ratingNum, 0) / n;
   $("#heroStat").innerHTML =
-    `<b>${n}</b> ${n === 1 ? "dish" : "dishes"} tasted across <b>${cuisines}</b> ${cuisines === 1 ? "cuisine" : "cuisines"}, ` +
-    `averaging <b>${num(avg)}</b> out of ten.`;
+    `<b>${n}</b> ${n === 1 ? "dish" : "dishes"}` +
+    `<i>·</i><b>${cuisines}</b> ${cuisines === 1 ? "cuisine" : "cuisines"}` +
+    `<i>·</i><b>${num(avg)}</b> average`;
 
   const best = state.all.slice()
     .sort((a, b) => b.ratingNum - a.ratingNum || (b.dateObj || 0) - (a.dateObj || 0))[0];

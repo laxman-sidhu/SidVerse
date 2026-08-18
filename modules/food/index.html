@@ -7,7 +7,7 @@
 <title>SidVerse — SidBites</title>
 <meta name="description" content="Every dish I've tried, where I ate it, and what I'd give it out of ten.">
 <meta name="theme-color" content="#DCE3CD">
-<link rel="icon" href="https://img.freepik.com/premium-vector/sid-letter-logo-design-technology-company-sid-logo-design-black-white-color-combination-sid-logo-sid-vector-sid-design-sid-icon-sid-alphabet-sid-typography-logo-design_229120-161627.jpg">
+<link rel="icon" href="../../assets/images/sidverse-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -37,7 +37,6 @@
 <main id="top">
   <section class="hero">
     <div class="hero__text">
-      <p class="eyebrow" id="heroEyebrow">Tasting log · Mumbai</p>
       <h1 class="hero__line" data-phrase></h1>
       <p class="hero__stat" id="heroStat">Reading the log…</p>
       <p class="hero__by" id="heroBy"></p>
@@ -49,10 +48,10 @@
         <span class="blob blob--plum"></span>
         <span class="blob blob--warm"></span>
       </div>
-      <img class="keeper__img" src="assets/images/keeper-cutout.webp" alt="The keeper of this log, mid-bite" width="900" height="1120">
+      <img class="keeper__img" src="assets/images/keeper-cutout.webp" alt="The keeper of this log, mid-bite" width="900" height="1120" loading="lazy" decoding="async">
 
       <div class="topcard" id="heroTop" hidden>
-        <img id="topImg" alt="">
+        <img id="topImg" alt="" loading="lazy" decoding="async">
         <div class="topcard__text">
           <p class="eyebrow">Top of the log</p>
           <p class="topcard__name" id="topName"></p>
@@ -104,7 +103,7 @@
   <button class="lb__nav lb__nav--prev" id="lbPrev" aria-label="Previous dish">‹</button>
   <button class="lb__nav lb__nav--next" id="lbNext" aria-label="Next dish">›</button>
   <figure class="lb__figure" id="lbFigure">
-    <div class="lb__media"><img id="lbImg" alt=""></div>
+    <div class="lb__media"><img id="lbImg" alt="" loading="lazy" decoding="async"></div>
     <figcaption class="lb__cap">
       <p class="lb__row">
         <span class="eyebrow" id="lbCuisine"></span>

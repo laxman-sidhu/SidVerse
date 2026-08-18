@@ -245,7 +245,129 @@
       if (align === "center") el.classList.add("langline--center");
       el.innerHTML = esc(here.phrase)
         + '<span class="langline__gloss">' + esc(here.gloss || "") + "</span>";
+
+      // There is no hover on a touch screen, so a tap opens the translation
+      // and a second tap — or a tap anywhere else — closes it again.
+      el.addEventListener("click", function (e) {
+        e.stopPropagation();
+        el.classList.toggle("is-glossed");
+      });
     });
+
+    // `pointerdown` rather than `click`: on iOS a click on a plain element
+    // does not always reach the document, so a tap on empty page never closed
+    // anything. pointerdown fires for mouse and touch alike.
+    document.addEventListener("pointerdown", function (e) {
+      if (e.target.closest && e.target.closest(".langline")) return;
+      document.querySelectorAll(".langline.is-glossed")
+        .forEach(function (el) { el.classList.remove("is-glossed"); });
+    });
+  }
+
+  /* ---- the page menu ----------------------------------------------------
+     On a phone every bar ran out of room: Cinema's four destinations, Books'
+     three plus two tools, Favourites' menu. They fold into one button that
+     opens the bar's own links as a sheet. The burger on the left stays the
+     way between rooms; this is the way around the room you are in. */
+
+  var PAGE_GROUPS = ".topbar__tools, .nav__links, .navbar .nav-links, .nav__tools";
+
+  /* A tool button carries only an icon, or only a count badge. Either way the
+     row needs a name; these are the few whose own title reads as a sentence. */
+  var PMENU_NAMES = {
+    refreshBtn: "Reload from sheet",
+    filterToggle: "Browse navigation",
+    reloadBtn: "Reload from sheet",
+    searchToggle: "Find a book"
+  };
+
+  function pmenuLabel(el, text) {
+    [].slice.call(el.childNodes).forEach(function (n) {
+      if (n.nodeType === 1 && n.tagName.toLowerCase() === "svg") return;
+      el.removeChild(n);
+    });
+    var span = document.createElement("span");
+    span.className = "pmenu__label";
+    span.textContent = text;
+    el.appendChild(span);
+  }
+
+  /* Trimming and naming the rows. Runs on every attempt, not just the first:
+     a module may fill its own bar after the fold has happened. */
+  function dress(sheet) {
+    // Favourites' bar carries Home and Collections beside its Galleries menu.
+    // In the sheet only the galleries are wanted: the rail already covers
+    // rooms, and Collections is the page you are on. Scoped to that module —
+    // every other bar's links ARE its destinations.
+    if (document.documentElement.getAttribute("data-section") === "favourites") {
+      sheet.querySelectorAll(".nav__link").forEach(function (el) {
+        // The Galleries toggle is a .nav__link too, and the module's own
+        // script wires it up after this runs — removing it threw. It is
+        // hidden by CSS instead.
+        if (el.classList.contains("nav__dropdown-toggle")) return;
+        if (!el.closest(".nav__dropdown-panel")) el.remove();
+      });
+    }
+
+    sheet.querySelectorAll("a, button").forEach(function (el) {
+      if (el.querySelector(".pmenu__label")) return;
+      if (PMENU_NAMES[el.id]) { pmenuLabel(el, PMENU_NAMES[el.id]); return; }
+
+      var own = el.textContent.trim();
+      if (own && !/^\d+$/.test(own)) return;
+
+      var text = el.getAttribute("aria-label") || el.getAttribute("title");
+      if (!text) return;
+      pmenuLabel(el, text.split(/[.,\u2014]/)[0].trim());
+    });
+  }
+
+  function pageMenu() {
+    var existing = document.querySelector(".pmenu__sheet");
+    if (existing) { dress(existing); return; }
+    var groups = [].slice.call(document.querySelectorAll(PAGE_GROUPS))
+      .filter(function (g) { return g.children.length; });
+    if (!groups.length) return;
+
+    var bar = document.querySelector(".topbar__inner, .navbar .nav-inner, .nav__inner, .topbar > .wrap");
+    if (!bar) return;
+
+    var wrap = document.createElement("div");
+    wrap.className = "pmenu";
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "pmenu__btn";
+    button.setAttribute("aria-label", "This page");
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"'
+      + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+      + '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/>'
+      + '<circle cx="19" cy="12" r="1.6"/></svg>';
+
+    var sheet = document.createElement("div");
+    sheet.className = "pmenu__sheet";
+    groups.forEach(function (g) { sheet.appendChild(g); });
+
+    dress(sheet);
+
+    wrap.appendChild(button);
+    wrap.appendChild(sheet);
+    bar.appendChild(wrap);
+
+    function close() { wrap.classList.remove("is-open"); button.setAttribute("aria-expanded", "false"); }
+
+    button.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = wrap.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    document.addEventListener("pointerdown", function (e) { if (!wrap.contains(e.target)) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    // Following a link inside the sheet should close it on the way out.
+    sheet.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
   }
 
   /* The module's own footer is hidden rather than removed: its markup is often
@@ -272,6 +394,14 @@
 
     brand();
     langline();
+
+    // Modules build their own bar links from their own scripts, which run
+    // after this one, so the fold is attempted again once they have.
+    if (window.matchMedia("(max-width: 720px)").matches) {
+      pageMenu();
+      window.addEventListener("load", pageMenu);
+      setTimeout(pageMenu, 600);
+    }
 
     retireOldFooter();
     var foot = footer();

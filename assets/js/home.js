@@ -86,14 +86,6 @@
       }).join("");
     }
 
-    var chips = document.querySelector("[data-index-chips]");
-    if (chips) {
-      chips.innerHTML = SECTIONS.map(function (s) {
-        return '<a class="index__chip" data-section="' + esc(s.key) + '" href="' + esc(s.href) + '">'
-          + '<span class="index__dot"></span>' + esc(s.label) + "</a>";
-      }).join("");
-    }
-
     var links = document.querySelector("[data-foot-links]");
     if (links) {
       var out = "";

@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SidVerse — SidTrails</title>
-  <link rel="icon" href="https://img.freepik.com/premium-vector/sid-letter-logo-design-technology-company-sid-logo-design-black-white-color-combination-sid-logo-sid-vector-sid-design-sid-icon-sid-alphabet-sid-typography-logo-design_229120-161627.jpg">
+  <link rel="icon" href="../../assets/images/sidverse-icon.png">
 
   <!-- Fonts: editorial pairing -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -124,20 +124,9 @@
 
         <!-- Right side - angled fanned photo gallery -->
         <div class="hero-visual" id="heroVisual">
-          <div class="hero-fan" id="heroFan">
-            <figure class="fan-card">
-              <img src="assets/hero/1.webp" alt="" loading="eager" />
-            </figure>
-            <figure class="fan-card">
-              <img src="assets/hero/2.webp" alt="" loading="lazy" />
-            </figure>
-            <figure class="fan-card">
-              <img src="assets/hero/3.webp" alt="" loading="lazy" />
-            </figure>
-            <figure class="fan-card">
-              <img src="assets/hero/4.webp" alt="" loading="lazy" />
-            </figure>
-          </div>
+          <!-- Filled from assets/hero-index.json by js/hero-fan.js, so adding
+               a picture to assets/hero/ and running the .bat is all it takes. -->
+          <div class="hero-fan" id="heroFan"></div>
 
           <!-- Floating stat card -->
           <div class="hero-float-card" id="heroFloatCard">
@@ -605,7 +594,7 @@
     </button>
     <span class="am-counter" id="actModalCounter" hidden></span>
     <div class="act-modal-stage">
-      <img id="actModalImg" alt="" decoding="async" />
+      <img id="actModalImg" alt="" loading="lazy" decoding="async">
       <div class="act-modal-no-img" id="actModalNoImg">
         <span class="no-img-icon">📷</span>
         <p>No photo yet</p>
@@ -628,6 +617,7 @@
   </div>
 
   <!-- Application script will be appended here -->
+  <script src="js/hero-fan.js"></script>
   <script id="appScript" src="js/dashboard.js"></script>
 
   <script defer src="../../assets/js/motion.js"></script>

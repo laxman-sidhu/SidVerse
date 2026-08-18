@@ -486,3 +486,271 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 /* The old wordmark drew a dot before the name; the shared mark has its own
    icon tile, so the dot is a leftover. */
 .logo::before, .logo .dot { display: none; }
+
+
+/* ---- reading widths -----------------------------------------------------
+   With the container uncapped, three blocks that are read rather than browsed
+   were running the full width of a wide monitor. They take one shared column
+   so the tab row sits directly over its table and the form does not stretch. */
+:root { --tv-read: 1180px; }
+
+.mon-tabs,
+.mon-block,
+#wrapped .container > *,
+.contact-section .contact-grid {
+  max-width: var(--tv-read);
+  margin-inline: auto;
+}
+
+/* The hero keeps its own left inset so the headline does not start at the
+   rail, and its two halves stay side by side rather than splitting apart on a
+   wide screen. */
+.hero .container { max-width: 1500px; }
+.hero .hero-grid { gap: clamp(2rem, 4vw, 4.5rem); align-items: center; }
+.hero .hero-text { padding-left: clamp(0px, 2.4vw, 46px); }
+
+
+/* ---- the contact band ---------------------------------------------------
+   The band is deep in both themes, so everything on it takes the on-deep ink.
+   The sign-off and the vibe pill were still module black, which on the dark
+   plate was unreadable. */
+#contact.contact-section .contact-signoff,
+#contact.contact-section .contact-signoff *,
+#contact.contact-section .vibe-line,
+#contact.contact-section .form-title,
+#contact.contact-section .contact-left p { color: var(--p-on-deep); }
+
+#contact.contact-section .vibe-line {
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: var(--p-pill);
+}
+
+#contact.contact-section .contact-signoff { color: var(--p-on-deep-soft); }
+#contact.contact-section .contact-signoff strong,
+#contact.contact-section .contact-sign-name { color: var(--p-on-deep); }
+
+/* The form card stays paper, so it reads as a form on a plate. */
+#contact.contact-section .contact-form-card {
+  background: var(--p-surface);
+  color: var(--p-ink);
+  border: 1px solid var(--p-line);
+  box-shadow: var(--p-shadow-lg);
+}
+
+#contact.contact-section .contact-form-card .form-title,
+#contact.contact-section .contact-form-card p,
+#contact.contact-section .contact-form-card label { color: var(--p-ink); }
+#contact.contact-section .contact-form-card .form-sub { color: var(--p-muted); }
+
+/* A textarea's placeholder sits on the first line by default, which read as
+   mis-aligned against the short fields beside it. */
+#contact.contact-section textarea.form-control { padding-block: 14px; }
+
+
+/* ---- the hero fan -------------------------------------------------------
+   The angled, overlapping stack is the design; it is kept exactly as it was.
+   The only change is that past four pictures the row scrolls sideways instead
+   of squeezing, so the folder can grow. Card size, tilt and overlap are
+   untouched — style.css still owns all of that. */
+.hero-fan.is-scroller {
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x proximity;
+  padding-block: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .3) transparent;
+}
+
+.hero-fan.is-scroller .fan-card { scroll-snap-align: center; flex: 0 0 auto; }
+.hero-fan.is-scroller::-webkit-scrollbar { height: 6px; }
+.hero-fan.is-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .28); border-radius: 999px; }
+.hero-fan.is-scroller::-webkit-scrollbar-track { background: transparent; }
+
+/* The module hid the fan outright below 768px. It stays, in the same tilted
+   style, scrolling sideways. */
+@media (max-width: 900px) {
+  .hero-visual { display: block; }
+  .hero-fan { display: flex !important; overflow-x: auto; padding-block: 8px; scrollbar-width: none; }
+  .hero-fan::-webkit-scrollbar { display: none; }
+  .hero-fan .fan-card { flex: 0 0 auto; }
+}
+
+/* ---- the bar and the fold ----------------------------------------------
+   The bar padded itself 1.4rem at rest and 0.85rem once scrolled, and both
+   values moved the wordmark sideways as well as up. Only the height changes
+   now; the brand stays put. */
+/* Only the block padding is reset. Setting padding-inline here too outranked
+   the shared band rule for `.scrolled` but not for the resting state, which is
+   what slid the wordmark 74px sideways on scroll. */
+.navbar, .navbar.scrolled { padding-block: 0; }
+.navbar .nav-inner { min-height: var(--p-bar-h); transition: none; }
+
+/* The opening screen is the whole screen, not most of it. */
+.hero { min-height: 100vh; min-height: 100svh; }
+
+/* The rooms below it use the full page rather than a centred column: with the
+   shell cap the wishlist and place cards sat in the middle third of a wide
+   monitor with bare paper either side. */
+.container { max-width: none; padding-inline: clamp(1.1rem, 3vw, 2.6rem); }
+
+/* Prose still reads in a column — a 1900px line of body copy is unreadable. */
+.section-head .title-block { max-width: 720px; margin-inline: auto; }
+.hero .hero-text { max-width: 620px; }
+
+/* The gallery's bar had no inner row, so it never picked up the shared
+   geometry and its wordmark sat at the screen edge. */
+.navbar .nav-links .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--p-control-sm);
+  padding: 0 15px;
+  border-radius: var(--p-pill);
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+  color: var(--p-ink-soft);
+  text-decoration: none;
+  font-size: var(--p-text-sm);
+  font-weight: 600;
+}
+
+.navbar .nav-links .back-link:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); border-color: transparent; }
+
+/* The gallery loads gallery.css after this module's own bar rules, and it sets
+   its own padding and flex on .navbar. The band geometry is restated here so
+   both pages measure the same. */
+body:has(.gallery-grid) .navbar {
+  display: block;
+  padding: 0;
+  margin-left: calc(-1 * var(--p-rail-clear));
+  padding-left: var(--p-rail-clear);
+}
+body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center; min-height: var(--p-bar-h); }
+
+/* The old wordmark drew a dot before the name; the shared mark has its own
+   icon tile, so the dot is a leftover. */
+.logo::before, .logo .dot { display: none; }
+
+
+/* ---- reading widths -----------------------------------------------------
+   With the container uncapped, three blocks that are read rather than browsed
+   were running the full width of a wide monitor. They take one shared column
+   so the tab row sits directly over its table and the form does not stretch. */
+:root { --tv-read: 1180px; }
+
+.mon-tabs,
+.mon-block,
+#wrapped .container > *,
+.contact-section .contact-grid {
+  max-width: var(--tv-read);
+  margin-inline: auto;
+}
+
+/* The hero keeps its own left inset so the headline does not start at the
+   rail, and its two halves stay side by side rather than splitting apart on a
+   wide screen. */
+.hero .container { max-width: 1500px; }
+.hero .hero-grid { gap: clamp(2rem, 4vw, 4.5rem); align-items: center; }
+.hero .hero-text { padding-left: clamp(0px, 2.4vw, 46px); }
+
+
+/* ---- the contact band ---------------------------------------------------
+   The band is deep in both themes, so everything on it takes the on-deep ink.
+   The sign-off and the vibe pill were still module black, which on the dark
+   plate was unreadable. */
+#contact.contact-section .contact-signoff,
+#contact.contact-section .contact-signoff *,
+#contact.contact-section .vibe-line,
+#contact.contact-section .form-title,
+#contact.contact-section .contact-left p { color: var(--p-on-deep); }
+
+#contact.contact-section .vibe-line {
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: var(--p-pill);
+}
+
+#contact.contact-section .contact-signoff { color: var(--p-on-deep-soft); }
+#contact.contact-section .contact-signoff strong,
+#contact.contact-section .contact-sign-name { color: var(--p-on-deep); }
+
+/* The form card stays paper, so it reads as a form on a plate. */
+#contact.contact-section .contact-form-card {
+  background: var(--p-surface);
+  color: var(--p-ink);
+  border: 1px solid var(--p-line);
+  box-shadow: var(--p-shadow-lg);
+}
+
+#contact.contact-section .contact-form-card .form-title,
+#contact.contact-section .contact-form-card p,
+#contact.contact-section .contact-form-card label { color: var(--p-ink); }
+#contact.contact-section .contact-form-card .form-sub { color: var(--p-muted); }
+
+/* A textarea's placeholder sits on the first line by default, which read as
+   mis-aligned against the short fields beside it. */
+#contact.contact-section textarea.form-control { padding-block: 14px; }
+
+
+/* ---- the hero fan -------------------------------------------------------
+   Up to four pictures keep the angled stack the page was designed around.
+   Past four it becomes a scroller, so the folder can grow without the fan
+   collapsing into a pile. */
+.hero-fan.is-scroller {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 4px 18px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .35) transparent;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26px, #000 calc(100% - 26px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 26px, #000 calc(100% - 26px), transparent 100%);
+}
+
+.hero-fan.is-scroller .fan-card {
+  position: relative;
+  inset: auto;
+  flex: 0 0 auto;
+  width: clamp(150px, 20vw, 210px);
+  margin: 0;
+  rotate: none;
+  transform: none;
+  scroll-snap-align: center;
+}
+
+.hero-fan.is-scroller .fan-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+.hero-fan.is-scroller::-webkit-scrollbar { height: 6px; }
+.hero-fan.is-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .3); border-radius: 999px; }
+
+/* The fan was hidden on a phone, which left the opening screen as words on a
+   photograph. It stays, as a scroller, at a size that fits. */
+/* The photo modal is a dark overlay in both themes, so its caption takes the
+   on-deep ink. It had been inheriting the page's own — invisible on dark. */
+.act-modal-info h3,
+.act-modal-info .am-title-row h3 { color: var(--p-on-deep); }
+.act-modal-info { color: var(--p-on-deep-soft); }
+.act-modal-info p, .act-modal-info .am-sub { color: var(--p-on-deep-soft); }
+
+/* Below 600px the module flattened every card into a full-width tile and
+   dropped the third and fourth outright. The fan keeps its own shape at every
+   size now — it scrolls rather than rearranging. */
+@media (max-width: 900px) {
+  .hero-fan .fan-card,
+  .hero-fan .fan-card:first-child,
+  .hero-fan .fan-card:nth-child(1),
+  .hero-fan .fan-card:nth-child(2),
+  .hero-fan .fan-card:nth-child(3),
+  .hero-fan .fan-card:nth-child(4),
+  .hero-fan .fan-card:nth-child(n) {
+    display: block;
+    width: 168px;
+    height: 230px;
+    margin-left: -28px;
+  }
+
+  .hero-fan .fan-card:first-child { margin-left: 0; }
+  .hero-fan .fan-card img { width: 100%; height: 100%; object-fit: cover; }
+}

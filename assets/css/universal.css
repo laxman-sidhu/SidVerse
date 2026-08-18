@@ -297,12 +297,16 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 .langline__gloss {
   position: absolute;
   left: 0;
-  top: calc(100% + 8px);
-  z-index: 5;
-  padding: 6px 13px;
+  /* Always above the phrase: below it the bubble covered whatever the hero
+     put underneath — a mode switch, a search bar. */
+  bottom: calc(100% + 10px);
+  top: auto;
+  z-index: 90;
+  padding: 7px 14px;
   border-radius: var(--p-pill);
-  background: var(--p-ink);
-  color: var(--p-bg);
+  background: var(--p-accent-ink);
+  color: var(--p-on-accent);
+  box-shadow: var(--p-shadow);
   font-family: var(--p-body);
   font-size: 12.5px;
   font-weight: 500;
@@ -310,18 +314,31 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   line-height: 1.4;
   white-space: nowrap;
   opacity: 0;
-  translate: 0 -6px;
+  translate: 0 6px;
   pointer-events: none;
   transition: opacity .22s var(--p-ease), translate .22s var(--p-ease);
 }
 
-.langline:hover .langline__gloss,
-.langline:focus-visible .langline__gloss { opacity: 1; translate: 0 0; }
+/* Hover is scoped to devices that have one. A tap on a touch screen leaves an
+   emulated hover behind, which held the translation open after the class had
+   already been removed. */
+@media (hover: hover) {
+  .langline:hover .langline__gloss { opacity: 1; translate: 0 0; }
+}
+
+.langline:focus-visible .langline__gloss,
+.langline.is-glossed .langline__gloss { opacity: 1; translate: 0 0; }
+
+.langline { cursor: help; }
 
 /* A centred hero centres its gloss too. */
-.langline--center .langline__gloss { left: 50%; translate: -50% -6px; }
-.langline--center:hover .langline__gloss,
-.langline--center:focus-visible .langline__gloss { translate: -50% 0; }
+.langline--center .langline__gloss { left: 50%; translate: -50% 6px; }
+@media (hover: hover) {
+  .langline--center:hover .langline__gloss { translate: -50% 0; }
+}
+
+.langline--center:focus-visible .langline__gloss,
+.langline--center.is-glossed .langline__gloss { translate: -50% 0; }
 
 @media (max-width: 560px) {
   .langline__gloss { white-space: normal; min-width: 200px; }

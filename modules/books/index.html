@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SidVerse — SidBooks</title>
 <meta name="description" content="Search millions of books, see what people are reading, and keep track of what I have read.">
-<link rel="icon" href="https://img.freepik.com/premium-vector/sid-letter-logo-design-technology-company-sid-logo-design-black-white-color-combination-sid-logo-sid-vector-sid-design-sid-icon-sid-alphabet-sid-typography-logo-design_229120-161627.jpg">
+<link rel="icon" href="../../assets/images/sidverse-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://covers.openlibrary.org">
@@ -34,14 +34,14 @@
      <div class="hero__lede">
       <p class="hero__eyebrow">One reader, one shelf</p>
       <h1 class="hero__title" data-phrase></h1>
-      <p class="hero__sub">Search millions of books, see what the world is reading this week, and mark what I have finished — it goes straight into the sheet.</p>
     </div>
 
      <form class="searchbox" data-search-form role="search">
-      <svg class="searchbox__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.2-4.2"/></svg>
+      <button class="searchbox__go" type="submit" aria-label="Search">
+        <svg class="searchbox__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.2-4.2"/></svg>
+      </button>
       <input class="searchbox__input" data-search-input type="search" placeholder="A title, an author, an ISBN…" aria-label="Search for a book" autocomplete="off">
       <span class="scopepick"><select data-scope aria-label="Search by"></select></span>
-      <button class="searchbox__go" type="submit">Search</button>
     </form>
 
       <div class="chiprow" data-subjects aria-label="Browse by subject"></div>

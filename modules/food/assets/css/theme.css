@@ -320,3 +320,167 @@ body { color: var(--ink); }
   background: var(--p-accent);
   flex: 0 0 auto;
 }
+
+
+/* ---- the controls row ---------------------------------------------------
+   It used to pin itself under the bar, so the search field and the cuisine
+   chips sat over the log while it scrolled. It is part of the page now. */
+.controls {
+  position: static;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+/* The count reads as three figures on one line rather than a sentence. */
+.hero__stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; font-size: var(--p-text-lg); }
+.hero__stat i { font-style: normal; color: var(--p-line); }
+
+
+/* ---- the lightbox -------------------------------------------------------
+   The figure was centred as a block, so a tall picture left a band of dead
+   space under the caption. It fills the screen instead: the picture takes
+   whatever height is going and the caption sits under it at the bottom. */
+/* A grid row sized to its content cannot be filled by a child asking for
+   `height: 100%` — the two define each other. A flex column can: the picture
+   takes the free space and the caption keeps its own. */
+.lightbox { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+.lb__figure {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(920px, 100%);
+  max-width: none;
+  height: 100%;
+  max-height: 100%;
+}
+
+/* A grid row sized `auto` takes its height FROM the picture, so a percentage
+   height on the picture has nothing to resolve against and falls back to its
+   natural size. A flex box with a resolved height does not have that cycle. */
+.lb__media {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lb__cap { flex: 0 0 auto; }
+
+/* `max-height: 100%` on a flex-sized parent is unreliable; filling the box and
+   letting object-fit letterbox the picture always holds. */
+.lb__media { overflow: hidden; }
+
+.lb__media img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lb__cap { color: var(--p-on-deep); padding-bottom: 4px; }
+.lb__cap h2 { color: var(--p-on-deep); }
+.lb__place, .lb__row .eyebrow { color: var(--p-on-deep-soft); }
+.lb__score { color: var(--p-accent); }
+.lb__close, .lb__nav { background: rgba(255, 255, 255, .14); color: var(--p-on-deep); }
+.lb__close:hover, .lb__nav:hover { background: rgba(255, 255, 255, .26); }
+
+@media (max-width: 720px) {
+  .lightbox { padding: 12px 12px 18px; }
+  .lb__cap h2 { font-size: 1.35rem; margin: 6px 0 4px; }
+  .lb__nav { width: 42px; height: 42px; }
+}
+
+
+/* ---- the lock ----------------------------------------------------------
+   The form inherits the entry form's two-column grid, which put the password
+   beside the button. It is one column: field, then button under it. */
+#lockPanel .form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: min(380px, 100%);
+  margin-inline: auto;
+}
+
+#lockPanel .form input { width: 100%; }
+#lockPanel .btn--wide { width: 100%; }
+#lockPanel .form__error { grid-column: 1; margin: 0; color: var(--p-danger); font-size: var(--p-text-sm); }
+
+/* The date field and its slider are different shapes; the slider needs the
+   room, and the two should not sit on the same baseline by accident. */
+.form input[type=date] { width: 100%; }
+
+@media (max-width: 720px) {
+  /* A back link on a phone is a way out, not a headline. */
+  .btn-back, .btn-add {
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    font-size: var(--p-text-sm) !important;
+    white-space: nowrap;
+  }
+
+  /* The byline's rule reads as a stray dash once the line is centred. */
+  .hero__by::before { display: none; }
+  .hero__by { justify-content: center; }
+}
+
+
+/* The hero's art sits in a later stacking context than its words, so the
+   translation bubble was painting behind the band. */
+.hero__text { position: relative; z-index: 3; }
+.hero__line.langline { position: relative; z-index: 4; }
+
+
+/* ---- the entry form, laid out ------------------------------------------
+   Panels were flowing into two columns by source order, which left one column
+   short and the row ragged. Each panel is placed, so the form reads as two
+   even columns with the actions across the foot. */
+@media (min-width: 901px) {
+  .form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .form .group:nth-of-type(1) { grid-column: 1; }   /* what you ate */
+  .form .group:nth-of-type(2) { grid-column: 1; }   /* where you ate it */
+  .form .group:nth-of-type(3) { grid-column: 1; }   /* the verdict */
+  .form .group:nth-of-type(4) { grid-column: 2; grid-row: 1 / span 3; }
+  .form .group:nth-of-type(4) { align-self: stretch; }
+  .form__actions, .form .actions { grid-column: 1 / -1; }
+}
+
+/* The verdict row: a date and a slider are different shapes and must not be
+   forced to share a column ratio that squeezes either. */
+.form .group:nth-of-type(3) .field-row {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 760px) {
+  .form .group:nth-of-type(3) .field-row { grid-template-columns: minmax(150px, .7fr) minmax(0, 1fr); }
+}
+
+/* The slider needs room of its own; it had been overlapping the date field. */
+.rating-field { display: grid; gap: 8px; min-width: 0; }
+.rating-field input[type=range] { width: 100%; }
+.rating-head { display: flex; align-items: baseline; gap: 8px; }
+
+
+/* The headline reveals itself with `clip-path: inset(0 0 100% 0)` animating
+   open. A clip-path clips EVERYTHING outside the element's box, including the
+   translation bubble that hangs above it — which is why the tooltip measured
+   correctly, reported full opacity, and still painted nothing.
+
+   The reveal is kept; it just finishes at an inset large enough to clip
+   nothing, instead of at the element's own edges. */
+.hero__line { animation-name: food-headline-reveal; }
+
+@keyframes food-headline-reveal {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(-400px -400px -400px -400px); }
+}
