@@ -250,7 +250,20 @@
       // and a second tap — or a tap anywhere else — closes it again.
       el.addEventListener("click", function (e) {
         e.stopPropagation();
-        el.classList.toggle("is-glossed");
+        var open = el.classList.toggle("is-glossed");
+        // The bubble sits above the phrase, which on a short screen puts it
+        // under the sticky bar. If there is not room, it flips below.
+        if (open) {
+          // Measured against the bubble's own height, not a guess: a tall
+          // heading sits low enough for the bubble to clear the bar, a short
+          // one does not.
+          var g = el.querySelector(".langline__gloss");
+          var need = (g ? g.offsetHeight : 32) + 18;
+          var bar = document.querySelector(".topbar, .navbar, .nav, .site-topbar");
+          var floor = bar ? bar.getBoundingClientRect().bottom : 0;
+          el.classList.toggle("langline--below",
+            el.getBoundingClientRect().top - need < floor);
+        }
       });
     });
 

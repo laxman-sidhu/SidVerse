@@ -484,3 +484,11 @@ body { color: var(--ink); }
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(-400px -400px -400px -400px); }
 }
+
+/* The page's own heading reads centred, and its line is not held to a column
+   narrower than the form beneath it. */
+.page__head { text-align: center; }
+.page__head .page__sub, .page__head p { max-width: none; margin-inline: auto; }
+
+/* The two actions sit together in the middle of their bar. */
+.form__actions, .form .actions { justify-content: center; }

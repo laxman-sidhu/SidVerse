@@ -563,6 +563,10 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 }
 
 .hero-fan.is-scroller .fan-card { scroll-snap-align: center; flex: 0 0 auto; }
+
+/* The picture fills its card. Left to its natural aspect it stopped short of
+   the frame and the card's own dark backing showed as a band underneath. */
+.hero-fan .fan-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero-fan.is-scroller::-webkit-scrollbar { height: 6px; }
 .hero-fan.is-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .28); border-radius: 999px; }
 .hero-fan.is-scroller::-webkit-scrollbar-track { background: transparent; }
@@ -721,7 +725,6 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   scroll-snap-align: center;
 }
 
-.hero-fan.is-scroller .fan-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
 .hero-fan.is-scroller::-webkit-scrollbar { height: 6px; }
 .hero-fan.is-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .3); border-radius: 999px; }
 
@@ -754,3 +757,46 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   .hero-fan .fan-card:first-child { margin-left: 0; }
   .hero-fan .fan-card img { width: 100%; height: 100%; object-fit: cover; }
 }
+
+/* The stamp card is a footnote on a phone, not a panel. */
+@media (max-width: 720px) {
+  .hero-float-card { padding: 9px 14px !important; width: max-content; margin: 12px auto 0 !important; }
+  .hero-float-card .hfc-value { font-size: 1.05rem; }
+  .hero-float-card .hfc-label, .hero-float-card .hfc-sub { font-size: 10.5px; }
+}
+
+/* ---- the postcard band --------------------------------------------------
+   Same deep plate, read more clearly: the perk rows lift off it instead of
+   dissolving into it, and the form card is plain paper. */
+#contact.contact-section .contact-perks li {
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: var(--p-radius);
+  backdrop-filter: blur(6px);
+}
+
+#contact.contact-section .contact-perks li:hover {
+  background: rgba(255, 255, 255, .16);
+  border-color: rgba(255, 255, 255, .3);
+}
+
+#contact.contact-section .perk-icon {
+  background: rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+
+#contact.contact-section .contact-form-card .form-control {
+  background: var(--p-surface-2);
+  border: 1px solid var(--p-line);
+  color: var(--p-ink);
+}
+
+#contact.contact-section .contact-form-card .form-control::placeholder { color: var(--p-muted); }
+#contact.contact-section .contact-form-card .form-control:focus {
+  border-color: var(--p-accent);
+  box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .2);
+  background: var(--p-surface);
+}
+
+#contact.contact-section .contact-form-card .form-group label { color: var(--p-muted); }
+#contact.contact-section .vibe-line { color: var(--p-on-deep); font-style: normal; }

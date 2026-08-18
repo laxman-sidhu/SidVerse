@@ -333,6 +333,17 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 
 /* A centred hero centres its gloss too. */
 .langline--center .langline__gloss { left: 50%; translate: -50% 6px; }
+
+/* Not enough room above — the bar is there. It hangs below instead. */
+.langline--below .langline__gloss {
+  bottom: auto;
+  top: calc(100% + 10px);
+  translate: 0 -6px;
+}
+
+.langline--below.langline--center .langline__gloss { translate: -50% -6px; }
+.langline--below.is-glossed .langline__gloss { translate: 0 0; }
+.langline--below.langline--center.is-glossed .langline__gloss { translate: -50% 0; }
 @media (hover: hover) {
   .langline--center:hover .langline__gloss { translate: -50% 0; }
 }
