@@ -67,7 +67,21 @@ window.PITARA = {
       phrase: "Ogni viaggio lascia una storia.",
       gloss: "Italian - \u201cEvery Journey Leaves a Story\u201d",
       footerLine: "The world is a book, and those who do not travel read only one page. - Saint Augustine",
-      footerLinks: [{ label: "See the gallery", href: "gallery.html", icon: "images" }],
+      footerLinks: [],
+      // A card rather than a link: the album is the one place worth going from here.
+      footerFeature: {
+        href: "gallery.html",
+        eyebrow: "A personal album",
+        title: "The",
+        titleEm: "gallery",
+        sub: "Glimpses from the road: every photo, every video, in one place.",
+        cta: "Open gallery",
+        shots: [
+          "https://res.cloudinary.com/dadtqawh5/image/upload/v1780377750/manali_wrfd8h.jpg",
+          "https://res.cloudinary.com/dadtqawh5/image/upload/v1780377750/cycle_beach_m8cfv9.jpg",
+          "https://res.cloudinary.com/dadtqawh5/image/upload/v1780377750/beach_yiymxk.jpg"
+        ]
+      },
       ownFooter: false,
       image: "https://c.ndtvimg.com/2025-05/qgckc648_air-travel_625x300_26_May_25.jpg?im=FaceCrop,algorithm=dnn,width=1200,height=738",
       label: "Travel",

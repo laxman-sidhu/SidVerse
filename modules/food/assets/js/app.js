@@ -20,7 +20,6 @@ export async function init() {
   document.title = `SidVerse - ${SITE.name}`;
   // The shell owns the bar wordmark and the footer, so those nodes may be gone.
   const put = (sel, text) => { const n = $(sel); if (n) n.textContent = text; };
-  put("#footAuthor", `Made with 💖 by ${SITE.author}`);
   put("#heroBy", "Photographed, rated and written down.");
   skeletons(8);
   measureTopbar();

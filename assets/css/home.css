@@ -163,7 +163,6 @@
 }
 
 .rooms__title { font-size: clamp(1.5rem, 3vw, 2rem); }
-.rooms__note { font-size: 13.5px; color: var(--p-muted); max-width: 46ch; }
 
 /* Six rooms, so the column count is set rather than left to auto-fit: three
    across gives two full rows, where auto-fit gave four then a ragged two. */

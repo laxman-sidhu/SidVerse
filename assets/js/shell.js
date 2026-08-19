@@ -196,10 +196,40 @@
         + '<span>' + esc(l.label) + "</span></a>";
     }).join("");
 
+    // An optional feature card above the line: a module with somewhere worth
+    // going puts it here rather than in the row of small links.
+    // A link to the page you are already on is not a way out of it.
+    var f = here.footerFeature && here.footerFeature.href !== page ? here.footerFeature : null;
+    var feature = !f ? "" :
+      '<a class="pfeat" href="' + esc(url(here.href + f.href)) + '">'
+      + '<div class="pfeat__text">'
+      + '<span class="pfeat__eyebrow">' + esc(f.eyebrow || "") + "</span>"
+      + '<h3 class="pfeat__title">' + esc(f.title || "")
+      + (f.titleEm ? " <em>" + esc(f.titleEm) + "</em>" : "") + ".</h3>"
+      + '<p class="pfeat__sub">' + esc(f.sub || "") + "</p>"
+      + "</div>"
+      + '<div class="pfeat__side">'
+      + '<span class="pfeat__frames" aria-hidden="true">'
+      + (f.shots || []).map(function (src) {
+          return '<span class="pfeat__frame" style="background-image:url(\'' + esc(src) + '\')"></span>';
+        }).join("")
+      + "</span>"
+      + '<span class="pfeat__cta">' + esc(f.cta || "Open")
+      + '<span class="pfeat__arrow" aria-hidden="true">&#8599;</span></span>'
+      + "</div></a>";
+
+    // A page can host the card itself; only then does it stay in the footer.
+    var slot = document.querySelector("[data-feature-slot]");
+    if (slot && feature) {
+      slot.innerHTML = feature;
+      feature = "";
+    }
+
     var node = document.createElement("footer");
     node.className = "pfoot";
     node.innerHTML =
-      '<div class="pfoot__inner">'
+      feature
+      + '<div class="pfoot__inner">'
       + '<p class="pfoot__line">' + esc(here.footerLine || SITE.footerLine || "") + "</p>"
       + (links ? '<nav class="pfoot__links">' + links + "</nav>" : "")
       + '<p class="pfoot__made">Made with <span class="pfoot__heart">&#128150;</span> by '

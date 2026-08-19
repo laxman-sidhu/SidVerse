@@ -165,7 +165,6 @@
    axis, so the eye runs straight down the middle rather than stepping. */
 .hero__lede, .hero__col { text-align: center; }
 .hero__lede { margin-inline: auto; }
-.hero__sub { margin-inline: auto; max-width: 52ch; }
 .hero__title { margin-inline: auto; }
 .searchbox { margin-inline: auto; }
 

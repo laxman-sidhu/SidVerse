@@ -667,20 +667,6 @@
         }
       }
 
-      /* ----- 6a-tris. Footer mini-stats ----- */
-      function renderFooterStats(a) {
-        const map = {
-          places: a.counters.placesVisited,
-          states: a.counters.states,
-          monuments: a.counters.monuments,
-          treks: a.counters.treksDone,
-        };
-        $$('#footerMiniStats [data-stat]').forEach(el => {
-          const key = el.dataset.stat;
-          animateCount(el, map[key] || 0);
-        });
-      }
-
       /* ----- 6b. KPI grid (clickable, each jumps to its section) ----- */
       function renderKPIs(a) {
         const cards = [
@@ -2292,9 +2278,6 @@
             submitBtn.classList.remove('sending');
           }
         });
-
-        // Year in footer
-        $('#year').textContent = new Date().getFullYear();
       }
 
       /* ============================================================
@@ -2316,7 +2299,6 @@
         renderGoals(analytics);
         renderActivities(analytics);
         renderTreks(analytics);
-        renderFooterStats(analytics);
         renderMap(analytics);  // async - runs in background
 
         // Auto-refresh from sheet
@@ -2331,7 +2313,6 @@
           renderGoals(next);
           renderActivities(next);
           renderTreks(next);
-          renderFooterStats(next);
           renderMap(next);
         }, CONFIG.REFRESH_MS);
       }

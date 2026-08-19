@@ -145,13 +145,6 @@ body { color: var(--ink); }
   color: var(--p-on-accent);
 }
 
-.folder__pick { background: var(--p-accent-ink); color: var(--p-on-accent); }
-
-.lock__badge { background: var(--p-accent-ink); }
-.lock__badge svg { stroke: var(--p-on-accent); }
-
-.form__hint, .form__note { color: var(--p-muted); }
-
 /* The card body sits on paper now, so its text is ink. */
 .card__body, .card__name { color: var(--p-ink); }
 .card__score { background: var(--p-accent-tint); color: var(--p-accent-ink); }
@@ -464,11 +457,6 @@ body { color: var(--ink); }
 @media (min-width: 760px) {
   .form .group:nth-of-type(3) .field-row { grid-template-columns: minmax(150px, .7fr) minmax(0, 1fr); }
 }
-
-/* The slider needs room of its own; it had been overlapping the date field. */
-.rating-field { display: grid; gap: 8px; min-width: 0; }
-.rating-field input[type=range] { width: 100%; }
-.rating-head { display: flex; align-items: baseline; gap: 8px; }
 
 
 /* The headline reveals itself with `clip-path: inset(0 0 100% 0)` animating

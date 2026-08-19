@@ -758,8 +758,6 @@ body { padding-left: var(--p-rail-clear); }
   color: var(--p-accent-ink);
 }
 
-.brand__mark { font: inherit; color: inherit; }
-
 /* The link groups ride on the right. */
 .nav__links, .navbar .nav-links, .topbar__tools, .nav__tools, .nav__menu {
   display: flex;
@@ -897,15 +895,6 @@ body { padding-left: var(--p-rail-clear); }
   color: var(--p-accent-ink);
   font-weight: 600;
   font-size: var(--p-text-sm);
-}
-
-.scopepick__label {
-  font-family: var(--p-mono);
-  font-size: var(--p-text-2xs);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--p-ink-soft);
-  padding-left: 8px;
 }
 
 

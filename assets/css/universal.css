@@ -71,17 +71,6 @@ body {
 .footer a, .site-footer a, .page-footer a { color: var(--p-ink-soft); }
 .footer a:hover, .site-footer a:hover, .page-footer a:hover { color: var(--p-accent-ink); }
 
-/* Footers whose markup expects light text on a dark slab keep that contract:
-   the slab darkens with the theme rather than inverting. */
-.footer--deep,
-.site-footer--deep {
-  background: var(--p-deep) !important;
-  color: var(--p-on-deep-soft);
-  border-top-color: transparent;
-}
-
-.footer--deep a, .site-footer--deep a { color: var(--p-on-deep-soft); }
-
 
 /* ---- form controls ----------------------------------------------------- */
 
@@ -126,7 +115,6 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
    the colour out, and never touches anything in light. */
 
 [data-theme="dark"] img:not([src$=".svg"]) { filter: brightness(.93) contrast(1.02); }
-[data-theme="dark"] .no-dim img { filter: none; }
 
 
 /* ---- the universal footer ----------------------------------------------
@@ -147,6 +135,147 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   border-top: 1px solid var(--p-line);
   background: var(--p-surface-2);
   font-family: var(--p-body);
+}
+
+/* The band a page gives the card when it hosts it itself. */
+.pfeat-band {
+  padding: clamp(28px, 5vw, 56px) 0;
+}
+
+.pfeat-band .pfeat { margin-bottom: 0; }
+
+/* ---- the footer feature card -------------------------------------------
+   A module with one place worth going puts it here as a card rather than a
+   small link. Everything is a token, so it turns over with the theme. */
+.pfeat {
+  display: grid;
+  grid-template-columns: 1.4fr auto;
+  gap: clamp(20px, 4vw, 44px);
+  align-items: center;
+  /* Capped, so the prints sit beside the words rather than a screen away. */
+  max-width: 980px;
+  margin: 0 auto 26px;
+  padding: clamp(20px, 3vw, 34px) clamp(20px, 3vw, 38px);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius-lg, 16px);
+  /* Paper, not a wash. The accent belongs to the eyebrow, the italic word and
+     the button; spread across the whole card it read as a green panel against
+     a page that uses its accent in small touches. */
+  background: linear-gradient(150deg, var(--p-surface), var(--p-surface-2));
+  text-decoration: none;
+  isolation: isolate;
+  transition: transform .35s var(--p-ease), border-color .35s var(--p-ease), box-shadow .35s var(--p-ease);
+}
+
+.pfeat:hover {
+  transform: translateY(-3px);
+  border-color: var(--p-accent);
+  box-shadow: var(--p-shadow-lg);
+}
+
+.pfeat__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
+  font-family: var(--p-mono, inherit);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--p-accent-ink);
+}
+
+.pfeat__eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 1.5px;
+  background: var(--p-accent);
+}
+
+.pfeat__title {
+  margin: 0 0 6px;
+  font-family: var(--p-display);
+  font-size: clamp(1.5rem, 3vw, 2.05rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -.025em;
+  color: var(--p-ink);
+}
+
+.pfeat__title em { font-style: italic; color: var(--p-accent-ink); }
+
+.pfeat__sub {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--p-muted);
+}
+
+.pfeat__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.pfeat__frames { display: flex; gap: 7px; height: 78px; }
+
+/* Three prints laid out as if dropped on a table, straightening on hover. */
+.pfeat__frame {
+  width: 56px;
+  height: 78px;
+  border-radius: 5px;
+  border: 1.5px solid var(--p-line);
+  background-color: var(--p-tint);
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 6px 16px -8px rgba(var(--p-deep-rgb), .5);
+  transition: transform .5s var(--p-ease);
+}
+
+.pfeat__frame:nth-child(1) { transform: rotate(-6deg) translateY(2px); }
+.pfeat__frame:nth-child(2) { transform: translateY(-3px); z-index: 2; }
+.pfeat__frame:nth-child(3) { transform: rotate(6deg) translateY(2px); }
+
+.pfeat:hover .pfeat__frame:nth-child(1) { transform: rotate(-9deg) translateY(0); }
+.pfeat:hover .pfeat__frame:nth-child(2) { transform: translateY(-6px) scale(1.04); }
+.pfeat:hover .pfeat__frame:nth-child(3) { transform: rotate(9deg) translateY(0); }
+
+.pfeat__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 17px;
+  border-radius: var(--p-pill);
+  border: 1px solid var(--p-line);
+  background: var(--p-surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--p-ink);
+  transition: background .3s var(--p-ease), color .3s var(--p-ease), border-color .3s var(--p-ease);
+}
+
+.pfeat:hover .pfeat__cta {
+  background: var(--p-accent-ink);
+  border-color: var(--p-accent-ink);
+  color: var(--p-on-accent);
+}
+
+.pfeat__arrow { transition: transform .3s var(--p-ease); }
+.pfeat:hover .pfeat__arrow { transform: translate(3px, -3px); }
+
+@media (max-width: 700px) {
+  .pfeat {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+    padding: 22px 18px;
+  }
+  .pfeat__eyebrow { justify-content: center; }
+  .pfeat__sub { margin-inline: auto; }
+  .pfeat__side { align-items: center; }
 }
 
 .pfoot__inner {
@@ -365,14 +494,6 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   color: var(--p-ink);
   text-decoration: none;
   letter-spacing: -.01em;
-}
-
-.brand__mark, .navbar__brand-text, .topbar__brand-text, .nav__brand-text, .logo__text {
-  font-family: var(--p-display) !important;
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -.01em;
-  color: var(--p-ink);
 }
 
 /* The second line under a wordmark is decoration, and it made the bars

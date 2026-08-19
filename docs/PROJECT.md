@@ -25,7 +25,7 @@ deployment and troubleshooting is here.
 | `journal/` | **SidNotes** | index, story | JSON files on disk |
 
 The folder names are the original ones and do not always match the display
-names — `food/` is SidBites, `favourites/` is SidPicks. Display names live in
+names - `food/` is SidBites, `favourites/` is SidPicks. Display names live in
 `assets/js/site.config.js` and are the single source for wordmarks, the module
 switcher, the front page and the footer.
 
@@ -66,15 +66,15 @@ Nothing is shared between two modules except the top-level `assets/`.
 `assets/js/shell.js` runs on every page and injects the parts that must look
 identical everywhere:
 
-- **The rail** — the vertical strip of module icons, and the theme switch at its
+- **The rail** - the vertical strip of module icons, and the theme switch at its
   foot. On a phone it collapses behind the hamburger at top left.
-- **The wordmark** — each bar carries an empty anchor (`.wordmark`, `.brand`,
+- **The wordmark** - each bar carries an empty anchor (`.wordmark`, `.brand`,
   `.nav__brand`, `.navbar .logo`); shell.js fills it with a tinted tile holding
   the module's icon, then the name. **Do not hardcode a name in the markup.** It
   will be overwritten, and it will drift.
-- **The language gloss** — the small translation under the module name, e.g.
+- **The language gloss** - the small translation under the module name, e.g.
   `Italian - "Every Journey Leaves a Story"`. Set in `site.config.js`.
-- **The page menu** — the three-dot button on narrow screens. It collects the
+- **The page menu** - the three-dot button on narrow screens. It collects the
   page's own nav groups into one sheet.
 
 ### The page menu trap
@@ -83,14 +83,14 @@ The sheet does not clone the module's nav; it **moves** the real nodes into
 itself. Any styling those nodes had as a dropdown comes with them. Three modules
 needed neutralising inside `.pmenu__sheet`, and a fourth will too if you add one:
 
-- **Travel** — `.nav-links` is a fixed panel at `opacity: 0` until its own
+- **Travel** - `.nav-links` is a fixed panel at `opacity: 0` until its own
   toggle opens it. Inside the sheet it is forced static and visible.
-- **Favourites** — `.nav__links` is a full-screen fixed layer (`height: 100dvh`,
+- **Favourites** - `.nav__links` is a full-screen fixed layer (`height: 100dvh`,
   `z-index: 110`). Left alone it sits invisibly over the whole viewport and
   swallows every tap. Its dropdown panel also has `pointer-events: none` and
-  collapses to `max-height: 0` on `:hover` and `:focus-within` — which made the
+  collapses to `max-height: 0` on `:hover` and `:focus-within` - which made the
   list vanish the instant a thumb touched it.
-- **Books and Cinema** — only their round tool buttons needed the row treatment
+- **Books and Cinema** - only their round tool buttons needed the row treatment
   (`.iconbtn` and `.icon-btn` respectively; both are handled in
   `components.css`).
 
@@ -117,7 +117,7 @@ with `var(--p-on-deep)` for a band meant to stay dark in both themes. A hex will
 look right in whichever theme you were viewing and wrong in the other.
 
 **The exception:** chrome that always sits over a photograph. The favourites
-lightbox — caption, name, close button, arrows, dots — is deliberately fixed
+lightbox - caption, name, close button, arrows, dots - is deliberately fixed
 light (`#fff` on `rgba(0,0,0,…)`), because tokens invert in dark mode and left
 it dark on dark.
 
@@ -146,13 +146,13 @@ at the data layer.
 | Travel | `1CtRBUNbgxf-Z-pEfwoKW9O5NTCUxTsbpTGBrfox9gSk` | Places, Monuments, Goals, Activities, Treks |
 | SidBites | `1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0` | one tab |
 | SidPicks | published link only | Actors, Actress, Superheroes, Supervillains |
-| SidNotes | none — JSON in `modules/journal/data/` | — |
+| SidNotes | none - JSON in `modules/journal/data/` | - |
 
 **Columns are matched by header name, never by position.** Reorder them freely.
 Renaming one is safe only if the new spelling is already in that section's alias
 list: `COLUMN_ALIASES` in the Apps Script **and** the alias table in
 `js/data/sheets.js`. Both sides must carry it. Where two columns name the same
-field, the **first wins** — so delete the old column when you rename one.
+field, the **first wins** - so delete the old column when you rename one.
 
 ### The Apps Scripts
 
@@ -165,7 +165,7 @@ field, the **first wins** — so delete the old column when you rename one.
 
 Each script's `SECRET` must equal `APPS_SCRIPT_TOKEN` in that module's
 `config.js`. Both pairs currently match. Cinema's token reads like a
-placeholder — `THIS-IS-A-LONG-RANDOM-STRING-FOR-APPS-SCRIPT-TOKEN` — but it is
+placeholder - `THIS-IS-A-LONG-RANDOM-STRING-FOR-APPS-SCRIPT-TOKEN` - but it is
 the live value; change it in **both** files together or writes stop.
 
 **After every script edit:** Deploy → Manage deployments → pencil → New version
@@ -193,7 +193,7 @@ This drives four card states:
 | `is-queued` | purple | a book on **Want to Read** |
 | `is-queued` + note | purple | another edition of a readlist book; hovering says so |
 
-A match is either by ISBN or, failing that, by title and author — the code keeps
+A match is either by ISBN or, failing that, by title and author - the code keeps
 a `via: "isbn" | "guess"` distinction, and a guess is worded as one. A card the
 lookup missed can be filed by hand with **Mark as another edition of a book I
 have read**.
@@ -204,10 +204,10 @@ The journal only ever **reads**. Stories are written in a separate editor that
 commits JSON through the GitHub API. Two files matter, under
 `modules/journal/data/`:
 
-- **`index.json`** — a flat list, one entry per story: `id`, `title`, `date`,
+- **`index.json`** - a flat list, one entry per story: `id`, `title`, `date`,
   `thumb`. `date` must be `YYYY-MM-DD`, because sorting compares those strings
   directly; any other format sorts wrongly and silently.
-- **`posts/<id>.json`** — one complete story, photographs embedded as data URLs.
+- **`posts/<id>.json`** - one complete story, photographs embedded as data URLs.
 
 The two must agree. An index entry with no matching file opens onto *"Story not
 found."*; a file with no index entry is invisible. Deleting a story means
@@ -253,7 +253,7 @@ easiest to break. It is worth understanding before touching it.
 Four **places**, not four images. Place 0 is the front of the fan; each step
 back is 10px narrower at 9:16, 4% smaller and 30px further away. A card takes
 the look of the place it is in, so moving up a place means a card *grows into*
-it — the places never move.
+it - the places never move.
 
 `modules/travel/js/hero-fan.js` writes `--fw`, `--fh`, `--fk`, `--fz`, `--fi`
 and `--fml` onto each card. Adding photographs to `assets/hero/` and rerunning
@@ -263,7 +263,7 @@ Four things will break it:
 
 1. **Do not wrap the cards in another element.** A `transform-style: preserve-3d`
    wrapper between `.hero-fan`'s perspective and the cards breaks hit-testing for
-   anything at a negative `translateZ` — cards 2, 3 and 4 stop responding to
+   anything at a negative `translateZ` - cards 2, 3 and 4 stop responding to
    hover while still looking correct. Cards must be direct children of
    `#heroFan`.
 2. **Do not clip the window.** Cards outside the fan fade to `opacity: 0`, which
@@ -277,6 +277,21 @@ Four things will break it:
 On a phone the fan is dropped for a scroll-snap strip: one card at 74% width
 with 13% of its neighbours showing.
 
+### The footer
+
+`shell.js` builds one footer for every module: the quote from `footerLine`, an
+optional feature card, and the signature. A module with `ownFooter: true`
+(currently only Cinema) keeps its own and is left alone; the rest have their
+original footer markup hidden rather than removed, since it is often wired to
+that module's scripts.
+
+A module with one place worth going can add a `footerFeature` to its entry in
+`site.config.js` - eyebrow, title, an emphasised word, a line of copy, a CTA
+label and three image URLs. Travel uses it for the gallery, and puts it in the
+page rather than the footer: an empty `<section data-feature-slot>` anywhere on
+the page takes the card instead. The card hides itself on the page it points
+at, the same way the small footer links do.
+
 ---
 
 ## 8. Favicon and link previews
@@ -289,7 +304,7 @@ Every page carries the same head block, built from
   `https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png`,
   with `og:image:width`, `:height` and `:type` so WhatsApp and Telegram render
   on first fetch rather than after a re-crawl.
-- Twitter card set to `summary`, not `summary_large_image` — the icon is square
+- Twitter card set to `summary`, not `summary_large_image` - the icon is square
   and the large card crops to 2:1.
 
 If the site moves off GitHub Pages, the absolute URL in all sixteen pages must
@@ -319,6 +334,7 @@ There is no build step, so a change is live as soon as Pages finishes.
 | To change | Edit |
 |---|---|
 | Site name, tagline, intro, portrait | `assets/js/site.config.js` |
+| A module's footer quote, links or feature card | `assets/js/site.config.js` |
 | Which modules exist, their order, blurbs, card images | `assets/js/site.config.js` |
 | A module's display name or language gloss | `assets/js/site.config.js` |
 | Any colour, font, radius, shadow or size | `assets/css/tokens.css` |
@@ -364,6 +380,6 @@ file in `posts/`. See §5.
   are generated placeholders. Drop real photographs in at the same paths, or
   point `image` in `site.config.js` at any `https://` URL.
 - `modules/books/assets/images/reading.svg` is the Books hero cut-out
-  placeholder — a background-removed subject on soft colour blobs.
+  placeholder - a background-removed subject on soft colour blobs.
 
 Everything else is configured and working.

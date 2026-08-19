@@ -289,17 +289,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
 .icon-btn__dot[data-state="error"] { background: var(--danger); }
 .icon-btn.is-busy svg { animation: spin 0.9s linear infinite; }
 
-/* Only one of the two icons is ever mounted; the other is scaled out. */
-.theme-btn svg {
-  grid-area: 1 / 1;
-  transition: transform 0.4s var(--ease), opacity 0.25s;
-}
-.theme-btn__moon { transform: rotate(0deg) scale(1); opacity: 1; }
-.theme-btn__sun  { transform: rotate(-70deg) scale(0.4); opacity: 0; }
-[data-theme="dark"] .theme-btn__moon { transform: rotate(70deg) scale(0.4); opacity: 0; }
-[data-theme="dark"] .theme-btn__sun  { transform: rotate(0deg) scale(1); opacity: 1; }
-.theme-btn:hover { color: var(--gold); border-color: var(--gold); }
-
 /* --- hero --- */
 .hero {
   position: relative;
@@ -384,17 +373,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   margin-left: 4px;
   border-left: 1px solid var(--line);
   flex-shrink: 0;
-}
-
-.scopepick__label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0;
-  white-space: nowrap;
-  pointer-events: none;
 }
 
 .scopepick__select {
@@ -1305,27 +1283,6 @@ body.is-suggesting .suggestions {
   box-shadow: var(--shadow-lg);
 }
 
-.detail__close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 5;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  background: rgba(18, 24, 34, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-}
-.detail__close svg { width: 17px; height: 17px; stroke-width: 2.2; }
-.detail__close:hover { background: rgba(18, 24, 34, 0.78); }
-
 /* Bootstrap expects a .modal-body to own scrolling; this layout has none. */
 .detail__body {
   display: block;
@@ -1642,7 +1599,6 @@ body.is-suggesting .suggestions {
   .sortfield select { flex: 1 1 auto; padding: 10px 14px; }
 
   .activefilters { gap: 6px; margin-top: 14px; }
-  .chipfilter { padding: 8px 12px; }
 
   /* --- cards --- */
   /* Exactly two columns, not auto-fill: a 154px floor collapses to ONE column at 320px, because two plus the gap need 322px. */
@@ -1661,8 +1617,6 @@ body.is-suggesting .suggestions {
   .card__note { width: 32px; height: 32px; }
 
   .sections { gap: 30px; }
-  .sec__head { flex-wrap: wrap; gap: 4px 10px; padding-bottom: 9px; margin-bottom: 14px; }
-  .sec__title { font-size: 17px; }
 
   .state { padding: 52px 12px; }
   .state__icon { width: 48px; height: 48px; margin-bottom: 18px; }
@@ -1674,7 +1628,6 @@ body.is-suggesting .suggestions {
   /* Nearly full width, and clear of the home indicator - the Apply button sat under it on an iPhone. */
   .panel { width: min(400px, 92vw); }
   .panel__body { gap: 14px; padding: 16px; }
-  .panelfield select { padding: 13px; }
   .panel__foot { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
   .panel__clear, .panel__apply { padding: 13px 16px; }
 
@@ -1687,7 +1640,6 @@ body.is-suggesting .suggestions {
   .detail__main { padding: 22px 18px 28px; }
   .detail__section { margin-top: 24px; }
   .detail__overview { font-size: 14.5px; line-height: 1.65; }
-  .detail__close { top: 12px; right: 12px; width: 36px; height: 36px; }
   /* Two full-width buttons, the shape the library's own popup uses. The official site goes: it is a marketing page, unlike the trailer and the TMDB record. */
   .detail__action--site { display: none; }
   .detail__actions { flex-direction: column; align-items: stretch; gap: 9px; }
@@ -1697,10 +1649,6 @@ body.is-suggesting .suggestions {
     justify-content: center;
     padding: 13px 20px;
   }
-  .factgrid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-  .castrow { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 12px; }
-  .similar-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .season-row { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
 
   /* The library page's own phone rules are NOT here - see the block at the bottom of this file, where its base styles are declared. */
 
@@ -1723,9 +1671,6 @@ body.is-suggesting .suggestions {
 
   .toolbar__title { font-size: 19px; }
   .segmented__btn { padding: 9px 4px; font-size: 12px; }
-
-  .similar-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .castrow { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
   .detail__title { font-size: 21px; }
   .detail__head { padding: 0 15px; }
   .detail__main { padding: 20px 15px 24px; }
@@ -1794,17 +1739,6 @@ body.is-suggesting .suggestions {
   color: var(--accent-deep);
 }/* The phone twin of the chip row. Fifty chips show a collection's shape on a desktop and bury the grid on a phone. */
 /* One bordered control carrying its own caption, the value and the caret. The border is here rather than on the <select> so the caption sits inside it. */
-.facets__picker {
-  position: relative;
-  display: none;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--tint);
-  padding: 0 36px 0 14px;
-  transition: border-color 0.16s var(--ease);
-}
 
 .facets__select {
   appearance: none;
@@ -1885,15 +1819,6 @@ body.is-suggesting .suggestions {
 }
 
 @media (max-width: 860px) {
-  .statbar__lead {
-    width: 100%;
-    padding: 0 0 16px;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    align-items: center;
-    text-align: center;
-  }
-  .statbar__tiles { width: 100%; }
 }
 
 
@@ -1977,7 +1902,6 @@ body.is-suggesting .suggestions {
 
 /* No hover on a touch screen, so the buttons are simply always there. */
 @media (hover: none) {
-  .cardacts { opacity: 1; transform: none; }
   .cardact { height: 34px; }
 }
 
@@ -2147,12 +2071,6 @@ body.gate-open { overflow: hidden; }
   transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
 }
 .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
-.toast--error {
-  border-color: rgba(224, 36, 94, 0.4);
-  background: #fff1f5;
-  color: #a01243;
-}
-[data-theme="dark"] .toast--error { background: #3a1020; color: #ffa8c4; }
 
 @media (max-width: 767px) {
   .gate { padding: 14px; }
@@ -2252,13 +2170,6 @@ body.gate-open { overflow: hidden; }
   border-radius: 50%;
   animation: spin 0.66s linear infinite;
 }
-
-.toast--pending { color: var(--ink-soft); }
-.toast--done { border-color: var(--seen); color: var(--seen-deep); background: var(--seen-wash); }
-.toast--error { border-color: var(--danger); color: var(--danger); background: var(--accent-tint); }
-
-[data-theme="dark"] .toast--done { background: #10241c; color: #6fd8ac; }
-[data-theme="dark"] .toast--error { background: #3a1020; color: #ffa8c4; }
 
 @media (prefers-reduced-motion: reduce) {
   .toast { transition: none; }
@@ -2747,12 +2658,6 @@ body.panel-open { overflow: hidden; }
 }
 
 .split__seg { display: block; height: 100%; }
-.split__seg--0 { background: var(--accent); }
-.split__seg--1 { background: var(--seen); }
-.split__seg--2 { background: var(--gold); }
-.split__seg--3 { background: #6b7fd7; }
-.split__seg--4 { background: #9b6bd7; }
-.split__seg--5 { background: var(--muted); }
 
 .split__keys { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 11px; }
 
@@ -2829,7 +2734,6 @@ body.panel-open { overflow: hidden; }
 
 /* No hover on a touch screen, so the button has to be there already. */
 @media (hover: none) {
-  .cardmenu__btn { opacity: 1; transform: none; }
 }
 
 
@@ -2932,8 +2836,6 @@ body.panel-open { overflow: hidden; }
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
-.detail__close svg { stroke: currentColor; }
-.detail__close:hover { background: rgba(0, 0, 0, 0.78); }
 
 /* === Phones. Everything above is sized for a pointer; this is the pass that makes it fit a 360px screen. === */
 @media (max-width: 767px) {
@@ -2953,21 +2855,6 @@ body.panel-open { overflow: hidden; }
   .collbar { padding: 12px; margin-top: 18px; margin-bottom: 18px; gap: 9px; }
   .collbar__search, .facets--inline .facets__wrap { height: 42px; }
   .collbar__count { margin-bottom: 0; }
-
-  
-  /* The trigger was a 34px circle on a 150px-wide poster. */
-  .cardmenu { right: 6px; bottom: 6px; }
-  .cardmenu__btn { width: 30px; height: 30px; }
-  .cardmenu__btn svg { width: 15px; height: 15px; }
-
-  .cardmenu__layer { min-width: 0; width: min(240px, calc(100vw - 20px)); padding: 5px; }
-  .cardmenu__item { padding: 9px 10px; font-size: 12.5px; gap: 8px; }
-
-  /* "Remove from watchlist" is the longest label and pushed the icon out of the row; it wraps now and the icon holds its width. */
-  .cardmenu__item span { white-space: normal; }
-
-  .detail__close { top: 10px; right: 10px; width: 34px; height: 34px; }
-  .detail__close svg { width: 16px; height: 16px; }
 
   .detail__actions { gap: 8px; }
   .btn-solid, .detail__actions .btn-outline { height: 38px; padding: 0 14px; font-size: 12.5px; }
