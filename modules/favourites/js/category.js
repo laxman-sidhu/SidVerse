@@ -182,7 +182,7 @@ async function loadExhibits() {
 function applyCategoryChrome() {
   qs("#category-icon").textContent = category.icon;
   qs("#category-title").textContent = category.title;
-  document.title = `${category.title} — Museum of Favorites`;
+  document.title = `${category.title} - Museum of Favorites`;
 }
 
 function init() {

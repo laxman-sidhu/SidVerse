@@ -1,5 +1,6 @@
-import { CLOUDINARY, ADMIN_PASSWORD } from "./config.js";
+import { CLOUDINARY } from "./config.js";
 import { post, formatDate, fetchDishes, addPending, cdn } from "./api.js";
+import { askOwner, hasKey } from "./gate.js";
 import { childrenOf, listChildren, createFolder, addPath, learnFromUrls } from "./folders.js";
 
 const $ = s => document.querySelector(s);
@@ -23,7 +24,6 @@ bindFolders();
 paintRating();
 loadKnownValues();
 
-if (key()) showForm();
 
 function show(panel) {
   ["#lockPanel", "#formPanel", "#donePanel"].forEach(id => { $(id).hidden = id !== panel; });
@@ -52,35 +52,23 @@ async function loadKnownValues() {
 
 /* ---------- unlock ---------- */
 
-// the copy in config.js only opens the form, Apps Script still checks every write
-const localGate = ADMIN_PASSWORD && ADMIN_PASSWORD !== "CHANGE_THIS_PASSWORD";
-
-function bindLock() {
-  $("#lockForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    const btn = $("#lockSubmit");
-    const pass = $("#lockPass").value;
-    showError($("#lockError"), "");
-
-    if (localGate && pass !== ADMIN_PASSWORD) {
-      return showError($("#lockError"), "That password does not match.");
-    }
-
-    btn.disabled = true;
-    btn.textContent = "Checking…";
-
-    try {
-      await post({ action: "auth", password: pass });
-      sessionStorage.setItem("swaad:key", pass);
-      $("#lockPass").value = "";
-      showForm();
-    } catch (err) {
-      showError($("#lockError"), err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Unlock";
-    }
-  });
+// The gate asks who you are, then the password. Apps Script still checks every
+// write, so the copy in config.js only decides whether the form opens.
+async function bindLock() {
+  if (hasKey()) return showForm();
+  if (!(await askOwner())) {
+    // Declined, so there is nothing on this page to see.
+    window.location.href = "index.html";
+    return;
+  }
+  try {
+    await post({ action: "auth", password: sessionStorage.getItem("swaad:key") });
+    showForm();
+  } catch (_) {
+    // The sheet turned it down, so ask again rather than stranding the page.
+    sessionStorage.removeItem("swaad:key");
+    bindLock();
+  }
 }
 
 function showForm() {

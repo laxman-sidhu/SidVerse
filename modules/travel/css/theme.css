@@ -548,38 +548,6 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 #contact.contact-section textarea.form-control { padding-block: 14px; }
 
 
-/* ---- the hero fan -------------------------------------------------------
-   The angled, overlapping stack is the design; it is kept exactly as it was.
-   The only change is that past four pictures the row scrolls sideways instead
-   of squeezing, so the folder can grow. Card size, tilt and overlap are
-   untouched — style.css still owns all of that. */
-.hero-fan.is-scroller {
-  overflow-x: auto;
-  overflow-y: visible;
-  scroll-snap-type: x proximity;
-  padding-block: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, .3) transparent;
-}
-
-.hero-fan.is-scroller .fan-card { scroll-snap-align: center; flex: 0 0 auto; }
-
-/* The picture fills its card. Left to its natural aspect it stopped short of
-   the frame and the card's own dark backing showed as a band underneath. */
-.hero-fan .fan-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.hero-fan.is-scroller::-webkit-scrollbar { height: 6px; }
-.hero-fan.is-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .28); border-radius: 999px; }
-.hero-fan.is-scroller::-webkit-scrollbar-track { background: transparent; }
-
-/* The module hid the fan outright below 768px. It stays, in the same tilted
-   style, scrolling sideways. */
-@media (max-width: 900px) {
-  .hero-visual { display: block; }
-  .hero-fan { display: flex !important; overflow-x: auto; padding-block: 8px; scrollbar-width: none; }
-  .hero-fan::-webkit-scrollbar { display: none; }
-  .hero-fan .fan-card { flex: 0 0 auto; }
-}
-
 /* ---- the bar and the fold ----------------------------------------------
    The bar padded itself 1.4rem at rest and 0.85rem once scrolled, and both
    values moved the wordmark sideways as well as up. Only the height changes
@@ -698,38 +666,100 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 
 
 /* ---- the hero fan -------------------------------------------------------
-   Up to four pictures keep the angled stack the page was designed around.
-   Past four it becomes a scroller, so the folder can grow without the fan
-   collapsing into a pile. */
-.hero-fan.is-scroller {
+   The angled stack is the design and is left alone. The fan sits inside a
+   window of a fixed size, and the cards move between the fan's four places
+   rather than the row sliding past: a card coming forward takes the size of
+   the place it arrives at. style.css owns the places; this owns the window. */
+.fan-window { position: relative; width: 100%; }
+
+/* Only once there are more pictures than the fan holds does anything change,
+   and then only inside the window. */
+@media (min-width: 901px) {
+  /* No clip: a card outside the fan is faded rather than cut, so a card
+     lifting on hover at either edge is never sliced. */
+  .hero-visual.is-carousel .fan-window {
+    width: var(--fan-page, 678px);
+    flex: 0 0 auto;
+  }
+
+  /* Clipped to one fan's width, so the row runs from the window's left edge
+     rather than being centred inside it. */
+  .hero-visual.is-carousel .hero-fan { justify-content: flex-start; }
+  .hero-visual.is-carousel .fan-card img { user-select: none; -webkit-user-drag: none; }
+}
+
+/* The 1100px breakpoint scales the fan down. With a window in play that scale
+   moves out to the window, so the clip scales with what it is clipping. */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .hero-visual.is-carousel .hero-fan { transform: none; }
+  .hero-visual.is-carousel .fan-window { transform: scale(.85); }
+}
+
+/* The control: two small arrows and a dot per page, sitting under the fan
+   without taking any height from it. */
+.fan-nav {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  translate: -50% 0;
+  z-index: 9;
   display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 10px 4px 18px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, .35) transparent;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26px, #000 calc(100% - 26px), transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 26px, #000 calc(100% - 26px), transparent 100%);
+  align-items: center;
+  gap: 10px;
 }
 
-.hero-fan.is-scroller .fan-card {
-  position: relative;
-  inset: auto;
-  flex: 0 0 auto;
-  width: clamp(150px, 20vw, 210px);
-  margin: 0;
-  rotate: none;
-  transform: none;
-  scroll-snap-align: center;
+.fan-nav[hidden] { display: none; }
+
+/* The dots are the control. The arrows are a hint that surfaces while the
+   gallery is in use and fades back out once it is left alone. */
+.fan-nav__btn {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .32);
+  color: var(--p-on-deep);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  transition: background .2s ease, opacity .3s ease;
 }
 
-.hero-fan.is-scroller::-webkit-scrollbar { height: 6px; }
-.hero-fan.is-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .3); border-radius: 999px; }
+.hero-visual.is-awake .fan-nav__btn { opacity: 1; pointer-events: auto; }
 
-/* The fan was hidden on a phone, which left the opening screen as words on a
-   photograph. It stays, as a scroller, at a size that fits. */
+.fan-nav__btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fan-nav__btn:hover { background: rgba(0, 0, 0, .5); }
+.hero-visual.is-awake .fan-nav__btn:disabled { opacity: .28; cursor: default; }
+.fan-nav__btn:disabled:hover { background: rgba(0, 0, 0, .32); }
+
+.fan-nav__dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--p-pill);
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .18);
+  backdrop-filter: blur(6px);
+}
+
+.fan-nav__dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .38);
+  cursor: pointer;
+  transition: width .25s ease, background .25s ease;
+}
+
+.fan-nav__dot.is-on { width: 16px; border-radius: 999px; background: var(--p-on-deep); }
+
 /* The photo modal is a dark overlay in both themes, so its caption takes the
    on-deep ink. It had been inheriting the page's own — invisible on dark. */
 .act-modal-info h3,
@@ -737,30 +767,95 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 .act-modal-info { color: var(--p-on-deep-soft); }
 .act-modal-info p, .act-modal-info .am-sub { color: var(--p-on-deep-soft); }
 
-/* Below 600px the module flattened every card into a full-width tile and
-   dropped the third and fourth outright. The fan keeps its own shape at every
-   size now — it scrolls rather than rearranging. */
+/* On a phone the stack is dropped for what a phone is good at: one picture at a
+   time, swiped sideways, with a sliver of the neighbours showing so it reads as
+   a gallery. The card's own frame, border and shadow are kept. */
 @media (max-width: 900px) {
-  .hero-fan .fan-card,
-  .hero-fan .fan-card:first-child,
-  .hero-fan .fan-card:nth-child(1),
-  .hero-fan .fan-card:nth-child(2),
-  .hero-fan .fan-card:nth-child(3),
-  .hero-fan .fan-card:nth-child(4),
-  .hero-fan .fan-card:nth-child(n) {
-    display: block;
-    width: 168px;
-    height: 230px;
-    margin-left: -28px;
+  .hero-visual { display: block; min-height: 0; margin-top: 1.4rem; }
+
+  .fan-window {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    transform: none;
   }
 
-  .hero-fan .fan-card:first-child { margin-left: 0; }
+  .fan-window::-webkit-scrollbar { display: none; }
+
+  .hero-visual .hero-fan {
+    display: flex !important;
+    /* Centred, a strip wider than its scroller overflows BOTH ways and the
+       first picture starts off the left edge. It runs from the start. */
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    perspective: none;
+    transform: none;
+  }
+
+  /* End margins rather than padding on the track: a scroll container drops its
+     trailing padding, which would stop the last picture short of centre. */
+  .hero-visual .hero-fan .fan-card:first-child { margin-left: 13%; }
+  .hero-visual .hero-fan .fan-card:last-child { margin-right: 13%; }
+
+  .hero-fan .fan-card,
+  .hero-fan .fan-card:first-child,
+  .hero-fan .fan-card:nth-child(n) {
+    display: block;
+    position: relative;
+    flex: 0 0 74%;
+    width: auto;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    margin: 0;
+    transform: none;
+    z-index: auto;
+    opacity: 1;
+    animation: none;
+    scroll-snap-align: center;
+    border-width: 2px;
+    border-radius: 10px;
+    box-shadow: 0 14px 30px -14px rgba(0, 0, 0, .55);
+  }
+
   .hero-fan .fan-card img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-fan:hover .fan-card { filter: none; }
+  .hero-fan .fan-card:hover { transform: none !important; filter: none; }
+
+  /* The arrows are for a pointer; a thumb has the whole strip. */
+  .fan-nav { display: none; }
+
+  /* Floating over the foot of the gallery, the way it does on a wide screen,
+     rather than dropping into the flow underneath it. */
+  .hero-float-card {
+    position: absolute;
+    left: 50%;
+    right: auto;
+    bottom: -34px;
+    translate: -50% 0;
+    z-index: 9;
+  }
 }
 
-/* The stamp card is a footnote on a phone, not a panel. */
+/* The stamp card is a footnote on a phone, not a panel: centred under the
+   gallery, with room above it and little below. */
 @media (max-width: 720px) {
-  .hero-float-card { padding: 9px 14px !important; width: max-content; margin: 12px auto 0 !important; }
+  .hero-float-card {
+    padding: 9px 16px !important;
+    width: max-content;
+    margin: 0 !important;
+    text-align: center;
+  }
+  .hero-float-card .hfc-label,
+  .hero-float-card .hfc-value,
+  .hero-float-card .hfc-sub { text-align: center; }
   .hero-float-card .hfc-value { font-size: 1.05rem; }
   .hero-float-card .hfc-label, .hero-float-card .hfc-sub { font-size: 10.5px; }
 }
@@ -800,3 +895,52 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 
 #contact.contact-section .contact-form-card .form-group label { color: var(--p-muted); }
 #contact.contact-section .vibe-line { color: var(--p-on-deep); font-style: normal; }
+
+
+/* ---- the bar on a phone -------------------------------------------------
+   The site's own page menu takes the module's links into its sheet, which left
+   the module's hamburger toggling a list that is no longer beside it. One
+   control, and it is the one that works. */
+@media (max-width: 720px) {
+  .navbar .nav-toggle { display: none; }
+
+  /* The list is the module's own dropdown, which sits hidden until its toggle
+     opens it. Inside the page sheet it is already open, so it drops the panel
+     and simply lists. */
+  .pmenu__sheet .nav-links {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0;
+    width: 100% !important;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* The sheet sits inside the bar, so the bar's light-on-dark hero rules still
+     reach these links and left them white on a white panel. Only !important
+     clears them: they are scoped to .navbar:not(.scrolled) and outrank this. */
+  .pmenu__sheet .nav-links li { list-style: none; width: 100%; }
+
+  .pmenu__sheet .nav-links a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 10px;
+    color: var(--p-ink) !important;
+    font-size: 15px !important;
+    font-weight: 500;
+  }
+
+  .pmenu__sheet .nav-links a:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
+}

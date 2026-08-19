@@ -4,7 +4,7 @@
 <script>(function(){try{var t=localStorage.getItem("sidcinema-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>SidVerse — SidCinemas</title>
+  <title>SidVerse - SidCinemas</title>
   <meta name="description" content="Everything queued up to watch.">
   <meta name="theme-color" content="#fafbfd" id="themeColor">
 
@@ -18,7 +18,26 @@
     })();
   </script>
 
-  <link rel="icon" href="../../assets/images/sidverse-icon.png">
+  <!-- Favicon, and the same icon for link previews -->
+  <link rel="icon" type="image/png" sizes="any" href="../../assets/images/sidverse-icon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/sidverse-icon.png">
+  <link rel="canonical" href="https://laxman-sidhu.github.io/SidVerse/modules/cinema/watchlist.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SidVerse">
+  <meta property="og:title" content="SidVerse - SidCinemas">
+  <meta property="og:description" content="Everything queued up to watch.">
+  <meta property="og:url" content="https://laxman-sidhu.github.io/SidVerse/modules/cinema/watchlist.html">
+  <meta property="og:image" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta property="og:image:secure_url" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1254">
+  <meta property="og:image:height" content="1254">
+  <meta property="og:image:alt" content="The SidVerse mark">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SidVerse - SidCinemas">
+  <meta name="twitter:description" content="Everything queued up to watch.">
+  <meta name="twitter:image" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta name="twitter:image:alt" content="The SidVerse mark">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,11 +61,7 @@
 
   <header class="topbar">
     <div class="wrap topbar__inner">
-      <a class="wordmark" href="index.html"
-         title="D&eacute;couverte de films &mdash; French for &ldquo;Movie Discovery&rdquo;">
-        <span class="wordmark__text"><span class="wordmark__long">D&eacute;couverte de films</span><span class="wordmark__brief">D&eacute;couverte</span><span class="wordmark__dot">.</span></span>
-        <span class="wordmark__gloss" aria-hidden="true">French for "Movie Discovery"</span>
-      </a>
+      <a class="wordmark" href="index.html"></a>
 
       <!-- Built by js/ui/nav.js from one list, so adding a destination is a change in a single file. -->
       <div class="topbar__tools" id="navTools"></div>
@@ -132,9 +147,14 @@
   <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
       <div class="modal-content detail">
-        <button type="button" class="detail__close" data-bs-dismiss="modal" aria-label="Close">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
+        <!-- The screen keeps a bar of its own: the room's name, and the way back. -->
+        <div class="detail__topbar">
+          <span class="detail__brand topbar__brand"></span>
+          <button type="button" class="detail__back" data-bs-dismiss="modal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            <span>Back to SidCinemas</span>
+          </button>
+        </div>
         <div class="detail__body" id="detailBody"></div>
       </div>
     </div>

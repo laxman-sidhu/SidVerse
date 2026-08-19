@@ -11,7 +11,7 @@ import { qs, cloneTpl, hydrateImage } from "./utils.js";
 
 const PLACEHOLDER = "assets/placeholders/exhibit.svg";
 
-let modal, stageEl, trackEl, nameEl, dotsEl, closeBtn, prevBtn, nextBtn;
+let modal, stageEl, trackEl, nameEl, countEl, dotsEl, closeBtn, prevBtn, nextBtn;
 let lastTrigger = null;
 
 let images = [];      // current exhibit's image URLs
@@ -24,6 +24,7 @@ function ensureRefs() {
   stageEl = qs(".modal__stage", modal);
   trackEl = qs(".modal__track", modal);
   nameEl = qs(".modal__name", modal);
+  countEl = qs("[data-modal-count]", modal);
   dotsEl = qs(".modal__dots", modal);
   closeBtn = qs(".modal__close", modal);
   prevBtn = qs(".modal__nav--prev", modal);
@@ -186,6 +187,11 @@ export function openModal({ name, image, images: imageList }, trigger = null) {
 
   current = 0;
   nameEl.textContent = name;
+  // The card no longer prints these, so the popup carries them.
+  if (countEl) {
+    countEl.textContent = images.length > 1 ? `${images.length} photographs` : "1 photograph";
+    countEl.hidden = false;
+  }
 
   // Size the stage without animating on open (avoids a grow-from-zero
   // flash); the smooth size transition is restored for navigation.

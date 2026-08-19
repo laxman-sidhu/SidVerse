@@ -4,7 +4,7 @@ import { esc, debounce, orderCategories } from "../core/util.js";
 import { gridMarkup, cardsMarkup } from "../ui/cards.js";
 import * as cardactions from "../ui/cardactions.js";
 import * as detail from "../ui/detail.js";
-import * as picker from "../ui/picker.js";
+import * as picker from "../../../../assets/js/picker.js";
 import * as actions from "../ui/actions.js";
 import * as toast from "../ui/toast.js";
 import { paintNav, wireTheme, wireRefresh } from "../ui/nav.js";
@@ -287,7 +287,7 @@ function paintDuplicates() {
     const side = row => `${esc(row.name || row.og_title || "(no name)")}`
       + `${row.year ? ` (${row.year})` : " (no year)"}`
       + ` &middot; ${esc(row.industry || "no industry")}`
-      + ` &middot; id ${row.tmdb_id == null ? "\u2014" : row.tmdb_id}`;
+      + ` &middot; id ${row.tmdb_id == null ? "-" : row.tmdb_id}`;
     return `<li class="dupes__item">`
       + `<div class="dupes__why">${esc(entry.reason)}</div>`
       + `<div class="dupes__row"><b>dropped</b> ${side(entry.dropped)}</div>`
@@ -434,7 +434,7 @@ function wire() {
     paintFrom(currentData());
 
     const count = (PAGE.views ? watched.stats().total_rows : watchlist.stats().total_rows);
-    return `Reloaded \u2014 ${count.toLocaleString()} ${PAGE.views ? "watched" : "queued"}`;
+    return `Reloaded - ${count.toLocaleString()} ${PAGE.views ? "watched" : "queued"}`;
   });
 
   detail.attach(dom.collGrid);

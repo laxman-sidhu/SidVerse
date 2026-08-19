@@ -54,7 +54,7 @@
     set("[data-hero-lede]", SITE.intro || "");
     set("[data-hero-count]", SECTIONS.length + " rooms, and counting");
     set("[data-foot-line]", SITE.footerLine || "");
-    set("[data-foot-meta]", SITE.name + " — kept by " + (SITE.owner || "me"));
+    set("[data-foot-meta]", SITE.name + " - kept by " + (SITE.owner || "me"));
 
     var portrait = document.querySelector("[data-portrait]");
     if (portrait) {

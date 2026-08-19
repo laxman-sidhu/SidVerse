@@ -12,8 +12,10 @@
   width: min(100% - 2 * var(--gutter), var(--content-wide));
 }
 
+/* The bar is sticky, so it already takes its height out of the flow. Padding
+   for it as well pushed every page down by a second bar's worth. */
 main {
-  padding-top: calc(var(--nav-height) + var(--safe-top));
+  padding-top: var(--safe-top);
   flex: 1 0 auto;
   width: 100%;
 }

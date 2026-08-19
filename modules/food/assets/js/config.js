@@ -14,12 +14,10 @@ export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIqOzeq
 // "csv" reads the published link, "script" reads live through Apps Script
 export const READ_FROM = "csv";
 
-// LEAVE THIS ALONE. It is a sentinel, not an unfilled blank: add.js only checks
-// a password in the browser when this is set to something else, so the literal
-// "CHANGE_THIS_PASSWORD" is what sends every attempt to Apps Script to be
-// checked against the ADMIN_PASSWORD script property instead. The form still
-// asks; the answer just never sits in this file where anyone can read it.
-export const ADMIN_PASSWORD = "CHANGE_THIS_PASSWORD";
+// The same word the film and book diaries use, so one password opens all three.
+// Apps Script still checks every write against its own ADMIN_PASSWORD property,
+// so this only decides whether the form opens.
+export const ADMIN_PASSWORD = "LaxSid@12345";
 
 export const CLOUDINARY = {
   cloudName: "dadtqawh5",

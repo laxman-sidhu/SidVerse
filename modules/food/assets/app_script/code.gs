@@ -1,6 +1,7 @@
 const SHEET_ID = "1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0";
 const SHEET_NAME = "";
-const ADMIN_PASSWORD = "CHANGE_THIS_PASSWORD";
+// A Script Property of the same name still wins, so the secret can stay out of this file.
+const ADMIN_PASSWORD = "LaxSid@12345";
 const CLOUDINARY_CLOUD_NAME = "dadtqawh5";
 const CLOUDINARY_API_KEY = "534744288219611";
 // leave this empty and set CLOUDINARY_API_SECRET in Project Settings > Script Properties

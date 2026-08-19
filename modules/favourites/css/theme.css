@@ -221,3 +221,107 @@ body { padding-top: 0; }
 .search__clear { flex: 0 0 auto; border-radius: 50%; background: var(--p-surface-3); color: var(--p-ink-soft); }
 .search__clear:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
 .search-count { margin-top: 12px; color: var(--p-muted); font-size: var(--p-text-sm); }
+
+
+/* ---- the hero on a phone ------------------------------------------------
+   The room's introduction sat high with the fold empty beneath it. It reads
+   centred in the opening screen instead. */
+@media (max-width: 860px) {
+  .hero {
+    min-height: calc(100svh - var(--nav-height));
+    display: flex;
+    align-items: center;
+    padding-block: clamp(1.5rem, 6vw, 2.5rem);
+  }
+
+  /* The introduction had been running to the screen edges. */
+  .hero__inner { width: 100%; padding-inline: clamp(18px, 6vw, 32px); }
+  .hero__ticket { max-width: 100%; }
+}
+
+
+/* ---- the module's own menu inside the page sheet ------------------------
+   .nav__links is a full-screen fixed panel on a phone. Moved into the page
+   sheet it kept that, so an invisible full-viewport layer sat over the rows
+   and swallowed every tap. Inside the sheet it is a plain list. */
+@media (max-width: 767px) {
+  .pmenu__sheet .nav__links {
+    position: static;
+    width: 100%;
+    height: auto;
+    z-index: auto;
+    padding: 0;
+    gap: 0;
+    overflow: visible;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    justify-content: flex-start;
+    align-items: stretch;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .pmenu__sheet .nav__toggle { display: none; }
+
+  .pmenu__sheet .nav__link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .pmenu__sheet .nav__link:hover { background: var(--p-accent-tint); }
+
+  /* The galleries are the point of this menu, so they are listed rather than
+     folded behind a toggle that has nowhere to open. */
+  .pmenu__sheet .nav__dropdown { width: 100%; }
+  .pmenu__sheet .nav__dropdown-toggle { display: none; }
+
+  .pmenu__sheet .nav__dropdown-panel {
+    position: static;
+    max-height: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    /* The panel is only clickable while the dropdown is open, and in the sheet
+       it is always open. */
+    pointer-events: auto;
+  }
+
+  /* The module collapses this panel on hover and on focus-within, which are its
+     way of neutralising the desktop dropdown inside its own sheet. Here it made
+     the list vanish the moment a thumb touched it. */
+  .pmenu__sheet .nav__dropdown:hover .nav__dropdown-panel,
+  .pmenu__sheet .nav__dropdown:focus-within .nav__dropdown-panel,
+  .pmenu__sheet .nav__dropdown.is-open .nav__dropdown-panel {
+    max-height: none;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .pmenu__sheet .nav__dropdown-item {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 10px;
+  }
+
+  .pmenu__sheet .nav__dropdown-item:hover { background: var(--p-accent-tint); }
+}

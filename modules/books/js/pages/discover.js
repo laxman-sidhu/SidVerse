@@ -10,6 +10,7 @@ import { repaint } from "../ui/cardactions.js";
 import { wireEdgeFades } from "../ui/scrollfade.js";
 import { wireTips } from "../ui/tip.js";
 import { search, trending, browse, SCOPES, TRENDING_PERIODS, googleTrouble, explain } from "../books/discover.js";
+import * as picker from "../../../../assets/js/picker.js";
 
 const shown = new Map();
 // Every book loaded, in order. The grid is a filtered view of it, so narrowing
@@ -279,10 +280,10 @@ function browseArgs() {
 
 const TRENDING_NOTE = {
   trending: period => `Open Library, ${period.toLowerCase()}`,
-  readinglog: () => "Trending did not answer — showing the most-read books instead",
-  subject: () => "Trending did not answer — showing books shelved under Fiction instead",
-  google: () => "Open Library did not answer — showing new releases from Google Books",
-  stale: () => "Nothing is reachable right now — this is the last feed that loaded",
+  readinglog: () => "Trending did not answer - showing the most-read books instead",
+  subject: () => "Trending did not answer - showing books shelved under Fiction instead",
+  google: () => "Open Library did not answer - showing new releases from Google Books",
+  stale: () => "Nothing is reachable right now - this is the last feed that loaded",
   none: () => "Nothing answered right now"
 };
 
@@ -293,7 +294,7 @@ function trendingNote(result, label) {
   if (result.source === "trending" || !result.problems?.length) return headline;
   // Deduped: three endpoints failing the same way is one fact, not three.
   const why = [...new Set(result.problems.map(explain))];
-  return `${headline} — ${why.join("; ")}`;
+  return `${headline} - ${why.join("; ")}`;
 }
 
 async function runTrending() {
@@ -401,6 +402,7 @@ function clearAll() {
 // --- boot -------------------------------------------------------------------
 
 export function start() {
+  picker.attach();
   mountNav({ page: "discover" });
   wireTips();
 

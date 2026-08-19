@@ -115,29 +115,7 @@ a { color: inherit; }
   min-width: 0;
 }
 
-.wordmark__mark {
-  width: 30px; height: 30px;
-  flex-shrink: 0;
-  display: grid; place-items: center;
-  border-radius: 10px;
-  background: linear-gradient(140deg, var(--plum), var(--blossom));
-  color: var(--p-on-deep);
-}
-.wordmark__mark svg { width: 17px; height: 17px; }
-
-.wordmark__text {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 22px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-  background: linear-gradient(120deg, var(--plum-deep), var(--blossom));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+/* The bar wordmark is built by assets/js/shell.js; only its box is set here. */
 
 .nav__links { display: flex; align-items: center; gap: 4px; margin-left: auto; }
 
@@ -1011,7 +989,6 @@ a { color: inherit; }
   .iconbtn { width: 33px; height: 33px; }
   .iconbtn svg { width: 16px; height: 16px; }
   .wordmark { gap: 7px; }
-  .wordmark__text { font-size: 18px; }
 
   .hero { padding: 34px 0 22px; }
   .searchbox { flex-wrap: wrap; border-radius: var(--radius-lg); padding: 10px 12px; gap: 6px; }
@@ -1442,12 +1419,6 @@ a { color: inherit; }
 
 /* Below this the name cannot shorten any further without becoming "Book…", so
    the mark carries the brand on its own and the icons get the room. */
-@media (max-width: 430px) {
-  .wordmark__text { display: none; }
-  .wordmark__mark { width: 34px; height: 34px; }
-  .wordmark__mark svg { width: 19px; height: 19px; }
-}
-
 /* A section heading on a phone is a label, not a headline. */
 @media (max-width: 480px) {
   .stage__title { font-size: 17px; }

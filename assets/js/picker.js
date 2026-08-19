@@ -1,17 +1,32 @@
-// A styled option list. The CLOSED control was already ours; the open one never
-// was - the browser draws that popup and honours almost nothing, so the items sat
-// hard against its left edge with no padding to give and no rule that could.
-// On a pointer device the native popup is suppressed and this is drawn instead.
+// A styled option list, shared by every module. The CLOSED control was already
+// ours; the open one never was - the browser draws that popup and honours almost
+// nothing, so the items sat hard against its left edge with no padding to give
+// and no rule that could. On a pointer device the native popup is suppressed and
+// this is drawn instead.
 //
 // The <select> stays exactly where it is and remains the state: it keeps its
 // label, its value, its change event and its 16px, so every caller that reads or
 // writes .value is untouched and nothing here has to be told when options change.
 
-import { esc, pageScale } from "../core/util.js";
+const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+
+function esc(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, ch => HTML_ESCAPES[ch]);
+}
+
+// Zoom compounds down the tree, and the menu writes its px into that space.
+function pageScale(element) {
+  let scale = 1;
+  for (let node = element; node && node.nodeType === 1; node = node.parentElement) {
+    const value = parseFloat(getComputedStyle(node).zoom);
+    if (value > 0) scale *= value;
+  }
+  return scale;
+}
 
 // Which selects get the treatment. An explicit list, so a <select> added later
 // is plain until someone decides otherwise.
-const UPGRADE = ".facets__select, .scopepick__select, .gate__select, #sortSelect";
+const UPGRADE = ".facets__select, .scopepick__select, .scopepick select, .gate__select, .selectwrap select, #sortSelect";
 
 const GAP = 6;
 const MARGIN = 10;
@@ -45,7 +60,7 @@ function options(select) {
 // The box the menu lines up with: the wrapper is the visible control wherever
 // there is one, and the select itself is only the visible control when there is not.
 function anchorFor(select) {
-  return select.closest(".facets__wrap, .scopepick, .sortfield") || select;
+  return select.closest(".facets__wrap, .scopepick, .sortfield, .selectwrap") || select;
 }
 
 function close({ focus = false } = {}) {

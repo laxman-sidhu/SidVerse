@@ -984,29 +984,27 @@
       height: 480px;
     }
 
+    /* Every card is one box; where it sits and how big it reads is the slot it
+   currently holds, written by js/hero-fan.js as --fx, --fz and --fk. That way
+   a card moving up a place GROWS into the place rather than the places being
+   fixed to whichever card happens to be there. */
     .fan-card {
       position: relative;
-      margin: 0;
-      width: 205px;
-      height: 365px;
-      aspect-ratio: 9 / 16;
+      margin: 0 0 0 var(--fml, -34px);
+      width: var(--fw, 210px);
+      height: var(--fh, 373px);
       flex-shrink: 0;
       border-radius: 8px;
       overflow: hidden;
-      margin-left: -34px;
+      transform: rotateY(-22deg) translateZ(var(--fz, 0px)) scale(var(--fk, 1));
+      z-index: var(--fi, 1);
       border: 3px solid rgba(var(--p-surface-rgb), 0.9);
       background: linear-gradient(160deg, var(--p-deep-2) 0%, var(--p-deep) 100%);
-      box-shadow:
-        0 30px 50px -18px rgba(0, 0, 0, 0.6),
-        0 10px 22px -12px rgba(0, 0, 0, 0.45);
+      box-shadow: none;
       transform-style: preserve-3d;
-      transition: transform 0.5s var(--ease-out), box-shadow 0.5s ease;
+      transition: transform 0.55s var(--ease-out), width 0.55s var(--ease-out), height 0.55s var(--ease-out), margin-left 0.55s var(--ease-out), box-shadow 0.5s ease, opacity 0.4s ease;
       opacity: 0;
       animation: fanIn 0.9s var(--ease-out) forwards;
-    }
-
-    .fan-card:first-child {
-      margin-left: 0;
     }
 
     .fan-card img {
@@ -1016,39 +1014,8 @@
       display: block;
     }
 
-    /* Each card angled to recede, decreasing size toward the back (9:16 aspect kept) */
-    .fan-card:nth-child(1) {
-      transform: rotateY(-22deg) translateZ(0) scale(1.04);
-      z-index: 4;
-      animation-delay: 0.30s;
-      width: 210px;
-      height: 373px;
-    }
-
-    .fan-card:nth-child(2) {
-      transform: rotateY(-22deg) translateZ(-30px) scale(1.0);
-      z-index: 3;
-      animation-delay: 0.45s;
-      width: 200px;
-      height: 356px;
-    }
-
-    .fan-card:nth-child(3) {
-      transform: rotateY(-22deg) translateZ(-60px) scale(0.96);
-      z-index: 2;
-      animation-delay: 0.60s;
-      width: 190px;
-      height: 338px;
-    }
-
-    .fan-card:nth-child(4) {
-      transform: rotateY(-22deg) translateZ(-90px) scale(0.92);
-      z-index: 1;
-      animation-delay: 0.75s;
-      width: 180px;
-      height: 320px;
-    }
-
+    /* The track is the fan's own box, so the cards inside it are placed against
+   a stable origin rather than against each other. */
     @keyframes fanIn {
       from {
         opacity: 0;
@@ -1066,11 +1033,9 @@
 
     .hero-fan .fan-card:hover {
       filter: brightness(1.05);
-      transform: rotateY(-8deg) translateZ(60px) scale(1.08) !important;
+      transform: rotateY(-8deg) translateZ(60px) scale(calc(var(--fk, 1) * 1.06));
       z-index: 10;
-      box-shadow:
-        0 40px 70px -20px rgba(0, 0, 0, 0.7),
-        0 16px 32px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: none;
     }
 
     @keyframes hpcPulse {

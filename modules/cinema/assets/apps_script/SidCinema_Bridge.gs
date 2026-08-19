@@ -1,4 +1,4 @@
-// SidCinema - the read and write bridge. Paste into Extensions > Apps Script, set SECRET, deploy as a web app; assets/docs/SETUP.md has the rest.
+// SidCinema - the read and write bridge. Paste into Extensions > Apps Script, set SECRET, deploy as a web app; docs/PROJECT.md has the rest.
 
 // === SETTINGS ===
 

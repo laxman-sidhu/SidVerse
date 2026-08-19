@@ -6,6 +6,7 @@ import { renderGrid, emptyState, skeletonGrid } from "../ui/cards.js";
 import { wireCardActions } from "../ui/actions.js";
 import { wireCardOpen } from "../ui/detail.js";
 import { wireTips } from "../ui/tip.js";
+import * as picker from "../../../../assets/js/picker.js";
 
 const config = window.PAGE_CONFIG || { source: "library", views: true };
 const source = config.source === "readlist" ? readlist : library;
@@ -114,6 +115,7 @@ function refresh({ head = true, filters = true } = {}) {
 }
 
 export function start() {
+  picker.attach();
   wireTips();
   el.eyebrow = document.querySelector("[data-eyebrow]");
   el.title = document.querySelector("[data-title]");

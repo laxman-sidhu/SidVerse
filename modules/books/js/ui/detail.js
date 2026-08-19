@@ -19,7 +19,20 @@ function shell() {
   if (host) return host;
   host = document.createElement("div");
   host.className = "detail";
-  host.innerHTML = '<div class="detail__wash" data-close></div><div class="detail__panel" role="dialog" aria-modal="true"><div class="detail__scroll"></div></div>';
+  // A screen of its own, with a bar carrying the room's name and the way back.
+  host.innerHTML = '<div class="detail__panel" role="dialog" aria-modal="true">'
+    + '<div class="detail__topbar">'
+    + '<span class="detail__brand pmark">'
+    + '<span class="pmark__tile" aria-hidden="true">'
+    + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/>'
+    + '<path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg></span>'
+    + '<span class="pmark__name">SidBooks</span></span>'
+    + '<button class="detail__back" type="button" data-close>'
+    + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'
+    + '<span>Back to SidBooks</span></button>'
+    + '</div>'
+    + '<div class="detail__scroll"></div></div>';
   document.body.appendChild(host);
   host.addEventListener("click", event => { if (event.target.closest("[data-close]")) closeDetail(); });
   document.addEventListener("keydown", event => { if (event.key === "Escape" && host.classList.contains("is-open")) closeDetail(); });
@@ -36,7 +49,7 @@ export function closeDetail() {
 
 // An em dash holds the row where a vanishing cell would reshape every book.
 function cell(label, value) {
-  return `<div class="stat"><p class="stat__label">${esc(label)}</p><p class="stat__value">${value ? esc(value) : "—"}</p></div>`;
+  return `<div class="stat"><p class="stat__label">${esc(label)}</p><p class="stat__value">${value ? esc(value) : "-"}</p></div>`;
 }
 
 function links(book) {
@@ -77,10 +90,6 @@ function body(book) {
   const blurbBlock = about(book);
 
   return `
-    <button class="detail__x" type="button" data-close aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-
     <div class="detail__head">
       <div class="detail__cover">${cover(book, { size: "large" })}</div>
       <div class="detail__intro">

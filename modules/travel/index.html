@@ -5,8 +5,28 @@
 <script>(function(){try{var t=localStorage.getItem("sidcinema-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SidVerse — SidTrails</title>
-  <link rel="icon" href="../../assets/images/sidverse-icon.png">
+  <title>SidVerse - SidTrails</title>
+  <meta name="description" content="Every road I have taken - places, treks, heritage, and the map that ties them together.">
+  <!-- Favicon, and the same icon for link previews -->
+  <link rel="icon" type="image/png" sizes="any" href="../../assets/images/sidverse-icon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/sidverse-icon.png">
+  <link rel="canonical" href="https://laxman-sidhu.github.io/SidVerse/modules/travel/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SidVerse">
+  <meta property="og:title" content="SidVerse - SidTrails">
+  <meta property="og:description" content="Every road I have taken - places, treks, heritage, and the map that ties them together.">
+  <meta property="og:url" content="https://laxman-sidhu.github.io/SidVerse/modules/travel/">
+  <meta property="og:image" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta property="og:image:secure_url" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1254">
+  <meta property="og:image:height" content="1254">
+  <meta property="og:image:alt" content="The SidVerse mark">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SidVerse - SidTrails">
+  <meta name="twitter:description" content="Every road I have taken - places, treks, heritage, and the map that ties them together.">
+  <meta name="twitter:image" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta name="twitter:image:alt" content="The SidVerse mark">
 
   <!-- Fonts: editorial pairing -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,10 +91,7 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="#home" class="logo">
-        <span class="dot"></span>
-        Sid<em>Trails</em>
-      </a>
+      <a href="#home" class="logo"></a>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -124,9 +141,21 @@
 
         <!-- Right side - angled fanned photo gallery -->
         <div class="hero-visual" id="heroVisual">
-          <!-- Filled from assets/hero-index.json by js/hero-fan.js, so adding
-               a picture to assets/hero/ and running the .bat is all it takes. -->
-          <div class="hero-fan" id="heroFan"></div>
+          <!-- The window is a fixed size; the track inside it holds any number of
+               pictures, listed in assets/hero-index.json and laid out by js/hero-fan.js. -->
+          <div class="fan-window" id="heroFanWindow">
+            <div class="hero-fan" id="heroFan"></div>
+          </div>
+
+          <div class="fan-nav" id="heroFanNav" hidden>
+            <button class="fan-nav__btn" type="button" data-fan-prev aria-label="Previous photos">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="fan-nav__dots" id="heroFanDots"></div>
+            <button class="fan-nav__btn" type="button" data-fan-next aria-label="More photos">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
 
           <!-- Floating stat card -->
           <div class="hero-float-card" id="heroFloatCard">
@@ -490,7 +519,7 @@
       <!-- Big quote band -->
       <div class="footer-quote">
         <p>The world is a book, and those who do not travel read only one page.</p>
-        <span class="quote-author">— Saint Augustine</span>
+        <span class="quote-author">- Saint Augustine</span>
       </div>
 
       <!-- Main row: gallery feature (left) + connect & stats (right) -->

@@ -28,8 +28,8 @@ const DEFINITIONS = [
     label: "Anything",
     hint: "Work out what I meant",
     placeholder: {
-      movie: "Akshay Kumar and Suniel Shetty movies, bollywood romance, movies like Interstellar\u2026",
-      tv: "Korean dramas, shows like Breaking Bad, best crime series\u2026"
+      movie: "Search movies\u2026",
+      tv: "Search series\u2026"
     },
     examples: {
       movie: [
@@ -61,8 +61,8 @@ const DEFINITIONS = [
     label: "Title",
     hint: "The name of one movie or series",
     placeholder: {
-      movie: "The Call, Interstellar, 3 Idiots, movies like Inception\u2026",
-      tv: "Dark, Breaking Bad, Panchayat, shows like Severance\u2026"
+      movie: "Movie title\u2026",
+      tv: "Series title\u2026"
     },
     examples: {
       movie: [
@@ -88,8 +88,8 @@ const DEFINITIONS = [
     label: "Person",
     hint: "An actor, director or creator - or several at once",
     placeholder: {
-      movie: "Hrithik Roshan, Akshay Kumar and Suniel Shetty, Tom Cruise action\u2026",
-      tv: "Vince Gilligan, Jeff Bridges shows, best Manoj Bajpayee series\u2026"
+      movie: "Actor or director\u2026",
+      tv: "Actor or creator\u2026"
     },
     examples: {
       movie: [
@@ -115,8 +115,8 @@ const DEFINITIONS = [
     label: "Genre & mood",
     hint: "A kind of title, not a name",
     placeholder: {
-      movie: "Bollywood romance, best sci fi, time travel, 90s action\u2026",
-      tv: "Korean thrillers, best crime, anime, Netflix mystery\u2026"
+      movie: "Genre or mood\u2026",
+      tv: "Genre or mood\u2026"
     },
     examples: {
       movie: [

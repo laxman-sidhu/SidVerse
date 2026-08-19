@@ -215,30 +215,8 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   height: var(--p-bar-h);
 }
 
+/* The bar wordmark is built by assets/js/shell.js; only its box is set here. */
 .wordmark { display: inline-flex; align-items: center; gap: 11px; }
-
-/* An image, not a drawn ring. object-fit stops a non-square source stretching and the tint stands in if the file never arrives. */
-.wordmark__mark {
-  width: 28px;
-  height: 28px;
-  flex: none;
-  border-radius: 8px;
-  object-fit: cover;
-  background: var(--tint);
-  border: 1px solid var(--line);
-}
-
-.wordmark__text {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 19px;
-  letter-spacing: -0.02em;
-  /* The header is one row: a wordmark allowed to wrap takes the row height with it and pushes the tools off the edge. */
-  white-space: nowrap;
-}
-/* Only the full stop is accented - "any span in here" stopped being specific enough once the name had two spellings. */
-.wordmark__dot { color: var(--accent); }
-.wordmark__brief { display: none; }
 
 .topbar__tools { display: inline-flex; align-items: center; gap: 9px; }
 
@@ -1577,8 +1555,6 @@ body.is-suggesting .suggestions {
   .icon-btn { width: 36px; height: 36px; }
   .topbar__tools { gap: 7px; }
   .wordmark { gap: 9px; }
-  .wordmark__mark { width: 25px; height: 25px; }
-  .wordmark__text { font-size: 16.5px; }
 
   /* --- hero: everything above the results is an introduction, and on a phone it cost most of the first screen before a single poster --- */
   .hero { padding: 20px 0 24px; }
@@ -1782,48 +1758,6 @@ body.is-suggesting .suggestions {
   }
   .card:hover { transform: none; }
   .card:hover .card__poster img { transform: none; }
-}
-
-/* --- wordmark gloss --- */
-/* "Decouverte de films" is French for "Movie Discovery" - one hover away rather than printed permanently. */
-.wordmark { position: relative; }
-
-.wordmark__gloss {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  white-space: nowrap;
-  padding: 6px 11px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--ink-soft);
-  font-family: var(--font-body);
-  font-size: 12px;
-  letter-spacing: 0;
-  text-transform: none;
-  box-shadow: var(--shadow);
-  opacity: 0;
-  transform: translateY(-4px);
-  pointer-events: none;
-  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
-  z-index: 5;
-}
-.wordmark:hover .wordmark__gloss,
-.wordmark:focus-visible .wordmark__gloss {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* The name steps down before it can collide with the tools: at 360px the row has 328px and the hamburger plus three tool buttons claim ~156px. */
-@media (max-width: 560px) {
-  .wordmark__text { font-size: 15px; }
-  .wordmark__gloss { display: none; }
-}
-
-@media (max-width: 480px) {
-  .wordmark__long  { display: none; }
-  .wordmark__brief { display: inline; }
 }
 
 /* === THE WATCHED LIBRARY PAGE: search asks "have I seen this", this page asks "what have I seen", so the numbers come before the grid === */
@@ -3543,13 +3477,6 @@ body.panel-open { overflow: hidden; }
 body { overflow-x: clip; }
 
 @media (max-width: 600px) {
-  .wordmark__text,
-  .wordmark__gloss { display: none; }
-
-  /* The only way back to search now, so it earns a real tap target. */
-  .wordmark__mark { width: 32px; height: 32px; }
-  .wordmark { gap: 0; }
-
   .topbar__inner { gap: 8px; }
 
   .topbar__tools {
@@ -3575,7 +3502,6 @@ body { overflow-x: clip; }
   .icon-btn { width: 32px; height: 32px; flex: 0 0 32px; }
   .icon-btn svg { width: 16px; height: 16px; }
   .topbar__tools { gap: 4px; }
-  .wordmark__mark { width: 30px; height: 30px; }
 }
 
 /* --- the rest of the phone layout: nothing was broken, just loose - the result toolbar took three stacked rows before the first poster --- */
@@ -4097,83 +4023,8 @@ body.portrait-open { overflow: hidden; }
 
 /* === The open option list === */
 
-/* The closed control was already ours and the open one never was: the browser
-   draws that popup, honours almost nothing, and gives its items no padding at
-   all. This replaces it on pointer devices. Touch keeps the platform picker. */
+/* The styled option list now lives in assets/css/components.css, shared. */
 
-/* Fixed and on <body>, for the same reason the nav menu is: .panel__body
-   scrolls and .topbar has a backdrop-filter, so an absolutely positioned menu
-   would be clipped by the first and trapped by the second. Above the modal
-   (1055) and its backdrop, below the toasts. */
-.pickmenu {
-  position: fixed;
-  z-index: 1300;
-  /* Sized to its longest option, floored at the control's width and capped by place(). */
-  width: max-content;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--card);
-  box-shadow: var(--shadow-lg);
-  scrollbar-width: thin;
-  scrollbar-color: var(--tint-2) transparent;
-  animation: pickdrop 0.14s var(--ease) both;
-}
-.pickmenu::-webkit-scrollbar { width: 10px; }
-.pickmenu::-webkit-scrollbar-thumb { background: var(--tint-2); border-radius: 999px; border: 3px solid var(--card); }
-.pickmenu::-webkit-scrollbar-track { background: transparent; }
-
-@keyframes pickdrop {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: none; }
-}
-
-/* The whole complaint in one declaration: the value gets the same 14px of air
-   from the edge that every other surface in this app gives its text. */
-.pickmenu__item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-family: var(--font-body);
-  font-size: 14.5px;
-  font-weight: 500;
-  line-height: 1.35;
-  color: var(--ink);
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.15s var(--ease), color 0.15s var(--ease);
-}
-
-.pickmenu__label {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Keyboard and mouse land on the same treatment because they move the same
-   highlight: picker.js walks `active` on mousemove, so a rule for :hover here
-   would light a second row alongside it. */
-.pickmenu__item.is-active { background: var(--tint); }
-
-.pickmenu__item.is-chosen {
-  color: var(--accent-deep);
-  font-weight: 650;
-}
-.pickmenu__item.is-chosen.is-active { background: var(--accent-tint); }
-
-/* A tick in the gutter would move every label along by its width; the weight
-   and the colour already say which one it is. */
-.pickmenu__item.is-off {
-  color: var(--muted);
-  cursor: default;
-  opacity: 0.6;
-}
 
 /* The trigger keeps the caret it always had, and turns it while the list is up. */
 .facets__select[aria-expanded="true"] ~ .facets__caret,

@@ -9,7 +9,7 @@ import { buildSections, releasedOnly } from "../ui/sections.js";
 import { gridMarkup, cardsMarkup } from "../ui/cards.js";
 import * as cardactions from "../ui/cardactions.js";
 import * as detail from "../ui/detail.js";
-import * as picker from "../ui/picker.js";
+import * as picker from "../../../../assets/js/picker.js";
 import * as actions from "../ui/actions.js";
 import * as toast from "../ui/toast.js";
 import { paintNav, wireTheme, wireRefresh } from "../ui/nav.js";
@@ -594,7 +594,7 @@ async function reload() {
 
   const seen = watched.stats().total_rows.toLocaleString();
   const queued = watchlist.stats().total_rows.toLocaleString();
-  return `Reloaded \u2014 ${seen} watched, ${queued} queued`;
+  return `Reloaded - ${seen} watched, ${queued} queued`;
 }
 
 // --- start ------------------------------------------------------------------

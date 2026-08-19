@@ -749,7 +749,7 @@ body { padding-left: var(--p-rail-clear); }
   white-space: nowrap;
 }
 
-.wordmark__mark, .navbar .logo .dot, .brand__mark, .nav__brand-mark {
+.navbar .logo .dot, .brand__mark, .nav__brand-mark {
   flex: 0 0 auto;
   display: inline-grid;
   place-items: center;
@@ -758,7 +758,7 @@ body { padding-left: var(--p-rail-clear); }
   color: var(--p-accent-ink);
 }
 
-.wordmark__text, .brand__mark { font: inherit; color: inherit; }
+.brand__mark { font: inherit; color: inherit; }
 
 /* The link groups ride on the right. */
 .nav__links, .navbar .nav-links, .topbar__tools, .nav__tools, .nav__menu {
@@ -1081,6 +1081,15 @@ body { padding-left: var(--p-rail-clear); }
   padding-inline: var(--p-gutter);
 }
 
+/* Three to a row on a phone: a fixed count rather than a minimum width, which
+   at this width resolved to a single column. */
+@media (max-width: 700px) {
+  [data-section="travel"] .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--p-space-xs, 8px);
+  }
+}
+
 [data-section="travel"] .gallery-item img,
 [data-section="travel"] .gallery-item video { background: transparent; }
 
@@ -1167,8 +1176,10 @@ body { padding-left: var(--p-rail-clear); }
    tight top and bottom. It breathes now, and the picture is the thing the
    room introduces itself with. */
 
+/* Less above than below, so the row reads centred in the opening screen rather
+   than sitting low in it. The band's scale is unchanged. */
 [data-section="books"] .hero {
-  padding-block: clamp(36px, 6vw, 88px);
+  padding-block: clamp(20px, 3.4vw, 50px) clamp(36px, 6vw, 88px);
 }
 
 [data-section="books"] .hero__main {
@@ -1347,12 +1358,26 @@ body { padding-left: var(--p-rail-clear); }
   border: 1px solid var(--p-line);
   background: var(--p-surface);
   color: var(--p-ink);
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
-.scopepick:hover { border-color: var(--p-accent); }
+/* The whole pill lights up, not the select inside it. Modules used to fill
+   only the select on hover, which left the caret sitting outside the colour. */
+.scopepick:hover {
+  background: var(--p-accent-tint);
+  border-color: var(--p-accent);
+}
+
+.scopepick:hover select,
+.scopepick:hover .scopepick__select { color: var(--p-accent-ink); }
+.scopepick:hover .scopepick__caret { stroke: var(--p-accent-ink); }
+.scopepick:hover::after { border-right-color: var(--p-accent-ink); border-bottom-color: var(--p-accent-ink); }
+
 .scopepick:focus-within { border-color: var(--p-accent); box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .2); }
 
-.scopepick select, .scopepick__select {
+/* Modules fill their own select; the pill owns the surface now. */
+.scopepick select, .scopepick__select,
+.scopepick select:hover, .scopepick__select:hover {
   appearance: none;
   -webkit-appearance: none;
   border: 0;
@@ -1903,4 +1928,119 @@ body { padding-left: var(--p-rail-clear); }
   [data-section="travel"] .hero-float-card .hfc-value { font-size: 1.15rem; }
   [data-section="travel"] .hero-float-card .hfc-label,
   [data-section="travel"] .hero-float-card .hfc-sub { font-size: var(--p-text-2xs); }
+}
+
+
+/* ---- the styled option list -------------------------------------------
+   Shared by every module; picker.js draws it in place of the browser's own
+   popup on pointer devices. */
+/* The closed control was already ours and the open one never was: the browser
+   draws that popup, honours almost nothing, and gives its items no padding at
+   all. This replaces it on pointer devices. Touch keeps the platform picker. */
+
+/* Fixed and on <body>, for the same reason the nav menu is: .panel__body
+   scrolls and .topbar has a backdrop-filter, so an absolutely positioned menu
+   would be clipped by the first and trapped by the second. Above the modal
+   (1055) and its backdrop, below the toasts. */
+.pickmenu {
+  position: fixed;
+  z-index: 1300;
+  /* Sized to its longest option, floored at the control's width and capped by place(). */
+  width: max-content;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  border: 1px solid var(--p-line);
+  border-radius: 14px;
+  background: var(--p-surface);
+  box-shadow: var(--p-shadow-lg, 0 30px 70px -30px rgba(0,0,0,.35));
+  scrollbar-width: thin;
+  scrollbar-color: var(--p-line) transparent;
+  animation: pickdrop 0.14s cubic-bezier(.2,.7,.2,1) both;
+}
+.pickmenu::-webkit-scrollbar { width: 10px; }
+.pickmenu::-webkit-scrollbar-thumb { background: var(--p-line); border-radius: 999px; border: 3px solid var(--p-surface); }
+.pickmenu::-webkit-scrollbar-track { background: transparent; }
+
+@keyframes pickdrop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The whole complaint in one declaration: the value gets the same 14px of air
+   from the edge that every other surface in this app gives its text. */
+.pickmenu__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--p-ink);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s cubic-bezier(.2,.7,.2,1), color 0.15s cubic-bezier(.2,.7,.2,1);
+}
+
+.pickmenu__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Keyboard and mouse land on the same treatment because they move the same
+   highlight: picker.js walks `active` on mousemove, so a rule for :hover here
+   would light a second row alongside it. */
+.pickmenu__item.is-active { background: var(--p-tint); }
+
+.pickmenu__item.is-chosen {
+  color: var(--p-accent-ink);
+  font-weight: 650;
+}
+.pickmenu__item.is-chosen.is-active { background: var(--p-accent-tint); }
+
+/* A tick in the gutter would move every label along by its width; the weight
+   and the colour already say which one it is. */
+.pickmenu__item.is-off {
+  color: var(--p-muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+
+/* ---- the page sheet: the modules' own tool buttons ----------------------
+   Cinema names its round tools .icon-btn and books names them .iconbtn, so the
+   row treatment above reached one and left the other as a circle in the list. */
+@media (max-width: 720px) {
+  .pmenu__sheet .iconbtn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    width: 100% !important;
+    height: auto;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .pmenu__sheet .iconbtn > svg { flex: 0 0 auto; width: 20px; height: 20px; margin: 0 !important; }
+  .pmenu__sheet .iconbtn:hover { background: var(--p-accent-tint); }
+
+  /* The destinations are one thing and the tools another, so a line separates
+     them rather than the list running on. */
+  .pmenu__sheet > .nav__tools,
+  .pmenu__sheet > .topbar__tools > #refreshBtn {
+    margin-top: 6px;
+    padding-top: 7px;
+    border-top: 1px solid var(--p-line);
+  }
 }

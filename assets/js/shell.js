@@ -221,13 +221,13 @@
   function brand() {
     var here = current();
     if (!here) return;
-    var node = document.querySelector(BRAND_SEL);
-    if (!node) return;
-    node.classList.add("pmark");
-    node.innerHTML =
-      '<span class="pmark__tile" aria-hidden="true">' + svg(here.icon) + "</span>"
-      + '<span class="pmark__name">' + esc(here.site || here.label || "") + "</span>";
-    node.setAttribute("aria-label", (here.site || "") + " home");
+    document.querySelectorAll(BRAND_SEL).forEach(function (node) {
+      node.classList.add("pmark");
+      node.innerHTML =
+        '<span class="pmark__tile" aria-hidden="true">' + svg(here.icon) + "</span>"
+        + '<span class="pmark__name">' + esc(here.site || here.label || "") + "</span>";
+      node.setAttribute("aria-label", (here.site || "") + " home");
+    });
   }
 
   /* ---- the hero language line -------------------------------------------
@@ -331,7 +331,7 @@
 
       var text = el.getAttribute("aria-label") || el.getAttribute("title");
       if (!text) return;
-      pmenuLabel(el, text.split(/[.,\u2014]/)[0].trim());
+      pmenuLabel(el, text.split(/[.,-]/)[0].trim());
     });
   }
 

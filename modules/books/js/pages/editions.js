@@ -8,6 +8,7 @@ import { cardMarkup, wireCoverFallbacks, emptyState } from "../ui/cards.js";
 import { wireCardOpen } from "../ui/detail.js";
 import { wireTips } from "../ui/tip.js";
 import { wireEdgeFades } from "../ui/scrollfade.js";
+import * as picker from "../../../../assets/js/picker.js";
 
 // Every printing the Other Versions column knows about, one card each. No API
 // is called: the column IS the answer, already fetched and written down.
@@ -185,6 +186,7 @@ function refresh() {
 }
 
 export function start() {
+  picker.attach();
   mountNav({ page: "editions" });
   wireTips();
 

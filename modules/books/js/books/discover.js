@@ -53,11 +53,11 @@ export function googleTrouble() {
 export function explain(message) {
   const text = String(message || "");
   if (/quota|rateLimitExceeded|429/i.test(text) && /books\.googleapis|Queries/i.test(text)) {
-    return "Google Books' shared daily quota is used up — add a free key as GOOGLE_BOOKS_KEY in js/config.js";
+    return "Google Books' shared daily quota is used up - add a free key as GOOGLE_BOOKS_KEY in js/config.js";
   }
   if (/429/.test(text)) return "too many requests just now";
-  if (/unknown location|403/i.test(text)) return "Google Books refused the request — check GOOGLE_BOOKS_COUNTRY in js/config.js";
-  if (/Failed to fetch|NetworkError|Load failed/i.test(text)) return "Open Library did not respond — it may be down, or blocked on this network";
+  if (/unknown location|403/i.test(text)) return "Google Books refused the request - check GOOGLE_BOOKS_COUNTRY in js/config.js";
+  if (/Failed to fetch|NetworkError|Load failed/i.test(text)) return "Open Library did not respond - it may be down, or blocked on this network";
   if (/abort/i.test(text)) return "Open Library timed out";
   return text;
 }

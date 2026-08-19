@@ -86,9 +86,7 @@ function openGate() {
 
   node.querySelector(".gate__title").textContent = `This is ${name}\u2019s film diary`;
   node.querySelector(".gate__text").textContent =
-    `Everything here \u2014 what\u2019s been watched, liked and queued up \u2014 is ${name}\u2019s `
-    + `own list, kept in ${name}\u2019s spreadsheet. You\u2019re very welcome to browse and `
-    + `search all of it, but only ${name} can change what\u2019s on it.`;
+    `Only ${name} can change what is on this list. Everything else is yours to browse.`;
   node.querySelector("[data-gate-yes]").textContent = `Yes, I\u2019m ${name}`;
 
   node.querySelector('[data-step="who"]').hidden = false;

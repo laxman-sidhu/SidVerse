@@ -148,19 +148,19 @@ function render(item) {
 
   // A fixed grid, label above value, every cell always present - an em dash says "no figure" where an absent cell says nothing.
   const cells = [
-    ["Release date", item.release_date ? prettyDate(item.release_date) : "\u2014"],
-    [isTv ? "Episode length" : "Runtime", item.runtime ? runtimeLabel(item.runtime) : "\u2014"],
+    ["Release date", item.release_date ? prettyDate(item.release_date) : "-"],
+    [isTv ? "Episode length" : "Runtime", item.runtime ? runtimeLabel(item.runtime) : "-"],
     [isTv ? "Created by" : "Director",
-      (item.directors || []).map(person => person.name).join(", ") || "\u2014"]
+      (item.directors || []).map(person => person.name).join(", ") || "-"]
   ];
   if (isTv) {
-    cells.push(["Seasons", item.seasons ? String(item.seasons) : "\u2014"]);
-    cells.push(["Episodes", item.episodes ? String(item.episodes) : "\u2014"]);
+    cells.push(["Seasons", item.seasons ? String(item.seasons) : "-"]);
+    cells.push(["Episodes", item.episodes ? String(item.episodes) : "-"]);
   } else {
-    cells.push(["Budget", item.budget ? money(item.budget) : "\u2014"]);
-    cells.push(["Box office", item.revenue ? money(item.revenue) : "\u2014"]);
+    cells.push(["Budget", item.budget ? money(item.budget) : "-"]);
+    cells.push(["Box office", item.revenue ? money(item.revenue) : "-"]);
   }
-  cells.push(["Status", item.status || "\u2014"]);
+  cells.push(["Status", item.status || "-"]);
 
   const numbers = cells.map(([label, value]) =>
     '<div class="detail__cell">'

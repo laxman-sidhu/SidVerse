@@ -367,8 +367,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   letter-spacing: -.01em;
 }
 
-.brand__mark, .navbar__brand-text, .topbar__brand-text, .nav__brand-text, .logo__text,
-.wordmark__text {
+.brand__mark, .navbar__brand-text, .topbar__brand-text, .nav__brand-text, .logo__text {
   font-family: var(--p-display) !important;
   font-weight: 600;
   font-size: 20px;

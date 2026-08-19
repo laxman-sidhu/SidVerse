@@ -60,8 +60,8 @@ function askOwner() {
       title: `This is ${esc(OWNER.name)}\u2019s book diary`,
       body: `<p class="dialog__lead">Only ${esc(OWNER.name)} can change what is on these shelves. Everything else is yours to browse.</p>
         <div class="dialog__row">
-          <button class="btn btn--solid" type="button" data-yes>Yes, I'm ${esc(OWNER.name)}</button>
           <button class="btn" type="button" data-close>No, go back</button>
+          <button class="btn btn--solid" type="button" data-yes>Yes, I\u2019m ${esc(OWNER.name)}</button>
         </div>`
     });
 
@@ -80,8 +80,8 @@ function showPassword(node, resolve) {
     <input class="field" type="password" data-autofocus data-pass placeholder="Password" autocomplete="current-password">
     <p class="dialog__error" data-error hidden>That is not it. Try again.</p>
     <div class="dialog__row">
-      <button class="btn btn--solid" type="button" data-go>Sign in</button>
       <button class="btn" type="button" data-close>Cancel</button>
+      <button class="btn btn--solid" type="button" data-go>Sign in</button>
     </div>`;
   body.querySelector("[data-pass]").focus();
 
@@ -349,7 +349,7 @@ async function optimistic({ cardEl, buttonEl, book, apply, undo, verb, done, run
 
   try {
     await run();
-    note.settle(`${done} — ${book.title}`, "ok");
+    note.settle(`${done} - ${book.title}`, "ok");
     return true;
   } catch (error) {
     undo ? undo() : Object.assign(book, before);

@@ -4,9 +4,9 @@ import { toast } from "./toast.js";
 
 // One list, every page.
 export const NAV = [
-  { key: "library", label: "Library", href: "library.html", icon: "shelf" },
+  { key: "library", label: "Books I have read", href: "library.html", icon: "shelf" },
   { key: "editions", label: "Editions", href: "editions.html", icon: "editions" },
-  { key: "readlist", label: "Readlist", href: "readlist.html", icon: "bookmark" }
+  { key: "readlist", label: "My Readlist", href: "readlist.html", icon: "bookmark" }
 ];
 
 const ICONS = {
@@ -49,12 +49,9 @@ export function mountNav({ page = "" } = {}) {
       </a>
       <nav class="nav__links" aria-label="Collections">${links}</nav>
       <div class="nav__tools">
-        <button class="iconbtn" type="button" data-reload title="Reload from the sheet" aria-label="Reload from the sheet">
+        <button class="iconbtn" id="reloadBtn" type="button" data-reload title="Reload from the sheet" aria-label="Reload from the sheet">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS.reload}</svg>
         </button>
-        <a class="iconbtn" href="index.html" title="Find a book" aria-label="Find a book">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS.search}</svg>
-        </a>
       </div>
     </div>`;
 }

@@ -379,11 +379,13 @@
   transform: scale(1);
 }
 
-/* Touch devices: always show the name, since there is no hover */
+/* Touch devices have no hover to reveal a caption, and printing it on every
+   card turned the wall into a list. The pictures stand alone; the name and the
+   count belong to the popup that opens on tap. */
 @media (hover: none) {
-  .exhibit-card__media::after { opacity: 1; }
-  .exhibit-card__name { opacity: 1; transform: none; }
-  .exhibit-card__count { opacity: 1; transform: none; }
+  .exhibit-card__media::after { opacity: 0; }
+  .exhibit-card__name,
+  .exhibit-card__count { display: none; }
 }
 
 /* ---- Skeleton cards ---- */
@@ -607,9 +609,9 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  color: var(--white);
-  background: rgba(var(--p-surface-rgb), 0.14);
-  border: 1px solid rgba(var(--p-surface-rgb), 0.25);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: background var(--dur-fast) var(--ease-out),
@@ -619,7 +621,7 @@
 .modal.has-carousel .modal__nav { display: grid; }
 
 .modal__nav:hover {
-  background: rgba(var(--p-surface-rgb), 0.3);
+  background: rgba(0, 0, 0, 0.68);
   transform: translateY(-50%) scale(1.08);
 }
 
@@ -641,16 +643,26 @@
   text-align: center;
   line-height: 1.4;
   background: linear-gradient(to top,
-    rgba(var(--p-deep-rgb), 0.82) 0%,
-    rgba(var(--p-deep-rgb), 0.45) 55%,
+    rgba(0, 0, 0, 0.86) 0%,
+    rgba(0, 0, 0, 0.5) 55%,
     transparent 100%);
   pointer-events: none;
 }
 
+.modal__count {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.modal__count[hidden] { display: none; }
+
 .modal__name {
   font-size: clamp(1.25rem, 2.6vw, 1.75rem);
-  color: var(--white);
-  text-shadow: 0 2px 16px rgba(var(--p-deep-rgb), 0.6);
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 2px 18px rgba(0, 0, 0, 0.5);
 }
 
 /* ---- Progress dots (fixed to the bottom of the page) ---- */
@@ -674,18 +686,18 @@
   height: 8px;
   padding: 0;
   border-radius: 50%;
-  background: rgba(var(--p-surface-rgb), 0.4);
+  background: rgba(255, 255, 255, 0.45);
   transition: transform var(--dur-fast) var(--ease-spring),
               background var(--dur-fast) var(--ease-out),
               width var(--dur-fast) var(--ease-out);
 }
 
-.modal__dot:hover { background: rgba(var(--p-surface-rgb), 0.7); }
+.modal__dot:hover { background: rgba(255, 255, 255, 0.75); }
 
 .modal__dot.is-active {
   width: 22px;
   border-radius: var(--radius-pill);
-  background: var(--white);
+  background: #fff;
 }
 
 .modal__close {
@@ -697,11 +709,11 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(var(--p-surface-rgb), 0.14);
-  border: 1px solid rgba(var(--p-surface-rgb), 0.25);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: var(--white);
+  color: #fff;
   z-index: 2;
   transition: transform var(--dur-fast) var(--ease-spring),
               background var(--dur-fast) var(--ease-out);
@@ -709,7 +721,8 @@
 
 .modal__close:hover {
   transform: rotate(90deg);
-  background: rgba(var(--p-surface-rgb), 0.28);
+  background: rgba(0, 0, 0, 0.68);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 body.modal-open { overflow: hidden; }

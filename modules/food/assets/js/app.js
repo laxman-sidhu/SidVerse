@@ -17,10 +17,9 @@ const line = (...parts) => parts.filter(Boolean).join(" · ");
 /* ---------- load ---------- */
 
 export async function init() {
-  document.title = `SidVerse — ${SITE.name}`;
+  document.title = `SidVerse - ${SITE.name}`;
   // The shell owns the bar wordmark and the footer, so those nodes may be gone.
   const put = (sel, text) => { const n = $(sel); if (n) n.textContent = text; };
-  put("#brandMark", SITE.name);
   put("#footAuthor", `Made with 💖 by ${SITE.author}`);
   put("#heroBy", "Photographed, rated and written down.");
   skeletons(8);

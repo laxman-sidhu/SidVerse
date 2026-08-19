@@ -1,4 +1,4 @@
-// A browser-side convenience, not a security boundary - APPS_SCRIPT_TOKEN is what actually protects the sheet. See assets/docs/SETUP.md, Troubleshooting.
+// A browser-side convenience, not a security boundary - APPS_SCRIPT_TOKEN is what actually protects the sheet. See docs/PROJECT.md, Troubleshooting.
 
 import { OWNER_PASSWORD, OWNER_NAME, SESSION_DAYS } from "../config.js";
 import { isConfigured } from "./writer.js";

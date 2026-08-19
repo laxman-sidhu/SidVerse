@@ -7,7 +7,7 @@ const LINKS = [
   {
     key: "library",
     href: "watched.html",
-    label: "Library",
+    label: "Movies I have watched",
     title: "Everything I have watched",
     icon: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h4A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-4A1.5 1.5 0 0 1 4 18.5Z"/>'
         + '<path d="M13 5.5A1.5 1.5 0 0 1 14.5 4h4A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5Z"/>'
@@ -16,7 +16,7 @@ const LINKS = [
   {
     key: "favorite",
     href: "watched.html?view=favorite",
-    label: "Favourites",
+    label: "My Favourites",
     title: "Everything I loved",
     icon: '<path d="M12 20s-7-4.4-7-9.3A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.6 12 20 12 20z"/>'
   },
@@ -30,7 +30,7 @@ const LINKS = [
   {
     key: "watchlist",
     href: "watchlist.html",
-    label: "Watchlist",
+    label: "My Watchlist",
     title: "Everything queued up to watch",
     icon: '<path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4.5L5 20V5a1 1 0 0 1 1-1Z"/>'
   }

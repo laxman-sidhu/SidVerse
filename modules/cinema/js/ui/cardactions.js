@@ -38,16 +38,16 @@ export function barFor(item) {
 
   if (watched) {
     rows.push({ act: "favorite", icon: "favorite", on: item.favorite === true, side: "left",
-      label: item.favorite ? "In Favourites \u2014 tap to remove" : "Add to Favourites" });
+      label: item.favorite ? "In Favourites - tap to remove" : "Add to Favourites" });
     rows.push({ act: "must", icon: "must", on: item.must_watch === true, side: "left",
-      label: item.must_watch ? "In Must watch \u2014 tap to remove" : "Mark as Must watch" });
+      label: item.must_watch ? "In Must watch - tap to remove" : "Mark as Must watch" });
   } else {
     rows.push({ act: "watchlist", icon: "watchlist", on: item.watchlisted === true, side: "right",
-      label: item.watchlisted ? "On the watchlist \u2014 tap to remove" : "Add to watchlist" });
+      label: item.watchlisted ? "On the watchlist - tap to remove" : "Add to watchlist" });
   }
 
   rows.push({ act: "watched", icon: "watched", on: watched, side: "right",
-    label: watched ? "Watched \u2014 tap to undo" : "Mark as watched" });
+    label: watched ? "Watched - tap to undo" : "Mark as watched" });
 
   return rows;
 }
@@ -102,7 +102,7 @@ function pendingFor(key, title) {
   const [doing, done] = WORDING[key];
   const handle = toast.pending(`${doing}\u2026`);
   return {
-    ok: () => handle.succeed(title ? `${done} \u2014 ${title}` : done),
+    ok: () => handle.succeed(title ? `${done} - ${title}` : done),
     no: message => handle.fail(message)
   };
 }

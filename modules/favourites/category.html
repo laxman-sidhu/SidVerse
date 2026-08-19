@@ -6,9 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="A collection inside the Museum of Favorites." />
   <meta name="theme-color" content="#fffaf4" />
-  <title>SidVerse — SidPicks</title>
+  <title>SidVerse - SidPicks</title>
 
-  <link rel="icon" href="../../assets/images/sidverse-icon.png">
+  <!-- Favicon, and the same icon for link previews -->
+  <link rel="icon" type="image/png" sizes="any" href="../../assets/images/sidverse-icon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/sidverse-icon.png">
+  <link rel="canonical" href="https://laxman-sidhu.github.io/SidVerse/modules/favourites/category.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SidVerse">
+  <meta property="og:title" content="SidVerse - SidPicks">
+  <meta property="og:description" content="A collection inside the Museum of Favorites.">
+  <meta property="og:url" content="https://laxman-sidhu.github.io/SidVerse/modules/favourites/category.html">
+  <meta property="og:image" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta property="og:image:secure_url" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1254">
+  <meta property="og:image:height" content="1254">
+  <meta property="og:image:alt" content="The SidVerse mark">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SidVerse - SidPicks">
+  <meta name="twitter:description" content="A collection inside the Museum of Favorites.">
+  <meta name="twitter:image" content="https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png">
+  <meta name="twitter:image:alt" content="The SidVerse mark">
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -43,10 +62,7 @@
 
   <header class="nav">
     <div class="container nav__inner">
-      <a class="nav__brand" href="index.html">
-        <span class="nav__brand-mark" aria-hidden="true">🏛️</span>
-        Museum of Favorites
-      </a>
+      <a class="nav__brand" href="index.html"></a>
 
       <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
         <span class="nav__toggle-bar"></span>
@@ -124,7 +140,7 @@
               Museum of Favorites
             </span>
             <p class="footer__tagline">
-              A quiet gallery of the people and characters worth remembering —
+              A quiet gallery of the people and characters worth remembering -
               wandered at your own pace, open whenever you are.
             </p>
           </div>
@@ -182,6 +198,7 @@
 
         <figcaption class="modal__caption">
           <h2 id="modal-name" class="modal__name"></h2>
+          <p class="modal__count" data-modal-count hidden></p>
         </figcaption>
       </div>
     </figure>
