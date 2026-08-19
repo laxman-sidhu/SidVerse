@@ -496,12 +496,17 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 
 .mon-tabs,
 .mon-block,
-#wrapped .container > *,
+#wrapped .container > * {
+  max-width: var(--tv-read);
+  margin-inline: auto;
+}
+
+/* The map and the postcard form sit in the same column as the monuments table,
+   which takes the shared shell width rather than the narrower reading one. */
 .map-section .section-head,
 .map-section .map-wrap,
-.contact-section .section-head,
 .contact-section .contact-wrap-grid {
-  max-width: var(--tv-read);
+  max-width: var(--p-shell);
   margin-inline: auto;
 }
 
