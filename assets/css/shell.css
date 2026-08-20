@@ -1,9 +1,4 @@
-/* Pitara — the app shell.
-
-   Collapsed, the sidebar is a floating pill of icons centred against the left
-   edge. The hamburger at the top-left expands it into a full panel. Each module
-   keeps its own bar for moving around inside itself; this is the one that moves
-   between them. */
+/* SidVerse - the app shell: the sidebar rail, its panel and the theme switch. */
 
 .psb, .psb__rail, .psb__scrim, .psb__burger {
   font-family: var(--p-body);

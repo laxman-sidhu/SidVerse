@@ -1,3 +1,7 @@
+// SidBites - the read and write bridge. Paste into Extensions > Apps Script,
+// set ADMIN_PASSWORD, deploy as a web app. It also signs Cloudinary uploads.
+// See docs/PROJECT.md section 5.
+
 const SHEET_ID = "1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0";
 const SHEET_NAME = "";
 // A Script Property of the same name still wins, so the secret can stay out of this file.
@@ -25,7 +29,7 @@ function out(obj) {
 function doGet(e) {
   const action = (e && e.parameter && e.parameter.action) || "";
   if (action === "list") return out({ ok: true, rows: readRows() });
-  return out({ ok: true, message: "Swaad backend is running" });
+  return out({ ok: true, message: "SidBites backend is running" });
 }
 
 function doPost(e) {

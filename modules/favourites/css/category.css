@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Museum of Favorites — Category page
-   Exhibition "title wall" + toolbar.
-   ========================================================================== */
+/* SidPicks - the category page: exhibition title wall and toolbar. */
 
 .exhibition-head {
   padding-top: clamp(1.4rem, 4vw, 2.4rem);

@@ -1,17 +1,9 @@
-// Books — the read and write bridge for Pitara.
-//
-// Paste this into Extensions > Apps Script from inside the workbook, replace
-// SECRET below, then Deploy > New deployment > Web app, executing as Me, with
-// access set to Anyone. Copy the /exec URL into APPS_SCRIPT_URL in js/config.js.
-//
-// AFTER EVERY EDIT: Deploy > Manage deployments > pencil > New version >
-// Deploy. The site sees the last DEPLOYED version, not the last saved one, and
-// creating a *new* deployment gives a new URL that breaks the config.
-//
-// COLUMNS ARE FOUND BY HEADER NAME, NEVER BY POSITION.
+// SidBooks - the read and write bridge. Paste into Extensions > Apps Script,
+// set SECRET, deploy as a web app. Columns are found by header name, never by
+// position. See docs/PROJECT.md section 5.
 
 // Must match APPS_SCRIPT_TOKEN in js/config.js.
-var SECRET = 'pitara-books-u81apw9xjBIM2AGt8dlx_0mJvwEvCZpZSBsuzbiq8E_42_Rk';
+var SECRET = 'sidverse-books-u81apw9xjBIM2AGt8dlx_0mJvwEvCZpZSBsuzbiq8E_42_Rk';
 
 var READ_SHEET = 'Books Read';
 var READLIST_SHEET = 'Want to Read';

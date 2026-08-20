@@ -1,7 +1,5 @@
-/* Journal — the reader's stylesheet.
-
-   Structure only; the colours come from the Pitara palette through
-   css/theme.css, which is loaded after this file. */
+/* SidNotes - the reader's stylesheet. Structure only; the colours come from
+   the SidVerse palette through css/theme.css, loaded after this file. */
 
 
 /* Fallback palette. css/theme.css re-points every one of these. */

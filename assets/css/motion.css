@@ -1,16 +1,6 @@
-/* Pitara — motion.
-   =========================================================================
-   Entrances, reveals and interaction polish.
-
-   THE SAFETY RULE THAT SHAPES THIS WHOLE FILE
-   Nothing is hidden unless JavaScript is present to reveal it again. Every
-   rule that sets `opacity: 0` is scoped to `html[data-motion]`, and that
-   attribute is set by motion.js on load. If the script fails, is blocked, or
-   the browser is old, no element is ever hidden and the page simply appears —
-   which is how a reveal effect should degrade.
-
-   The whole file also stands down under prefers-reduced-motion.
-   ========================================================================= */
+/* SidVerse - entrances, reveals and interaction polish. Every rule that hides
+   something is scoped to html[data-motion], which motion.js sets on load, so a
+   blocked script leaves the page visible. Stands down under reduced-motion. */
 
 
 /* ---- 1. section reveal -------------------------------------------------

@@ -1,8 +1,5 @@
-/* Pitara — the one palette.
-
-   Every module maps its own variables onto these tokens, so a colour is
-   changed here once and the whole site follows. Two themes; [data-theme] is
-   set on <html> by the sidebar toggle and remembered per device. */
+/* SidVerse - the one palette. Every module maps its own variables onto these,
+   so a colour is changed here once and the whole site follows. */
 
 :root {
   /* Paper and ink — soft lavender-white paper, deep plum ink */
@@ -31,6 +28,14 @@
   --p-butter:      #f0d68a;
   --p-sky:         #8fc4ea;
 
+  /* Bare channels for the same six, so a rule can set its own alpha. */
+  --p-pink-rgb:     242, 163, 192;
+  --p-lilac-rgb:    195, 174, 240;
+  --p-lavender-rgb: 176, 156, 230;
+  --p-mint-rgb:     142, 207, 174;
+  --p-butter-rgb:   240, 214, 138;
+  --p-sky-rgb:      143, 196, 234;
+
   /* Meaning, not decoration. Green is done, amber is waiting, red is wrong. */
   --p-ok:          #6fbb94;
   --p-ok-deep:     #31734f;
@@ -39,7 +44,9 @@
   --p-wait:        #e0b455;
   --p-wait-deep:   #8a6420;
   --p-wait-tint:   #fbf2dc;
+  --p-wait-rgb:    224, 180, 85;
   --p-danger:      #e2798c;
+  --p-danger-rgb:  226, 121, 140;
   --p-star:        #e6bb5d;
 
   /* The accent is the only thing a module changes. Set by [data-section]. */
@@ -160,6 +167,13 @@
   --p-butter:      #f0dc9d;
   --p-sky:         #a2d0f0;
 
+  --p-pink-rgb:     240, 170, 197;
+  --p-lilac-rgb:    203, 184, 243;
+  --p-lavender-rgb: 191, 172, 237;
+  --p-mint-rgb:     154, 217, 187;
+  --p-butter-rgb:   240, 220, 157;
+  --p-sky-rgb:      162, 208, 240;
+
   --p-ok:          #86ceaa;
   --p-ok-deep:     #a6dcc2;
   --p-ok-tint:     #1c2f27;
@@ -167,7 +181,9 @@
   --p-wait:        #e8c579;
   --p-wait-deep:   #f2d79c;
   --p-wait-tint:   #2e2718;
+  --p-wait-rgb:    232, 197, 121;
   --p-danger:      #ef97a7;
+  --p-danger-rgb:  239, 151, 167;
   --p-star:        #ecc873;
 
   /* Dark accents are lifted pastels, so what sits on them must be ink. */

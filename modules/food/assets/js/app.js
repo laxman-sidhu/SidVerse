@@ -53,7 +53,7 @@ async function load() {
     // err.message is a browser string — "Failed to fetch" tells a reader
     // nothing and reads as a broken page rather than a considered state. The
     // detail still goes to the console for whoever is debugging.
-    console.error("Swaad: could not read the sheet —", err);
+    console.error("SidBites: could not read the sheet —", err);
     emptyEl.querySelector(".empty__note").textContent =
       "The sheet did not answer. It may be offline, or this network may be blocking it. Try again in a moment.";
   }

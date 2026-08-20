@@ -1,20 +1,8 @@
-/**
- * Museum of Favorites — Configuration
- * ------------------------------------------------------------------
- * This is the only file you need to edit to change the collections.
- *
- * To add a new collection, append one object to the `categories` array
- * below (a sheet tab with columns Name | Image Url must exist for its gid):
- *
- *   { title: "Favourite Characters", icon: "🎭", gid: "<tab-gid>" }
- *
- * The homepage card, category page, navbar dropdown, footer link, URL slug
- * and colour theme are all generated automatically from this list.
- *
- * A clean URL `slug` is generated from each title with the leading
- * "Favourite" dropped (e.g. "Favourite Actors" -> "actors"), so pages
- * open as category.html?category=actors.
- */
+// SidPicks - the only file to edit to change the collections. Append an object
+// to `categories` ({ title, icon, gid }) and its homepage card, category page,
+// navbar dropdown, footer link, URL slug and colour theme all follow. A tab
+// with columns Name | Image Url must exist for that gid. The slug drops the
+// leading "Favourite", so "Favourite Actors" opens at ?category=actors.
 
 export const CONFIG = {
   sheetBaseUrl:

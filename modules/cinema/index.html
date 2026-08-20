@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-section="cinema">
 <head>
-<script>(function(){try{var t=localStorage.getItem("sidcinema-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("sidverse:theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.setAttribute("data-bs-theme",t);}catch(e){}})();</script>
   <meta charset="UTF-8">
   <!-- viewport-fit=cover lets env(safe-area-inset-*) report real values, so the header and drawer stay clear of a notch. -->
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -13,7 +13,7 @@
     // Runs before the stylesheet paints, so a dark session never flashes white.
     (function () {
       var saved = null;
-      try { saved = localStorage.getItem("sidcinema-theme"); } catch (e) {}
+      try { saved = localStorage.getItem("sidverse:theme"); } catch (e) {}
       var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = dark ? "dark" : "light";
       document.documentElement.dataset.bsTheme = dark ? "dark" : "light";

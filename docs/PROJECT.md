@@ -29,6 +29,26 @@ names - `food/` is SidBites, `favourites/` is SidPicks. Display names live in
 `assets/js/site.config.js` and are the single source for wordmarks, the module
 switcher, the front page and the footer.
 
+### Which name to write
+
+Both registers are in use on purpose, so the rule is:
+
+- **Inside a module's own files**, use its display name: `/* SidBooks - ... */`.
+- **When one file refers to another module**, use the folder name, capitalised:
+  *Books*, *Cinema*, *Travel*, *Food*, *Favourites*, *Journal*. The shared
+  stylesheets do this because those comments sit beside `[data-section="food"]`
+  selectors, and the selector is the folder name.
+
+Storage keys follow the display name, lowercased, as `<module>:<thing>` -
+`sidbooks:cache:`, `sidcinemas:owner`, `sidbites:key`, `sidpicks:sheet:`. The
+one site-wide key is `sidverse:theme`.
+
+Earlier names - Pitara, Swaad, BookVerse, SidCinema, Museum of Favorites,
+Wanderlog, Marquee - are gone from the codebase. Two deliberate exceptions
+remain, both in `modules/food/assets/js/config.js`: `baseFolder: "Swaad"` and
+`uploadPreset: "swaad_uploads"` name resources that live in the Cloudinary
+account, and renaming them here without renaming them there breaks uploads.
+
 ---
 
 ## 2. Structure
@@ -50,7 +70,7 @@ assets/
     js/picker.js                the styled <select> menu, shared
     js/motion.js                scroll reveals
     images/sidverse-icon.png    favicon and link-preview image
-    img/                        portrait, and cards/ thumbnails
+    images/portrait-cutout.png  the front-page portrait
 
 modules/<name>/                 each keeps its own css/, js/ and assets/
 docs/PROJECT.md                 this file
@@ -58,6 +78,10 @@ tools/                          screenshot and audit scripts (see tools/README.m
 ```
 
 Nothing is shared between two modules except the top-level `assets/`.
+
+The front-page card thumbnails are not files in this repo. Each module's `image`
+in `site.config.js` is a full `https://` URL; point it at a local path instead if
+you would rather keep them here.
 
 ---
 
@@ -108,8 +132,8 @@ shadow is a `--p-*` custom property, and each module gets its accent from a
 `[data-section="…"]` block.
 
 One toggle at the foot of the rail sets `data-theme` on `<html>` and stores the
-choice under `sidcinema-theme` (Cinema's original key, so a device that had
-already chosen dark keeps it).
+choice under `sidverse:theme`. The inline snippet in every page's `<head>` reads
+the same key before the stylesheets load, so a dark page never flashes light.
 
 **If you add a rule, use a token, not a literal.** `var(--p-surface)` for a
 panel, `var(--p-ink)` for text, `var(--p-line)` for a border, `var(--p-deep)`
@@ -144,9 +168,9 @@ at the data layer.
 | Cinema | `1UhTK_0IqotZila6-SFMVYtmP863qcWAt4Jk1JBj3ETs` | All Watched, Watchlist, People |
 | Books | `1SPNRwytBNr4b5OtTnKe1kkH9nU0w8UEt4LWl4bVKte8` | Books Read, Want to Read |
 | Travel | `1CtRBUNbgxf-Z-pEfwoKW9O5NTCUxTsbpTGBrfox9gSk` | Places, Monuments, Goals, Activities, Treks |
-| SidBites | `1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0` | one tab |
-| SidPicks | published link only | Actors, Actress, Superheroes, Supervillains |
-| SidNotes | none - JSON in `modules/journal/data/` | - |
+| Food | `1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0` | one tab |
+| Favourites | published link only | Actors, Actress, Superheroes, Supervillains |
+| Journal | none - JSON in `modules/journal/data/` | - |
 
 **Columns are matched by header name, never by position.** Reorder them freely.
 Renaming one is safe only if the new spelling is already in that section's alias
@@ -158,15 +182,19 @@ field, the **first wins** - so delete the old column when you rename one.
 
 | File | Does |
 |---|---|
-| `modules/cinema/assets/apps_script/SidCinema_Bridge.gs` | reads all three tabs in one request; writes ticks and rows |
+| `modules/cinema/assets/apps_script/SidCinemas_Bridge.gs` | reads all three tabs in one request; writes ticks and rows |
 | `modules/books/assets/apps_script/Code.gs` | reads both tabs; writes rows and edition marks |
 | `modules/books/assets/apps_script/OtherVersions.gs` | a manual job: fills `Other Versions` and `Count` from Open Library |
-| `modules/food/assets/app_script/code.gs` | reads the sheet; writes dishes; signs Cloudinary uploads |
+| `modules/food/assets/apps_script/Code.gs` | reads the sheet; writes dishes; signs Cloudinary uploads |
 
 Each script's `SECRET` must equal `APPS_SCRIPT_TOKEN` in that module's
 `config.js`. Both pairs currently match. Cinema's token reads like a
 placeholder - `THIS-IS-A-LONG-RANDOM-STRING-FOR-APPS-SCRIPT-TOKEN` - but it is
 the live value; change it in **both** files together or writes stop.
+
+Food is the exception to the pair: it has no token. Its Apps Script checks
+the password on every write instead, reading a Script Property named
+`ADMIN_PASSWORD` in preference to the constant in `Code.gs`.
 
 **After every script edit:** Deploy → Manage deployments → pencil → New version
 → Deploy. The site sees the last *deployed* version, not the last saved one.
@@ -223,24 +251,22 @@ removing both.
 |---|---|---|
 | Cinema | `OWNER_PASSWORD` | `modules/cinema/js/config.js` |
 | Books | `OWNER_PASSWORD` | `modules/books/js/config.js` |
-| SidBites | `ADMIN_PASSWORD` | `modules/food/assets/js/config.js` |
+| Food | `ADMIN_PASSWORD` | `modules/food/assets/js/config.js` |
 
 The browser check only decides whether the form opens. **Every write is checked
 again server-side** by the Apps Script, so the password in these files is a
 gate, not the lock.
 
-SidBites previously used a `CHANGE_THIS_PASSWORD` sentinel that deferred every
-check to Apps Script, keeping the password out of the source. It now holds the
-literal, matching the other two. Its Apps Script still reads a Script Property
-named `ADMIN_PASSWORD` in preference to the constant in `code.gs`, so setting
-that property keeps the secret out of the file if you'd rather.
+Food's Apps Script reads a Script Property named `ADMIN_PASSWORD` in
+preference to the constant in `Code.gs`, so setting that property keeps the
+password out of the file if you'd rather.
 
 ### The gate
 
 All three ask the same way, in two steps: **"This is Siddhesh's …"** with
 **No, go back** / **Yes, I'm Siddhesh**, then the password. On a phone the
 buttons stack with the affirmative on top. Cinema and Books draw it as a modal
-over the page; SidBites draws the same modal from
+over the page; Food draws the same modal from
 `modules/food/assets/js/gate.js`.
 
 ---
@@ -376,10 +402,12 @@ file in `posts/`. See §5.
 
 ## 12. Still to do
 
-- `assets/img/portrait.jpg` and the card thumbnails under `assets/img/cards/`
-  are generated placeholders. Drop real photographs in at the same paths, or
-  point `image` in `site.config.js` at any `https://` URL.
-- `modules/books/assets/images/reading.svg` is the Books hero cut-out
-  placeholder - a background-removed subject on soft colour blobs.
+- The six front-page card images in `site.config.js` are borrowed `https://`
+  URLs from elsewhere on the web. Swap each `image` for one of your own
+  photographs, or a local path under `assets/images/`.
+- Dark mode on Travel is partial. `modules/travel/css/style.css` carries roughly
+  380 colours written as literal hex or `rgba()` rather than through a variable,
+  and `theme.css` cannot reach those. The shell, cards and type follow the
+  theme; some washes and dark sections keep their light values.
 
 Everything else is configured and working.

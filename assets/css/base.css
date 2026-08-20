@@ -1,5 +1,4 @@
-/* Pitara — reset and the few primitives the home page shares with the shell.
-   The page background itself lives in universal.css, which every page loads. */
+/* SidVerse - reset and the primitives the home page shares with the shell. */
 
 *, *::before, *::after { box-sizing: border-box; }
 

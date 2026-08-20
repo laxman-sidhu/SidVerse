@@ -109,7 +109,7 @@ export async function fetchDishes() {
 }
 
 // a new row takes a few minutes to reach the published CSV, so hold it locally until then
-const PENDING = "swaad:pending";
+const PENDING = "sidbites:pending";
 
 export function readPending() {
   try { return JSON.parse(localStorage.getItem(PENDING) || "[]"); }

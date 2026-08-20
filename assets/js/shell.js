@@ -14,7 +14,7 @@
 (function () {
   "use strict";
 
-  var SITE = window.PITARA || {};
+  var SITE = window.SIDVERSE || {};
   var SECTIONS = SITE.sections || [];
   var script = document.currentScript || document.querySelector("script[data-root]");
   var ROOT = (script && script.getAttribute("data-root")) || ".";
@@ -123,19 +123,18 @@
   }
 
   /* ---- theme ------------------------------------------------------------
-     The key is Cinema's original one, so a device that had already chosen dark
-     there keeps it. data-bs-theme rides along because Cinema's stylesheet
-     inherited a handful of Bootstrap rules that read it. */
+     One key for the whole site. data-bs-theme rides along because Cinema's
+     stylesheet inherited a handful of Bootstrap rules that read it. */
 
   function readTheme() {
-    try { return localStorage.getItem("sidcinema-theme") || ""; } catch (e) { return ""; }
+    try { return localStorage.getItem("sidverse:theme") || ""; } catch (e) { return ""; }
   }
 
   function setTheme(next) {
     var root = document.documentElement;
     root.setAttribute("data-theme", next);
     root.setAttribute("data-bs-theme", next);
-    try { localStorage.setItem("sidcinema-theme", next); } catch (e) {}
+    try { localStorage.setItem("sidverse:theme", next); } catch (e) {}
 
     // There are two switches — one on the rail, one in the panel — and both
     // have to read the same way.

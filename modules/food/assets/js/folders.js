@@ -1,7 +1,7 @@
 import { CLOUDINARY } from "./config.js";
 import { post } from "./api.js";
 
-const STORE = "swaad:folders";
+const STORE = "sidbites:folders";
 const base = () => CLOUDINARY.baseFolder;
 
 let paths = new Set(load());

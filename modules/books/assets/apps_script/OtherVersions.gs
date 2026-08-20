@@ -1,4 +1,4 @@
-// BookVerse — fills an "Other Versions" column from Open Library.
+// SidBooks - fills an "Other Versions" column from Open Library.
 //
 // Paste this into Extensions > Apps Script as a NEW file (File > + > Script,
 // name it OtherVersions). Leave Code.gs alone; the two do not touch.
@@ -46,7 +46,7 @@ var TIME_BUDGET_MS = 4.5 * 60 * 1000;
 
 // Open Library asks for a contactable agent and a gentle pace. Both are polite
 // and both keep this from being throttled halfway through a long run.
-var USER_AGENT = 'Pitara-Books/1.0 (personal reading log; contact: laxman19.sawant@gmail.com)';
+var USER_AGENT = 'SidVerse-Books/1.0 (personal reading log; contact: laxman19.sawant@gmail.com)';
 var PAUSE_MS = 350;
 
 // --- the run ----------------------------------------------------------------

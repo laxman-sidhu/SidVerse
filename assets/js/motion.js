@@ -1,15 +1,6 @@
-/* Pitara — motion.js
-   =========================================================================
-   Drives the reveal-on-scroll and the theme cross-fade.
-
-   The contract with motion.css: this script sets `data-motion` on <html>, and
-   every rule in that file which hides something is scoped to that attribute.
-   So if this script never runs — blocked, errored, an old browser — nothing
-   is ever hidden and the page renders normally. The effects are an addition,
-   never a prerequisite.
-
-   It also stands down entirely when the reader has asked for reduced motion.
-   ========================================================================= */
+/* SidVerse - reveal-on-scroll and the theme cross-fade. Sets data-motion on
+   <html>; every rule in motion.css that hides something is scoped to it, so a
+   blocked script leaves the page visible. Off under reduced-motion. */
 
 (function () {
   "use strict";

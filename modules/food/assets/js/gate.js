@@ -64,7 +64,7 @@ function step(name) {
 function submit() {
   const field = gate.querySelector("#gatePassword");
   if (field.value && field.value === ADMIN_PASSWORD) {
-    sessionStorage.setItem("swaad:key", field.value);
+    sessionStorage.setItem("sidbites:key", field.value);
     close(true);
     return;
   }
@@ -92,4 +92,4 @@ export function askOwner() {
   return new Promise(resolve => { settle = resolve; });
 }
 
-export const hasKey = () => Boolean(sessionStorage.getItem("swaad:key"));
+export const hasKey = () => Boolean(sessionStorage.getItem("sidbites:key"));

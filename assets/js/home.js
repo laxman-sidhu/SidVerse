@@ -1,10 +1,10 @@
-/* Pitara — the front page. Everything on it is drawn from site.config.js, so
-   adding a section there adds a card here. */
+/* SidVerse - the front page. Drawn entirely from site.config.js, so adding a
+   section there adds a card here. */
 
 (function () {
   "use strict";
 
-  var SITE = window.PITARA || {};
+  var SITE = window.SIDVERSE || {};
   var SECTIONS = SITE.sections || [];
 
   var ICONS = {

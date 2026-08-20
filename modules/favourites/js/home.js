@@ -1,9 +1,5 @@
-/**
- * Museum of Favorites — Homepage
- * Builds the collection cards from CONFIG (markup lives in the
- * #tpl-collection-card template), then fills each card with a live
- * exhibit count and three preview portraits once the sheets load.
- */
+// SidPicks - the homepage. Builds the collection cards from CONFIG, then fills
+// each with a live exhibit count and three preview portraits once sheets load.
 
 import { CONFIG, CARD_THEMES, categoryUrl, displayTitle } from "./config.js";
 import { fetchAllCategories } from "./api.js";

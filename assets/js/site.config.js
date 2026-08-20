@@ -2,7 +2,7 @@
    Loaded as a plain script before shell.js, so every page can read it whether
    or not that page uses ES modules. */
 
-window.PITARA = {
+window.SIDVERSE = {
   name: "SidVerse",
   tagline: "a box of everything I keep",
   owner: "Siddhesh",

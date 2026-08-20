@@ -1,7 +1,6 @@
-/* Journal — retargeted onto the Pitara palette. Loaded after journal.css so
-   these win. The scrapbook pages themselves are untouched by the theme: a story
-   carries its own colours inside its JSON, which is the point of publishing it
-   that way. */
+/* SidNotes - retargeted onto the SidVerse palette. Loaded after journal.css so
+   these win. The scrapbook pages themselves are untouched: a story carries its
+   own colours inside its JSON. */
 
 :root {
   --paper:          var(--p-bg);

@@ -1,7 +1,7 @@
 import { CACHE_TTL_MS } from "../config.js";
 
 const memory = new Map();
-const PREFIX = "bv:cache:";
+const PREFIX = "sidbooks:cache:";
 
 function readSession(key) {
   try {

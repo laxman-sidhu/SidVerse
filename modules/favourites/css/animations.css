@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Museum of Favorites — Animations
-   Keyframes, reveal-on-scroll utilities, reduced-motion support.
-   ========================================================================== */
+/* SidPicks - keyframes, reveal-on-scroll utilities, reduced-motion support. */
 
 @keyframes page-in {
   from { opacity: 0; }

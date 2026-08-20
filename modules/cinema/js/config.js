@@ -9,7 +9,7 @@ export const GEMINI_MODEL = "gemini-2.0-flash";
 // The Apps Script web app deployed from inside the workbook: it reads the tabs and writes to them. See docs/PROJECT.md.
 export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5--x2f-OHO4jwZRrFXxXBm9YNFg8e8YCJkh9qiz0-tmZAEXrvH7NSBd6Rzon0KOhw/exec";
 
-// Must match SECRET inside SidCinema_Bridge.gs exactly. Change both together.
+// Must match SECRET inside SidCinemas_Bridge.gs exactly. Change both together.
 // This IS the deployed value, not a placeholder, despite how it reads.
 export const APPS_SCRIPT_TOKEN = "THIS-IS-A-LONG-RANDOM-STRING-FOR-APPS-SCRIPT-TOKEN";
 

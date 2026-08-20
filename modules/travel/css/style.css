@@ -34,70 +34,70 @@
 
       /* Backgrounds - a warm blush canvas with a touch more presence than near-white,
      so the crisp white cards pop against it. */
-      --bg: #f6efe6;
-      --bg-2: #eee4d6;
-      --paper: #fffdf9;
-      --paper-2: #fbf6ee;
+      --bg: var(--p-bg);
+      --bg-2: var(--p-bg-2);
+      --paper: var(--p-surface);
+      --paper-2: var(--p-surface-2);
 
       /* Inks (deep plum - kept dark for strong, legible contrast) */
-      --ink: #2c2420;
-      --ink-soft: #5f5348;
-      --muted: #978c7e;
-      --line: #e7ddcd;
-      --line-soft: #f2ebe0;
+      --ink: var(--p-ink);
+      --ink-soft: var(--p-ink-soft);
+      --muted: var(--p-muted);
+      --line: var(--p-line);
+      --line-soft: var(--p-line-soft);
 
       /* Deepened pastel families - main (readable accent on white),
      soft (mid pastel for fills/borders), pale (lightest wash). */
 
       /* Rose */
-      --pink: #c85d73;
-      --pink-soft: #e3a0af;
-      --pink-pale: #f7e2e7;
+      --pink: var(--p-accent-ink);
+      --pink-soft: var(--p-accent);
+      --pink-pale: var(--p-accent-tint);
 
       /* Sky / periwinkle-blue */
-      --sky: #5b8bbf;
-      --sky-soft: #a6c4e0;
-      --sky-pale: #e4eef7;
+      --sky: var(--tv-sky-ink);
+      --sky-soft: var(--p-sky);
+      --sky-pale: var(--tv-sky-wash);
 
       /* Peach / coral */
-      --coral: #d98159;
-      --coral-soft: #f0b394;
-      --coral-pale: #fbe6d9;
+      --coral: var(--tv-coral-ink);
+      --coral-soft: var(--p-danger);
+      --coral-pale: var(--tv-coral-wash);
 
       /* Butter / honey */
-      --butter: #c99a3f;
-      --butter-soft: #e8cd8b;
-      --butter-pale: #f6eccf;
+      --butter: var(--p-wait);
+      --butter-soft: var(--p-butter);
+      --butter-pale: var(--tv-butter-wash);
 
       /* Lime / soft fresh green (success accent) */
-      --lime: #6faa5f;
-      --lime-soft: #aecfa0;
-      --lime-pale: #e0edd8;
+      --lime: var(--p-ok);
+      --lime-soft: var(--p-ok);
+      --lime-pale: var(--tv-ok-wash);
 
       /* Mint / sage (cool fresh accent) */
-      --mint: #4f9d86;
-      --mint-soft: #9fcfbf;
-      --mint-pale: #dcefe8;
+      --mint: var(--tv-mint-ink);
+      --mint-soft: var(--p-mint);
+      --mint-pale: var(--tv-mint-wash);
 
       /* Lavender / periwinkle (dreamy accent) */
-      --lavender: #8674c0;
-      --lavender-soft: #bcaee0;
-      --lavender-pale: #ebe4f6;
+      --lavender: var(--tv-lavender-ink);
+      --lavender-soft: var(--p-lavender);
+      --lavender-pale: var(--tv-lavender-wash);
 
       /* Warm mocha — soft pastel brown, used for the Places KPI card */
-      --mocha: #a3774e;
-      --mocha-soft: #d8c3ad;
-      --mocha-pale: #ffeed6;
+      --mocha: var(--tv-butter-ink);
+      --mocha-soft: var(--p-butter);
+      --mocha-pale: var(--tv-butter-wash);
 
       /* Deep plum for dark sections - lifted & cleaner than near-black,
      harmonised with the footer's plum. */
-      --navy-deep: #241c22;
-      --navy: #2f2630;
-      --navy-mid: #4a3d49;
+      --navy-deep: var(--p-deep);
+      --navy: var(--p-deep);
+      --navy-mid: var(--p-deep-2);
 
       /* Star ratings (warm gold for filled, soft lilac-grey for empty) */
-      --star-gold: #d3a53f;
-      --star-empty: #ddd2c4;
+      --star-gold: var(--p-star);
+      --star-empty: var(--p-line);
 
       /* Aliases - keep old names mapped */
       --rose: var(--pink);
@@ -123,9 +123,9 @@
       --mauve-pale: var(--lavender-pale);
       --plum: var(--lavender);
 
-      --shadow-sm: 0 1px 2px rgba(74, 54, 40, 0.05), 0 4px 12px rgba(74, 54, 40, 0.06);
-      --shadow-md: 0 4px 14px rgba(74, 54, 40, 0.07), 0 18px 38px rgba(74, 54, 40, 0.10);
-      --shadow-lg: 0 10px 28px rgba(74, 54, 40, 0.10), 0 34px 70px rgba(74, 54, 40, 0.16);
+      --shadow-sm: 0 1px 2px rgba(var(--p-deep-rgb), 0.05), 0 4px 12px rgba(var(--p-deep-rgb), 0.06);
+      --shadow-md: 0 4px 14px rgba(var(--p-deep-rgb), 0.07), 0 18px 38px rgba(var(--p-deep-rgb), 0.10);
+      --shadow-lg: 0 10px 28px rgba(var(--p-deep-rgb), 0.10), 0 34px 70px rgba(var(--p-deep-rgb), 0.16);
 
       --radius-sm: 7px;
       --radius: 11px;
@@ -159,9 +159,9 @@
     .hero,
     .goals-section,
     .contact-section {
-      --bg: color-mix(in srgb, rgb(246 239 230) 15%, var(--p-surface));
-      --bg-2: #eee4d6;
-      --paper-2: #fbf6ee;
+      --bg: color-mix(in srgb, var(--p-surface-2) 15%, var(--p-surface));
+      --bg-2: var(--p-bg-2);
+      --paper-2: var(--p-surface-2);
 
       /* These four were the source of every invisible label on this page.
          --ink was pointed at --p-deep (a band colour that goes near-black in
@@ -172,7 +172,7 @@
       --ink-soft: var(--p-ink-soft);
       --muted: var(--p-muted);
       --line: var(--p-line);
-      --line-soft: color-mix(in srgb, rgb(242 235 224) 19%, var(--p-surface));
+      --line-soft: color-mix(in srgb, var(--p-line-soft) 19%, var(--p-surface));
 
       /* These were the SidTrails brand pinks — the loudest colour left on the
          site. They now read from the module accent, so the wordmark and the
@@ -185,32 +185,12 @@
       --sky-soft: var(--p-accent-soft);
       --sky-pale: var(--p-accent-tint);
 
-      --coral: #d98159;
-      --coral-soft: #f0b394;
-      --coral-pale: color-mix(in srgb, rgb(251 230 217) 18%, var(--p-surface));
-
-      --butter: #c99a3f;
-      --butter-soft: #e8cd8b;
-      --butter-pale: color-mix(in srgb, rgb(246 236 207) 25%, var(--p-surface));
-
-      --lime: #6faa5f;
-      --lime-soft: #aecfa0;
-      --lime-pale: color-mix(in srgb, rgb(224 237 216) 25%, var(--p-surface));
-
-      --mint: #4f9d86;
-      --mint-soft: #9fcfbf;
-      --mint-pale: color-mix(in srgb, rgb(220 239 232) 22%, var(--p-surface));
-
-      --lavender: #8674c0;
-      --lavender-soft: #bcaee0;
-      --lavender-pale: color-mix(in srgb, rgb(235 228 246) 16%, var(--p-surface));
-
       --navy-deep: var(--p-deep);
       --navy: var(--p-deep);
       --navy-mid: var(--p-deep-2);
 
-      --star-gold: #d3a53f;
-      --star-empty: color-mix(in srgb, rgb(221 210 196) 30%, var(--p-surface));
+      --star-gold: var(--p-star);
+      --star-empty: var(--p-line);
 
       --shadow-sm: 0 1px 2px rgba(var(--p-deep-rgb), 0.05), 0 4px 12px rgba(var(--p-deep-rgb), 0.06);
       --shadow-md: 0 4px 14px rgba(var(--p-deep-rgb), 0.07), 0 18px 38px rgba(var(--p-deep-rgb), 0.10);
@@ -222,7 +202,7 @@
     .hero .italic-accent::before,
     .goals-section .italic-accent::before,
     .contact-section .italic-accent::before {
-      background: radial-gradient(ellipse at center, rgba(200, 93, 115, 0.12), transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(var(--p-accent-rgb), 0.12), transparent 70%);
     }
 
     * {
@@ -262,8 +242,8 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
       background-image:
-        radial-gradient(ellipse at 30% 20%, rgba(200, 93, 115, 0.07), transparent 60%),
-        radial-gradient(ellipse at 70% 60%, rgba(134, 116, 192, 0.08), transparent 60%);
+        radial-gradient(ellipse at 30% 20%, rgba(var(--p-accent-rgb), 0.07), transparent 60%),
+        radial-gradient(ellipse at 70% 60%, rgba(var(--p-lavender-rgb), 0.08), transparent 60%);
       background-attachment: fixed;
     }
 
@@ -528,11 +508,11 @@
     }
 
     .navbar .nav-toggle span {
-      background: color-mix(in srgb, rgb(253 252 251) 10%, var(--p-surface));
+      background: color-mix(in srgb, var(--p-surface) 10%, var(--p-surface));
     }
 
     .navbar.scrolled {
-      background: rgba(250, 246, 238, 0.86);
+      background: rgba(var(--p-surface-rgb), 0.86);
       backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
       border-bottom-color: var(--line-soft);
@@ -597,7 +577,7 @@
       height: 10px;
       border-radius: 50%;
       background: var(--pink);
-      box-shadow: 0 0 0 4px rgba(200, 93, 115, 0.22);
+      box-shadow: 0 0 0 4px rgba(var(--p-accent-rgb), 0.22);
     }
 
     .logo em {
@@ -790,7 +770,7 @@
     .hero-headline {
       margin-top: 1.2rem;
       line-height: 1.02;
-      color: color-mix(in srgb, rgb(253 252 251) 10%, var(--p-surface));
+      color: color-mix(in srgb, var(--p-surface) 10%, var(--p-surface));
     }
 
     .hero .eyebrow {
@@ -890,7 +870,7 @@
       background: var(--pink);
       color: var(--paper);
       transform: translateY(-3px);
-      box-shadow: 0 14px 34px rgba(200, 93, 115, 0.42);
+      box-shadow: 0 14px 34px rgba(var(--p-accent-rgb), 0.42);
     }
 
     .btn-ghost {
@@ -915,7 +895,7 @@
       background: var(--ink);
       color: var(--pink);
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(200, 93, 115, 0.4);
+      box-shadow: 0 12px 32px rgba(var(--p-accent-rgb), 0.4);
     }
 
     .btn .arrow {
@@ -1020,11 +1000,11 @@
 
       0%,
       100% {
-        box-shadow: 0 0 0 4px rgba(200, 93, 115, 0.3);
+        box-shadow: 0 0 0 4px rgba(var(--p-accent-rgb), 0.3);
       }
 
       50% {
-        box-shadow: 0 0 0 7px rgba(200, 93, 115, 0.1);
+        box-shadow: 0 0 0 7px rgba(var(--p-accent-rgb), 0.1);
       }
     }
 
@@ -1194,7 +1174,7 @@
       left: 0;
       right: 0;
       height: 100%;
-      background: radial-gradient(circle at top right, var(--accent-soft, rgba(200, 93, 115, 0.16)), transparent 60%);
+      background: radial-gradient(circle at top right, var(--accent-soft, rgba(var(--p-accent-rgb), 0.16)), transparent 60%);
       opacity: 0;
       transition: opacity 0.4s ease;
       pointer-events: none;
@@ -1215,7 +1195,7 @@
       width: 42px;
       height: 42px;
       border-radius: var(--radius-sm);
-      background: var(--accent-soft, rgba(200, 93, 115, 0.16));
+      background: var(--accent-soft, rgba(var(--p-accent-rgb), 0.16));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1298,7 +1278,7 @@
    MAP
    ============================================ */
     .map-section {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(235 228 246) 16%, var(--p-surface)) 0%, color-mix(in srgb, rgb(250 219 230) 18%, var(--p-surface)) 50%, color-mix(in srgb, rgb(251 221 232) 16%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 50%, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 100%);
     }
 
     .map-wrap {
@@ -1319,7 +1299,7 @@
       position: absolute;
       bottom: 16px;
       left: 16px;
-      background: rgba(251, 247, 239, 0.95);
+      background: rgba(var(--p-surface-rgb), 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid var(--line-soft);
       border-radius: var(--radius);
@@ -1357,7 +1337,7 @@
     }
 
     .map-legend .dot.trek {
-      background: #3f7a4f;
+      background: var(--p-ok-deep);
     }
 
     .popup-card {
@@ -1459,7 +1439,7 @@
 
     .ptab-search-input:focus {
       border-color: var(--pink);
-      box-shadow: 0 0 0 4px rgba(200, 93, 115, 0.16);
+      box-shadow: 0 0 0 4px rgba(var(--p-accent-rgb), 0.16);
     }
 
     /* Block headers */
@@ -1507,7 +1487,7 @@
 
     .visited-tag .tag-dot {
       background: var(--sky);
-      box-shadow: 0 0 0 3px rgba(91, 139, 191, 0.35);
+      box-shadow: 0 0 0 3px rgba(var(--p-sky-rgb), 0.35);
       animation: pulse 2s infinite;
     }
 
@@ -1538,11 +1518,11 @@
 
       0%,
       100% {
-        box-shadow: 0 0 0 3px rgba(91, 139, 191, 0.35);
+        box-shadow: 0 0 0 3px rgba(var(--p-sky-rgb), 0.35);
       }
 
       50% {
-        box-shadow: 0 0 0 7px rgba(91, 139, 191, 0.05);
+        box-shadow: 0 0 0 7px rgba(var(--p-sky-rgb), 0.05);
       }
     }
 
@@ -1851,7 +1831,7 @@
       left: 50%;
       transform: translateX(-50%);
       background: var(--p-deep);
-      color: color-mix(in srgb, rgb(253 246 239) 10%, var(--p-surface));
+      color: color-mix(in srgb, var(--p-surface) 10%, var(--p-surface));
       padding: 0.7rem 0.95rem;
       border-radius: 6px;
       font-family: var(--font-body);
@@ -1865,7 +1845,7 @@
       width: max-content;
       z-index: 100;
       box-shadow: 0 14px 34px rgba(var(--p-deep-rgb), 0.38);
-      border: 1px solid rgba(217, 129, 89, 0.4);
+      border: 1px solid rgba(var(--p-danger-rgb), 0.4);
       pointer-events: none;
       animation: notesIn 0.2s var(--ease-out);
     }
@@ -1898,7 +1878,7 @@
    MONUMENTS & LANDMARKS - heritage section
    ============================================ */
     .monuments-section {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(238 228 214) 25%, var(--p-surface)) 0%, color-mix(in srgb, rgb(251 213 200) 25%, var(--p-surface)) 55%, color-mix(in srgb, rgb(251 226 218) 18%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-surface-3) 25%, var(--p-surface)) 0%, color-mix(in srgb, var(--p-danger) var(--tv-band), var(--p-surface)) 55%, color-mix(in srgb, var(--p-danger) var(--tv-band), var(--p-surface)) 100%);
       position: relative;
       overflow: hidden;
     }
@@ -1912,7 +1892,7 @@
     }
 
     .monuments-section .italic-accent::before {
-      background: radial-gradient(ellipse at center, rgba(200, 93, 115, 0.20), transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(var(--p-accent-rgb), 0.20), transparent 70%);
     }
 
     .ms-num {
@@ -1977,12 +1957,12 @@
 
     .mtab.active .mtab-dot.visited {
       background: var(--pink);
-      box-shadow: 0 0 0 3px rgba(200, 93, 115, 0.40);
+      box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), 0.40);
     }
 
     .mtab.active .mtab-dot.wishlist {
       background: var(--lavender);
-      box-shadow: 0 0 0 3px rgba(134, 116, 192, 0.40);
+      box-shadow: 0 0 0 3px rgba(var(--p-lavender-rgb), 0.40);
     }
 
     .mtab-count {
@@ -1996,7 +1976,7 @@
     }
 
     .mtab.active .mtab-count {
-      background: rgba(254, 246, 239, 0.15);
+      background: rgba(255, 255, 255, 0.15);
       color: var(--paper);
     }
 
@@ -2051,8 +2031,11 @@
     }
 
     .mon-table thead th {
-      background: var(--ink);
-      color: var(--paper);
+      /* --ink flips with the theme, so this header inverted into the brightest
+         slab on the page in dark. The bands that are meant to read as deep
+         stay deep in both themes. */
+      background: var(--p-deep);
+      color: var(--p-on-deep);
       padding: 0.95rem 1.2rem;
       text-align: left;
       font-family: var(--font-mono);
@@ -2120,28 +2103,28 @@
     }
 
     .region-north {
-      background: rgba(91, 139, 191, 0.16);
-      color: #2a6b8a;
+      background: rgba(var(--p-sky-rgb), 0.16);
+      color: var(--tv-sky-ink);
     }
 
     .region-south {
-      background: rgba(79, 157, 134, 0.20);
-      color: #3a7a52;
+      background: rgba(var(--p-ok-rgb), 0.20);
+      color: var(--tv-ok-ink);
     }
 
     .region-east {
-      background: rgba(201, 154, 63, 0.20);
-      color: #9a7a1f;
+      background: rgba(var(--p-wait-rgb), 0.20);
+      color: var(--tv-butter-ink);
     }
 
     .region-west {
-      background: rgba(217, 129, 89, 0.18);
-      color: #b35333;
+      background: rgba(var(--p-danger-rgb), 0.18);
+      color: var(--tv-coral-ink);
     }
 
     .region-central {
-      background: rgba(200, 93, 115, 0.16);
-      color: #b3477a;
+      background: rgba(var(--p-accent-rgb), 0.16);
+      color: var(--tv-pink-ink);
     }
 
     .region-default {
@@ -2161,8 +2144,8 @@
     }
 
     .mon-status-pill.wishlist {
-      background: rgba(134, 116, 192, 0.20);
-      color: #6b54c8;
+      background: rgba(var(--p-lavender-rgb), 0.20);
+      color: var(--tv-lavender-ink);
     }
 
     .mon-view-cell {
@@ -2253,7 +2236,7 @@
     .nice-select:focus-visible,
     .nice-select:focus {
       border-color: var(--pink);
-      box-shadow: 0 0 0 4px rgba(200, 93, 115, 0.16);
+      box-shadow: 0 0 0 4px rgba(var(--p-accent-rgb), 0.16);
     }
 
     .nice-select option {
@@ -2276,7 +2259,7 @@
     .nice-select.ns-green:focus-visible,
     .nice-select.ns-green:focus {
       border-color: var(--mint);
-      box-shadow: 0 0 0 4px rgba(79, 157, 134, 0.22);
+      box-shadow: 0 0 0 4px rgba(var(--p-ok-rgb), 0.22);
     }
 
     /* ── Filter bar: [status] [search] [type] on desktop ── */
@@ -2355,7 +2338,7 @@
       white-space: nowrap;
       background: rgba(var(--p-surface-rgb), 0.94);
       color: var(--ink);
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 3px 10px rgba(var(--p-deep-rgb), 0.22);
     }
 
     /* ============================================
@@ -2410,7 +2393,7 @@
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: rgba(251, 247, 239, 0.95);
+      background: rgba(var(--p-surface-rgb), 0.95);
       border: none;
       width: 36px;
       height: 36px;
@@ -2520,13 +2503,13 @@
    ============================================ */
     /* Stats + Places: soft pink, warming into the orange bucket section below */
     #stats {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(251 232 239) 12%, var(--p-surface)) 0%, color-mix(in srgb, rgb(247 226 231) 16%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 100%);
     }
 
     /* Cools out of the pink into lavender so the lavender bucket-list below blends
        in seamlessly (pink -> lavender, no warm band between them). */
     #places {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(247 226 231) 16%, var(--p-surface)) 0%, color-mix(in srgb, rgb(242 226 239) 18%, var(--p-surface)) 52%, color-mix(in srgb, rgb(235 228 246) 16%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 52%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 100%);
     }
 
     /* BUCKET LIST - lavender pastel. Starts in the lavender handed down by Places,
@@ -2535,7 +2518,7 @@
        hues, so the warm bridge is kept high-value (light) and thin to avoid the
        muddy grey a straight lavender->yellow blend would produce. */
     .goals-section {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(235 228 246) 16%, var(--p-surface)) 0%, color-mix(in srgb, rgb(231 223 247) 17%, var(--p-surface)) 52%, var(--p-surface-2) 72%, color-mix(in srgb, rgb(245 237 221) 19%, var(--p-surface)) 88%, color-mix(in srgb, rgb(247 236 206) 25%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 52%, var(--p-surface-2) 72%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 88%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 100%);
       position: relative;
       overflow: hidden;
       padding-top: 2.5rem;
@@ -2588,7 +2571,7 @@
       right: 5rem;
       z-index: 5;
       background: var(--paper);
-      border: 1px solid rgba(200, 93, 115, 0.25);
+      border: 1px solid rgba(var(--p-accent-rgb), 0.25);
       border-radius: 50px;
       padding: 0.5rem 1.1rem;
       display: inline-flex;
@@ -2660,7 +2643,7 @@
       width: 44px;
       height: 44px;
       border-radius: 6px;
-      background: rgba(200, 93, 115, 0.18);
+      background: rgba(var(--p-accent-rgb), 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2755,16 +2738,16 @@
 
     .goal-card:hover {
       background: var(--paper-2);
-      border-color: rgba(200, 93, 115, 0.45);
+      border-color: rgba(var(--p-accent-rgb), 0.45);
       transform: translateY(-3px);
       box-shadow: var(--shadow-md);
     }
 
     /* Completed state - full green highlight, matching activities "done" cards */
     .goal-card.completed {
-      background: color-mix(in srgb, rgb(224 237 216) 25%, var(--p-surface));
-      border-color: #a9d3ad;
-      box-shadow: 0 2px 10px -3px rgba(63, 122, 79, 0.28);
+      background: color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface));
+      border-color: color-mix(in srgb, var(--p-ok) var(--tv-edge), var(--p-line));
+      box-shadow: 0 2px 10px -3px rgba(var(--p-ok-rgb), 0.28);
     }
 
     .goal-card.completed::before {
@@ -2774,7 +2757,7 @@
       left: 0;
       width: 3px;
       height: 100%;
-      background: #3f7a4f;
+      background: var(--p-ok-deep);
       border-radius: 6px 0 0 6px;
     }
 
@@ -2782,14 +2765,14 @@
        but not finished. Mirrors the completed card's green treatment so the three
        states (not started / in progress / done) read as one family. */
     .goal-card.in-progress {
-      background: color-mix(in srgb, rgb(249 236 176) 30%, var(--p-surface));
-      border-color: #e6ce7d;
-      box-shadow: 0 2px 10px -3px rgba(201, 154, 63, 0.32);
+      background: color-mix(in srgb, var(--p-wait) var(--tv-band), var(--p-surface));
+      border-color: color-mix(in srgb, var(--p-wait) var(--tv-edge), var(--p-line));
+      box-shadow: 0 2px 10px -3px rgba(var(--p-wait-rgb), 0.32);
     }
 
     .goal-card.in-progress:hover {
-      background: #f6e69f;
-      border-color: #d9bf63;
+      background: color-mix(in srgb, var(--p-wait) calc(var(--tv-wash) + 8%), var(--p-surface));
+      border-color: color-mix(in srgb, var(--p-wait) calc(var(--tv-edge) + 14%), var(--p-line));
     }
 
     .goal-card.in-progress::before {
@@ -2799,7 +2782,7 @@
       left: 0;
       width: 3px;
       height: 100%;
-      background: #c99a3f;
+      background: var(--p-wait);
       border-radius: 6px 0 0 6px;
     }
 
@@ -2812,7 +2795,7 @@
     }
 
     .goal-card.in-progress .goal-meta .pct {
-      color: #8a6a17;
+      color: var(--p-wait-deep);
     }
 
     /* Tie the status pill into the amber theme on in-progress cards */
@@ -2828,14 +2811,14 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: #3f7a4f;
+      background: var(--p-ok-deep);
       color: var(--p-on-deep);
       font-size: 0.8rem;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px -2px rgba(63, 122, 79, 0.45);
+      box-shadow: 0 4px 12px -2px rgba(var(--p-ok-rgb), 0.45);
       flex-shrink: 0;
     }
 
@@ -2920,7 +2903,7 @@
     }
 
     .goal-card.completed .goal-meta .pct {
-      color: #2f5f3c;
+      color: var(--p-ok-deep);
     }
 
     .goal-spacer {
@@ -3027,7 +3010,7 @@
       width: max-content;
       z-index: 100;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(200, 93, 115, 0.25);
+      border: 1px solid rgba(var(--p-accent-rgb), 0.25);
       pointer-events: none;
       animation: notesIn 0.2s var(--ease-out);
     }
@@ -3076,12 +3059,12 @@
        and ramps to full yellow quickly (so the section reads solidly yellow from the
        top), then fades to green for the Treks section below. */
     .activities-section {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(247 236 206) 25%, var(--p-surface)) 0%, color-mix(in srgb, rgb(251 238 197) 27%, var(--p-surface)) 24%, color-mix(in srgb, rgb(249 233 192) 30%, var(--p-surface)) 60%, color-mix(in srgb, rgb(235 231 205) 30%, var(--p-surface)) 84%, color-mix(in srgb, rgb(224 237 216) 25%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 24%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 60%, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 84%, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 100%);
     }
 
-    /* TREKS - green pastel, landing on exactly the #eee4d6 Heritage starts from */
+    /* TREKS - green pastel, landing on exactly the surface Heritage starts from */
     .treks-section {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(224 237 216) 25%, var(--p-surface)) 0%, color-mix(in srgb, rgb(216 236 214) 26%, var(--p-surface)) 38%, color-mix(in srgb, rgb(210 233 214) 29%, var(--p-surface)) 66%, color-mix(in srgb, rgb(238 228 214) 25%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 38%, color-mix(in srgb, var(--p-mint) var(--tv-band), var(--p-surface)) 66%, color-mix(in srgb, var(--p-surface-3) 25%, var(--p-surface)) 100%);
     }
 
     .activity-stats {
@@ -3115,7 +3098,7 @@
     .activity-stat.is-active {
       border-color: var(--pink);
       background: linear-gradient(135deg, var(--paper), var(--pink-pale));
-      box-shadow: 0 10px 24px -8px rgba(200, 93, 115, 0.30);
+      box-shadow: 0 10px 24px -8px rgba(var(--p-accent-rgb), 0.30);
     }
 
     .activity-stat.is-active::after {
@@ -3192,7 +3175,7 @@
     .show-all-chip:hover {
       background: var(--pink);
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px -6px rgba(200, 93, 115, 0.4);
+      box-shadow: 0 8px 20px -6px rgba(var(--p-accent-rgb), 0.4);
     }
 
     /* ----- Activity cards ----- */
@@ -3290,10 +3273,10 @@
 
     /* ---- Completed activity card: full green highlight, plain meta text ---- */
     .activity-card.done {
-      background: color-mix(in srgb, rgb(224 237 216) 25%, var(--p-surface));
-      border-color: #a9d3ad;
+      background: color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface));
+      border-color: color-mix(in srgb, var(--p-ok) var(--tv-edge), var(--p-line));
       border-width: 1px;
-      box-shadow: 0 2px 8px -3px rgba(63, 122, 79, 0.25);
+      box-shadow: 0 2px 8px -3px rgba(var(--p-ok-rgb), 0.25);
     }
 
     .activity-card.done::before {
@@ -3303,13 +3286,13 @@
       top: 0;
       bottom: 0;
       width: 3px;
-      background: #3f7a4f;
+      background: var(--p-ok-deep);
       border-radius: var(--radius) 0 0 var(--radius);
     }
 
     .activity-card.done .icon {
       background: rgba(var(--p-surface-rgb), 0.7);
-      box-shadow: 0 0 0 1px rgba(174, 207, 160, 0.6);
+      box-shadow: 0 0 0 1px rgba(var(--p-ok-rgb), 0.6);
     }
 
     .activity-card.done h5 {
@@ -3323,7 +3306,7 @@
       right: 0.6rem;
       width: 20px;
       height: 20px;
-      background: #3f7a4f;
+      background: var(--tv-ok-solid);
       color: var(--p-on-deep);
       font-size: var(--p-text-xs);
       font-weight: 700;
@@ -3336,7 +3319,7 @@
 
     /* Location · date as plain text inside the green card */
     .activity-card .meta-text.done-meta {
-      color: #2f5f3c;
+      color: var(--p-ok-deep);
       font-weight: 500;
       font-family: var(--font-body);
       font-size: var(--p-text-xs);
@@ -3459,7 +3442,7 @@
       font-size: 0.56rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #9a7a1f;
+      color: var(--tv-butter-ink);
       font-weight: 700;
     }
 
@@ -3496,11 +3479,11 @@
     }
 
     .tp-ring-track {
-      stroke: rgba(45, 95, 55, 0.13);
+      stroke: rgba(var(--p-ok-rgb), 0.13);
     }
 
     .tp-ring-prog {
-      stroke: #3f7a4f;
+      stroke: var(--p-ok-deep);
       transition: stroke-dashoffset 1.4s var(--ease-out) 0.2s;
     }
 
@@ -3535,11 +3518,11 @@
     }
 
     .trg-b {
-      stop-color: #3f7a4f;
+      stop-color: var(--p-ok-deep);
     }
 
     .tp-area {
-      fill: rgba(63, 122, 79, 0.09);
+      fill: rgba(var(--p-ok-rgb), 0.09);
     }
 
     .tp-track {
@@ -3561,7 +3544,7 @@
       stroke-width: 3.5;
       stroke-linecap: round;
       stroke-linejoin: round;
-      filter: drop-shadow(0 2px 6px rgba(63, 122, 79, 0.45));
+      filter: drop-shadow(0 2px 6px rgba(var(--p-ok-rgb), 0.45));
       transition: stroke-dashoffset 1.8s var(--ease-out) 0.25s;
     }
 
@@ -3633,7 +3616,7 @@
     .trek-search-input:focus {
       background: var(--p-surface);
       border-color: var(--mint);
-      box-shadow: 0 0 0 4px rgba(79, 157, 134, 0.22);
+      box-shadow: 0 0 0 4px rgba(var(--p-ok-rgb), 0.22);
     }
 
     /* ── Cards: one grid, two tints ────────────────────────────────────────────
@@ -3682,7 +3665,7 @@
     }
 
     .trek-card:focus-visible {
-      outline: 2px solid #3f7a4f;
+      outline: 2px solid var(--p-ok-deep);
       outline-offset: 3px;
     }
 
@@ -3690,21 +3673,21 @@
        from the planned (plain white) cards - a stronger green border, a soft green
        glow, and a green-tinted body band beneath the photo. */
     .trek-card.done {
-      border: 2px solid #6faa5f;
-      box-shadow: 0 6px 18px -7px rgba(63, 122, 79, 0.45);
+      border: 2px solid var(--p-ok);
+      box-shadow: 0 6px 18px -7px rgba(var(--p-ok-rgb), 0.45);
     }
 
     .trek-card.done .tc-body {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(231 241 224) 19%, var(--p-surface)) 0%, color-mix(in srgb, rgb(220 235 211) 28%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 100%);
     }
 
     .trek-card.done .tc-foot {
-      border-top-color: rgba(63, 122, 79, 0.18);
+      border-top-color: rgba(var(--p-ok-rgb), 0.18);
     }
 
     .trek-card.done:hover {
-      border-color: #3f7a4f;
-      box-shadow: 0 12px 26px -10px rgba(63, 122, 79, 0.5);
+      border-color: var(--p-ok-deep);
+      box-shadow: 0 12px 26px -10px rgba(var(--p-ok-rgb), 0.5);
     }
 
     .trek-card.todo:hover {
@@ -3795,16 +3778,16 @@
       letter-spacing: 0.07em;
       text-transform: uppercase;
       white-space: nowrap;
-      background: #3f7a4f;
+      background: var(--tv-ok-solid);
       color: var(--p-on-deep);
       border: 1px solid rgba(var(--p-surface-rgb), 0.55);
       box-shadow: 0 4px 12px -3px rgba(var(--p-deep-rgb), 0.5);
     }
 
     .tc-tag.todo {
-      background: rgba(var(--p-deep-rgb), 0.5);
-      color: rgba(var(--p-surface-rgb), 0.92);
-      border-color: rgba(var(--p-surface-rgb), 0.32);
+      background: rgba(var(--p-deep-rgb), 0.7);
+      color: var(--p-on-deep);
+      border-color: rgba(255, 255, 255, 0.32);
       -webkit-backdrop-filter: blur(4px);
       backdrop-filter: blur(4px);
     }
@@ -3884,7 +3867,7 @@
     }
 
     .trek-card.done .tc-date {
-      color: #2f5f3c;
+      color: var(--p-ok-deep);
     }
 
     .tc-arrow {
@@ -3901,7 +3884,7 @@
     }
 
     .trek-card:hover .tc-arrow {
-      background: #3f7a4f;
+      background: var(--tv-ok-solid);
       color: var(--p-on-deep);
       transform: rotate(45deg);
     }
@@ -3913,7 +3896,7 @@
       top: 0.6rem;
       left: 0;
       z-index: 5;
-      background: linear-gradient(90deg, var(--butter), #f2d896);
+      background: linear-gradient(90deg, var(--butter), var(--p-butter));
       color: var(--p-ink);
       font-family: var(--font-mono);
       font-size: 0.54rem;
@@ -4031,15 +4014,15 @@
 
     /* North-east needs its own colour (the shared set stops at the 5 compass regions) */
     .region-northeast {
-      background: rgba(134, 116, 192, 0.20);
-      color: #6b54c8;
+      background: rgba(var(--p-lavender-rgb), 0.20);
+      color: var(--tv-lavender-ink);
     }
 
     /* Modal chip for the trek's region */
     .act-modal-meta .am-region {
-      background: rgba(79, 157, 134, 0.16);
+      background: rgba(var(--p-ok-rgb), 0.16);
       color: var(--mint);
-      border-color: rgba(79, 157, 134, 0.32);
+      border-color: rgba(var(--p-ok-rgb), 0.32);
     }
 
     /* ============================================
@@ -4083,8 +4066,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: rgba(254, 246, 239, 0.10);
-      border: 1px solid rgba(254, 246, 239, 0.18);
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       color: var(--paper);
       font-size: 1.6rem;
       line-height: 1;
@@ -4110,8 +4093,8 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: rgba(254, 246, 239, 0.07);
-      border: 1px solid rgba(254, 246, 239, 0.16);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       color: var(--paper);
       cursor: pointer;
       display: flex;
@@ -4140,8 +4123,8 @@
     }
 
     .act-modal-nav:hover {
-      background: rgba(254, 246, 239, 0.16);
-      border-color: rgba(254, 246, 239, 0.34);
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.34);
       transform: translateY(-50%) scale(1.06);
     }
 
@@ -4167,9 +4150,9 @@
       font-family: var(--font-mono);
       font-size: var(--p-text-xs);
       letter-spacing: 0.14em;
-      color: rgba(254, 246, 239, 0.62);
-      background: rgba(254, 246, 239, 0.06);
-      border: 1px solid rgba(254, 246, 239, 0.12);
+      color: rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       padding: 0.3rem 0.85rem;
       border-radius: 50px;
       z-index: 11;
@@ -4198,7 +4181,7 @@
       max-height: 100%;
       border-radius: 12px;
       box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6), 0 16px 36px rgba(0, 0, 0, 0.4);
-      outline: 1px solid rgba(254, 246, 239, 0.10);
+      outline: 1px solid rgba(255, 255, 255, 0.10);
       outline-offset: -1px;
       display: block;
       animation: actImgIn 0.5s var(--ease-out);
@@ -4218,7 +4201,7 @@
 
     .act-modal-no-img {
       text-align: center;
-      color: rgba(254, 246, 239, 0.55);
+      color: rgba(255, 255, 255, 0.55);
       padding: 4rem 2rem;
     }
 
@@ -4284,40 +4267,40 @@
       font-size: 0.78rem;
       padding: 0.4rem 0.85rem;
       border-radius: 50px;
-      background: rgba(254, 246, 239, 0.08);
-      color: rgba(254, 246, 239, 0.85);
-      border: 1px solid rgba(254, 246, 239, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       letter-spacing: 0.03em;
     }
 
     .act-modal-meta .am-cat.water {
-      background: rgba(91, 139, 191, 0.18);
+      background: rgba(var(--p-sky-rgb), 0.18);
       color: var(--sky);
-      border-color: rgba(91, 139, 191, 0.3);
+      border-color: rgba(var(--p-sky-rgb), 0.3);
     }
 
     .act-modal-meta .am-cat.air {
-      background: rgba(201, 154, 63, 0.18);
+      background: rgba(var(--p-wait-rgb), 0.18);
       color: var(--butter);
-      border-color: rgba(201, 154, 63, 0.3);
+      border-color: rgba(var(--p-wait-rgb), 0.3);
     }
 
     .act-modal-meta .am-cat.snow {
-      background: rgba(134, 116, 192, 0.18);
+      background: rgba(var(--p-lavender-rgb), 0.18);
       color: var(--lavender);
-      border-color: rgba(134, 116, 192, 0.3);
+      border-color: rgba(var(--p-lavender-rgb), 0.3);
     }
 
     .act-modal-meta .am-cat.land {
-      background: rgba(79, 157, 134, 0.18);
+      background: rgba(var(--p-ok-rgb), 0.18);
       color: var(--mint);
-      border-color: rgba(79, 157, 134, 0.3);
+      border-color: rgba(var(--p-ok-rgb), 0.3);
     }
 
     .act-modal-meta .am-famous {
-      background: rgba(134, 116, 192, 0.15);
+      background: rgba(var(--p-lavender-rgb), 0.15);
       color: var(--lavender);
-      border-color: rgba(134, 116, 192, 0.30);
+      border-color: rgba(var(--p-lavender-rgb), 0.30);
       max-width: 480px;
       white-space: normal;
       line-height: 1.4;
@@ -4325,9 +4308,9 @@
     }
 
     .act-modal-meta .am-type {
-      background: rgba(200, 93, 115, 0.20);
+      background: rgba(var(--p-accent-rgb), 0.20);
       color: var(--pink-soft);
-      border-color: rgba(200, 93, 115, 0.35);
+      border-color: rgba(var(--p-accent-rgb), 0.35);
       text-transform: capitalize;
       font-weight: 600;
     }
@@ -4335,12 +4318,12 @@
     .act-modal-meta .am-duration,
     .act-modal-meta .am-with,
     .act-modal-meta .am-rating {
-      background: rgba(254, 246, 239, 0.10);
+      background: rgba(255, 255, 255, 0.10);
     }
 
     .act-modal-meta .am-rating {
-      background: rgba(201, 154, 63, 0.14);
-      border-color: rgba(201, 154, 63, 0.25);
+      background: rgba(var(--p-wait-rgb), 0.14);
+      border-color: rgba(var(--p-wait-rgb), 0.25);
     }
 
     /* This used to be `white-space: nowrap` + `text-overflow: ellipsis`, which
@@ -4349,7 +4332,7 @@
     .am-memory {
       font-family: var(--font-hand);
       font-size: 1.35rem;
-      color: rgba(254, 246, 239, 0.92);
+      color: rgba(255, 255, 255, 0.92);
       line-height: 1.35;
       letter-spacing: 0.01em;
       margin: 0.7rem auto 0;
@@ -4379,15 +4362,15 @@
     }
 
     .am-status.done {
-      background: rgba(111, 170, 95, 0.16);
-      color: #a8e2b8;
-      border: 1px solid rgba(111, 170, 95, 0.34);
+      background: rgba(var(--p-ok-rgb), 0.16);
+      color: var(--p-ok-deep);
+      border: 1px solid rgba(var(--p-ok-rgb), 0.34);
     }
 
     .am-status.pending {
-      background: rgba(254, 246, 239, 0.07);
-      color: rgba(254, 246, 239, 0.6);
-      border: 1px solid rgba(254, 246, 239, 0.16);
+      background: rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.16);
     }
 
     @media (max-width: 700px) {
@@ -4486,7 +4469,7 @@
     .form-control:focus {
       border-color: var(--pink);
       background: var(--paper);
-      box-shadow: 0 0 0 4px rgba(200, 93, 115, 0.18);
+      box-shadow: 0 0 0 4px rgba(var(--p-accent-rgb), 0.18);
     }
 
     .form-control::placeholder {
@@ -4547,7 +4530,7 @@
       font-size: var(--p-text-2xs);
       text-transform: uppercase;
       letter-spacing: 0.2em;
-      color: rgba(254, 246, 239, 0.55);
+      color: rgba(255, 255, 255, 0.55);
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -4559,7 +4542,7 @@
       content: '';
       width: 22px;
       height: 1.5px;
-      background: rgba(254, 246, 239, 0.4);
+      background: rgba(255, 255, 255, 0.4);
     }
 
     .contact-section .italic-accent {
@@ -4583,8 +4566,8 @@
       display: inline-flex;
       align-items: center;
       gap: 0.55rem;
-      background: rgba(254, 246, 239, 0.08);
-      border: 1px solid rgba(254, 246, 239, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: var(--paper);
       padding: 0.55rem 1rem;
       border-radius: 50px;
@@ -4652,7 +4635,7 @@
     }
 
     .contact-perks li:nth-child(2) .perk-icon {
-      background: color-mix(in srgb, var(--p-ok) 22%, var(--p-surface));
+      background: color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface));
     }
 
     .contact-perks li:nth-child(3) .perk-icon {
@@ -4691,14 +4674,14 @@
     .signoff-line {
       width: 50px;
       height: 1.5px;
-      background: linear-gradient(90deg, rgba(254, 246, 239, 0.5), transparent);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), transparent);
       border-radius: 50px;
     }
 
     .signoff-text {
       font-family: var(--font-hand);
       font-size: 1.4rem;
-      color: rgba(254, 246, 239, 0.85);
+      color: rgba(255, 255, 255, 0.85);
       line-height: 1;
       letter-spacing: 0.02em;
     }
@@ -4873,20 +4856,20 @@
 
     .form-status.success {
       background: var(--lime-pale);
-      color: #4d6b1f;
-      border: 1px solid rgba(174, 207, 160, 0.55);
+      color: var(--p-ok-deep);
+      border: 1px solid rgba(var(--p-ok-rgb), 0.55);
     }
 
     .form-status.error {
       background: var(--coral-pale);
-      color: #9c3a18;
-      border: 1px solid rgba(217, 129, 89, 0.45);
+      color: var(--tv-coral-ink);
+      border: 1px solid rgba(var(--p-danger-rgb), 0.45);
     }
 
     .form-status.info {
       background: var(--lavender-pale);
-      color: #4a3a8e;
-      border: 1px solid rgba(134, 116, 192, 0.55);
+      color: var(--tv-lavender-ink);
+      border: 1px solid rgba(var(--p-lavender-rgb), 0.55);
     }
 
     /* ============================================
@@ -4897,7 +4880,7 @@
       overflow: hidden;
       /* Clean, even dark backdrop - no pink */
       background: linear-gradient(180deg, var(--p-deep) 0%, var(--p-deep) 45%, var(--p-deep) 100%);
-      color: rgba(254, 246, 239, 0.72);
+      color: rgba(255, 255, 255, 0.72);
       padding: 6rem 0 2rem;
       margin-top: 0;
     }
@@ -4939,7 +4922,7 @@
       align-items: center;
       margin-bottom: 3.5rem;
       padding-bottom: 3rem;
-      border-bottom: 1px solid rgba(251, 247, 239, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @media (max-width: 900px) {
@@ -5965,7 +5948,7 @@
    can support and silently skips the rest.
    ============================================ */
     #wrapped {
-      background: linear-gradient(180deg, color-mix(in srgb, rgb(231 240 250) 13%, var(--p-surface)) 0%, color-mix(in srgb, rgb(221 235 249) 17%, var(--p-surface)) 50%, color-mix(in srgb, rgb(235 228 246) 16%, var(--p-surface)) 100%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--p-sky) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-sky) var(--tv-band), var(--p-surface)) 50%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 100%);
       padding: 4rem 0 4.5rem;
     }
 
@@ -6163,7 +6146,7 @@
 
     .tw-pop:hover .tw-track,
     .tw-pop:focus-visible .tw-track {
-      background: rgba(0, 0, 0, 0.06);
+      background: var(--p-surface-3);
     }
 
     /* --- Companion list (small ring + place tags, reveals full list on hover/tap) --- */
@@ -6271,7 +6254,7 @@
       color: var(--p-on-deep);
       border-radius: var(--radius);
       padding: 0.6rem 0.75rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 10px 30px rgba(var(--p-deep-rgb), 0.22);
       pointer-events: none;
       opacity: 0;
       transform: translateY(4px);
@@ -6427,18 +6410,18 @@
     }
 
     .tw-lead-row.top1 .tw-rank {
-      background: var(--butter);
-      color: var(--p-ink);
+      background: var(--p-star);
+      color: var(--p-deep);
     }
 
     .tw-lead-row.top2 .tw-rank {
-      background: color-mix(in srgb, rgb(216 221 227) 29%, var(--p-surface));
+      background: color-mix(in srgb, var(--p-surface-3) 29%, var(--p-surface));
       color: var(--p-ink);
     }
 
     .tw-lead-row.top3 .tw-rank {
-      background: var(--coral-soft);
-      color: #7a3b22;
+      background: var(--tv-coral-wash);
+      color: var(--tv-coral-ink);
     }
 
     .tw-lead-body {

@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 PAGES=[("home","/index.html"),("cinema","/modules/cinema/index.html"),
 ("books","/modules/books/index.html"),("travel","/modules/travel/index.html"),
-("swaad","/modules/swaad/index.html"),("fav","/modules/favourites/index.html"),
+("food","/modules/food/index.html"),("fav","/modules/favourites/index.html"),
 ("journal","/modules/journal/index.html"),("gallery","/modules/travel/gallery.html")]
 COUNT="""() => { let hidden=0,total=0;
   document.querySelectorAll('*').forEach(el=>{

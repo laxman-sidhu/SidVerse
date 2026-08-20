@@ -5,7 +5,7 @@ PAGES=[("home","/index.html"),("cinema","/modules/cinema/index.html"),
 ("books-library","/modules/books/library.html"),("books-editions","/modules/books/editions.html"),
 ("travel","/modules/travel/index.html"),("travel-gallery","/modules/travel/gallery.html"),
 ("food","/modules/food/index.html"),("food-add","/modules/food/add.html"),
-("fav","/modules/favourites/index.html"),("fav-category","/modules/favourites/category.html?c=movies"),
+("fav","/modules/favourites/index.html"),("fav-category","/modules/favourites/category.html?category=actors"),
 ("journal","/modules/journal/index.html"),("journal-story","/modules/journal/story.html")]
 JS="""() => {
   const vw=document.documentElement.clientWidth, out=[];

@@ -1,16 +1,11 @@
-/**
- * Museum of Favorites — Data layer
- * Fetches published Google Sheets tabs as CSV and normalises them
- * into exhibit objects: { name, image }.
- *
- * Results are cached in sessionStorage so navigating between the
- * homepage and category pages never refetches the same sheet.
- */
+// SidPicks - the data layer. Fetches published Google Sheets tabs as CSV and
+// normalises them into { name, image }, cached in sessionStorage so moving
+// between the homepage and a category never refetches the same sheet.
 
 import { CONFIG } from "./config.js";
 import { parseCsv } from "./utils.js";
 
-const CACHE_PREFIX = "mof-sheet-";
+const CACHE_PREFIX = "sidpicks:sheet:";
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes — fresh enough, kind to Google
 
 /** Build the published-CSV URL for a sheet tab. */

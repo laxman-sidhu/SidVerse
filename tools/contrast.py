@@ -34,7 +34,7 @@ PAGES = [
     ("food", "/modules/food/index.html"),
     ("food-add", "/modules/food/add.html"),
     ("fav", "/modules/favourites/index.html"),
-    ("fav-category", "/modules/favourites/category.html?c=movies"),
+    ("fav-category", "/modules/favourites/category.html?category=actors"),
     ("journal", "/modules/journal/index.html"),
     ("journal-story", "/modules/journal/story.html"),
 ]
@@ -143,7 +143,7 @@ def run(theme):
         b = p.chromium.launch(args=["--force-color-profile=srgb"])
         ctx = b.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=1)
         ctx.add_init_script(
-            f"try{{localStorage.setItem('sidcinema-theme','{theme}')}}catch(e){{}}")
+            f"try{{localStorage.setItem('sidverse:theme','{theme}')}}catch(e){{}}")
         for name, path in PAGES:
             pg = ctx.new_page()
             try:

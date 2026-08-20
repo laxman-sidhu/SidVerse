@@ -1,11 +1,6 @@
-/**
- * Museum of Favorites — Exhibit modal
- * Fullscreen glass modal showing one exhibit. When an exhibit has more
- * than one image it becomes a carousel: previous / next arrows, progress
- * dots, circular (wrap-around) navigation, keyboard arrows and swipe —
- * all with a smooth directional slide + fade. Closes on the ✕ button,
- * the Escape key, or a click on the backdrop.
- */
+// SidPicks - the exhibit modal. One exhibit fullscreen; more than one image
+// turns it into a wrap-around carousel with arrows, dots, keyboard and swipe.
+// Closes on the button, Escape, or a click on the backdrop.
 
 import { qs, cloneTpl, hydrateImage } from "./utils.js";
 

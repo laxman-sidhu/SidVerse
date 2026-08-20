@@ -1,13 +1,8 @@
-/* Cinema — retargeted onto the Pitara palette.
-
-   Loaded after style.css so these win. Nothing below re-styles a rule: it only
-   re-points the variables style.css was already written against, which is why
-   4,000 lines of it still work untouched.
-
-   The dark block is restated rather than left to style.css. Both are one
-   attribute deep, so the later file wins at equal specificity — without it the
-   light mapping above would outrank style.css's own dark tokens and the sidebar
-   toggle would appear to do nothing. */
+/* SidCinemas - retargeted onto the SidVerse palette. Loaded after style.css so
+   these win; only variables are re-pointed, which is why 4,000 lines of it
+   still work untouched. The dark block is restated rather than left to
+   style.css: both are one attribute deep, so the later file has to carry it or
+   the light mapping outranks style.css's own dark tokens. */
 
 :root {
   --paper:        var(--p-bg);

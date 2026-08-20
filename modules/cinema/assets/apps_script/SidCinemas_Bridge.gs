@@ -1,4 +1,5 @@
-// SidCinema - the read and write bridge. Paste into Extensions > Apps Script, set SECRET, deploy as a web app; docs/PROJECT.md has the rest.
+// SidCinemas - the read and write bridge. Paste into Extensions > Apps Script,
+// set SECRET, deploy as a web app. See docs/PROJECT.md section 5.
 
 // === SETTINGS ===
 
@@ -36,7 +37,7 @@ function doGet(e) {
   if (action !== 'read') {
     return reply({
       ok: true,
-      message: 'SidCinema bridge is deployed. Use ?action=read to read, POST to write.'
+      message: 'SidCinemas bridge is deployed. Use ?action=read to read, POST to write.'
     });
   }
 

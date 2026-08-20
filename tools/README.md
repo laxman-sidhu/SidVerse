@@ -1,6 +1,6 @@
 # Audit tooling
 
-Five scripts that turn "does dark mode still work" into a command. They drive a
+Seven scripts that turn "does dark mode still work" into a command. They drive a
 headless Chromium over every page of the site, so they catch what a manual
 sweep misses — a label that only fails contrast in dark, a grid that only
 overflows at 768px, a control that is 25px in one module and 47px in another.
@@ -19,8 +19,11 @@ pip install playwright && playwright install chromium
 | `measure.py` | Are type, bar height and control height consistent across modules? | `python3 measure.py` |
 | `tinytext.py` | Is anything rendering below 11.5px? | `python3 tinytext.py` |
 | `shot.py` | Full-page screenshots of every page in both themes. | `python3 shot.py ./out light,dark 1440` |
+| `motiontest.py` | Does any content stay hidden when `motion.js` is blocked? | `python3 motiontest.py` |
+| `scrolltest.py` | Does any reveal stay stuck after scrolling the page through? | `python3 scrolltest.py` |
 
-All five point at `http://localhost:8899` and cover all 16 pages.
+All seven point at `http://localhost:8899`. The first five cover all 16 pages;
+`motiontest.py` and `scrolltest.py` cover the eight that carry reveals.
 
 **Known clean baseline:** contrast 0 dark / 2 light, overflow 0 at 1440, 1024,
 768, 430 and 390, body 16px everywhere, hero 65.6px, navbar 64-65px, controls

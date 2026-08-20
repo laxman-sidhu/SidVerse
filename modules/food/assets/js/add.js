@@ -5,7 +5,7 @@ import { childrenOf, listChildren, createFolder, addPath, learnFromUrls } from "
 
 const $ = s => document.querySelector(s);
 
-const key = () => sessionStorage.getItem("swaad:key") || "";
+const key = () => sessionStorage.getItem("sidbites:key") || "";
 const slug = v => v.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const esc = s => String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -62,11 +62,11 @@ async function bindLock() {
     return;
   }
   try {
-    await post({ action: "auth", password: sessionStorage.getItem("swaad:key") });
+    await post({ action: "auth", password: sessionStorage.getItem("sidbites:key") });
     showForm();
   } catch (_) {
     // The sheet turned it down, so ask again rather than stranding the page.
-    sessionStorage.removeItem("swaad:key");
+    sessionStorage.removeItem("sidbites:key");
     bindLock();
   }
 }
@@ -301,7 +301,7 @@ async function save(e) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
     saving(false);
-    if (/password/i.test(error.message)) sessionStorage.removeItem("swaad:key");
+    if (/password/i.test(error.message)) sessionStorage.removeItem("sidbites:key");
     showError(err, error.message);
   }
 }

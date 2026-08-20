@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Museum of Favorites — Layout
-   Navbar, page shells, sections, footer.
-   ========================================================================== */
+/* SidPicks - navbar, page shells, sections, footer. */
 
 .container {
   width: min(100% - 2 * var(--gutter), var(--content-max));

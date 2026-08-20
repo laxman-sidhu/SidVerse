@@ -1,6 +1,6 @@
-/* Swaad — retargeted onto the Pitara palette. Loaded after style.css so these
-   win. The sage page becomes the same paper as everywhere else; turmeric stays,
-   because that is what this module is. */
+/* SidBites - retargeted onto the SidVerse palette. Loaded after style.css so
+   these win. The sage page becomes the same paper as everywhere else; turmeric
+   stays, because that is what this module is. */
 
 :root {
   --sage:           var(--p-bg);
@@ -65,7 +65,7 @@ body { color: var(--ink); }
 .hero { max-width: var(--p-shell); margin-inline: auto; }
 
 
-/* Swaad's hero blobs and its --turmeric accent were the loudest colour on the
+/* The hero blobs and the --turmeric accent were the loudest colour on the
    site: a saturated marigold (#E9A227) and an orange sun blob, against a module
    accent that is soft peach. They read from the palette now. */
 :root, [data-theme="dark"] { --turmeric: var(--p-accent-ink); }

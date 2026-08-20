@@ -1,26 +1,6 @@
-/* Pitara — the shared component language.
-   =========================================================================
-
-   Loaded LAST on every page, after the module's own stylesheet, its theme.css
-   and universal.css.
-
-   universal.css already unified the *surfaces* — bar backgrounds, footers,
-   scrollbars, selection. This file unifies the *dimensions*: how tall a bar is,
-   how tall a button is, what radius a field has, how big a heading is.
-
-   That was the gap the modules fell through. Every one of them mapped its
-   colours onto the shared tokens correctly and still felt like a different
-   site, because a navbar was 44px in one room and 66px in the next, a button
-   25px here and 47px there, and a hero 32px on one page and 76px on another.
-
-   RULES THIS FILE FOLLOWS
-   - It sets dimension, type and shape. It does NOT set background or text
-     colour on module components, so each room keeps its own identity.
-   - It matches classes several modules already share (.topbar, .navbar, .nav,
-     .btn, .card). A module that uses a different class is simply not matched
-     and keeps its own look — the same contract universal.css uses.
-   - No class or id is renamed, so nothing JavaScript queries is disturbed.
-   ========================================================================= */
+/* SidVerse - the shared component language: how tall a bar is, how tall a
+   button is, what radius a field has. Loaded last, so it sets dimension, type
+   and shape only, never colour. See docs/PROJECT.md section 4. */
 
 
 /* ---- 1. the type scale -------------------------------------------------
@@ -217,7 +197,7 @@ button:disabled,
 
 /* ---- 4. fields ---------------------------------------------------------
    universal.css gave these their colours. This gives them their box, so a
-   search field in Books is the same object as a search field in Swaad. */
+   search field in Books is the same object as a search field in Food. */
 
 input[type="text"], input[type="search"], input[type="number"],
 input[type="email"], input[type="password"], input[type="url"],
@@ -250,7 +230,7 @@ input:focus, select:focus, textarea:focus, .form-control:focus {
   box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .22);
 }
 
-/* Swaad's sort control was the one native, unstyled <select> left on the site.
+/* Food's sort control was the one native, unstyled <select> left on the site.
    Restyling the box alone leaves the OS arrow, so the arrow is drawn here. */
 select {
   appearance: none;
@@ -343,7 +323,7 @@ a.link,
 
 
 /* ---- 8. empty, loading and error states --------------------------------
-   These read as browser output rather than as part of the site — Swaad
+   These read as browser output rather than as part of the site — Food
    surfaced a bare "Failed to fetch", Books an unstyled "Nothing here" in a
    large blank panel. One shape for all three, in every module. */
 
@@ -486,7 +466,7 @@ p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
    clears 4.5:1 against white (light) and against ink (dark), so one pair of
    tokens covers both themes.
 
-   Swaad's Unlock button is the case this fixes: its --plum ground had been
+   Food's Unlock button is the case this fixes: its --plum ground had been
    remapped to a near-white surface, leaving pale text on pale paper. */
 
 .btn--primary, .btn-primary, .btn.primary,
@@ -598,7 +578,7 @@ html { background: var(--p-bg); }
 
 
 /* ---- 17. states get a mark ---------------------------------------------
-   Both Books and Swaad render `.empty > .empty__title + .empty__note`, which
+   Both Books and Food render `.empty > .empty__title + .empty__note`, which
    section 8 already sized and coloured. What made them read as browser output
    rather than as part of the site was that they were words alone in a large
    blank panel. A quiet dot of the module's accent gives the block a centre. */
@@ -701,7 +681,7 @@ body { padding-left: var(--p-rail-clear); }
 /* ---- 21. one navbar ----------------------------------------------------
    The five rooms each shipped a different bar: Cinema `.topbar > .wrap`,
    Books a JS-built `.topbar > .nav__inner`, Travel `nav.navbar > .nav-inner`,
-   Swaad a `.topbar` with no inner wrapper at all, and Favourites
+   Food a `.topbar` with no inner wrapper at all, and Favourites
    `header.nav > .container`. Same job, five structures, five looks.
 
    This gives all five one shell, one row, one brand treatment and one
@@ -716,7 +696,7 @@ body { padding-left: var(--p-rail-clear); }
   box-shadow: none;
 }
 
-/* The row. Swaad has no inner element, so the bar itself becomes the row and
+/* The row. Food has no inner element, so the bar itself becomes the row and
    gets the same shell width — which is why it is listed on both rules. */
 .topbar__inner, .navbar .nav-inner, .nav__inner,
 .nav > .container, .topbar > .wrap {
@@ -995,7 +975,7 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="travel"] .hero-bg { max-width: 100%; left: 0; right: 0; }
 
 
-/* ---- 26. Swaad ---------------------------------------------------------
+/* ---- 26. Food ---------------------------------------------------------
    Its search field drew its own pill. Section 23 strips the frame from fields
    inside a composed control, so the wrapper has to draw the pill instead or
    the field disappears entirely. */
@@ -1011,8 +991,21 @@ body { padding-left: var(--p-rail-clear); }
   background: var(--p-surface);
 }
 
-[data-section="food"] .search input { width: 100%; color: var(--p-ink); }
-[data-section="food"] .search input::placeholder { color: var(--p-muted); }
+/* The wrapper already holds the icon slot and the inner padding, so the field
+   inside it keeps none of its own — two sets of padding left the placeholder
+   with barely half the pill to sit in. */
+[data-section="food"] .search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  color: var(--p-ink);
+}
+
+[data-section="food"] .search input::placeholder {
+  color: var(--p-muted);
+  text-overflow: ellipsis;
+}
+
 [data-section="food"] .search__icon { stroke: var(--p-muted); }
 
 /* The hero sits on the page wash, not on a photograph, so its text is ink. */
@@ -1106,14 +1099,16 @@ body { padding-left: var(--p-rail-clear); }
 .topbar__tools::-webkit-scrollbar, .nav__tools::-webkit-scrollbar,
 .nav__links::-webkit-scrollbar, .navbar .nav-links::-webkit-scrollbar { display: none; }
 
-/* The contact block sits on the page wash now that its own dark band is gone,
-   so everything in it reads as ink rather than as text on a dark panel. */
+/* The contact band is a deep plate again in both themes, so its text is the
+   on-deep ink. It had been forced to --p-ink from when the band was paper,
+   which put near-black on the plate. The form card inside keeps its own paper
+   colours; those are set in the module's theme.css. */
 [data-section="travel"] .contact-section .vibe-line,
 [data-section="travel"] .contact-section .vibe-line span,
 [data-section="travel"] .contact-section h2,
-[data-section="travel"] .contact-section p { color: var(--p-ink); }
-[data-section="travel"] .contact-section .vibe-icon { color: var(--p-accent-ink); }
-[data-section="travel"] .contact-section .contact-eyebrow { color: var(--p-muted); }
+[data-section="travel"] .contact-section > .container p { color: var(--p-on-deep); }
+[data-section="travel"] .contact-section .vibe-icon { color: var(--p-on-deep); }
+[data-section="travel"] .contact-section .contact-eyebrow { color: var(--p-on-deep-soft); }
 
 
 /* ---- 28. eyebrows and small accent text --------------------------------
@@ -1516,7 +1511,9 @@ body { padding-left: var(--p-rail-clear); }
     flex-wrap: nowrap;
   }
 
-  [data-section="food"] .search { flex: 1 1 auto; min-width: 0; }
+  [data-section="food"] .search { flex: 1 1 auto; min-width: 0; padding-left: 34px; }
+  [data-section="food"] .search input { font-size: var(--p-text-sm); }
+  [data-section="food"] .search__icon { left: 12px; }
   [data-section="food"] .sort { flex: 0 0 auto; }
   [data-section="food"] .sort span { display: none; }
 
@@ -1530,9 +1527,19 @@ body { padding-left: var(--p-rail-clear); }
   [data-section="travel"] .wishlist-grid .wish-card h5,
   [data-section="travel"] .activity-grid .activity-card h5 { font-size: 12.5px; }
 
-  /* Books: the destinations sit closer together so all three fit the bar. */
+  /* Books: the destinations sit closer together so all three fit the bar.
+     Scoped out of the sheet — there the rows are full width and set below. */
   [data-section="books"] .nav__links { gap: 2px; }
-  [data-section="books"] .nav__links .nav__link { padding-inline: 8px; gap: 5px; font-size: 12.5px; }
+  [data-section="books"] .nav__links:not(.pmenu__sheet *) .nav__link { padding-inline: 8px; gap: 5px; font-size: 12.5px; }
+
+  /* The genre rail is a secondary control, so it steps down a size on a phone
+     and more of it fits before the row has to be scrolled. */
+  [data-section="books"] .chiprow { gap: 6px; }
+  [data-section="books"] .chiprow .chipbtn {
+    min-height: 28px;
+    padding: 0 12px;
+    font-size: 12.5px;
+  }
   [data-section="books"] .nav__tools { margin-left: var(--p-space-xs); }
   [data-section="books"] .nav__tools::before { margin-right: var(--p-space-xs); }
 }
@@ -1722,6 +1729,30 @@ body { padding-left: var(--p-rail-clear); }
 
   .pmenu__sheet svg { flex: 0 0 auto; }
   .pmenu__label { font-size: var(--p-text-md); font-weight: 600; }
+
+  /* One row metric for every sheet, whatever each module's own bar sets. A bar
+     rule scoped to that module outranks the generic sheet rule, which is how
+     Books ended up with three small rows and one large one. */
+  .pmenu__sheet a,
+  .pmenu__sheet button,
+  .pmenu__sheet .nav__link,
+  .pmenu__sheet .icon-btn {
+    min-height: 42px;
+    gap: 10px;
+    font-family: var(--p-body);
+    font-size: var(--p-text-md);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .pmenu__sheet a > svg,
+  .pmenu__sheet button > svg,
+  .pmenu__sheet .nav__icon,
+  .pmenu__sheet .icon-btn > svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /* A row that is still too long ellipsises rather than pushing the sheet wide. */
@@ -1985,7 +2016,7 @@ body { padding-left: var(--p-rail-clear); }
 /* Keyboard and mouse land on the same treatment because they move the same
    highlight: picker.js walks `active` on mousemove, so a rule for :hover here
    would light a second row alongside it. */
-.pickmenu__item.is-active { background: var(--p-tint); }
+.pickmenu__item.is-active { background: var(--p-accent-tint); }
 
 .pickmenu__item.is-chosen {
   color: var(--p-accent-ink);
@@ -2010,7 +2041,7 @@ body { padding-left: var(--p-rail-clear); }
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     width: 100% !important;
     height: auto;
     min-height: 42px;
@@ -2021,7 +2052,7 @@ body { padding-left: var(--p-rail-clear); }
     box-shadow: none;
   }
 
-  .pmenu__sheet .iconbtn > svg { flex: 0 0 auto; width: 20px; height: 20px; margin: 0 !important; }
+  .pmenu__sheet .iconbtn > svg { flex: 0 0 auto; width: 18px; height: 18px; margin: 0 !important; }
   .pmenu__sheet .iconbtn:hover { background: var(--p-accent-tint); }
 
   /* The destinations are one thing and the tools another, so a line separates

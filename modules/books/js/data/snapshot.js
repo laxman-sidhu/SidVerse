@@ -2,7 +2,7 @@ import { store } from "../core/util.js";
 
 // Bump when the row shape changes, or a stale snapshot outlives its reader.
 const VERSION = 2;
-const KEY = tab => `bv:snapshot:v${VERSION}:${tab}`;
+const KEY = tab => `sidbooks:snapshot:v${VERSION}:${tab}`;
 
 export function readSnapshot(tab) {
   const raw = store.get(KEY(tab));

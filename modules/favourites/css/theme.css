@@ -1,9 +1,7 @@
-/* Favourites — retargeted onto the Pitara palette. Loaded after the museum's own
-   stylesheets so these win.
-
-   The five pastel washes stay, because they are how one collection is told from
-   another — but they are re-pointed onto the new palette's hues so this room
-   belongs to the same house as the rest. */
+/* SidPicks - retargeted onto the SidVerse palette. Loaded after this module's
+   own stylesheets so these win. The five pastel washes stay, because they are
+   how one collection is told from another, but they are re-pointed onto the
+   shared palette's hues. */
 
 :root {
   --cream:            var(--p-bg);

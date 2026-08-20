@@ -1,5 +1,5 @@
-/* Books — retargeted onto the Pitara palette. Loaded after style.css so these
-   win. Only variables are re-pointed; no rule below is re-styled. */
+/* SidBooks - retargeted onto the SidVerse palette. Loaded after style.css so
+   these win. Only variables are re-pointed; no rule below is re-styled. */
 
 :root {
   --paper:          var(--p-bg);
@@ -79,9 +79,9 @@
 
 
 /* ---- the hero portrait -------------------------------------------------
-   The same shape Swaad's hero uses: a cut-out floating on soft colour, so a
+   The same shape the Food hero uses: a cut-out floating on soft colour, so a
    background-removed photograph drops straight in. Replace
-   assets/images/reading.svg with your own and nothing else changes. */
+   assets/images/siddhesh.jpeg with your own and nothing else changes. */
 
 .hero__main {
   display: grid;

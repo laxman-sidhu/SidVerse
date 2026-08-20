@@ -1,13 +1,6 @@
-/* Pitara — universal chrome.
-
-   Loaded on every page AFTER the module's own stylesheet and its theme.css.
-   Each module keeps its own navbar and footer markup — the contents differ and
-   should — but the surface, height, blur, border and type they are drawn with
-   come from here, so moving between modules feels like moving around one site.
-
-   Selectors are deliberately shared across modules (.topbar, .navbar, .nav,
-   .footer, .site-footer). A module that uses a different class simply is not
-   matched, and keeps its own look. */
+/* SidVerse - universal chrome. Loaded after each module's own stylesheet to
+   give every bar and footer the same surface, height, blur and type. Selectors
+   are shared on purpose; a module using a different class keeps its own look. */
 
 
 /* ---- the paper ---------------------------------------------------------
@@ -167,10 +160,20 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   transition: transform .35s var(--p-ease), border-color .35s var(--p-ease), box-shadow .35s var(--p-ease);
 }
 
+/* The album card is a photo invitation, so it hovers in the site's pink and
+   lavender rather than the room's own accent — in Travel that accent is green,
+   which read as a hard border rather than a soft lift. */
+.pfeat {
+  --pfeat-glow: color-mix(in srgb, var(--p-pink) 55%, var(--p-lavender));
+}
+
 .pfeat:hover {
   transform: translateY(-3px);
-  border-color: var(--p-accent);
-  box-shadow: var(--p-shadow-lg);
+  border-color: color-mix(in srgb, var(--pfeat-glow) 46%, var(--p-line));
+  background: linear-gradient(150deg,
+    var(--p-surface),
+    color-mix(in srgb, var(--pfeat-glow) 12%, var(--p-surface)));
+  box-shadow: var(--p-shadow);
 }
 
 .pfeat__eyebrow {
@@ -183,14 +186,14 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   font-weight: 600;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--p-accent-ink);
+  color: color-mix(in srgb, var(--pfeat-glow) 46%, var(--p-ink));
 }
 
 .pfeat__eyebrow::before {
   content: "";
   width: 22px;
   height: 1.5px;
-  background: var(--p-accent);
+  background: var(--pfeat-glow);
 }
 
 .pfeat__title {
@@ -203,7 +206,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   color: var(--p-ink);
 }
 
-.pfeat__title em { font-style: italic; color: var(--p-accent-ink); }
+.pfeat__title em { font-style: italic; color: color-mix(in srgb, var(--pfeat-glow) 46%, var(--p-ink)); }
 
 .pfeat__sub {
   margin: 0;
@@ -228,7 +231,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   height: 78px;
   border-radius: 5px;
   border: 1.5px solid var(--p-line);
-  background-color: var(--p-tint);
+  background-color: var(--p-surface-3);
   background-size: cover;
   background-position: center;
   box-shadow: 0 6px 16px -8px rgba(var(--p-deep-rgb), .5);
@@ -258,9 +261,9 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 }
 
 .pfeat:hover .pfeat__cta {
-  background: var(--p-accent-ink);
-  border-color: var(--p-accent-ink);
-  color: var(--p-on-accent);
+  background: color-mix(in srgb, var(--pfeat-glow) 16%, var(--p-surface));
+  border-color: color-mix(in srgb, var(--pfeat-glow) 42%, var(--p-line));
+  color: color-mix(in srgb, var(--pfeat-glow) 38%, var(--p-ink));
 }
 
 .pfeat__arrow { transition: transform .3s var(--p-ease); }
@@ -271,6 +274,9 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
     grid-template-columns: 1fr;
     gap: 20px;
     text-align: center;
+    /* It sat flush against both screen edges: the card is capped, not inset,
+       so the gutter has to come from its own margin. */
+    margin-inline: var(--p-space-md);
     padding: 22px 18px;
   }
   .pfeat__eyebrow { justify-content: center; }

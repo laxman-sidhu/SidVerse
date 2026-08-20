@@ -9,7 +9,7 @@ const VERSION = 3;
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 function key(name) {
-  return `sidcinema-snapshot-${name}-v${VERSION}`;
+  return `sidcinemas:snapshot:v${VERSION}:${name}`;
 }
 
 export function save(name, rows) {

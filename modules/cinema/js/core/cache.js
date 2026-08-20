@@ -1,7 +1,7 @@
 // Two layers: the map answers within a page, sessionStorage across a reload.
 
 const memory = new Map();
-const PREFIX = "sc:";
+const PREFIX = "sidcinemas:cache:";
 
 function readSession(key) {
   try {

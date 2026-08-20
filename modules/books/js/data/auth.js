@@ -1,7 +1,7 @@
 import { OWNER_PASSWORD, SESSION_HOURS, APPS_SCRIPT_URL } from "../config.js";
 import { store } from "../core/util.js";
 
-const KEY = "bv:owner";
+const KEY = "sidbooks:owner";
 
 // A convenience, not a security boundary: the token Code.gs checks is the real gate.
 export function writesEnabled() {

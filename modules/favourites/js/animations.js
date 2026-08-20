@@ -1,11 +1,6 @@
-/**
- * Museum of Favorites — Animations & shared chrome
- * Reveal-on-scroll, navbar blur, hamburger menu, the Galleries dropdown,
- * footer category links, ripple buttons, and the ambient sparkle field.
- * The dropdown + footer links are built from CONFIG (markup lives in the
- * #tpl-nav-dropdown-item / #tpl-footer-category templates). Imported by
- * both pages.
- */
+// SidPicks - reveal-on-scroll, navbar blur, hamburger menu, the Galleries
+// dropdown, footer category links, ripple buttons and the sparkle field.
+// The dropdown and footer links are built from CONFIG. Imported by both pages.
 
 import { qs, qsa, cloneTpl, prefersReducedMotion } from "./utils.js";
 import { CONFIG, categoryUrl, displayTitle } from "./config.js";

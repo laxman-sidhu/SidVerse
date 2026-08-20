@@ -218,5 +218,5 @@ export function wireRefresh(job) {
 }
 
 // A no-op the pages still call. The toggle it used to own is in the site
-// sidebar, so there is exactly one of them for the whole of Pitara.
+// sidebar, so there is exactly one of them for the whole of SidVerse.
 export function wireTheme() {}

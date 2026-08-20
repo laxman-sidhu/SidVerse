@@ -431,7 +431,7 @@ body.gate-open{overflow:hidden}
 
 .gate__input{
   width:100%;padding:12px 14px;border:1px solid var(--p-line);border-radius:12px;
-  background:var(--p-tint);font-size:16px;color:var(--p-ink);outline:none;
+  background:var(--p-surface-2);font-size:16px;color:var(--p-ink);outline:none;
   transition:border-color .16s ease;
 }
 .gate__input:focus{border-color:var(--p-accent)}
@@ -448,7 +448,7 @@ body.gate-open{overflow:hidden}
   transition:background .15s ease,border-color .15s ease;
 }
 .gate__btn--ghost{background:transparent;color:var(--p-muted)}
-.gate__btn--ghost:hover{background:var(--p-tint);color:var(--p-ink)}
+.gate__btn--ghost:hover{background:var(--p-accent-tint);color:var(--p-ink)}
 .gate__btn--solid{background:var(--p-accent-ink);border-color:var(--p-accent-ink);color:var(--p-on-accent)}
 .gate__btn--solid:hover{opacity:.92}
 

@@ -1,7 +1,4 @@
-/**
- * Museum of Favorites — Search
- * Instant, debounced filtering of the current gallery. No reloads.
- */
+// SidPicks - instant, debounced filtering of the current gallery. No reloads.
 
 import { qs, debounce } from "./utils.js";
 

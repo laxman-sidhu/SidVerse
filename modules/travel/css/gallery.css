@@ -1,16 +1,6 @@
-/* ---------------------------------------------------------------------------->
-   SidTrails - Gallery Page
-   --------------------------------------------------------------------------
-    01  DESIGN TOKENS
-    02  TYPOGRAPHY
-    03  NAVBAR
-    04  GALLERY HERO
-    05  MASONRY GRID
-    06  FULLSCREEN MODAL
-    07  FOOTER
-    08  LOADING / EMPTY STATES
-    09  MOBILE RESPONSIVE
-   ----------------------------------------------------------------------------> */
+/* SidTrails - the gallery page. Sections in order: design tokens, typography,
+   navbar, hero, masonry grid, fullscreen modal, footer, loading and empty
+   states, mobile responsive. */
 
 /*  -  01 DESIGN TOKENS  - */
 :root {
@@ -59,7 +49,7 @@
 
   --ease-out:  var(--p-ease);
   --shadow-sm: var(--p-shadow-sm);
-  --shadow-md: var(--p-shadow-md);
+  --shadow-md: var(--p-shadow);
   --shadow-lg: var(--p-shadow-lg);
 }
 

@@ -4,7 +4,7 @@ import { OWNER_PASSWORD, OWNER_NAME, SESSION_DAYS } from "../config.js";
 import { isConfigured } from "./writer.js";
 import { store } from "../core/util.js";
 
-const KEY = "sidcinema-owner";
+const KEY = "sidcinemas:owner";
 
 export function bridgeReady() {
   return isConfigured();

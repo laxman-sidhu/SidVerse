@@ -19,6 +19,9 @@ export const READ_FROM = "csv";
 // so this only decides whether the form opens.
 export const ADMIN_PASSWORD = "LaxSid@12345";
 
+// baseFolder and uploadPreset are names that live in the Cloudinary account, not
+// here. They keep the module's original spelling on purpose: renaming either one
+// means renaming it in Cloudinary too, and the existing uploads sit under it.
 export const CLOUDINARY = {
   cloudName: "dadtqawh5",
   apiKey: "534744288219611",

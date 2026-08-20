@@ -1,10 +1,6 @@
-/**
- * Museum of Favorites — Category page
- * Reads ?category=<slug> from the URL, resolves the collection from CONFIG,
- * fetches its sheet and renders the gallery with search, skeleton loading,
- * empty/error states and the exhibit modal. All markup lives in the
- * <template> elements in category.html.
- */
+// SidPicks - the category page. Reads ?category=<slug>, resolves the collection
+// from CONFIG, then renders the gallery with search, skeletons, empty and error
+// states and the exhibit modal. All markup lives in category.html's <template>s.
 
 import { findCategoryBySlug } from "./config.js";
 import { fetchCategory } from "./api.js";
@@ -182,7 +178,7 @@ async function loadExhibits() {
 function applyCategoryChrome() {
   qs("#category-icon").textContent = category.icon;
   qs("#category-title").textContent = category.title;
-  document.title = `${category.title} - Museum of Favorites`;
+  document.title = `${category.title} - SidPicks`;
 }
 
 function init() {

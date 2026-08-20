@@ -1,7 +1,4 @@
-/**
- * Museum of Favorites — Utilities
- * Small shared helpers used across modules.
- */
+// SidPicks - small shared helpers.
 
 /** querySelector shorthand. */
 export const qs = (selector, scope = document) => scope.querySelector(selector);

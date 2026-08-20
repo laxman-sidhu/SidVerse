@@ -255,7 +255,7 @@ export const TRENDING_PERIODS = [
 // subjects index — the same endpoint the chips use, so it is known to work in
 // the browser. Whatever failed on the way is carried out with the result rather
 // than swallowed, because a silent fallback is a bug that cannot be reported.
-const LAST_GOOD = "bv:trending:last";
+const LAST_GOOD = "sidbooks:trending:last";
 
 export async function trending(period = "weekly") {
   const problems = [];

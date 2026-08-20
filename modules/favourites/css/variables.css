@@ -1,8 +1,5 @@
-/* ==========================================================================
-   Museum of Favorites — Design Tokens
-   Soft bright pastel system. Every color, radius, shadow and duration
-   used across the site is defined here.
-   ========================================================================== */
+/* SidPicks - design tokens. Every colour, radius, shadow and duration this
+   module uses is defined here, then re-pointed by css/theme.css. */
 
 :root {
   /* ---- Pastel palette ---- */
