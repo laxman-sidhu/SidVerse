@@ -351,12 +351,15 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 }
 
 /* DARK: the page is already deep, so a deep plate would sink into it. The band
-   lifts to a warm plum-silver instead — steel grey read as cold against the
-   rest of the site, and sat so close to the card's own value that the two
-   merged into one slab. This base is darker than the card on purpose. */
+   goes the other way instead - a plate tinted with the module's own green,
+   sunk below the page rather than lifted above it. Grey read as silver and a
+   lighter slab read as glass; a hue the rest of the page does not use is what
+   makes this band its own place. */
 [data-theme="dark"] #contact.contact-section {
-  background: linear-gradient(168deg, #262231 0%, #322c40 52%, #221e2c 100%);
-  border-block: 1px solid rgba(255, 255, 255, .13);
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(147, 216, 182, .07) 0%, transparent 60%),
+    linear-gradient(168deg, #0e1a16 0%, #12241d 54%, #0c1613 100%);
+  border-block: 1px solid rgba(147, 216, 182, .16);
 }
 
 #contact.contact-section h2,
@@ -547,6 +550,21 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .trek-card .tc-caption .tc-loc,
 .visited-card .image-place .loc {
   color: rgba(255, 255, 255, .92);
+}
+
+/* Under 600px style.css moves both captions off the picture and onto the card,
+   so they stop being text-on-a-photograph and take the card's own ink again. */
+@media (max-width: 600px) {
+  .trek-card .tc-caption h3,
+  .visited-card .image-place h3,
+  .visited-card .image-place {
+    color: var(--ink);
+  }
+
+  .trek-card .tc-caption .tc-loc,
+  .visited-card .image-place .loc {
+    color: var(--ink-soft);
+  }
 }
 
 /* The scrim is what makes them readable, so it has to reach far enough up the
@@ -766,20 +784,17 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 #contact.contact-section .contact-signoff strong,
 #contact.contact-section .contact-sign-name { color: var(--p-on-deep); }
 
-/* The card was within a few percent of the band's own value, so the two read
-   as one murky slab. It lifts clearly now: a brighter glass panel, a lit top
-   edge, and a deep drop shadow that puts real space under it. */
+/* The card sits on the green plate as a solid panel rather than frosted glass:
+   a flat surface a few steps above the band, one lit top edge, and a real
+   shadow under it. No blur, so it reads as paper on a plate. */
 [data-theme="dark"] #contact.contact-section .contact-form-card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .13) 0%, rgba(255, 255, 255, .045) 34%, rgba(255, 255, 255, .03) 100%),
-    rgba(60, 54, 78, .55);
-  border: 1px solid rgba(255, 255, 255, .17);
+  background: linear-gradient(180deg, #1e2b26 0%, #18241f 100%);
+  border: 1px solid rgba(147, 216, 182, .20);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .30),
-    inset 0 -1px 0 rgba(0, 0, 0, .22),
-    0 30px 70px -26px rgba(0, 0, 0, .8);
-  backdrop-filter: blur(22px) saturate(1.25);
-  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+    inset 0 1px 0 rgba(147, 216, 182, .18),
+    0 26px 60px -28px rgba(0, 0, 0, .85);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-title,
@@ -792,8 +807,8 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
    what holds it, with the light catching its top edge. They had been lighter
    than the card, which is why the form read as flat. */
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-control {
-  background: rgba(18, 15, 26, .42);
-  border: 1px solid rgba(255, 255, 255, .13);
+  background: rgba(8, 16, 13, .5);
+  border: 1px solid rgba(147, 216, 182, .15);
   color: var(--p-on-deep);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, .34);
 }
@@ -803,7 +818,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 }
 
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-control:focus {
-  background: rgba(18, 15, 26, .58);
+  background: rgba(8, 16, 13, .66);
   border-color: var(--p-accent);
   box-shadow:
     inset 0 1px 2px rgba(0, 0, 0, .3),

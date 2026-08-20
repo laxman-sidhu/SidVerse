@@ -3890,6 +3890,8 @@
     }
 
     /* ── "Latest" sticker - shared by the newest trek and the newest place ── */
+    /* The butter gradient is fixed in both themes, so the ink is fixed too:
+       --p-ink flips to near-white on dark paper and vanished against it. */
     .tc-latest,
     .latest-sticker {
       position: absolute;
@@ -3897,7 +3899,7 @@
       left: 0;
       z-index: 5;
       background: linear-gradient(90deg, var(--butter), var(--p-butter));
-      color: var(--p-ink);
+      color: #3a2c10;
       font-family: var(--font-mono);
       font-size: 0.54rem;
       font-weight: 700;
@@ -4822,6 +4824,8 @@
 
     /* Form status - feedback after submit */
     .form-status {
+      position: relative;
+      overflow: hidden;
       margin-top: 1rem;
       padding: 0.85rem 1.1rem;
       border-radius: 6px;
@@ -4835,6 +4839,12 @@
     }
 
     .form-status:not(:empty) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      text-align: center;
+      text-wrap: balance;
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
@@ -4848,10 +4858,54 @@
       font-size: var(--p-text-sm);
     }
 
-    .form-status.loading {
-      background: var(--bg-2);
-      color: var(--ink-soft);
-      border: 1px solid var(--line);
+    /* The wait between pressing send and the postcard landing. A ring turning
+       in the room's own green, and a sheen crossing the strip, so the pause
+       reads as something in flight rather than a box of grey text. */
+    .form-status.is-sending {
+      background: linear-gradient(180deg,
+          rgba(var(--p-accent-rgb), 0.14),
+          rgba(var(--p-accent-rgb), 0.07));
+      color: var(--ink);
+      border: 1px solid rgba(var(--p-accent-rgb), 0.38);
+      font-weight: 600;
+    }
+
+    .form-status.is-sending::before {
+      content: "";
+      flex: none;
+      width: 1.05rem;
+      height: 1.05rem;
+      border-radius: 50%;
+      border: 2px solid rgba(var(--p-accent-rgb), 0.35);
+      border-top-color: var(--p-accent-ink);
+      animation: postcard-spin 0.75s linear infinite;
+    }
+
+    .form-status.is-sending::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(100deg,
+          transparent 32%,
+          rgba(var(--p-accent-rgb), 0.22) 50%,
+          transparent 68%);
+      transform: translateX(-100%);
+      animation: postcard-sweep 1.7s ease-in-out infinite;
+    }
+
+    @keyframes postcard-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes postcard-sweep {
+      to { transform: translateX(100%); }
+    }
+
+    /* The message still has to arrive without the animation. */
+    @media (prefers-reduced-motion: reduce) {
+      .form-status.is-sending::before { animation: none; border-top-color: var(--p-accent-ink); }
+      .form-status.is-sending::after { animation: none; opacity: 0; }
     }
 
     .form-status.success {
@@ -6750,4 +6804,126 @@ section[id] {
   .hero {
     padding: 6.5rem 0 3.5rem;
   }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   §19  PHONE: CAPTIONS OFF THE THUMBNAIL
+   The grids go two-up on a phone, leaving the photo about 165px wide - not
+   enough to read a name over. The caption comes off the picture and onto the
+   card: name on one line, place on the next, each scrolling sideways on its
+   own when the words are longer than the card.
+
+   No markup moves. The image box keeps the photo in a padding band at the top
+   and every picture layer is pinned to that band, so the caption - still a
+   child of the box - simply flows underneath it. Colours are in theme.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+
+  /* ---- treks ---- */
+  .tc-media {
+    height: auto;
+    padding-top: 135px;
+    background: none;
+  }
+
+  .tc-media img,
+  .tc-fallback,
+  .tc-shade,
+  .tc-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    height: 135px;
+  }
+
+  /* Nothing sits on the picture now, so the scrim only has to carry the tags. */
+  .tc-shade {
+    background: linear-gradient(180deg,
+        rgba(var(--p-deep-rgb), 0.30) 0%,
+        rgba(0, 0, 0, 0) 55%);
+  }
+
+  .tc-caption {
+    position: static;
+    padding: 0.5rem 0.75rem 0;
+    left: auto;
+    right: auto;
+    bottom: auto;
+  }
+
+  /* ---- places ---- */
+  .visited-card .image {
+    height: auto;
+    padding-top: 132px;
+    background: none;
+  }
+
+  .visited-card .image img,
+  .visited-card .image-fallback,
+  .visited-card .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    height: 132px;
+  }
+
+  .visited-card .image-overlay {
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.28) 0%,
+        rgba(0, 0, 0, 0) 55%);
+  }
+
+  .visited-card .image-place {
+    position: static;
+    padding: 0.5rem 0.8rem 0;
+    left: auto;
+    right: auto;
+    bottom: auto;
+  }
+
+  /* ---- both: one line each, scrolled sideways rather than wrapped ---- */
+  .tc-caption h3,
+  .tc-caption .tc-loc,
+  .visited-card .image-place h3,
+  .visited-card .image-place .loc {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-shadow: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tc-caption h3::-webkit-scrollbar,
+  .tc-caption .tc-loc::-webkit-scrollbar,
+  .visited-card .image-place h3::-webkit-scrollbar,
+  .visited-card .image-place .loc::-webkit-scrollbar { display: none; }
+
+  .tc-caption h3,
+  .visited-card .image-place h3 {
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  .tc-caption .tc-loc,
+  .visited-card .image-place .loc {
+    font-size: var(--p-text-2xs);
+    margin-top: 0.1rem;
+    line-height: 1.4;
+  }
+
+  .tc-body,
+  .visited-card .body { padding-top: 0.55rem; }
 }

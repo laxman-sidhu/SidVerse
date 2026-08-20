@@ -2021,10 +2021,11 @@ body.gate-open { overflow: hidden; }
 }
 .gate__btn--ghost { background: transparent; color: var(--ink-soft); }
 .gate__btn--ghost:hover { background: var(--tint); color: var(--ink); }
+/* --on-accent, not #fff: --accent is a pale pink on dark paper. */
 .gate__btn--solid {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .gate__btn--solid:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
 .gate__btn:disabled { opacity: 0.6; cursor: default; }

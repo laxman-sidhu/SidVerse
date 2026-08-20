@@ -69,7 +69,8 @@ assets/
     js/home.js                  draws the front page from site.config.js
     js/picker.js                the styled <select> menu, shared
     js/motion.js                scroll reveals
-    images/sidverse-icon.png    favicon and link-preview image
+    images/sidverse-icon.png    favicon
+    images/sidverse-preview.jpg link-preview image
     images/portrait-cutout.png  the front-page portrait
 
 modules/<name>/                 each keeps its own css/, js/ and assets/
@@ -322,16 +323,31 @@ at, the same way the small footer links do.
 
 ## 8. Favicon and link previews
 
-Every page carries the same head block, built from
-`assets/images/sidverse-icon.png`:
+Two files, same artwork, different jobs:
 
-- `<link rel="icon">` and `apple-touch-icon`, at the right relative depth.
+| File | Size | Used for |
+|---|---|---|
+| `assets/images/sidverse-icon.png` | 256x256, 67 KB | `<link rel="icon">` and `apple-touch-icon` |
+| `assets/images/sidverse-preview.jpg` | 600x600, 38 KB | `og:image` and `twitter:image` |
+
+Every page carries the same head block:
+
+- The two icon links, at the right relative depth for that page.
 - Open Graph: `og:image` on the **absolute** URL
-  `https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-icon.png`,
+  `https://laxman-sidhu.github.io/SidVerse/assets/images/sidverse-preview.jpg`,
   with `og:image:width`, `:height` and `:type` so WhatsApp and Telegram render
   on first fetch rather than after a re-crawl.
-- Twitter card set to `summary`, not `summary_large_image` - the icon is square
+- Twitter card set to `summary`, not `summary_large_image` - the mark is square
   and the large card crops to 2:1.
+
+**Keep the preview file small.** WhatsApp silently drops an `og:image` over
+roughly 600 KB: the title and description still render, the picture does not.
+This is what a single 1.8 MB icon serving both jobs used to do. JPEG suits the
+mark because it is a soft gradient, and it keeps the file far under the limit.
+
+WhatsApp also caches a preview for days. After changing anything in this block,
+run the URL through Facebook's Sharing Debugger to force a re-scrape, or the old
+preview keeps appearing.
 
 If the site moves off GitHub Pages, the absolute URL in all sixteen pages must
 change with it.
@@ -393,7 +409,19 @@ list, or a duplicate column earlier in the sheet is winning. See §5.
 cards. See §7.
 
 **A colour looks wrong in one theme.** A literal hex was used where a token
-belongs. See §4.
+belongs. See §4. Two variants of this are worth knowing: text set to `#fff`
+over an accent that turns pale on dark paper - use `--p-on-accent`, which is
+white in light and dark ink in dark - and text set to `--p-ink` over a badge
+whose background is a fixed colour in both themes, where the ink has to be
+fixed too.
+
+**A link preview shows the title but no picture.** The `og:image` is too large.
+See §8.
+
+**A small element suddenly has huge padding.** It is matching one of the shared
+state classes in `components.css` - `.state`, `.empty`, `.empty-state`,
+`.loading`, `.error-state` - which are styled as full-width panels. Give the
+element a name of its own rather than fighting the specificity. See §4.
 
 **A story shows "Story not found."** `index.json` has an entry whose `id` has no
 file in `posts/`. See §5.

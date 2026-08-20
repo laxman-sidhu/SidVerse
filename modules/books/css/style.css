@@ -732,14 +732,15 @@ a { color: inherit; }
   transition: all 0.18s var(--ease);
 }
 .btn:hover { border-color: var(--lilac); color: var(--plum-deep); background: var(--tint-1); }
+/* --p-on-accent, not --p-on-deep: the gradient is pale lavender on dark paper. */
 .btn--solid {
   border-color: transparent;
   background: linear-gradient(130deg, var(--plum), var(--blossom));
-  color: var(--p-on-deep);
+  color: var(--p-on-accent);
   font-weight: 600;
   box-shadow: 0 6px 16px rgba(139, 127, 217, 0.3);
 }
-.btn--solid:hover { color: var(--p-on-deep); background: linear-gradient(130deg, var(--plum-deep), var(--blossom)); }
+.btn--solid:hover { color: var(--p-on-accent); background: linear-gradient(130deg, var(--plum-deep), var(--blossom)); }
 
 .detail__section { margin-top: 26px; }
 .detail__label {

@@ -2257,7 +2257,7 @@
       // Loading state
       submitBtn.disabled = true;
       submitBtn.classList.add('sending');
-      statusEl.className = 'form-status loading';
+      statusEl.className = 'form-status is-sending';
       statusEl.textContent = 'Sending your postcard…';
 
       try {
