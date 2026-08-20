@@ -350,16 +350,15 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
     transparent, rgba(255, 255, 255, .34) 22%, rgba(255, 255, 255, .34) 78%, transparent);
 }
 
-/* DARK: the page is already deep, so a deep plate would sink into it. The band
-   goes the other way instead - a plate tinted with the module's own green,
-   sunk below the page rather than lifted above it. Grey read as silver and a
-   lighter slab read as glass; a hue the rest of the page does not use is what
-   makes this band its own place. */
+/* DARK: the same deep plate as the light theme, one step below the page rather
+   than above it. The page is already dark, so the band reads as a recess - a
+   hairline along the top edge and a faint neutral lift are enough to separate
+   it. No grey slab, no glass, no colour from outside the palette. */
 [data-theme="dark"] #contact.contact-section {
   background:
-    radial-gradient(120% 80% at 50% 0%, rgba(147, 216, 182, .07) 0%, transparent 60%),
-    linear-gradient(168deg, #0e1a16 0%, #12241d 54%, #0c1613 100%);
-  border-block: 1px solid rgba(147, 216, 182, .16);
+    radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, .04) 0%, transparent 62%),
+    linear-gradient(168deg, var(--p-deep) 0%, var(--p-deep-2) 55%, var(--p-deep) 100%);
+  border-block: 1px solid rgba(255, 255, 255, .09);
 }
 
 #contact.contact-section h2,
@@ -588,6 +587,20 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
     rgba(0, 0, 0, .72) 100%);
 }
 
+/* Under 600px the caption leaves the picture and the media box grows to hold
+   it, so this scrim has to stop at the photo instead of running the full box -
+   otherwise it paints a dark band behind the caption. Only the tags sit on the
+   picture now, so it lightens and moves to the top. */
+@media (max-width: 600px) {
+  .trek-card .tc-media::after {
+    inset: 0 0 auto 0;
+    height: 135px;
+    background: linear-gradient(180deg,
+      rgba(0, 0, 0, .30) 0%,
+      rgba(0, 0, 0, 0) 55%);
+  }
+}
+
 .visited-card .image-fallback { color: rgba(255, 255, 255, .55); }
 
 
@@ -784,15 +797,15 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 #contact.contact-section .contact-signoff strong,
 #contact.contact-section .contact-sign-name { color: var(--p-on-deep); }
 
-/* The card sits on the green plate as a solid panel rather than frosted glass:
-   a flat surface a few steps above the band, one lit top edge, and a real
-   shadow under it. No blur, so it reads as paper on a plate. */
+/* The card is the page's own card surface, sitting a clear step above the
+   recessed band. Flat, bordered, with a real shadow under it - the same object
+   every other card on the site is, not a pane of glass. */
 [data-theme="dark"] #contact.contact-section .contact-form-card {
-  background: linear-gradient(180deg, #1e2b26 0%, #18241f 100%);
-  border: 1px solid rgba(147, 216, 182, .20);
+  background: var(--p-surface-2);
+  border: 1px solid var(--p-line);
   box-shadow:
-    inset 0 1px 0 rgba(147, 216, 182, .18),
-    0 26px 60px -28px rgba(0, 0, 0, .85);
+    inset 0 1px 0 rgba(255, 255, 255, .06),
+    0 26px 60px -28px rgba(0, 0, 0, .8);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -807,8 +820,8 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
    what holds it, with the light catching its top edge. They had been lighter
    than the card, which is why the form read as flat. */
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-control {
-  background: rgba(8, 16, 13, .5);
-  border: 1px solid rgba(147, 216, 182, .15);
+  background: rgba(var(--p-bg-rgb), .55);
+  border: 1px solid var(--p-line);
   color: var(--p-on-deep);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, .34);
 }
@@ -818,7 +831,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 }
 
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-control:focus {
-  background: rgba(8, 16, 13, .66);
+  background: rgba(var(--p-bg-rgb), .72);
   border-color: var(--p-accent);
   box-shadow:
     inset 0 1px 2px rgba(0, 0, 0, .3),
