@@ -37,16 +37,14 @@ function identityPayload(book) {
   };
 }
 
-// A URL that resolves. ?default=false is there so an <img> can fall back; in a
-// cell it is just a link that 404s. A book with no cover falls back to its ISBN.
+// A URL that resolves. ?default=false is there so an <img> can fall back; in a cell it is just a link that 404s. A book with no cover falls back to its ISBN.
 function coverFor(book, isbn) {
   const direct = clean(book.cover || book.coverAlt || "");
   if (direct) return direct.replace(/([?&])default=false&?/, "$1").replace(/[?&]$/, "");
   return isbn ? `${OPEN_LIBRARY_COVERS}/b/isbn/${isbn}-L.jpg` : "";
 }
 
-// extra is folded in FIRST, then cleaned: spread last it overwrote both of these
-// with their raw values and the titleCase and cleanLines did nothing.
+// extra is folded in FIRST, then cleaned: spread last it overwrote both of these with their raw values and the titleCase and cleanLines did nothing.
 function rowPayload(book, extra = {}) {
   const identity = identityPayload(book);
   const rest = { ...extra };
@@ -60,8 +58,7 @@ function rowPayload(book, extra = {}) {
     cover: coverFor(book, identity.isbn),
     summary: cleanLines(extra.summary ?? book.description ?? book.summary ?? ""),
     year: book.year || "",
-    // "None" rather than blank: an empty cell reads as "not looked up yet",
-    // which is what OtherVersions.gs would then redo on its next run.
+    // "None" rather than blank: an empty cell reads as "not looked up yet", which is what OtherVersions.gs would then redo on its next run.
     versions: clean(book.versions) ? book.versions : "None",
     version_count: Number(book.version_count) || 0
   };
@@ -86,8 +83,7 @@ export async function markRead(book, { genre, summary } = {}) {
   return result;
 }
 
-// One more printing filed against a book already read. The line is written the
-// same way OtherVersions.gs writes it, or the two would parse differently.
+// One more printing filed against a book already read. The line is written the same way OtherVersions.gs writes it, or the two would parse differently.
 export async function addVersion(target, { isbn, line } = {}) {
   const number = normaliseIsbn(isbn);
   const text = clean(line);

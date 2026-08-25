@@ -1,6 +1,6 @@
 // Every call shape the app makes against TMDB.
 
-import { PAGES_PER_REQUEST, ENRICH_LIMIT, POSTER_SIZE } from "../config.js";
+import { PAGES_PER_REQUEST, ENRICH_LIMIT, POSTER_SIZE, WATCH_REGIONS } from "../config.js";
 import { today, mapLimit, normaliseTitle } from "../core/util.js";
 import * as tmdb from "./client.js";
 
@@ -330,11 +330,46 @@ function seasonList(raw) {
     }));
 }
 
+// TMDB's own key order, narrowed to the four rows worth drawing.
+const PROVIDER_GROUPS = [
+  ["flatrate", "Streaming"],
+  ["free", "Free"],
+  ["rent", "Rent"],
+  ["buy", "Buy"]
+];
+
+function watchProviders(raw) {
+  const source = raw["watch/providers"];
+  const results = (source && source.results) || {};
+  const region = WATCH_REGIONS.find(code => results[code]) || Object.keys(results)[0];
+  const offer = region ? results[region] : null;
+  if (!offer) return null;
+
+  // One provider, one badge: Netflix listed under both stream and rent is still one place to watch.
+  const seen = new Set();
+  const groups = [];
+  for (const [key, label] of PROVIDER_GROUPS) {
+    const items = [];
+    for (const entry of offer[key] || []) {
+      if (seen.has(entry.provider_id)) continue;
+      seen.add(entry.provider_id);
+      items.push({
+        id: entry.provider_id,
+        name: entry.provider_name,
+        logo: tmdb.logoUrl(entry.logo_path)
+      });
+    }
+    if (items.length) groups.push({ label, items });
+  }
+
+  return groups.length ? { region, groups } : null;
+}
+
 export async function details(itemId, media = MOVIE) {
   const kind = tmdb.cleanMedia(media);
   const raw = await tmdb.get(`/${kind}/${itemId}`, {
     language: "en-US",
-    append_to_response: "credits,videos,recommendations,similar,external_ids"
+    append_to_response: "credits,videos,recommendations,similar,external_ids,watch/providers"
   });
 
   const item = await tmdb.normaliseItem(raw, kind);
@@ -371,6 +406,7 @@ export async function details(itemId, media = MOVIE) {
   item.budget = raw.budget || null;
   item.revenue = raw.revenue || null;
   item.season_list = kind === TV ? seasonList(raw) : [];
+  item.providers = watchProviders(raw);
 
   const recommended = (raw.recommendations && raw.recommendations.results) || [];
   const similar = (raw.similar && raw.similar.results) || [];

@@ -1,8 +1,6 @@
 /* SidCinemas - light and dark themes */
-/* Green is reserved: it only ever means "already watched". Gold is only for */
-/* ratings, raspberry only for interaction. */
-/* Every colour is a token. Adding [data-theme="dark"] overrides below is the */
-/* only thing needed to reskin the whole app, so never hardcode a hex here. */
+/* Green is reserved: it only ever means "already watched". Gold is only for ratings, raspberry only for interaction. */
+/* Every colour is a token. Adding [data-theme="dark"] overrides below is the only thing needed to reskin the whole app, so never hardcode a hex here. */
 
 /* [hidden] is a user-agent rule, so any author rule setting display outranks it and the element keeps its box. */
 [hidden] { display: none !important; }
@@ -121,8 +119,7 @@
   color-scheme: dark;
 }
 
-/* Themes cross-fade instead of snapping, but only while the toggle is armed, */
-/* so page load and hovers stay instant. */
+/* Themes cross-fade instead of snapping, but only while the toggle is armed, so page load and hovers stay instant. */
 .is-theming, .is-theming * {
   transition: background-color 0.32s var(--ease), border-color 0.32s var(--ease),
               color 0.32s var(--ease) !important;
@@ -132,9 +129,7 @@
 * { box-sizing: border-box; }
 
 /* --- overall scale: one number, because the page was drawn a size too large. `zoom` not `transform`, since zoom reflows and the grid gains columns. --- */
-/* The page is drawn at its true size. It used to carry `zoom: .7` here, which
-   made body text render at 10.5px and made every @media breakpoint fire against
-   a viewport 1.43x wider than the layout inside it. */
+/* The page is drawn at its true size. It used to carry `zoom: .7` here, which made body text render at 10.5px and made every @media breakpoint fire against a viewport 1.43x wider than the layout inside it. */
 
 body {
   margin: 0;
@@ -326,7 +321,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   color: var(--muted);
 }
 
-
 /* Movies or series. Sets what the next search looks through. */
 .modeswitch {
   display: inline-flex;
@@ -467,7 +461,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   box-shadow: var(--shadow-lg), 0 0 0 4px var(--accent-tint);
 }
 
-
 .searchbox__input {
   flex: 1;
   min-width: 0;
@@ -578,10 +571,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
 .suggestions::-webkit-scrollbar { display: none; }
 
 /* Hidden rather than removed while the dropdown is open, so the hero does not jump a row taller and shorter on every keystroke. */
-body.is-suggesting .suggestions {
-  visibility: hidden;
-  pointer-events: none;
-}
 
 .suggestions__row {
   display: flex;
@@ -788,7 +777,6 @@ body.is-suggesting .suggestions {
 }
 .sortfield select:hover { border-color: var(--muted); }
 
-
 .hamburger.is-active { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-deep); }
 /* --- browse panel --- */
 .scrim {
@@ -922,17 +910,12 @@ body.is-suggesting .suggestions {
 }
 
 /* Cards from "Load more" animate individually - the page-load stagger delays the last card half a second, which on an append reads as lag. */
-.card.is-new { animation: rise 0.34s var(--ease) both; animation-delay: 0ms; }
 
 /* --- result sections --- */
 .sections { display: flex; flex-direction: column; gap: 44px; }
 
 /* A filter change keeps the current cards on screen and dims them, so a fast round trip does not read as a full page reload. */
-.sections.is-refreshing {
-  opacity: 0.45;
-  pointer-events: none;
-  transition: opacity 0.18s var(--ease);
-}/* Upcoming titles are dated but not watchable, so gold rather than green. Sits opposite the watched badge. */
+/* Upcoming titles are dated but not watchable, so gold rather than green. Sits opposite the watched badge. */
 .card__soon {
   position: absolute;
   top: 10px;
@@ -1202,7 +1185,6 @@ body.is-suggesting .suggestions {
 }
 .card.is-watched .card__meta { border-top-color: rgba(var(--seen-rgb), 0.24); }
 
-
 .skeleton {
   border-radius: var(--radius);
   border: 1px solid var(--line-soft);
@@ -1302,13 +1284,12 @@ body.is-suggesting .suggestions {
   background-clip: content-box;
 }
 
-/* The backdrop stays fully visible; only its bottom edge fades into the page, */
-/* and no text is ever laid over the image. */
+/* The backdrop stays fully visible; only its bottom edge fades into the page, and no text is ever laid over the image. */
 .detail__hero {
   position: relative;
-  height: clamp(200px, 26vw, 340px);
+  height: clamp(240px, 32vw, 460px);
   background-size: cover;
-  background-position: center 25%;
+  background-position: center 30%;
   background-color: #101722;
 }
 .detail__hero::after {
@@ -1318,9 +1299,9 @@ body.is-suggesting .suggestions {
   background: linear-gradient(
     to bottom,
     rgba(var(--fade-rgb), 0) 0%,
-    rgba(var(--fade-rgb), 0) 52%,
-    rgba(var(--fade-rgb), 0.3) 76%,
-    rgba(var(--fade-rgb), 0.86) 93%,
+    rgba(var(--fade-rgb), 0) 68%,
+    rgba(var(--fade-rgb), 0.26) 83%,
+    rgba(var(--fade-rgb), 0.8) 94%,
     rgb(var(--fade-rgb)) 100%
   );
 }
@@ -1339,8 +1320,7 @@ body.is-suggesting .suggestions {
   padding: 0 34px;
 }
 
-/* Only the poster overlaps the backdrop, so every line of text sits on a */
-/* plain background and stays readable. */
+/* Only the poster overlaps the backdrop, so every line of text sits on a plain background and stays readable. */
 .detail__poster {
   position: relative;
   flex: none;
@@ -1369,19 +1349,30 @@ body.is-suggesting .suggestions {
   box-shadow: 0 0 0 4px rgba(var(--seen-rgb), 0.18), var(--shadow-lg);
 }
 
-.detail__headline { padding-bottom: 4px; min-width: 0; }
+.detail__headline { flex: 1 1 auto; padding-bottom: 4px; min-width: 0; }
+
+/* The kind and the watch state share one row: as separate blocks they ran together as "FilmOn the watchlist". */
+.detail__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
 
 .detail__kind {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--tint);
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 10px;
 }
 
 .detail__title {
@@ -1409,23 +1400,42 @@ body.is-suggesting .suggestions {
 .detail__facts .dot { color: var(--line); }
 .detail__facts .rating { color: var(--gold); font-weight: 700; }
 
-.detail__seen {
+/* The watch state, as a pill with the glyph on its own tinted disc. */
+.detail__flag {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  margin-bottom: 12px;
+  gap: 8px;
+  padding: 4px 14px 4px 5px;
   border-radius: 999px;
-  background: var(--seen-tint);
-  border: 1px solid rgba(var(--seen-rgb), 0.4);
-  color: var(--seen-deep);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.detail__seen svg { width: 13px; height: 13px; stroke-width: 3; }
+
+.detail__flag svg {
+  width: 22px;
+  height: 22px;
+  padding: 5px;
+  border-radius: 50%;
+  stroke-width: 3;
+  flex: 0 0 auto;
+}
+
+.detail__flag--seen {
+  background: var(--seen-tint);
+  border: 1px solid rgba(var(--seen-rgb), 0.38);
+  color: var(--seen-deep);
+}
+.detail__flag--seen svg { background: var(--seen); color: var(--on-seen); }
+
+.detail__flag--listed {
+  background: var(--gold-tint);
+  border: 1px solid var(--gold-line);
+  color: var(--gold-ink);
+}
+.detail__flag--listed svg { background: var(--gold); color: #fff; fill: currentColor; stroke: none; }
 
 .detail__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 
@@ -1462,7 +1472,6 @@ body.is-suggesting .suggestions {
 }
 
 .detail__overview { font-size: 15.5px; line-height: 1.72; color: var(--ink-soft); margin: 0; }
-
 
 .detail__loading { padding: 90px 30px; text-align: center; color: var(--muted); }
 
@@ -1501,9 +1510,8 @@ body.is-suggesting .suggestions {
 
   /* iOS zooms the page whenever a focused field is under 16px and never zooms back out, so every typeable control is pinned to 16px here. */
   .searchbox__input,
-  .scopepick__select,
-  .sortfield select,
-  .panelfield select { font-size: 16px; }
+.scopepick__select,
+.sortfield select { font-size: 16px; }
 
   /* --- header --- */
   .topbar__inner { height: 58px; }
@@ -1562,7 +1570,6 @@ body.is-suggesting .suggestions {
   .acbox__item { padding: 12px; }
   .acbox__name { font-size: 15px; }
   /* Role and industry are nice-to-know, and the first thing to go when the row has to hold a full name at 360px. */
-  .acbox__meta { display: none; }
 
   .searchbox__input::placeholder { font-size: 14px; }
   .suggestions { margin-top: 13px; }
@@ -1633,7 +1640,7 @@ body.is-suggesting .suggestions {
 
   /* --- detail modal --- */
   .detail { border-radius: var(--radius); }
-  .detail__hero { height: clamp(150px, 34vw, 200px); }
+  .detail__hero { height: clamp(200px, 52vw, 300px); }
   .detail__head { flex-direction: column; align-items: flex-start; gap: 14px; padding: 0 18px; }
   .detail__poster { width: 112px; margin-top: -58px; }
   .detail__title { font-size: 24px; }
@@ -1641,9 +1648,8 @@ body.is-suggesting .suggestions {
   .detail__section { margin-top: 24px; }
   .detail__overview { font-size: 14.5px; line-height: 1.65; }
   /* Two full-width buttons, the shape the library's own popup uses. The official site goes: it is a marketing page, unlike the trailer and the TMDB record. */
-  .detail__action--site { display: none; }
+  
   .detail__actions { flex-direction: column; align-items: stretch; gap: 9px; }
-  .btn-primary-solid,
   .btn-outline {
     width: 100%;
     justify-content: center;
@@ -1706,14 +1712,6 @@ body.is-suggesting .suggestions {
 }
 
 /* === THE WATCHED LIBRARY PAGE: search asks "have I seen this", this page asks "what have I seen", so the numbers come before the grid === */
-
-.libhero {
-  /* .wash is fixed at z-index 0 and paints over static content, so this opts out the same way .hero and .results do. */
-  position: relative;
-  z-index: 1;
-  padding: 46px 0 26px;
-  text-align: center;
-}
 
 .stat { display: flex; flex-direction: column; gap: 5px; }/* A bar rather than percentage labels: the relative sizes are the point, and four numbers against four others reads as noise. *//* --- controls and facets --- */.facets {
   display: flex;
@@ -1779,14 +1777,7 @@ body.is-suggesting .suggestions {
   pointer-events: none;
 }/* --- the leaner library card: no rating, runtime or overview, because the sheet does not hold them --- */
 
-.card--lib .card__body {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  padding: 14px 15px 16px;
-}
-
-.card--lib .card__facts { margin: 0; }/* --- library page on phones. Down here on purpose: its base styles are declared BELOW the main phone block, and at equal specificity the later rule wins at every width. --- */
+/* --- library page on phones. Down here on purpose: its base styles are declared BELOW the main phone block, and at equal specificity the later rule wins at every width. --- */
 @media (max-width: 767px) {  /* The desktop copy of the group name, which sat in the gutter beside the chips. Each picker carries its own caption now. */
   .facets__label { display: none; }
 
@@ -1802,8 +1793,7 @@ body.is-suggesting .suggestions {
   }
 
   /* `display: block` on purpose: the base rule is a flex row with align-items:flex-start, which is what shrank each picker to its content. */
-  .facets__group { display: block; }  /* The whole row lights up when its filter is doing something, so it is obvious which of the two is narrowing the grid. */
-  .facets__picker.is-on { background: var(--accent-tint); }  .facets__picker.is-on .facets__pickerlabel { color: var(--accent-deep); }
+    /* The whole row lights up when its filter is doing something, so it is obvious which of the two is narrowing the grid. */
 
   /* 16px, not 15: iOS zooms the page whenever a focused control is under 16px and never zooms back out, and a <select> counts. */
   .facets__select {
@@ -1811,40 +1801,17 @@ body.is-suggesting .suggestions {
     font-weight: 600;
     padding: 15px 0;
   }
-  .facets__picker.is-on .facets__select { color: var(--accent-deep); }
-  .facets__picker.is-on .facets__caret { stroke: var(--accent); }
 
   /* Focus is an inset ring rather than a border, which the card's own rounded edge would otherwise clip in half. */
-  .facets__picker:focus-within { background: var(--accent-tint); }
+  
 }
 
 @media (max-width: 860px) {
 }
 
-
 /* === WRITING BACK - card buttons, the identity gate, and toasts === */
 
 /* --- the buttons on a card: bottom of the poster over a gradient, always rendered, because clicking one as a visitor explains whose list this is --- */
-.cardacts {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 3;
-  display: flex;
-  gap: 6px;
-  padding: 22px 8px 8px;
-  background: linear-gradient(to top,
-              rgba(var(--shade-rgb), 0.72), rgba(var(--shade-rgb), 0));
-  /* Off until the card is hovered or focused on a pointer device, so a wall of posters is not also a wall of buttons. */
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
-}
-
-.card:hover .cardacts,
-.card:focus-within .cardacts,
-.cardacts:focus-within { opacity: 1; transform: translateY(0); }
 
 .cardact {
   flex: 1;
@@ -1877,13 +1844,8 @@ body.is-suggesting .suggestions {
 
 /* An engaged flag fills its icon as well as colouring it - colour alone is the one signal some people cannot read. */
 .cardact.is-on svg { fill: currentColor; }
-.cardact--watched.is-on   { background: var(--seen); border-color: var(--seen); }
-.cardact--watchlist.is-on { background: var(--accent); border-color: var(--accent); }
-.cardact--favorite.is-on  { background: #e0245e; border-color: #e0245e; }
-.cardact--must.is-on      { background: #f0a500; border-color: #f0a500; color: #1a1a1a; }
 
 /* The watched tick is not a fill, so it needs its own rule. */
-.cardact--watched.is-on svg { fill: none; }
 
 /* In flight. The whole card dims rather than one button, because a write can change several flags at once. */
 /* A save in flight must not look like a broken card: the old rule faded this to 62% and killed pointer events, which is the visual language of broken. */
@@ -1898,7 +1860,6 @@ body.is-suggesting .suggestions {
   pointer-events: none;
   z-index: 2;
 }
-.card.is-saving .cardacts { opacity: 1; transform: none; }
 
 /* No hover on a touch screen, so the buttons are simply always there. */
 @media (hover: none) {
@@ -2086,11 +2047,9 @@ body.gate-open { overflow: hidden; }
 
 /* --- collection views: All / Favourites / Must watch --- */
 
-
 @media (max-width: 767px) {
     /* Three even columns, so the row reads as one control rather than three pills of whatever width their labels needed. */
     }
-
 
 /* --- saving and toasts. Appended on purpose: at equal specificity the later rule wins, so anything above the library phone block would be reverted by it. --- */
 
@@ -2182,7 +2141,6 @@ body.gate-open { overflow: hidden; }
 
 /* --- library card: sheet rows have no overview, rating or runtime --- */
 .card--sheet .card__body { padding-bottom: 14px; }
-
 
 /* --- collection page shell --- */
 /* Positioned and ranked, or .wash paints over it. Every top-level region needs a rank: .topbar 60, .hero 20, .results 1, .coll 1, .footer 1. */
@@ -2282,7 +2240,6 @@ body.gate-open { overflow: hidden; }
   .toasts { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
   .toast { font-size: 13px; padding: 10px 15px; }
 }
-
 
 /* === The pieces the JS renders. Appended on purpose: the library phone block sits ~270 lines above and the later rule wins at every width. New rules go here. === */
 
@@ -2412,7 +2369,6 @@ body.gate-open { overflow: hidden; }
   font-size: 12.5px;
   font-weight: 600;
 }
-
 
 .detail__people {
   display: grid;
@@ -2581,7 +2537,6 @@ body.panel-open { overflow: hidden; }
   color: var(--muted);
 }
 
-
 /* === Navbar state, the card menu, and the collection header. Appended, for the cascade reason above. === */
 
 /* --- you are here --- */
@@ -2723,26 +2678,11 @@ body.panel-open { overflow: hidden; }
   .collbar { padding: 13px; }
 }
 
-
 /* === Stacking, the floating card menu, and the mobile pass. === */
-
-.cardmenu { position: absolute; right: 8px; bottom: 8px; z-index: 4; }
-
-
-.card:hover .cardmenu__btn,
-.card:focus-within .cardmenu__btn,
-.cardmenu.is-open .cardmenu__btn { opacity: 1; transform: none; }
 
 /* No hover on a touch screen, so the button has to be there already. */
 @media (hover: none) {
 }
-
-
-.cardmenu__item.is-on { color: var(--ink); }
-.cardmenu__item.cardact--favorite.is-on svg { fill: var(--accent); stroke: var(--accent); }
-.cardmenu__item.cardact--must.is-on svg { fill: var(--gold); stroke: var(--gold); }
-.cardmenu__item.cardact--watched.is-on svg { stroke: var(--seen); }
-.cardmenu__item.cardact--watchlist.is-on svg { fill: var(--gold); stroke: var(--gold); }
 
 /* --- one row, one height: the search field and the three pickers are one control strip, so 46px is set on both rather than left to padding --- */
 .collbar { align-items: flex-end; }
@@ -2829,14 +2769,6 @@ body.panel-open { overflow: hidden; }
 .btn-solid svg, .detail__actions .btn-outline svg { width: 16px; height: 16px; }
 
 /* --- the modal close button: at z-index 5 on the backdrop image it vanished against a light poster, so it gets its own surface --- */
-.detail__close {
-  z-index: 30;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
 
 /* === Phones. Everything above is sized for a pointer; this is the pass that makes it fit a 360px screen. === */
 @media (max-width: 767px) {
@@ -2876,7 +2808,6 @@ body.panel-open { overflow: hidden; }
   .gate__actions { gap: 8px; }
   .gate__btn { flex: 1 1 auto; justify-content: center; }
 }
-
 
 /* === Flag marks, the collection header, and the modal action row. === */
 
@@ -2942,7 +2873,6 @@ body.panel-open { overflow: hidden; }
 .split { max-width: 660px; margin-left: auto; margin-right: auto; }
 .split__keys { justify-content: center; }
 
-
 @media (max-width: 767px) {
   .coll__head { margin-bottom: 16px; }
   .coll__title { font-size: clamp(24px, 7.2vw, 32px); }
@@ -2970,7 +2900,6 @@ body.panel-open { overflow: hidden; }
   /* An odd count leaves a gap, and the trailer is the primary action, so it takes the full width rather than sitting beside a hole. */
   .detail__actions > .btn-solid:first-child:nth-last-child(odd) { grid-column: 1 / -1; }
 }
-
 
 /* === The card action bar, and the browse drawer moved to the right. === */
 
@@ -3082,7 +3011,6 @@ body.panel-open { overflow: hidden; }
   background: var(--line);
 }
 
-
 /* === One card height for every card: every text block is line-bounded and grid-auto-rows:1fr matches each row to its tallest card. === */
 
 .grid { grid-auto-rows: 1fr; }
@@ -3172,9 +3100,6 @@ body.panel-open { overflow: hidden; }
 
 /* === The detail modal: numbers grid, circular cast, trailer. === */
 
-/* The TMDB score, in the facts line rather than a tile of its own - it is the one number people read before deciding. */
-.detail__rate { color: var(--gold-ink); font-weight: 700; }
-
 /* Label above value, in a grid that keeps its shape between titles: a cell that disappears when TMDB has no figure makes every title a different layout. */
 .detail__grid {
   display: grid;
@@ -3213,7 +3138,6 @@ body.panel-open { overflow: hidden; }
 }
 
 .detail__people { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
-
 
 @media (max-width: 599px) {
   /* Two columns, so a six-cell grid is three tidy rows rather than six thin ones or two cramped ones. */
@@ -3358,7 +3282,6 @@ body.panel-open { overflow: hidden; }
   .detail__poster-alt { font-size: 14px; padding: 10px; }
 }
 
-
 /* === Mobile: the navbar outgrew the phone, so the DOCUMENT outgrew the viewport - that was the dark band down the right. The wordmark text goes (~114px), buttons shrink, and .topbar__tools scrolls as a last resort. === */
 
 /* overflow-x: clip, not hidden - `hidden` on body makes it a scroll container and the sticky topbar stops sticking. */
@@ -3430,16 +3353,6 @@ body { overflow-x: clip; }
   stroke: none;
 }
 
-.detail__seen--listed {
-  background: var(--gold-tint);
-  border-color: var(--gold-line);
-  color: var(--gold-ink);
-}
-.detail__seen--listed svg {
-  fill: currentColor;
-  stroke: none;
-}
-
 /* --- the collections dropdown: four unlabelled glyphs named nothing, so they become one control. Fixed on <body>, or .topbar__tools clips it. --- */
 .navmenu { position: relative; display: none; }
 
@@ -3503,9 +3416,7 @@ body { overflow-x: clip; }
   font-weight: 700;
 }
 
-/* Folds at 920px, not 720. The four labelled destinations are their true size
-   now that the module is no longer drawn at 70%, and at 768px they ran past
-   the end of the bar before the old breakpoint could fire. */
+/* Folds at 920px, not 720. The four labelled destinations are their true size now that the module is no longer drawn at 70%, and at 768px they ran past the end of the bar before the old breakpoint could fire. */
 @media (max-width: 920px) {
   /* The row of four goes and the one control replacing them arrives. Both stay in the DOM - a resize listener would re-bind on every breakpoint crossing. */
   .topbar__tools > .icon-btn--label { display: none; }
@@ -3536,7 +3447,7 @@ body { overflow-x: clip; }
 /* --- phone: the controls above the grid. Smaller by PADDING, never font-size - iOS zooms the page when a focused control under 16px takes focus. --- */
 @media (max-width: 600px) {
   /* The label above the control, which is not focusable and so is free to be as small as it reads. */
-  .scopepick__label { font-size: 8.5px; letter-spacing: 0.08em; }
+  
   .scopepick { gap: 7px; }
   .scopepick__select { padding: 6px 22px 6px 11px; }
   .scopepick__caret { right: 9px; width: 13px; height: 13px; margin-top: -6.5px; }
@@ -3793,14 +3704,9 @@ body.portrait-open { overflow: hidden; }
 
 /* === The detail modal backdrop: one treatment for the whole viewport === */
 
-/* The backdrop only ever dimmed. The page is full of glass - .topbar, .searchbox
-   and .filters each run their own backdrop-filter - so the top of the page came
-   out frosted while the grid below it stayed sharp under a flat black. Half
-   blurred, half not, on every open. The blur belongs on the backdrop, where it
-   covers every region the same way whatever that region is made of. */
+/* The backdrop only ever dimmed. The page is full of glass - .topbar, .searchbox and .filters each run their own backdrop-filter - so the top of the page came out frosted while the grid below it stayed sharp under a flat black. Half blurred, half not, on every open. The blur belongs on the backdrop, where it covers every region the same way whatever that region is made of. */
 
-/* inset:0 rather than Bootstrap's 100vw/100vh: 100vw counts the scrollbar and
-   100vh is the LARGE viewport on mobile, so both overshoot the visible area. */
+/* inset:0 rather than Bootstrap's 100vw/100vh: 100vw counts the scrollbar and 100vh is the LARGE viewport on mobile, so both overshoot the visible area. */
 .modal-backdrop {
   inset: 0;
   width: auto;
@@ -3811,28 +3717,22 @@ body.portrait-open { overflow: hidden; }
   transition: opacity 0.24s var(--ease);
 }
 
-/* The dim is carried by the background alpha above, so the fade runs 0 -> 1 and
-   takes the blur with it. Bootstrap's own 0.5 would halve both. */
+/* The dim is carried by the background alpha above, so the fade runs 0 -> 1 and takes the blur with it. Bootstrap's own 0.5 would halve both. */
 .modal-backdrop.show { opacity: 1; }
 
-/* Wider than modal-xl's 1140px: the poster, the facts and the button row share
-   one line at this size instead of wrapping. The calc keeps a margin either
-   side, so it never becomes a full-bleed sheet on a laptop. */
+/* Wider than modal-xl's 1140px: the poster, the facts and the button row share one line at this size instead of wrapping. The calc keeps a margin either side, so it never becomes a full-bleed sheet on a laptop. */
 #detailModal .modal-dialog {
   max-width: min(1320px, calc(100vw - 56px));
 }
 
-/* Below 576px Bootstrap already runs the dialog edge to edge on an 8px margin,
-   which is wider than the calc above would leave it. Hand it back. */
+/* Below 576px Bootstrap already runs the dialog edge to edge on an 8px margin, which is wider than the calc above would leave it. Hand it back. */
 @media (max-width: 575.98px) {
   #detailModal .modal-dialog { max-width: none; }
 }
 
 /* === Dropdowns: one treatment for the browse drawer and the library toolbar === */
 
-/* Every chevron sat half its own height above the middle of its control. It was
-   centred TWICE: .facets__caret pulls up by margin-top:-8px, and then
-   .facets__wrap .facets__caret adds translateY(-50%) without clearing it. */
+/* Every chevron sat half its own height above the middle of its control. It was centred TWICE: .facets__caret pulls up by margin-top:-8px, and then .facets__wrap .facets__caret adds translateY(-50%) without clearing it. */
 .facets__wrap .facets__caret {
   margin-top: 0;
   right: 9px;
@@ -3847,8 +3747,7 @@ body.portrait-open { overflow: hidden; }
   transition: background 0.16s var(--ease), stroke 0.16s var(--ease);
 }
 
-/* The value was 12px off a border on a 46px control, which reads as text that
-   has fallen against the edge rather than a control with a value in it. */
+/* The value was 12px off a border on a 46px control, which reads as text that has fallen against the edge rather than a control with a value in it. */
 .facets--inline .facets__wrap,
 .panel__body .facets__wrap {
   padding-left: 15px;
@@ -3859,16 +3758,13 @@ body.portrait-open { overflow: hidden; }
 .facets--inline .facets__wrap:hover .facets__caret,
 .panel__body .facets__wrap:hover .facets__caret { background: var(--line); }
 
-/* A ring, not a 1px border colour: at this size the border change alone is
-   almost invisible, and these are the controls the whole page is driven from. */
+/* A ring, not a 1px border colour: at this size the border change alone is almost invisible, and these are the controls the whole page is driven from. */
 .facets--inline .facets__wrap:focus-within,
 .panel__body .facets__wrap:focus-within {
   box-shadow: 0 0 0 3px var(--accent-tint);
 }
 
-/* A filter that is narrowing the grid says so. The double :has() is the point -
-   it matches only a select that HAS an "all" option and is not sitting on it, so
-   Sort, which has no empty value and is never "off", is left alone. */
+/* A filter that is narrowing the grid says so. The double :has() is the point - it matches only a select that HAS an "all" option and is not sitting on it, so Sort, which has no empty value and is never "off", is left alone. */
 .facets__wrap:has(option[value=""]):has(option:not([value=""]):checked) {
   border-color: var(--accent);
   background: var(--accent-tint);
@@ -3884,8 +3780,7 @@ body.portrait-open { overflow: hidden; }
   color: var(--accent-deep);
 }
 
-/* The native popup honours little more than these two, and they are what the
-   dark theme needs: Windows otherwise draws the list in the system palette. */
+/* The native popup honours little more than these two, and they are what the dark theme needs: Windows otherwise draws the list in the system palette. */
 .facets__select option {
   background: var(--card);
   color: var(--ink);
@@ -3895,9 +3790,7 @@ body.portrait-open { overflow: hidden; }
 .facets--inline .facets__label,
 .panel__body .facets__label { color: var(--ink-soft); }
 
-/* The rules above are base rules at the bottom of the file, so they outrank the
-   phone block further up at equal specificity. The tighter phone sizing has to
-   be restated here or it is silently reverted at every width. */
+/* The rules above are base rules at the bottom of the file, so they outrank the phone block further up at equal specificity. The tighter phone sizing has to be restated here or it is silently reverted at every width. */
 @media (max-width: 600px) {
   .facets--inline .facets__wrap { padding-left: 11px; padding-right: 32px; }
   .facets__wrap .facets__caret {
@@ -3913,7 +3806,6 @@ body.portrait-open { overflow: hidden; }
 
 /* The styled option list now lives in assets/css/components.css, shared. */
 
-
 /* The trigger keeps the caret it always had, and turns it while the list is up. */
 .facets__select[aria-expanded="true"] ~ .facets__caret,
 .scopepick__select[aria-expanded="true"] ~ .scopepick__caret {
@@ -3923,4 +3815,166 @@ body.portrait-open { overflow: hidden; }
 @media (max-width: 600px) {
   .pickmenu { border-radius: 12px; padding: 5px; }
   .pickmenu__item { padding: 11px 13px; font-size: 15px; }
+}
+
+/* === The title screen: the score strip, where to watch, and the two-column body. === */
+
+/* Four scores side by side, each a tile the eye can pick out by its mark alone. */
+.detail__scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 2px 0 18px;
+}
+
+.detail__score {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 16px 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.18s, transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+a.detail__score:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+a.detail__score:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* The marks carry their own fills, so only the inherited stroke has to be called off. */
+.detail__score-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+}
+.detail__score-mark svg { width: 100%; height: auto; stroke: none; }
+
+.detail__score-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+
+.detail__score-value {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.detail__score-value i {
+  margin-left: 5px;
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.detail__score-meta {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Two ghosts while OMDb is in flight, so the row does not jump when the scores land. */
+.detail__scores.is-waiting::after,
+.detail__scores.is-waiting::before {
+  content: "";
+  width: 132px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+  background: linear-gradient(90deg, var(--tint) 25%, var(--shimmer) 50%, var(--tint) 75%);
+  background-size: 300% 100%;
+  animation: shimmer 1.3s linear infinite;
+}
+
+/* --- where to watch: a column beside the headline, real provider artwork --- */
+.detail__watchcol {
+  flex: 0 0 250px;
+  align-self: flex-end;
+  min-width: 0;
+  padding-bottom: 4px;
+}
+
+.detail__watch {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 15px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--tint);
+}
+
+.detail__watch-row { display: flex; flex-direction: column; gap: 8px; }
+
+.detail__watch-kind {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.detail__watch-logos { display: flex; flex-wrap: wrap; gap: 9px; }
+
+.detail__provider {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s var(--ease);
+}
+.detail__provider:hover { transform: translateY(-2px); }
+.detail__provider img { width: 100%; height: 100%; object-fit: cover; }
+
+.detail__provider-alt {
+  padding: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.detail__awards {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* Below the three-across width the column takes a full row of its own. `flex: none` with a full width works in both directions, so the stacked head needs no rule. */
+@media (max-width: 991px) {
+  .detail__head { flex-wrap: wrap; }
+  .detail__watchcol { flex: none; width: 100%; align-self: stretch; padding-bottom: 0; }
+  .detail__watch { flex-direction: row; flex-wrap: wrap; gap: 10px 26px; }
+}
+
+@media (max-width: 767px) {
+  .detail__scores { gap: 8px; margin-bottom: 15px; }
+  .detail__score { gap: 9px; padding: 7px 13px 7px 10px; }
+  .detail__score-mark { width: 26px; height: 26px; }
+  .detail__score-value { font-size: 15.5px; }
+  .detail__provider { width: 42px; height: 42px; border-radius: 10px; }
+  .detail__watch { padding: 13px; }
+  .detail__meta { gap: 7px; margin-bottom: 12px; }
+  .detail__flag { padding: 3px 12px 3px 4px; font-size: 9.5px; }
+  .detail__flag svg { width: 20px; height: 20px; }
 }

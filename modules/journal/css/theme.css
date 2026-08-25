@@ -1,6 +1,4 @@
-/* SidNotes - retargeted onto the SidVerse palette. Loaded after journal.css so
-   these win. The scrapbook pages themselves are untouched: a story carries its
-   own colours inside its JSON. */
+/* SidNotes - retargeted onto the SidVerse palette. Loaded after journal.css so these win. The scrapbook pages themselves are untouched: a story carries its own colours inside its JSON. */
 
 :root {
   --paper:          var(--p-bg);
@@ -63,8 +61,7 @@
 }
 
 
-/* The polaroid cards read wrong on the dark paper: the frame follows the
-   surface, the ink follows the theme, and the date keeps its accent. */
+/* The polaroid cards read wrong on the dark paper: the frame follows the surface, the ink follows the theme, and the date keeps its accent. */
 .card {
   background: var(--p-surface) !important;
   border: 1px solid var(--p-line);
@@ -77,10 +74,8 @@
 .site-head p   { color: var(--p-ink-soft); }
 
 
-/* ---- the card wall ------------------------------------------------------
-   `auto-fill` builds a full row of tracks whether or not there are posts to
-   fill them, so two stories sat hard left inside a centred grid. `auto-fit`
-   collapses the empty tracks, and the row centres on what is actually there. */
+/* ---- the card wall ------------------------------------------------------ */
+/* `auto-fill` builds a full row of tracks whether or not there are posts to fill them, so two stories sat hard left inside a centred grid. `auto-fit` collapses the empty tracks, and the row centres on what is actually there. */
 .cards {
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 300px));
   justify-content: center;
@@ -95,8 +90,7 @@
 .card .c-title { font-family: var(--p-display); font-weight: 600; font-size: 21px; letter-spacing: -.015em; }
 .card .c-date { font-family: var(--p-mono); font-weight: 500; letter-spacing: .12em; }
 
-/* The loading line sits in the flow, so it must not hold a screen of height
-   open after the cards have arrived. */
+/* The loading line sits in the flow, so it must not hold a screen of height open after the cards have arrived. */
 .loading { padding: 48px 20px; font-family: var(--p-display); font-size: 20px; }
 
 /* The room had no bar of its own; it takes the shared one now. */

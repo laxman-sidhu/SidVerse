@@ -17,7 +17,7 @@ deployment and troubleshooting is here.
 
 | Module | Name | Pages | Data behind it |
 |---|---|---|---|
-| `cinema/` | **SidCinemas** | index, watched, watchlist | TMDB + Google Sheet (3 tabs) |
+| `cinema/` | **SidCinemas** | index, watched, watchlist | TMDB + OMDb + Google Sheet (3 tabs) |
 | `books/` | **SidBooks** | index, library, readlist, editions | Google Books + Open Library + Sheet (2 tabs) |
 | `travel/` | **SidTrails** | index, gallery | Sheet (5 tabs) + Leaflet + EmailJS |
 | `food/` | **SidBites** | index, add | Sheet + Cloudinary |
@@ -74,6 +74,8 @@ assets/
     images/portrait-cutout.png  the front-page portrait
 
 modules/<name>/                 each keeps its own css/, js/ and assets/
+    cinema/js/tmdb/             every call the app makes against TMDB
+    cinema/js/omdb/             the scores TMDB does not carry
 docs/PROJECT.md                 this file
 tools/                          screenshot and audit scripts (see tools/README.md)
 ```
@@ -200,6 +202,35 @@ the password on every write instead, reading a Script Property named
 **After every script edit:** Deploy → Manage deployments → pencil → New version
 → Deploy. The site sees the last *deployed* version, not the last saved one.
 Creating a *new* deployment gives a new URL and breaks the config.
+
+### The title screen's two extra sources
+
+Cinema reads from two APIs besides the sheet, and neither is load-bearing: if
+either is down the screen still opens, just with less on it.
+
+**OMDb** (`modules/cinema/js/omdb/client.js`) is keyed by IMDb id, which TMDB
+hands over in `external_ids`. It supplies the three scores TMDB has no field
+for - IMDb, Rotten Tomatoes, Metacritic - plus the awards line and a US box
+office figure used only where TMDB has none. It is fetched *after* the screen
+paints and dropped into slots the first render left open (`[data-scores]`,
+`[data-cell]`, `[data-awards]`), so a slow answer never delays the page. One
+attempt, no retries: this is an enrichment, and a placeholder shimmering through
+three backoffs looks broken. Answers are cached for a day.
+
+The key lives in `OMDB_API_KEY` in `modules/cinema/js/config.js`. It must be
+called over **https** - OMDb documents the http URL, but the site is served over
+https and a browser blocks the mixed request outright.
+
+**Watch providers** come from TMDB itself, appended to the details call as
+`watch/providers`, and give the real provider artwork in the *Available on*
+column beside the headline. Availability is per country: `WATCH_REGIONS` in
+`config.js` is tried in order and the first region TMDB answers for wins. Each
+row is capped at `PROVIDERS_PER_GROUP` in `js/ui/detail.js`, currently four,
+which is exactly one row at the column's width.
+
+TMDB sources this data from JustWatch and asks that they be credited. The
+credit line was removed at the owner's request; if the site ever goes public
+enough to matter, that is the thing to put back.
 
 ### The books edition model
 
@@ -373,6 +404,11 @@ There is no build step, so a change is live as soon as Pages finishes.
 
 ## 10. Changing things
 
+Comments are one line each. CSS keeps `/* ... */` because `//` is not a comment
+in CSS and would swallow the rule after it; JS uses `//`. A banner such as
+`/* ---- 3. interaction polish ---- */` keeps its own line and any explanation
+follows on the next.
+
 | To change | Edit |
 |---|---|
 | Site name, tagline, intro, portrait | `assets/js/site.config.js` |
@@ -383,6 +419,7 @@ There is no build step, so a change is live as soon as Pages finishes.
 | One module's accent | its `[data-section="…"]` block in `tokens.css` |
 | How a button, field, card, sheet or picker is drawn | `assets/css/components.css` |
 | A module's sheet, token or password | that module's `config.js` |
+| The OMDb key, or which country *Available on* reports | `modules/cinema/js/config.js` |
 | The favourites collections | `modules/favourites/js/config.js` |
 
 Renaming the site is one string.
@@ -425,6 +462,15 @@ element a name of its own rather than fighting the specificity. See §4.
 
 **A story shows "Story not found."** `index.json` has an entry whose `id` has no
 file in `posts/`. See §5.
+
+**Only the TMDB score shows on a title.** Either TMDB gave no `imdb_id` for it -
+common on obscure and very new titles - or OMDb has no record under that id. The
+strip is built from whatever answered, so it simply shows fewer tiles. If *every*
+title is missing them, check the key and that the request went out over https.
+
+**No "Available on" column.** JustWatch lists nothing for that title in any of
+the `WATCH_REGIONS`. The column is omitted rather than drawn empty, and the
+headline takes the full width.
 
 ---
 

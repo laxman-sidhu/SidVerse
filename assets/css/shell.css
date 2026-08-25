@@ -9,8 +9,7 @@
 
 .psb__burger {
   position: fixed;
-  /* Centred on the bar's own height, so it lines up with the wordmark and the
-     bar's buttons rather than sitting a few pixels low. */
+  /* Centred on the bar's own height, so it lines up with the wordmark and the bar's buttons rather than sitting a few pixels low. */
   top: calc((var(--p-bar-h) - 42px) / 2);
   left: 16px;
   z-index: 2400;
@@ -30,13 +29,10 @@
 }
 
 .psb__burger:hover { transform: scale(1.06); box-shadow: var(--p-shadow); }
-/* The bars rotate into a cross and swing outside the viewBox while they
-   do, so the box must not clip. */
+/* The bars rotate into a cross and swing outside the viewBox while they do, so the box must not clip. */
 .psb__burger svg { width: 19px; height: 19px; overflow: visible; }
 
-/* Three lines that fold into a cross while the panel is open. transform-box
-   makes each bar rotate about its own centre; without it, "center" means the
-   centre of the whole viewBox and the cross lands half outside the icon. */
+/* Three lines that fold into a cross while the panel is open. transform-box makes each bar rotate about its own centre; without it, "center" means the centre of the whole viewBox and the cross lands half outside the icon. */
 .psb__bar {
   transform-box: fill-box;
   transform-origin: center;
@@ -62,9 +58,7 @@ body.psb-open .psb__bar--bot { transform: translateY(-5px) rotate(-45deg); }
   padding: 9px 7px;
   border: 1px solid var(--p-nav-line);
   border-radius: var(--p-pill);
-  /* No backdrop-filter here: a blur layer under children that fade their own
-     opacity leaves stale paint behind — the dark smudge that stayed on screen
-     after hovering a dot. A near-solid surface needs no blur. */
+  /* No backdrop-filter here: a blur layer under children that fade their own opacity leaves stale paint behind — the dark smudge that stayed on screen after hovering a dot. A near-solid surface needs no blur. */
   background: rgba(var(--p-surface-rgb), .97);
   box-shadow: var(--p-shadow);
   transition: opacity .24s var(--p-ease), transform .32s var(--p-ease);
@@ -93,8 +87,7 @@ body.psb-open .psb__rail {
 .psb__dot:hover { background: color-mix(in srgb, var(--row) 13%, transparent); color: var(--row); transform: scale(1.08); }
 .psb__dot.is-current { background: color-mix(in srgb, var(--row) 15%, transparent); color: var(--row); }
 
-/* The name appears beside the icon on hover, so an icon rail is still legible
-   to somebody who has not learnt the icons yet. */
+/* The name appears beside the icon on hover, so an icon rail is still legible to somebody who has not learnt the icons yet. */
 .psb__tip {
   position: absolute;
   left: calc(100% + 12px);
@@ -128,9 +121,7 @@ body.psb-open .psb__rail {
   color: var(--p-nav-ink);
   border-right: 1px solid var(--p-nav-line);
   box-shadow: var(--p-shadow-lg);
-  /* Closed, the panel is clipped down to the pill's own footprint — a rounded
-     slot where the rail sits — so opening reads as the pill growing into the
-     sidebar rather than a drawer arriving from off-screen. */
+  /* Closed, the panel is clipped down to the pill's own footprint — a rounded slot where the rail sits — so opening reads as the pill growing into the sidebar rather than a drawer arriving from off-screen. */
   clip-path: inset(30% 74% 30% 4px round 999px);
   opacity: 0;
   visibility: hidden;
@@ -293,21 +284,17 @@ body.psb-open .psb__foot  { opacity: 1; translate: 0 0; transition-delay: .22s; 
 
 body.psb-open .psb__scrim { opacity: 1; pointer-events: auto; }
 
-/* ---- the page beside it ------------------------------------------------
-   The rail floats, so pages only need to clear its width — the panel overlays
-   rather than pushing, which keeps every module's own layout untouched. */
+/* ---- the page beside it ------------------------------------------------ */
+/* The rail floats, so pages only need to clear its width — the panel overlays rather than pushing, which keeps every module's own layout untouched. */
 
 body { padding-left: var(--p-rail-clear); }
 
 @media (max-width: 720px) {
-  /* The rail is replaced by the floating burger on a phone. The burger is
-     fixed and overlays, so the page no longer reserves a band above itself —
-     that band was pushing every module's bar 66px down the screen. */
+  /* The rail is replaced by the floating burger on a phone. The burger is fixed and overlays, so the page no longer reserves a band above itself — that band was pushing every module's bar 66px down the screen. */
   body { padding-left: 0; }
   .psb__rail { display: none; }
 
-  /* Instead the burger tucks into the bar's own left slot, which every bar
-     already keeps clear. */
+  /* Instead the burger tucks into the bar's own left slot, which every bar already keeps clear. */
   .psb__burger { top: 11px; left: 11px; width: 40px; height: 40px; }
 }
 

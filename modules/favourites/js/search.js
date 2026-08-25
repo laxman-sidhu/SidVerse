@@ -2,11 +2,7 @@
 
 import { qs, debounce } from "./utils.js";
 
-/**
- * Attach search behaviour to the toolbar.
- * @param {(query: string) => void} onQuery — called with the trimmed,
- *        lower-cased query after the debounce window.
- */
+// Attach search behaviour to the toolbar. @param {(query: string) => void} onQuery — called with the trimmed, lower-cased query after the debounce window.
 export function initSearch(onQuery) {
   const wrapper = qs(".search");
   if (!wrapper) return;

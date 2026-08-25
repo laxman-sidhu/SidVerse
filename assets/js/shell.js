@@ -1,15 +1,4 @@
-/* SidVerse — the app shell: one sidebar for the site, and the theme toggle.
-
-   A plain script, not a module, because four of the six modules load their own
-   code as modules and two do not. Each page says which module it is and how
-   far up the site root is:
-
-     <html data-section="cinema">
-     <script defer src="../../assets/js/site.config.js"></script>
-     <script defer src="../../assets/js/shell.js" data-root="../.."></script>
-
-   The theme is set on <html> before this runs, by the inline snippet in each
-   page's <head>, so a dark page never flashes light first. */
+// SidVerse — the app shell: one sidebar for the site, and the theme toggle. A plain script, not a module, because four of the six modules load their own code as modules and two do not. Each page says which module it is and how far up the site root is: <html data-section="cinema"> <script defer src="../../assets/js/site.config.js"></script> <script defer src="../../assets/js/shell.js" data-root="../.."></script> The theme is set on <html> before this runs, by the inline snippet in each page's <head>, so a dark page never flashes light first.
 
 (function () {
   "use strict";
@@ -56,15 +45,14 @@
     return null;
   }
 
-  /* ---- markup ---------------------------------------------------------- */
+  // ---- markup ----------------------------------------------------------
 
   function items() {
     return [{ key: "home", label: "Home", href: "index.html", note: "Everything at once", icon: "home" }]
       .concat(SECTIONS);
   }
 
-  /* Collapsed: a floating pill of icons against the left edge. The name shows
-     on hover, so the rail is still legible before the icons are learnt. */
+  // Collapsed: a floating pill of icons against the left edge. The name shows on hover, so the rail is still legible before the icons are learnt.
   function rail() {
     var dots = items().map(function (s, i) {
       var on = s.key === HERE;
@@ -122,9 +110,8 @@
     return node;
   }
 
-  /* ---- theme ------------------------------------------------------------
-     One key for the whole site. data-bs-theme rides along because Cinema's
-     stylesheet inherited a handful of Bootstrap rules that read it. */
+  // ---- theme ------------------------------------------------------------
+  // One key for the whole site. data-bs-theme rides along because Cinema's stylesheet inherited a handful of Bootstrap rules that read it.
 
   function readTheme() {
     try { return localStorage.getItem("sidverse:theme") || ""; } catch (e) { return ""; }
@@ -136,8 +123,7 @@
     root.setAttribute("data-bs-theme", next);
     try { localStorage.setItem("sidverse:theme", next); } catch (e) {}
 
-    // There are two switches — one on the rail, one in the panel — and both
-    // have to read the same way.
+    // There are two switches — one on the rail, one in the panel — and both have to read the same way.
     var word = next === "dark" ? "Light" : "Dark";
     document.querySelectorAll("[data-theme-label]").forEach(function (el) { el.textContent = word; });
     document.querySelectorAll("[data-theme-toggle]").forEach(function (el) {
@@ -158,7 +144,7 @@
     });
   }
 
-  /* ---- open and close --------------------------------------------------- */
+  // ---- open and close ---------------------------------------------------
 
   function wireOpen(button, scrim) {
     function set(open) {
@@ -176,10 +162,8 @@
     });
   }
 
-  /* ---- the footer -------------------------------------------------------
-     One shape on every page: the module's own line on the left, its links in
-     the middle, the same signature on the right. A module with `ownFooter`
-     already has one worth keeping and is left alone. */
+  // ---- the footer -------------------------------------------------------
+  // One shape on every page: the module's own line on the left, its links in the middle, the same signature on the right. A module with `ownFooter` already has one worth keeping and is left alone.
 
   function footer() {
     var here = current();
@@ -195,9 +179,7 @@
         + '<span>' + esc(l.label) + "</span></a>";
     }).join("");
 
-    // An optional feature card above the line: a module with somewhere worth
-    // going puts it here rather than in the row of small links.
-    // A link to the page you are already on is not a way out of it.
+    // An optional feature card above the line: a module with somewhere worth going puts it here rather than in the row of small links. A link to the page you are already on is not a way out of it.
     var f = here.footerFeature && here.footerFeature.href !== page ? here.footerFeature : null;
     var feature = !f ? "" :
       '<a class="pfeat" href="' + esc(url(here.href + f.href)) + '">'
@@ -232,18 +214,14 @@
       + '<p class="pfoot__line">' + esc(here.footerLine || SITE.footerLine || "") + "</p>"
       + (links ? '<nav class="pfoot__links">' + links + "</nav>" : "")
       + '<p class="pfoot__made">Made with <span class="pfoot__heart">&#128150;</span> by '
-      // A span, not an anchor: the sign-off names who made the site, it is not
-      // somewhere to go, and an <a> back to the home page from the footer of
-      // the home page was a link to nowhere useful.
+      // A span, not an anchor: the sign-off names who made the site, it is not somewhere to go, and an <a> back to the home page from the footer of the home page was a link to nowhere useful.
       + '<span class="pfoot__me">' + esc(SITE.madeBy || SITE.owner || "me") + "</span></p>"
       + "</div>";
     return node;
   }
 
-  /* ---- the bar wordmark --------------------------------------------------
-     Every module wrote its own brand markup. The name and the icon now come
-     from site.config.js, so a rename happens in one place. The existing node
-     is kept and refilled: it carries each module's own link and handlers. */
+  // ---- the bar wordmark --------------------------------------------------
+  // Every module wrote its own brand markup. The name and the icon now come from site.config.js, so a rename happens in one place. The existing node is kept and refilled: it carries each module's own link and handlers.
 
   var BRAND_SEL = ".wordmark, .navbar .logo, .brand, .nav__brand, .topbar__brand";
 
@@ -259,8 +237,8 @@
     });
   }
 
-  /* ---- the hero language line -------------------------------------------
-     The phrase and its translation both live in the config. */
+  // ---- the hero language line -------------------------------------------
+  // The phrase and its translation both live in the config.
 
   function langline() {
     var here = current();
@@ -268,24 +246,19 @@
     document.querySelectorAll("[data-phrase]").forEach(function (el) {
       el.classList.add("langline");
       el.setAttribute("tabindex", "0");
-      // A centred heading centres its gloss, so the label sits under the phrase
-      // rather than off to one side of it.
+      // A centred heading centres its gloss, so the label sits under the phrase rather than off to one side of it.
       var align = window.getComputedStyle(el).textAlign;
       if (align === "center") el.classList.add("langline--center");
       el.innerHTML = esc(here.phrase)
         + '<span class="langline__gloss">' + esc(here.gloss || "") + "</span>";
 
-      // There is no hover on a touch screen, so a tap opens the translation
-      // and a second tap — or a tap anywhere else — closes it again.
+      // There is no hover on a touch screen, so a tap opens the translation and a second tap — or a tap anywhere else — closes it again.
       el.addEventListener("click", function (e) {
         e.stopPropagation();
         var open = el.classList.toggle("is-glossed");
-        // The bubble sits above the phrase, which on a short screen puts it
-        // under the sticky bar. If there is not room, it flips below.
+        // The bubble sits above the phrase, which on a short screen puts it under the sticky bar. If there is not room, it flips below.
         if (open) {
-          // Measured against the bubble's own height, not a guess: a tall
-          // heading sits low enough for the bubble to clear the bar, a short
-          // one does not.
+          // Measured against the bubble's own height, not a guess: a tall heading sits low enough for the bubble to clear the bar, a short one does not.
           var g = el.querySelector(".langline__gloss");
           var need = (g ? g.offsetHeight : 32) + 18;
           var bar = document.querySelector(".topbar, .navbar, .nav, .site-topbar");
@@ -296,9 +269,7 @@
       });
     });
 
-    // `pointerdown` rather than `click`: on iOS a click on a plain element
-    // does not always reach the document, so a tap on empty page never closed
-    // anything. pointerdown fires for mouse and touch alike.
+    // `pointerdown` rather than `click`: on iOS a click on a plain element does not always reach the document, so a tap on empty page never closed anything. pointerdown fires for mouse and touch alike.
     document.addEventListener("pointerdown", function (e) {
       if (e.target.closest && e.target.closest(".langline")) return;
       document.querySelectorAll(".langline.is-glossed")
@@ -306,16 +277,12 @@
     });
   }
 
-  /* ---- the page menu ----------------------------------------------------
-     On a phone every bar ran out of room: Cinema's four destinations, Books'
-     three plus two tools, Favourites' menu. They fold into one button that
-     opens the bar's own links as a sheet. The burger on the left stays the
-     way between rooms; this is the way around the room you are in. */
+  // ---- the page menu ----------------------------------------------------
+  // On a phone every bar ran out of room: Cinema's four destinations, Books' three plus two tools, Favourites' menu. They fold into one button that opens the bar's own links as a sheet. The burger on the left stays the way between rooms; this is the way around the room you are in.
 
   var PAGE_GROUPS = ".topbar__tools, .nav__links, .navbar .nav-links, .nav__tools";
 
-  /* A tool button carries only an icon, or only a count badge. Either way the
-     row needs a name; these are the few whose own title reads as a sentence. */
+  // A tool button carries only an icon, or only a count badge. Either way the row needs a name; these are the few whose own title reads as a sentence.
   var PMENU_NAMES = {
     refreshBtn: "Reload from sheet",
     filterToggle: "Browse navigation",
@@ -334,18 +301,12 @@
     el.appendChild(span);
   }
 
-  /* Trimming and naming the rows. Runs on every attempt, not just the first:
-     a module may fill its own bar after the fold has happened. */
+  // Trimming and naming the rows. Runs on every attempt, not just the first: a module may fill its own bar after the fold has happened.
   function dress(sheet) {
-    // Favourites' bar carries Home and Collections beside its Galleries menu.
-    // In the sheet only the galleries are wanted: the rail already covers
-    // rooms, and Collections is the page you are on. Scoped to that module —
-    // every other bar's links ARE its destinations.
+    // Favourites' bar carries Home and Collections beside its Galleries menu. In the sheet only the galleries are wanted: the rail already covers rooms, and Collections is the page you are on. Scoped to that module — every other bar's links ARE its destinations.
     if (document.documentElement.getAttribute("data-section") === "favourites") {
       sheet.querySelectorAll(".nav__link").forEach(function (el) {
-        // The Galleries toggle is a .nav__link too, and the module's own
-        // script wires it up after this runs — removing it threw. It is
-        // hidden by CSS instead.
+        // The Galleries toggle is a .nav__link too, and the module's own script wires it up after this runs — removing it threw. It is hidden by CSS instead.
         if (el.classList.contains("nav__dropdown-toggle")) return;
         if (!el.closest(".nav__dropdown-panel")) el.remove();
       });
@@ -412,8 +373,7 @@
     sheet.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
   }
 
-  /* The module's own footer is hidden rather than removed: its markup is often
-     wired to that module's scripts, and removing it would break them. */
+  // The module's own footer is hidden rather than removed: its markup is often wired to that module's scripts, and removing it would break them.
   function retireOldFooter() {
     var here = current();
     if (!here || here.ownFooter) return;
@@ -437,8 +397,7 @@
     brand();
     langline();
 
-    // Modules build their own bar links from their own scripts, which run
-    // after this one, so the fold is attempted again once they have.
+    // Modules build their own bar links from their own scripts, which run after this one, so the fold is attempted again once they have.
     if (window.matchMedia("(max-width: 720px)").matches) {
       pageMenu();
       window.addEventListener("load", pageMenu);

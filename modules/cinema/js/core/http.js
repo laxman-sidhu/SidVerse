@@ -16,16 +16,17 @@ function timeoutSignal(ms) {
   return { signal: controller.signal, done: () => clearTimeout(timer) };
 }
 
-export async function getJSON(url, { timeout = 20000, signal } = {}) {
+// attempts: optional enrichment passes 1, so a dead endpoint fails fast rather than holding a placeholder on screen for three backoffs.
+export async function getJSON(url, { timeout = 20000, signal, attempts = MAX_ATTEMPTS } = {}) {
   let lastError = null;
 
-  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
     const guard = timeoutSignal(timeout);
     try {
       const response = await fetch(url, { signal: signal || guard.signal });
 
       if (!response.ok) {
-        if (RETRY_STATUS.has(response.status) && attempt < MAX_ATTEMPTS) {
+        if (RETRY_STATUS.has(response.status) && attempt < attempts) {
           await new Promise(r => setTimeout(r, BACKOFF_MS * attempt));
           continue;
         }
@@ -35,7 +36,7 @@ export async function getJSON(url, { timeout = 20000, signal } = {}) {
     } catch (error) {
       if (error.name === "AbortError" && signal && signal.aborted) throw error;
       lastError = error;
-      if (attempt >= MAX_ATTEMPTS) break;
+      if (attempt >= attempts) break;
       await new Promise(r => setTimeout(r, BACKOFF_MS * attempt));
     } finally {
       guard.done();

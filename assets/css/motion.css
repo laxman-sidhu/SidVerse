@@ -1,10 +1,8 @@
-/* SidVerse - entrances, reveals and interaction polish. Every rule that hides
-   something is scoped to html[data-motion], which motion.js sets on load, so a
-   blocked script leaves the page visible. Stands down under reduced-motion. */
+/* SidVerse - entrances, reveals and interaction polish. Every rule that hides something is scoped to html[data-motion], which motion.js sets on load, so a blocked script leaves the page visible. Stands down under reduced-motion. */
 
 
-/* ---- 1. section reveal -------------------------------------------------
-   Content lifts in as it comes into view, once, and then stays put. */
+/* ---- 1. section reveal ------------------------------------------------- */
+/* Content lifts in as it comes into view, once, and then stays put. */
 
 @media (prefers-reduced-motion: no-preference) {
 
@@ -22,18 +20,15 @@
     transform: none;
   }
 
-  /* Rows of cards arrive in sequence rather than all at once. The delay is
-     capped so a long grid never leaves the reader waiting. */
+  /* Rows of cards arrive in sequence rather than all at once. The delay is capped so a long grid never leaves the reader waiting. */
   html[data-motion] [data-reveal][style*="--i"] {
     transition-delay: calc(var(--i) * 55ms);
   }
 }
 
 
-/* ---- 2. the hero ------------------------------------------------------
-   The front door gets a longer, softer entrance than the rest of the page:
-   the eyebrow, the headline, the lede and the buttons arrive in order, and
-   the portrait settles in behind them. */
+/* ---- 2. the hero ------------------------------------------------------ */
+/* The front door gets a longer, softer entrance than the rest of the page: the eyebrow, the headline, the lede and the buttons arrive in order, and the portrait settles in behind them. */
 
 @media (prefers-reduced-motion: no-preference) {
 
@@ -49,7 +44,7 @@
   html[data-motion] .hero__grid > div > *:nth-child(3) { animation-delay: .22s; }
   html[data-motion] .hero__grid > div > *:nth-child(4) { animation-delay: .30s; }
 
-  html[data-motion] .hero__cut,
+  /* The front-page portrait is not here: home.css animates it on its own, and two entrances on one element compound into a slide. */
   html[data-motion] .reader-cut {
     opacity: 0;
     animation: p-settle 1.05s var(--p-ease-out, cubic-bezier(.22, .8, .28, 1)) .12s forwards;
@@ -66,23 +61,8 @@
 }
 
 
-/* ---- 3. the portrait follows the pointer ------------------------------
-   A few pixels of parallax, driven by motion.js. Small enough to feel like
-   depth rather than a gimmick, and it never moves far enough to disturb the
-   layout because it is a transform. */
-
-.hero__cut img,
-.hero__halo {
-  transition: translate .5s cubic-bezier(.22, .8, .28, 1);
-}
-
-@media (hover: none) {
-  .hero__cut img, .hero__halo { translate: none !important; }
-}
-
-
-/* ---- 4. interaction polish --------------------------------------------
-   The same easing everywhere, so the whole site moves like one object. */
+/* ---- 3. interaction polish -------------------------------------------- */
+/* The same easing everywhere, so the whole site moves like one object. */
 
 :root {
   --p-ease-out: cubic-bezier(.22, .8, .28, 1);
@@ -120,9 +100,8 @@ a, button, .card, .room, .chipbtn, .pill, .mtab,
 .btn:active, .button:active, .room:active { transform: translateY(1px) scale(.995); }
 
 
-/* ---- 5. the home room cards -------------------------------------------
-   Each card carries its room's accent. On hover the accent surfaces rather
-   than the card changing into something else. */
+/* ---- 4. the home room cards ------------------------------------------- */
+/* Each card carries its room's accent. On hover the accent surfaces rather than the card changing into something else. */
 
 .room::after {
   content: "";
@@ -141,7 +120,7 @@ a, button, .card, .room, .chipbtn, .pill, .mtab,
 .room:hover { transform: translateY(-4px); }
 
 
-/* ---- 6. focus, for people who navigate by keyboard -------------------- */
+/* ---- 5. focus, for people who navigate by keyboard -------------------- */
 
 :focus-visible {
   outline: 2px solid var(--p-accent);
@@ -168,9 +147,8 @@ a, button, .card, .room, .chipbtn, .pill, .mtab,
 .p-skip:focus { translate: -50% 0; }
 
 
-/* ---- 7. theme change ---------------------------------------------------
-   Light and dark cross-fade rather than snapping. The transition is applied
-   only while the toggle is working, so it never slows an ordinary hover. */
+/* ---- 6. theme change --------------------------------------------------- */
+/* Light and dark cross-fade rather than snapping. The transition is applied only while the toggle is working, so it never slows an ordinary hover. */
 
 html.is-theming, html.is-theming * {
   transition:
@@ -180,7 +158,7 @@ html.is-theming, html.is-theming * {
 }
 
 
-/* ---- 8. scrolling ------------------------------------------------------ */
+/* ---- 7. scrolling ------------------------------------------------------ */
 
 html { scroll-behavior: smooth; }
 
@@ -189,6 +167,5 @@ html { scroll-behavior: smooth; }
   html[data-motion] [data-reveal] { opacity: 1; transform: none; }
   html[data-motion] .hero__grid > div > *,
   html[data-motion] .hero__col > *,
-  html[data-motion] .hero__cut,
   html[data-motion] .reader-cut { opacity: 1; animation: none; transform: none; }
 }

@@ -60,8 +60,7 @@ class Readlist {
     for (const isbn of this.byIsbn.keys()) this.byVersion.delete(isbn);
   }
 
-  // A different printing of something already queued. Same rule as the library:
-  // never folded into find(), because they are different claims.
+  // A different printing of something already queued. Same rule as the library: never folded into find(), because they are different claims.
   findVersion(book) {
     return this.versionMatch(book).entry;
   }
@@ -74,8 +73,7 @@ class Readlist {
       const hit = this.byIsbn.get(other) || this.byVersion.get(other);
       if (hit) return { entry: hit, via: "isbn" };
     }
-    // Title and author alone, which is the weaker claim. Same rule as the
-    // library, and it colours a card yellow rather than violet.
+    // Title and author alone, which is the weaker claim. Same rule as the library, and it colours a card yellow rather than violet.
     const wanted = normaliseAuthor(firstAuthor(book));
     if (wanted) {
       for (const entry of this.byTitle.get(looseKeyOf(book)) || []) {
@@ -109,8 +107,7 @@ class Readlist {
       for (const entry of this.byKey.values()) if (entry.isbn && carriesIsbn(book, entry.isbn)) return entry;
     }
 
-    // Same rule as the library: a different ISBN is a different printing, and
-    // silence on either side says nothing and stays eligible for a title match.
+    // Same rule as the library: a different ISBN is a different printing, and silence on either side says nothing and stays eligible for a title match.
     const mine = ownIsbns(book);
     const ok = entry => !entry.isbn || !mine.length || mine.includes(entry.isbn);
 

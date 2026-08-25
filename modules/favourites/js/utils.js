@@ -1,15 +1,12 @@
 // SidPicks - small shared helpers.
 
-/** querySelector shorthand. */
+// querySelector shorthand.
 export const qs = (selector, scope = document) => scope.querySelector(selector);
 
-/** querySelectorAll shorthand, returned as a real array. */
+// querySelectorAll shorthand, returned as a real array.
 export const qsa = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 
-/**
- * Debounce: delays `fn` until `wait` ms have passed without a new call.
- * Used for the search input so we don't filter on every keystroke.
- */
+// Debounce: delays `fn` until `wait` ms have passed without a new call. Used for the search input so we don't filter on every keystroke.
 export function debounce(fn, wait = 200) {
   let timer;
   return function debounced(...args) {
@@ -18,20 +15,13 @@ export function debounce(fn, wait = 200) {
   };
 }
 
-/**
- * Clone a <template>'s single root element by id. Keeps markup in the
- * HTML files — JS just clones and fills these.
- */
+// Clone a <template>'s single root element by id. Keeps markup in the HTML files — JS just clones and fills these.
 export function cloneTpl(id) {
   const tpl = document.getElementById(id);
   return tpl.content.firstElementChild.cloneNode(true);
 }
 
-/**
- * Minimal CSV parser that understands quoted fields, escaped quotes
- * and CRLF line endings — enough for Google Sheets CSV exports.
- * Returns an array of rows, each row an array of cell strings.
- */
+// Minimal CSV parser that understands quoted fields, escaped quotes and CRLF line endings — enough for Google Sheets CSV exports. Returns an array of rows, each row an array of cell strings.
 export function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -77,20 +67,17 @@ export function parseCsv(text) {
   return rows;
 }
 
-/** True when the visitor prefers reduced motion. */
+// True when the visitor prefers reduced motion.
 export function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/** Read a query-string parameter from the current URL. */
+// Read a query-string parameter from the current URL.
 export function getQueryParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-/**
- * Wire an <img> element so it fades in once loaded and falls back to
- * the museum placeholder if the URL is broken.
- */
+// Wire an <img> element so it fades in once loaded and falls back to the museum placeholder if the URL is broken.
 export function hydrateImage(img, fallbackSrc = "assets/placeholders/exhibit.svg") {
   const markLoaded = () => img.classList.add("is-loaded");
 

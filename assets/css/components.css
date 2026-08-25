@@ -1,20 +1,15 @@
-/* SidVerse - the shared component language: how tall a bar is, how tall a
-   button is, what radius a field has. Loaded last, so it sets dimension, type
-   and shape only, never colour. See docs/PROJECT.md section 4. */
+/* SidVerse - the shared component language: how tall a bar is, how tall a button is, what radius a field has. Loaded last, so it sets dimension, type and shape only, never colour. See docs/PROJECT.md section 4. */
 
 
-/* ---- 1. the type scale -------------------------------------------------
-   Every module now renders at 100% browser zoom, so these are real sizes on
-   screen rather than values waiting to be scaled down by a `zoom` rule. */
+/* ---- 1. the type scale ------------------------------------------------- */
+/* Every module now renders at 100% browser zoom, so these are real sizes on screen rather than values waiting to be scaled down by a `zoom` rule. */
 
 body {
   font-size: var(--p-text);
   line-height: var(--p-leading);
 }
 
-/* Favourites asked for 1.08rem above 1920px and clamped its body type up to
-   1.08rem, which is where its 17.28px came from — the largest body text on the
-   site against Cinema's 15px. */
+/* Favourites asked for 1.08rem above 1920px and clamped its body type up to 1.08rem, which is where its 17.28px came from — the largest body text on the site against Cinema's 15px. */
 [data-section="favourites"] {
   --text-body: clamp(0.94rem, .25vw + .88rem, 1rem);
   --text-hero: var(--p-display-1);
@@ -42,10 +37,8 @@ body {
 }
 
 
-/* ---- 2. bars -----------------------------------------------------------
-   Measured 44 / 49 / 55 / 63 / 66px across the five modules that have one.
-   The bar is the first thing seen on every page, so its height is the single
-   most visible inconsistency on the site. */
+/* ---- 2. bars ----------------------------------------------------------- */
+/* Measured 44 / 49 / 55 / 63 / 66px across the five modules that have one. The bar is the first thing seen on every page, so its height is the single most visible inconsistency on the site. */
 
 .topbar,
 .navbar,
@@ -77,9 +70,8 @@ body {
 }
 
 
-/* ---- 3. buttons --------------------------------------------------------
-   Heights measured 25, 27, 29, 32, 38, 39 and 47px, across radii of 999px,
-   50px, 12px and 50%. Colour is left to the module; only the box is unified. */
+/* ---- 3. buttons -------------------------------------------------------- */
+/* Heights measured 25, 27, 29, 32, 38, 39 and 47px, across radii of 999px, 50px, 12px and 50%. Colour is left to the module; only the box is unified. */
 
 .btn,
 .button,
@@ -108,18 +100,14 @@ button.btn {
               transform var(--p-t-fast, .18s) var(--p-ease);
 }
 
-/* Vertical padding is pinned so min-height actually decides the height;
-   horizontal padding is a zero-specificity default a module may override to
-   make room for a leading glyph. */
+/* Vertical padding is pinned so min-height actually decides the height; horizontal padding is a zero-specificity default a module may override to make room for a leading glyph. */
 .btn, .button, .pill, .chipbtn, .mtab, .modeswitch__btn,
 .searchbox__go, .nav__link { padding-block: 0; }
 
 :where(.btn, .button, .pill, .chipbtn, .mtab, .modeswitch__btn,
        .searchbox__go, .nav__link) { padding-inline: var(--p-space-md); }
 
-/* Small, dense controls — filter chips, tab strips, table actions. These are
-   meant to read as secondary, so they get the small height rather than the
-   standard one. */
+/* Small, dense controls — filter chips, tab strips, table actions. These are meant to read as secondary, so they get the small height rather than the standard one. */
 .chipbtn,
 .pill,
 .mtab,
@@ -131,8 +119,7 @@ button.btn {
 :where(.chipbtn, .pill, .mtab, .modeswitch__btn) { padding-inline: var(--p-space-sm); }
 
 /* Square icon buttons keep a circle, but stop being 25px. */
-/* :not(--label) matters: Cinema's nav uses .icon-btn.icon-btn--label for
-   glyph-plus-text pills. Squaring those to 40px clipped every label. */
+/* :not(--label) matters: Cinema's nav uses .icon-btn.icon-btn--label for glyph-plus-text pills. Squaring those to 40px clipped every label. */
 .icon-btn:not(.icon-btn--label),
 .iconbtn:not(.iconbtn--label),
 .icon-button:not(.icon-button--label) {
@@ -195,9 +182,7 @@ button:disabled,
 }
 
 
-/* ---- 4. fields ---------------------------------------------------------
-   universal.css gave these their colours. This gives them their box, so a
-   search field in Books is the same object as a search field in Food. */
+/* ---- 4. fields --------------------------------------------------------- universal.css gave these their colours. This gives them their box, so a search field in Books is the same object as a search field in Food. */
 
 input[type="text"], input[type="search"], input[type="number"],
 input[type="email"], input[type="password"], input[type="url"],
@@ -230,8 +215,7 @@ input:focus, select:focus, textarea:focus, .form-control:focus {
   box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .22);
 }
 
-/* Food's sort control was the one native, unstyled <select> left on the site.
-   Restyling the box alone leaves the OS arrow, so the arrow is drawn here. */
+/* Food's sort control was the one native, unstyled <select> left on the site. Restyling the box alone leaves the OS arrow, so the arrow is drawn here. */
 select {
   appearance: none;
   -webkit-appearance: none;
@@ -244,10 +228,7 @@ select {
   cursor: pointer;
 }
 
-/* The longhands are repeated here on purpose. A module that sets the
-   `background` shorthand after the base rule resets background-repeat to its
-   initial `repeat`, and an arrow declared on its own then tiles across the
-   control — which is what happened to Books' scope picker in dark only. */
+/* The longhands are repeated here on purpose. A module that sets the `background` shorthand after the base rule resets background-repeat to its initial `repeat`, and an arrow declared on its own then tiles across the control — which is what happened to Books' scope picker in dark only. */
 [data-theme="dark"] select {
   background-image:
     url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239a92a8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
@@ -256,28 +237,21 @@ select {
   background-size: 16px 16px;
 }
 
-/* Books and Cinema wrap their selects in a picker that already draws its own
-   chevron. Those keep theirs — a second arrow would sit on top of the first.
-   This sits after the dark rule so it holds in both themes, and leaves
-   padding-right alone because the wrapper positions its arrow with it. */
+/* Books and Cinema wrap their selects in a picker that already draws its own chevron. Those keep theirs — a second arrow would sit on top of the first. This sits after the dark rule so it holds in both themes, and leaves padding-right alone because the wrapper positions its arrow with it. */
 .scopepick select, .picker select, .select-wrap select {
   background-image: none;
 }
 
 
-/* ---- 5. text on an accent ----------------------------------------------
-   In light the accents are mid-tones and carry white. In dark they are lifted
-   pastels: white on them measures 1.86:1. --p-on-accent flips to ink for dark
-   in tokens.css; this points the components that fill with an accent at it.
-   Books' Search button was the visible case. */
+/* ---- 5. text on an accent ---------------------------------------------- */
+/* In light the accents are mid-tones and carry white. In dark they are lifted pastels: white on them measures 1.86:1. --p-on-accent flips to ink for dark in tokens.css; this points the components that fill with an accent at it. Books' Search button was the visible case. */
 
 .btn--primary, .btn-primary, .btn.primary,
 .searchbox__go, .postcard-btn {
   color: var(--p-on-accent);
 }
 
-/* An accent used as TEXT on paper is only 2.0–2.3:1. Links take the darkened
-   (light) or lifted (dark) version of the same hue instead. */
+/* An accent used as TEXT on paper is only 2.0–2.3:1. Links take the darkened (light) or lifted (dark) version of the same hue instead. */
 .pfoot__link,
 a.link,
 .link--accent { color: var(--p-accent-ink); }
@@ -300,9 +274,8 @@ a.link,
 }
 
 
-/* ---- 7. cards ----------------------------------------------------------
-   Shape and motion only. What a card *contains* is the module's business —
-   a poster grid and a food photo want different layouts and should keep them. */
+/* ---- 7. cards ---------------------------------------------------------- */
+/* Shape and motion only. What a card *contains* is the module's business — a poster grid and a food photo want different layouts and should keep them. */
 
 .card, .mcard, .fav-card, .bookcard, .moviecard, .dish-card {
   border-radius: var(--p-radius);
@@ -322,10 +295,8 @@ a.link,
 }
 
 
-/* ---- 8. empty, loading and error states --------------------------------
-   These read as browser output rather than as part of the site — Food
-   surfaced a bare "Failed to fetch", Books an unstyled "Nothing here" in a
-   large blank panel. One shape for all three, in every module. */
+/* ---- 8. empty, loading and error states -------------------------------- */
+/* These read as browser output rather than as part of the site — Food surfaced a bare "Failed to fetch", Books an unstyled "Nothing here" in a large blank panel. One shape for all three, in every module. */
 
 .state, .empty, .empty-state, .loading, .error-state {
   display: grid;
@@ -362,8 +333,8 @@ a.link,
 .loading, .is-loading { animation: p-pulse 1.6s var(--p-ease) infinite; }
 
 
-/* ---- 9. tables ---------------------------------------------------------
-   Readability over decoration: a ruled baseline, a quiet header, no zebra. */
+/* ---- 9. tables --------------------------------------------------------- */
+/* Readability over decoration: a ruled baseline, a quiet header, no zebra. */
 
 table { border-collapse: collapse; width: 100%; font-size: var(--p-text-md); }
 
@@ -388,8 +359,8 @@ td {
 tbody tr:hover td { background: var(--p-surface-2); }
 
 
-/* ---- 10. motion --------------------------------------------------------
-   Everything that moves, moves at one of two speeds. */
+/* ---- 10. motion -------------------------------------------------------- */
+/* Everything that moves, moves at one of two speeds. */
 
 :root { --p-t-fast: .18s; --p-t: .24s; }
 
@@ -403,9 +374,8 @@ tbody tr:hover td { background: var(--p-surface-2); }
 }
 
 
-/* ---- 11. responsive ----------------------------------------------------
-   The bar relaxes its height on a phone, where 64px of chrome is a lot of a
-   small screen, and controls grow to a comfortable touch target. */
+/* ---- 11. responsive ---------------------------------------------------- */
+/* The bar relaxes its height on a phone, where 64px of chrome is a lot of a small screen, and controls grow to a comfortable touch target. */
 
 @media (max-width: 720px) {
   .topbar, .navbar, .nav, .site-topbar,
@@ -430,10 +400,8 @@ tbody tr:hover td { background: var(--p-surface-2); }
 p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
 
 
-/* ---- 12. the label floor ----------------------------------------------
-   Eyebrows and mono labels are a deliberate device on this site — small,
-   uppercase, widely tracked. They are not licence to go to 9.6px. Eleven is
-   the floor, and tracking does the rest of the work. */
+/* ---- 12. the label floor ---------------------------------------------- */
+/* Eyebrows and mono labels are a deliberate device on this site — small, uppercase, widely tracked. They are not licence to go to 9.6px. Eleven is the floor, and tracking does the rest of the work. */
 
 .eyebrow, .hero__eyebrow, .coll__eyebrow, .contact-eyebrow, .gallery-eyebrow,
 .psb__label, .facets__label, .suggestions__label, .gsp-label, .hfc-label,
@@ -445,8 +413,7 @@ p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
   line-height: 1.45;
 }
 
-/* The video badge sat at 9.6px in ink-on-brown, 1.31:1. It is a label over a
-   photograph, so it carries its own dark plate in both themes. */
+/* The video badge sat at 9.6px in ink-on-brown, 1.31:1. It is a label over a photograph, so it carries its own dark plate in both themes. */
 .gallery-video-badge {
   background: rgba(17, 14, 23, .74);
   color: #fff;
@@ -459,15 +426,8 @@ p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
 .c-date { color: var(--p-accent-ink); font-weight: 600; }
 
 
-/* ---- 13. the primary button -------------------------------------------
-   A primary button is the module's accent, filled, with text that can be read
-   on it. It could not simply take --p-accent as its ground: white on a light
-   accent measures 2.0–2.3:1. --p-accent-ink is the same hue pushed to where it
-   clears 4.5:1 against white (light) and against ink (dark), so one pair of
-   tokens covers both themes.
-
-   Food's Unlock button is the case this fixes: its --plum ground had been
-   remapped to a near-white surface, leaving pale text on pale paper. */
+/* ---- 13. the primary button ------------------------------------------- */
+/* A primary button is the module's accent, filled, with text that can be read on it. It could not simply take --p-accent as its ground: white on a light accent measures 2.0–2.3:1. --p-accent-ink is the same hue pushed to where it clears 4.5:1 against white (light) and against ink (dark), so one pair of tokens covers both themes. Food's Unlock button is the case this fixes: its --plum ground had been remapped to a near-white surface, leaving pale text on pale paper. */
 
 .btn--primary, .btn-primary, .btn.primary,
 .searchbox__go, .postcard-btn, button[type="submit"].btn {
@@ -497,19 +457,14 @@ p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
 }
 
 
-/* ---- 14. the rail notch ------------------------------------------------
-   `body` is padded by the rail's width, so a band that bleeds to the screen
-   edge has to reach back past that padding. Travel's hero does; the section
-   under it does not, which left a small lighter notch at the left edge where
-   the two met. Bands that bleed are given the reach in one place. */
+/* ---- 14. the rail notch ------------------------------------------------ */
+/* `body` is padded by the rail's width, so a band that bleeds to the screen edge has to reach back past that padding. Travel's hero does; the section under it does not, which left a small lighter notch at the left edge where the two met. Bands that bleed are given the reach in one place. */
 
 @media (min-width: 721px) {
   .bleed,
   .hero--bleed,
   .section--bleed,
-  /* Travel paints a full-width wash on each band. Without the reach-back the
-     page's own paper showed as a lighter notch in the rail's column wherever
-     two bands met. */
+  /* Travel paints a full-width wash on each band. Without the reach-back the page's own paper showed as a lighter notch in the rail's column wherever two bands met. */
   [data-section="travel"] .hero,
   [data-section="travel"] .goals-section,
   [data-section="travel"] .activities-section,
@@ -525,21 +480,12 @@ p, li, dd, td, h1, h2, h3, h4 { overflow-wrap: break-word; }
   }
 }
 
-/* The page background sits behind everything, so the notch cannot show
-   through as paper of a different colour. */
+/* The page background sits behind everything, so the notch cannot show through as paper of a different colour. */
 html { background: var(--p-bg); }
 
 
-/* ---- 15. dropdowns stay inside the window -----------------------------
-   Favourites' Galleries panel is centred on its trigger with
-   `left: 50%; translateX(-50%)`, and its trigger is the last item in a
-   right-aligned bar. At 768–1024px that pushed 248px of panel past the right
-   edge and gave the page a horizontal scrollbar — while the panel was
-   `visibility: hidden`, so the scrollbar appeared with nothing visible causing
-   it. An absolutely positioned box still extends the scroll area.
-
-   The panel now hangs from the trigger's right edge and is capped to the
-   window, so it opens inward and never widens the page. */
+/* ---- 15. dropdowns stay inside the window ----------------------------- */
+/* Favourites' Galleries panel is centred on its trigger with `left: 50%; translateX(-50%)`, and its trigger is the last item in a right-aligned bar. At 768–1024px that pushed 248px of panel past the right edge and gave the page a horizontal scrollbar — while the panel was `visibility: hidden`, so the scrollbar appeared with nothing visible causing it. An absolutely positioned box still extends the scroll area. The panel now hangs from the trigger's right edge and is capped to the window, so it opens inward and never widens the page. */
 
 .nav__dropdown-panel {
   left: auto;
@@ -563,25 +509,17 @@ html { background: var(--p-bg); }
 .nav__dropdown:focus-within .nav__dropdown-panel { pointer-events: auto; }
 
 
-/* ---- 16. decorative art never widens the page -------------------------
-   Books' hero blobs are painted past the layout box on purpose. They are
-   decoration, so they are clipped rather than allowed to add scroll width. */
+/* ---- 16. decorative art never widens the page ------------------------- */
+/* Books' hero blobs are painted past the layout box on purpose. They are decoration, so they are clipped rather than allowed to add scroll width. */
 
-/* These used to carry `overflow: clip` to stop decorative blobs widening the
-   page. It also squared off the round wash behind each portrait — the halo was
-   clipped to the figure's box and read as a rectangle, which is the one thing
-   the halo exists to avoid. The page is protected by `overflow-x: clip` on
-   <body> instead, which costs nothing here. */
+/* These used to carry `overflow: clip` to stop decorative blobs widening the page. It also squared off the round wash behind each portrait — the halo was clipped to the figure's box and read as a rectangle, which is the one thing the halo exists to avoid. The page is protected by `overflow-x: clip` on <body> instead, which costs nothing here. */
 .keeper__blobs { overflow: clip; }
 
 .rblob, .hero__blob, .blob { pointer-events: none; }
 
 
-/* ---- 17. states get a mark ---------------------------------------------
-   Both Books and Food render `.empty > .empty__title + .empty__note`, which
-   section 8 already sized and coloured. What made them read as browser output
-   rather than as part of the site was that they were words alone in a large
-   blank panel. A quiet dot of the module's accent gives the block a centre. */
+/* ---- 17. states get a mark --------------------------------------------- */
+/* Both Books and Food render `.empty > .empty__title + .empty__note`, which section 8 already sized and coloured. What made them read as browser output rather than as part of the site was that they were words alone in a large blank panel. A quiet dot of the module's accent gives the block a centre. */
 
 .empty:not(:has(.empty__icon)):not(:has(.big))::before,
 .state:not(:has(.state__icon))::before {
@@ -607,25 +545,13 @@ html { background: var(--p-bg); }
 }
 
 
-/* ---- 18. flex-item shrink guard ---------------------------------------
-   universal.css makes <body> a flex column so the injected footer pins to the
-   bottom. That silently makes every top-level block a flex item, and a flex
-   item's `min-width: auto` refuses to shrink below its min-content width — so
-   a grid with fixed minimum tracks pushes the page sideways instead of
-   reflowing. Journal's card grid did exactly that at 768px. */
+/* ---- 18. flex-item shrink guard --------------------------------------- universal.css makes <body> a flex column so the injected footer pins to the bottom. That silently makes every top-level block a flex item, and a flex item's `min-width: auto` refuses to shrink below its min-content width — so a grid with fixed minimum tracks pushes the page sideways instead of reflowing. Journal's card grid did exactly that at 768px. */
 
 body > * { min-width: 0; }
 
 
-/* ---- 19. one background, everywhere ------------------------------------
-   The page background is set once, on <body>, in base.css. Every band below is
-   cleared so that one wash runs the whole length of every page.
-
-   This is what fixed the seams: Home showed an edge where the hero band met
-   the rooms band, Cinema was one colour at the top and another at the bottom,
-   and Travel painted five different hues down the page — lavender, cream,
-   yellow, green, beige — none of which met the sidebar's colour. Cards, bars
-   and modals keep their surfaces; only the full-width bands go. */
+/* ---- 19. one background, everywhere ------------------------------------ */
+/* The page background is set once, on <body>, in base.css. Every band below is cleared so that one wash runs the whole length of every page. This is what fixed the seams: Home showed an edge where the hero band met the rooms band, Cinema was one colour at the top and another at the bottom, and Travel painted five different hues down the page — lavender, cream, yellow, green, beige — none of which met the sidebar's colour. Cards, bars and modals keep their surfaces; only the full-width bands go. */
 
 .hero, .rooms,
 [data-section] .hero,
@@ -668,25 +594,16 @@ body > * { min-width: 0; }
 }
 
 
-/* ---- 20. the page sits in the space beside the rail --------------------
-   The rail floats over the left edge. Content is centred in what is left of
-   the window, while the background and the footer run underneath it, so the
-   colour reaches the screen edge and nothing shows a lighter column. */
+/* ---- 20. the page sits in the space beside the rail -------------------- */
+/* The rail floats over the left edge. Content is centred in what is left of the window, while the background and the footer run underneath it, so the colour reaches the screen edge and nothing shows a lighter column. */
 
 body { padding-left: var(--p-rail-clear); }
 
 @media (max-width: 720px) { body { padding-left: 0; } }
 
 
-/* ---- 21. one navbar ----------------------------------------------------
-   The five rooms each shipped a different bar: Cinema `.topbar > .wrap`,
-   Books a JS-built `.topbar > .nav__inner`, Travel `nav.navbar > .nav-inner`,
-   Food a `.topbar` with no inner wrapper at all, and Favourites
-   `header.nav > .container`. Same job, five structures, five looks.
-
-   This gives all five one shell, one row, one brand treatment and one
-   alignment: brand hard left on the content's own left edge, everything else
-   pushed right. */
+/* ---- 21. one navbar ---------------------------------------------------- */
+/* The five rooms each shipped a different bar: Cinema `.topbar > .wrap`, Books a JS-built `.topbar > .nav__inner`, Travel `nav.navbar > .nav-inner`, Food a `.topbar` with no inner wrapper at all, and Favourites `header.nav > .container`. Same job, five structures, five looks. This gives all five one shell, one row, one brand treatment and one alignment: brand hard left on the content's own left edge, everything else pushed right. */
 
 .topbar, .navbar, .nav, .site-topbar {
   background: color-mix(in srgb, var(--p-surface) 78%, transparent);
@@ -696,14 +613,11 @@ body { padding-left: var(--p-rail-clear); }
   box-shadow: none;
 }
 
-/* The row. Food has no inner element, so the bar itself becomes the row and
-   gets the same shell width — which is why it is listed on both rules. */
+/* The row. Food has no inner element, so the bar itself becomes the row and gets the same shell width — which is why it is listed on both rules. */
 .topbar__inner, .navbar .nav-inner, .nav__inner,
 .nav > .container, .topbar > .wrap {
   width: 100%;
-  /* No shell cap: the bar spans the window, brand at the far left and tools at
-     the far right, rather than sitting in a centred column with empty rails on
-     a wide screen. */
+  /* No shell cap: the bar spans the window, brand at the far left and tools at the far right, rather than sitting in a centred column with empty rails on a wide screen. */
   max-width: none;
   margin-inline: 0;
   padding-inline: clamp(18px, 2.2vw, 34px);
@@ -772,9 +686,7 @@ body { padding-left: var(--p-rail-clear); }
   color: var(--p-accent-ink);
 }
 
-/* Travel's bar is fixed, the others are sticky. Either way the band spans the
-   window and its content starts after the rail — see the band rule in
-   universal.css, which this used to fight by insetting fixed bars by 74px. */
+/* Travel's bar is fixed, the others are sticky. Either way the band spans the window and its content starts after the rail — see the band rule in universal.css, which this used to fight by insetting fixed bars by 74px. */
 .topbar, .navbar, .nav, .site-topbar { left: 0; right: 0; }
 
 @media (max-width: 720px) {
@@ -787,9 +699,7 @@ body { padding-left: var(--p-rail-clear); }
 
 /* ---- 22. the footer signature ------------------------------------------ */
 
-/* "Made with love by ME" is a sign-off, not a call to action. It reads as one
-   sentence in one weight — no pill, no underline, no hover, and it does not
-   pretend to be a link. */
+/* "Made with love by ME" is a sign-off, not a call to action. It reads as one sentence in one weight — no pill, no underline, no hover, and it does not pretend to be a link. */
 .pfoot__me {
   text-decoration: none;
   font-weight: 600;
@@ -815,13 +725,8 @@ body { padding-left: var(--p-rail-clear); }
 .pfoot__link:hover { text-decoration: none; color: var(--p-accent-ink); }
 
 
-/* ---- 23. composed controls --------------------------------------------
-   A search box is one control built from several elements: a shell that draws
-   the pill, a borderless input inside it, and a button or a scope picker at
-   the ends. Section 4 gave every <input> its own border and radius, which drew
-   a second box inside the pill — the "extra box" on Cinema's search bar.
-
-   Anything living inside a composed shell gives up its own frame. */
+/* ---- 23. composed controls -------------------------------------------- */
+/* A search box is one control built from several elements: a shell that draws the pill, a borderless input inside it, and a button or a scope picker at the ends. Section 4 gave every <input> its own border and radius, which drew a second box inside the pill — the "extra box" on Cinema's search bar. Anything living inside a composed shell gives up its own frame. */
 
 .searchbox input, .searchbox select,
 .search input, .search select,
@@ -845,8 +750,7 @@ body { padding-left: var(--p-rail-clear); }
   box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .18);
 }
 
-/* Cinema's submit is a glyph with no label, so it reads as a quiet icon
-   button. Books' carries the word "Search" and stays a filled primary. */
+/* Cinema's submit is a glyph with no label, so it reads as a quiet icon button. Books' carries the word "Search" and stays a filled primary. */
 [data-section="cinema"] .searchbox__go {
   background: transparent;
   border: 0;
@@ -878,18 +782,15 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 24. Travel ---------------------------------------------------------
-   Travel's bands are addressed by id, not class, so section 19's class-based
-   rule never reached them and each kept painting its own hue. Ids outrank
-   classes, so they are cleared by id here. */
+/* ---- 24. Travel --------------------------------------------------------- */
+/* Travel's bands are addressed by id, not class, so section 19's class-based rule never reached them and each kept painting its own hue. Ids outrank classes, so they are cleared by id here. */
 
 #places, #goals, #activities, #treks, #monuments, #contact, #journey,
 #stats, #heritage, #map, #gallery {
   background: transparent;
 }
 
-/* The hero fills the window below the bar and no more, so the first screen is
-   the picture and the headline rather than a band of arbitrary height. */
+/* The hero fills the window below the bar and no more, so the first screen is the picture and the headline rather than a band of arbitrary height. */
 [data-section="travel"] .hero {
   min-height: 100vh;
   min-height: 100svh;
@@ -914,19 +815,15 @@ body { padding-left: var(--p-rail-clear); }
 
 [data-section="travel"] .hero .hero-tagline { color: var(--p-on-deep-soft); }
 
-/* ...except the buttons. The rule above is an anchor selector, so it also
-   caught the two hero CTAs — and the filled one is drawn on paper, which left
-   white text on a white pill. A filled button carries its own text colour. */
+/* ...except the buttons. The rule above is an anchor selector, so it also caught the two hero CTAs — and the filled one is drawn on paper, which left white text on a white pill. A filled button carries its own text colour. */
 [data-section="travel"] .hero a.btn-primary { color: var(--p-ink); }
 [data-section="travel"] .hero a.btn-primary:hover { background: var(--p-accent-ink); color: var(--p-on-accent); }
 [data-section="travel"] .hero a.btn-accent { background: var(--p-accent-ink); color: var(--p-on-accent); }
 [data-section="travel"] .hero a.btn-accent:hover { background: var(--p-ink); color: var(--p-bg); }
 
 
-/* ---- 25. cards read the same in both themes ---------------------------
-   Cinema's cards are the reference: a surface, a drawn edge, a soft drop, and
-   a lift on hover. Several rooms drew a card as paper-on-paper, which
-   disappears the moment the paper goes dark. */
+/* ---- 25. cards read the same in both themes --------------------------- */
+/* Cinema's cards are the reference: a surface, a drawn edge, a soft drop, and a lift on hover. Several rooms drew a card as paper-on-paper, which disappears the moment the paper goes dark. */
 
 .card, .mcard, .fav-card, .bookcard, .moviecard, .dish-card,
 .topcard, .place-card, .trek-card, .goal-card, .activity-card,
@@ -959,26 +856,20 @@ body { padding-left: var(--p-rail-clear); }
   color: var(--p-muted);
 }
 
-/* The hero headline is built from per-word spans for its reveal, so the text
-   colour has to reach the spans, not just the heading. */
+/* The hero headline is built from per-word spans for its reveal, so the text colour has to reach the spans, not just the heading. */
 [data-section="travel"] .hero h1 .word,
 [data-section="travel"] .hero .hero-headline * { color: inherit; }
 
-/* If the animation library is blocked or offline, the words must still show:
-   the reveal animation ends at opacity 1, but its 0 start would otherwise be
-   the resting state for anyone who never loads it. */
+/* If the animation library is blocked or offline, the words must still show: the reveal animation ends at opacity 1, but its 0 start would otherwise be the resting state for anyone who never loads it. */
 [data-section="travel"] .hero h1 .word { opacity: 1; }
 
-/* Full-bleed rows reach past the shell by design; they are clipped to the page
-   so they cannot extend the paint area past the window. */
+/* Full-bleed rows reach past the shell by design; they are clipped to the page so they cannot extend the paint area past the window. */
 [data-section="travel"] .full-bleed { max-width: 100%; }
 [data-section="travel"] .hero-bg { max-width: 100%; left: 0; right: 0; }
 
 
-/* ---- 26. Food ---------------------------------------------------------
-   Its search field drew its own pill. Section 23 strips the frame from fields
-   inside a composed control, so the wrapper has to draw the pill instead or
-   the field disappears entirely. */
+/* ---- 26. Food --------------------------------------------------------- */
+/* Its search field drew its own pill. Section 23 strips the frame from fields inside a composed control, so the wrapper has to draw the pill instead or the field disappears entirely. */
 
 [data-section="food"] .search {
   display: flex;
@@ -991,9 +882,7 @@ body { padding-left: var(--p-rail-clear); }
   background: var(--p-surface);
 }
 
-/* The wrapper already holds the icon slot and the inner padding, so the field
-   inside it keeps none of its own — two sets of padding left the placeholder
-   with barely half the pill to sit in. */
+/* The wrapper already holds the icon slot and the inner padding, so the field inside it keeps none of its own — two sets of padding left the placeholder with barely half the pill to sit in. */
 [data-section="food"] .search input {
   width: 100%;
   min-width: 0;
@@ -1015,10 +904,8 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="food"] .hero__by { color: var(--p-muted); }
 
 
-/* ---- 27. the gallery ---------------------------------------------------
-   A masonry wall of photographs. The tiles carry the work, so the chrome
-   stays quiet: a soft radius, a drawn edge that only shows while a picture is
-   still arriving, and a lift on hover. */
+/* ---- 27. the gallery --------------------------------------------------- */
+/* A masonry wall of photographs. The tiles carry the work, so the chrome stays quiet: a soft radius, a drawn edge that only shows while a picture is still arriving, and a lift on hover. */
 
 [data-section="travel"] .gallery-item {
   border-radius: var(--p-radius);
@@ -1053,9 +940,7 @@ body { padding-left: var(--p-rail-clear); }
   z-index: 2;
 }
 
-/* A little more room to breathe than the old 130px tracks gave. The album runs
-   the full width of the page: a cap here left the photographs in a column with
-   bare paper either side. */
+/* A little more room to breathe than the old 130px tracks gave. The album runs the full width of the page: a cap here left the photographs in a column with bare paper either side. */
 [data-section="travel"] .gallery-grid {
   grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
   gap: var(--p-space-sm);
@@ -1063,8 +948,7 @@ body { padding-left: var(--p-rail-clear); }
   padding-inline: var(--p-gutter);
 }
 
-/* Three to a row on a phone: a fixed count rather than a minimum width, which
-   at this width resolved to a single column. */
+/* Three to a row on a phone: a fixed count rather than a minimum width, which at this width resolved to a single column. */
 @media (max-width: 700px) {
   [data-section="travel"] .gallery-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -1088,9 +972,7 @@ body { padding-left: var(--p-rail-clear); }
   scrollbar-width: none;
 }
 
-/* ...unless it holds a menu. Scrolling clips on both axes, so the Galleries
-   panel was being cut to the 32px height of the row it hangs from. A bar with
-   a dropdown in it stays visible and wraps instead. */
+/* ...unless it holds a menu. Scrolling clips on both axes, so the Galleries panel was being cut to the 32px height of the row it hangs from. A bar with a dropdown in it stays visible and wraps instead. */
 .topbar__tools:has(.nav__dropdown), .nav__links:has(.nav__dropdown),
 .nav__tools:has(.nav__dropdown), .navbar .nav-links:has(.nav__dropdown) {
   overflow: visible;
@@ -1099,10 +981,7 @@ body { padding-left: var(--p-rail-clear); }
 .topbar__tools::-webkit-scrollbar, .nav__tools::-webkit-scrollbar,
 .nav__links::-webkit-scrollbar, .navbar .nav-links::-webkit-scrollbar { display: none; }
 
-/* The contact band is a deep plate again in both themes, so its text is the
-   on-deep ink. It had been forced to --p-ink from when the band was paper,
-   which put near-black on the plate. The form card inside keeps its own paper
-   colours; those are set in the module's theme.css. */
+/* The contact band is a deep plate again in both themes, so its text is the on-deep ink. It had been forced to --p-ink from when the band was paper, which put near-black on the plate. The form card inside keeps its own paper colours; those are set in the module's theme.css. */
 [data-section="travel"] .contact-section .vibe-line,
 [data-section="travel"] .contact-section .vibe-line span,
 [data-section="travel"] .contact-section h2,
@@ -1111,35 +990,27 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="travel"] .contact-section .contact-eyebrow { color: var(--p-on-deep-soft); }
 
 
-/* ---- 28. eyebrows and small accent text --------------------------------
-   An eyebrow is small, so it needs the accent at text strength. --p-accent is
-   a fill colour and lands at 2.1-4.2:1 against paper; --p-accent-ink is the
-   same hue at readable weight. */
+/* ---- 28. eyebrows and small accent text -------------------------------- */
+/* An eyebrow is small, so it needs the accent at text strength. --p-accent is a fill colour and lands at 2.1-4.2:1 against paper; --p-accent-ink is the same hue at readable weight. */
 
 .eyebrow, .hero__eyebrow, .collhead__eyebrow, .contact-eyebrow,
 .gallery-eyebrow, .coll__eyebrow, .hero__count {
   color: var(--p-accent-ink);
 }
 
-/* Travel's bar carried white links and a cream sign-off, which was right when
-   both sat on its own dark band. The bar is translucent paper now. */
+/* Travel's bar carried white links and a cream sign-off, which was right when both sat on its own dark band. The bar is translucent paper now. */
 [data-section="travel"] .navbar .nav-links a,
 [data-section="travel"] .navbar .logo { color: var(--p-ink); }
 [data-section="travel"] .navbar .nav-links a:hover { color: var(--p-accent-ink); }
 [data-section="travel"] .signoff-text { color: var(--p-ink); }
 
-/* The hero is the exception: it keeps a dark photographic band, so the bar
-   above it stays light while the page is scrolled to the top. It had been set
-   to ink, which put a near-black link on a near-black photograph at 1.3:1.
-   Scoped to the page that actually has that band: the gallery shares this bar
-   but opens on paper, and an unscoped rule turned its wordmark white. */
+/* The hero is the exception: it keeps a dark photographic band, so the bar above it stays light while the page is scrolled to the top. It had been set to ink, which put a near-black link on a near-black photograph at 1.3:1. Scoped to the page that actually has that band: the gallery shares this bar but opens on paper, and an unscoped rule turned its wordmark white. */
 [data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .nav-links a,
 [data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .logo,
 [data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .logo em,
 [data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .pmark__name { color: var(--p-on-deep); }
 
-/* The tile is a pale plate in every other room; over a dark photograph it
-   reads as glass instead. */
+/* The tile is a pale plate in every other room; over a dark photograph it reads as glass instead. */
 [data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .pmark__tile {
   background: rgba(255, 255, 255, .16);
   border-color: rgba(255, 255, 255, .3);
@@ -1147,34 +1018,28 @@ body { padding-left: var(--p-rail-clear); }
 }
 [data-section="travel"] body:has(.hero) .navbar:not(.scrolled) .nav-links a:hover { color: var(--p-on-deep); opacity: .78; }
 
-/* Travel's hero is the one band that stays dark in both themes, so its eyebrow
-   is the exception to the rule above: on-deep, not accent-ink. */
+/* Travel's hero is the one band that stays dark in both themes, so its eyebrow is the exception to the rule above: on-deep, not accent-ink. */
 [data-section="travel"] .hero .eyebrow,
 [data-section="travel"] .hero .hero-eyebrow {
   color: var(--p-on-deep-soft);
 }
 
 
-/* ---- 29. Books hero band ----------------------------------------------
-   The band was sized to the text column, so enlarging the picture left it
-   tight top and bottom. It breathes now, and the picture is the thing the
-   room introduces itself with. */
+/* ---- 29. Books hero band ---------------------------------------------- */
+/* The band was sized to the text column, so enlarging the picture left it tight top and bottom. It breathes now, and the picture is the thing the room introduces itself with. */
 
-/* Less above than below, so the row reads centred in the opening screen rather
-   than sitting low in it. The band's scale is unchanged. */
+/* Less above than below, so the row reads centred in the opening screen rather than sitting low in it. The band's scale is unchanged. */
 [data-section="books"] .hero {
   padding-block: clamp(20px, 3.4vw, 50px) clamp(36px, 6vw, 88px);
 }
 
 [data-section="books"] .hero__main {
   align-items: center;
-  /* More air between the reading column and the photograph, so the search bar
-     is not crowding the plate. */
+  /* More air between the reading column and the photograph, so the search bar is not crowding the plate. */
   gap: clamp(32px, 6vw, 104px);
 }
 
-/* The reading column reads centred on one axis: eyebrow, phrase, line, search
-   and genres all sit over the same middle. */
+/* The reading column reads centred on one axis: eyebrow, phrase, line, search and genres all sit over the same middle. */
 [data-section="books"] .hero__col { width: 100%; }
 [data-section="books"] .hero__main,
 [data-section="books"] .hero__main > * { text-align: center; }
@@ -1184,13 +1049,10 @@ body { padding-left: var(--p-rail-clear); }
 
 [data-section="books"] .searchbox { max-width: 540px; margin-inline: auto; }
 
-/* The genre row runs a little wider than the search bar above it, so the
-   scroller reads as the wider thing it is. */
+/* The genre row runs a little wider than the search bar above it, so the scroller reads as the wider thing it is. */
 [data-section="books"] .chiprow { max-width: 620px; margin-inline: auto; }
 
-/* The plate and its wash are never clipped — that is what squared the circle
-   off before. The wash is a decoration, so it is simply not allowed to
-   contribute scroll width instead. */
+/* The plate and its wash are never clipped — that is what squared the circle off before. The wash is a decoration, so it is simply not allowed to contribute scroll width instead. */
 [data-section="books"] .reader-cut,
 [data-section="books"] .reader-cut__blobs { overflow: visible; }
 
@@ -1201,23 +1063,18 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 23. renames and band alignment -----------------------------------
-   Cinema drew its own page wash on a fixed 760px slab, which sat over the
-   site's wash and left a hard seam where it ended. The body carries the wash
-   for every room now. */
+/* ---- 23. renames and band alignment ----------------------------------- */
+/* Cinema drew its own page wash on a fixed 760px slab, which sat over the site's wash and left a hard seam where it ended. The body carries the wash for every room now. */
 [data-section="cinema"] .wash { display: none; }
 
-/* No bar caps itself: the footers match the bars, so a sign-off starts at the
-   same x as the wordmark above it. */
+/* No bar caps itself: the footers match the bars, so a sign-off starts at the same x as the wordmark above it. */
 .nav__inner.container, .foot__inner, .pfoot__inner {
   max-width: none;
   margin-inline: 0;
   padding-inline: var(--p-gutter);
 }
 
-/* Brand hard left, everything else to the right. The left padding clears the
-   floating burger, which is fixed and would otherwise sit over the wordmark as
-   soon as the page scrolls and the bar slides under it. */
+/* Brand hard left, everything else to the right. The left padding clears the floating burger, which is fixed and would otherwise sit over the wordmark as soon as the page scrolls and the bar slides under it. */
 .pmark { margin-right: auto; }
 
 .topbar__inner, .navbar .nav-inner, .nav__inner, .topbar > .wrap, .nav > .container {
@@ -1227,12 +1084,10 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="food"] .topbar { padding-left: calc(var(--p-rail-clear) + var(--p-space-xs)); }
 .navbar .nav-inner > .nav-links { margin-left: auto; }
 
-/* Travel's bar is fixed, so `left: 0` already puts it at the window edge and
-   the band's negative margin would pull it 74px past it. */
+/* Travel's bar is fixed, so `left: 0` already puts it at the window edge and the band's negative margin would pull it 74px past it. */
 [data-section="travel"] .navbar { margin-left: 0; }
 
-/* Food's bar lays itself out directly, with no inner row, and set `padding` as
-   a shorthand — which cancelled the rail pull-back. */
+/* Food's bar lays itself out directly, with no inner row, and set `padding` as a shorthand — which cancelled the rail pull-back. */
 [data-section="food"] .topbar {
   padding-block: 0;
   min-height: var(--p-bar-h);
@@ -1240,10 +1095,7 @@ body { padding-left: var(--p-rail-clear); }
   padding-right: var(--p-gutter);
 }
 
-/* The burger sits over the rail, so a bar's first item must clear it.
-   `.topbar > .wrap` is listed because Cinema's bar row carries both classes and
-   the two-class selector outranks `.topbar__inner`, which left its wordmark
-   under the burger on a phone. */
+/* The burger sits over the rail, so a bar's first item must clear it. `.topbar > .wrap` is listed because Cinema's bar row carries both classes and the two-class selector outranks `.topbar__inner`, which left its wordmark under the burger on a phone. */
 @media (max-width: 720px) {
   .topbar__inner, .navbar .nav-inner, .nav__inner,
   .topbar > .wrap, .nav > .container,
@@ -1257,10 +1109,8 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="journal"] .site-head h1 { font-size: var(--p-h1); }
 
 
-/* ---- 24. one navbar link, everywhere ----------------------------------
-   Cinema drew its four destinations as bordered white pills with a shadow;
-   Books drew the same kind of list as quiet tinted text. Books was right, so
-   Cinema's bar links take that treatment and the two rooms match. */
+/* ---- 24. one navbar link, everywhere ---------------------------------- */
+/* Cinema drew its four destinations as bordered white pills with a shadow; Books drew the same kind of list as quiet tinted text. Books was right, so Cinema's bar links take that treatment and the two rooms match. */
 
 .topbar__tools .icon-btn--label {
   min-height: var(--p-control-sm);
@@ -1293,18 +1143,15 @@ body { padding-left: var(--p-rail-clear); }
 
 .topbar__tools .icon-btn--label svg { width: 17px; height: 17px; }
 
-/* The round tool buttons beside them keep their outline: they are buttons, not
-   destinations. */
+/* The round tool buttons beside them keep their outline: they are buttons, not destinations. */
 .topbar__tools > .icon-btn:not(.icon-btn--label) {
   border: 1px solid var(--p-line);
   background: var(--p-surface);
 }
 
 
-/* ---- 25. one content scale --------------------------------------------
-   Cinema's posters and Books' shelves were laid out before the shared shell
-   existed, so each picked its own track size and the two rooms read at
-   different zooms. One scale, so a card is the same size in every room. */
+/* ---- 25. one content scale -------------------------------------------- */
+/* Cinema's posters and Books' shelves were laid out before the shared shell existed, so each picked its own track size and the two rooms read at different zooms. One scale, so a card is the same size in every room. */
 
 [data-section="cinema"] .grid {
   grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
@@ -1316,8 +1163,7 @@ body { padding-left: var(--p-rail-clear); }
   gap: clamp(16px, 1.6vw, 22px);
 }
 
-/* The books hero photograph was half the row; it reads as a portrait beside
-   the words now, not the subject of the page. */
+/* The books hero photograph was half the row; it reads as a portrait beside the words now, not the subject of the page. */
 [data-section="books"] .reader-cut { width: min(400px, 100%); align-self: start; margin-top: clamp(0px, 1vw, 18px); }
 
 /* Food's keeper sits closer to the words rather than hard against the edge. */
@@ -1325,11 +1171,8 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="food"] .keeper { margin-inline-start: auto; }
 
 
-/* ---- 26. one search bar ------------------------------------------------
-   Cinema labelled its scope picker "Search by" and drew the select as a bare
-   filled pill, which lost its own text on hover. Books ended its bar with a
-   worded Search button. Both are the same control now: a magnifier that
-   submits on the left, the field, then a plain dropdown on the right. */
+/* ---- 26. one search bar ------------------------------------------------ */
+/* Cinema labelled its scope picker "Search by" and drew the select as a bare filled pill, which lost its own text on hover. Books ended its bar with a worded Search button. Both are the same control now: a magnifier that submits on the left, the field, then a plain dropdown on the right. */
 
 .scopepick {
   position: relative;
@@ -1345,8 +1188,7 @@ body { padding-left: var(--p-rail-clear); }
   transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
-/* The whole pill lights up, not the select inside it. Modules used to fill
-   only the select on hover, which left the caret sitting outside the colour. */
+/* The whole pill lights up, not the select inside it. Modules used to fill only the select on hover, which left the caret sitting outside the colour. */
 .scopepick:hover {
   background: var(--p-accent-tint);
   border-color: var(--p-accent);
@@ -1390,9 +1232,7 @@ body { padding-left: var(--p-rail-clear); }
   stroke-linejoin: round;
 }
 
-/* Books draws its own caret; it is repositioned rather than duplicated, and
-   the module's left divider on the picker is dropped since the pill now has a
-   border of its own. */
+/* Books draws its own caret; it is repositioned rather than duplicated, and the module's left divider on the picker is dropped since the pill now has a border of its own. */
 [data-section="books"] .scopepick { border-left: 1px solid var(--p-line); }
 
 [data-section="books"] .scopepick::after {
@@ -1402,8 +1242,7 @@ body { padding-left: var(--p-rail-clear); }
   height: 7px;
   border-right-color: var(--p-muted);
   border-bottom-color: var(--p-muted);
-  /* The module already rotates this with `transform`; adding `rotate` on top
-     compounded to 90deg and drew an L. One transform, stated once. */
+  /* The module already rotates this with `transform`; adding `rotate` on top compounded to 90deg and drew an L. One transform, stated once. */
   rotate: none;
   translate: none;
   transform: translateY(-70%) rotate(45deg);
@@ -1431,10 +1270,8 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="books"] .searchbox__go svg { width: 19px; height: 19px; position: static; }
 
 
-/* ---- 27. the bar divider ----------------------------------------------
-   The rule between the destinations and the round tools was drawn as a border
-   on the tools group, so it sat hard against the first button. It is a gap
-   with a centred rule instead. */
+/* ---- 27. the bar divider ---------------------------------------------- */
+/* The rule between the destinations and the round tools was drawn as a border on the tools group, so it sat hard against the first button. It is a gap with a centred rule instead. */
 [data-section="books"] .nav__tools {
   border-left: 0;
   padding-left: 0;
@@ -1452,9 +1289,8 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 28. the footer line ----------------------------------------------
-   The quote is the one piece of writing on the page that is not mine, so it is
-   set apart: the display face, a little larger, in ink rather than grey. */
+/* ---- 28. the footer line ---------------------------------------------- */
+/* The quote is the one piece of writing on the page that is not mine, so it is set apart: the display face, a little larger, in ink rather than grey. */
 .pfoot__line, .foot__line, .footer__line {
   font-family: var(--p-display);
   font-size: clamp(.95rem, 1.1vw, 1.08rem);
@@ -1466,13 +1302,11 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 29. the phone ------------------------------------------------------
-   Grids that read as one column on a phone waste most of the screen when the
-   card is a chip or a thumbnail. These pack two or three across instead. */
+/* ---- 29. the phone ------------------------------------------------------ */
+/* Grids that read as one column on a phone waste most of the screen when the card is a chip or a thumbnail. These pack two or three across instead. */
 
 @media (max-width: 720px) {
-  /* The footer band: the sign-off centres and the quote gets the full width
-     rather than an inherited left inset from the rail. */
+  /* The footer band: the sign-off centres and the quote gets the full width rather than an inherited left inset from the rail. */
   .pfoot__inner, .foot__inner, .footer__inner {
     flex-direction: column;
     align-items: center;
@@ -1492,9 +1326,7 @@ body { padding-left: var(--p-rail-clear); }
     padding-inline: 12px;
   }
 
-  /* The module sized its card at `50% - 8px` of the ROW for its own flex
-     layout; inside a grid track that halves it again. The track is the width
-     now. */
+  /* The module sized its card at `50% - 8px` of the ROW for its own flex layout; inside a grid track that halves it again. The track is the width now. */
   [data-section="journal"] .cards .card { width: 100%; padding: 9px 9px 13px; }
   [data-section="journal"] .card .thumb { aspect-ratio: 4 / 5; }
   [data-section="journal"] .card .c-title { font-size: 16px; line-height: 1.2; }
@@ -1527,13 +1359,11 @@ body { padding-left: var(--p-rail-clear); }
   [data-section="travel"] .wishlist-grid .wish-card h5,
   [data-section="travel"] .activity-grid .activity-card h5 { font-size: 12.5px; }
 
-  /* Books: the destinations sit closer together so all three fit the bar.
-     Scoped out of the sheet — there the rows are full width and set below. */
+  /* Books: the destinations sit closer together so all three fit the bar. Scoped out of the sheet — there the rows are full width and set below. */
   [data-section="books"] .nav__links { gap: 2px; }
   [data-section="books"] .nav__links:not(.pmenu__sheet *) .nav__link { padding-inline: 8px; gap: 5px; font-size: 12.5px; }
 
-  /* The genre rail is a secondary control, so it steps down a size on a phone
-     and more of it fits before the row has to be scrolled. */
+  /* The genre rail is a secondary control, so it steps down a size on a phone and more of it fits before the row has to be scrolled. */
   [data-section="books"] .chiprow { gap: 6px; }
   [data-section="books"] .chiprow .chipbtn {
     min-height: 28px;
@@ -1545,10 +1375,8 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 30. smoothness ----------------------------------------------------
-   Cheap wins that keep scrolling steady: the browser is told which properties
-   actually animate, off-screen cards are not laid out until they scroll near,
-   and images reserve their space so nothing jumps as they arrive. */
+/* ---- 30. smoothness ---------------------------------------------------- */
+/* Cheap wins that keep scrolling steady: the browser is told which properties actually animate, off-screen cards are not laid out until they scroll near, and images reserve their space so nothing jumps as they arrive. */
 
 .room, .card, .place-card, .goal-card, .activity-card, .trek-card, .wish-card,
 .gallery-item, .kpi-card {
@@ -1556,22 +1384,17 @@ body { padding-left: var(--p-rail-clear); }
   contain-intrinsic-size: auto 280px;
 }
 
-/* `transition: all` makes the browser watch every property; these elements
-   only ever move and fade. */
+/* `transition: all` makes the browser watch every property; these elements only ever move and fade. */
 .room, .card, .kpi-card, .gallery-item { will-change: auto; }
 
-/* A placeholder tint behind every <img> was the rectangle showing through the
-   two cut-out portraits — a PNG with a transparent background sits ON that
-   tint, so its own box was painted. Only images that fill their box get it. */
+/* A placeholder tint behind every <img> was the rectangle showing through the two cut-out portraits — a PNG with a transparent background sits ON that tint, so its own box was painted. Only images that fill their box get it. */
 .room__shot img, .card img, .gallery-item img, .place-card img, .c-thumb img {
   background-color: color-mix(in srgb, var(--p-accent) 8%, var(--p-surface-2));
 }
 
 
-/* ---- 31. the page menu (phones) ---------------------------------------
-   One button on the right of the bar holding whatever that page's own bar
-   held. The burger on the left is unchanged: rooms on the left, this page on
-   the right. */
+/* ---- 31. the page menu (phones) --------------------------------------- */
+/* One button on the right of the bar holding whatever that page's own bar held. The burger on the left is unchanged: rooms on the left, this page on the right. */
 
 .pmenu { position: relative; margin-left: auto; flex: 0 0 auto; }
 
@@ -1645,27 +1468,20 @@ body { padding-left: var(--p-rail-clear); }
 
 @media (min-width: 721px) { .pmenu { display: none; } }
 
-/* Worded links are hidden in the bar on a phone; inside the sheet there is
-   room for them. */
+/* Worded links are hidden in the bar on a phone; inside the sheet there is room for them. */
 @media (max-width: 720px) {
-  /* In the bar these controls shrink to an icon and hide their words. In the
-     sheet they are rows, so the words come back. */
+  /* In the bar these controls shrink to an icon and hide their words. In the sheet they are rows, so the words come back. */
   .pmenu__sheet .icon-btn--label,
   .pmenu__sheet .nav__link { display: flex !important; width: 100% !important; }
 
-  /* A module's own collapsed menu is redundant inside the sheet — its items
-     are already rows here. It is hidden rather than removed, because the
-     module's script still wires it up after this runs. */
+  /* A module's own collapsed menu is redundant inside the sheet — its items are already rows here. It is hidden rather than removed, because the module's script still wires it up after this runs. */
   .pmenu__sheet .navmenu,
   .pmenu__sheet .nav__dropdown-toggle { display: none !important; }
 
-  /* Same for the module's own phone hamburger out in the bar: the page menu
-     replaces it, and two of them side by side is one too many. */
+  /* Same for the module's own phone hamburger out in the bar: the page menu replaces it, and two of them side by side is one too many. */
   .nav__toggle, .navmenu__btn, .navbar__toggle, .menu-toggle { display: none !important; }
 
-  /* Favourites' off-canvas panel starts its links at opacity 0 and only
-     reveals them when the panel gets .is-open. Inside the sheet there is no
-     panel to open, so they are shown outright. */
+  /* Favourites' off-canvas panel starts its links at opacity 0 and only reveals them when the panel gets .is-open. Inside the sheet there is no panel to open, so they are shown outright. */
   .pmenu__sheet .nav__link,
   .pmenu__sheet .nav__links > * {
     opacity: 1 !important;
@@ -1674,8 +1490,7 @@ body { padding-left: var(--p-rail-clear); }
     transition-delay: 0s !important;
   }
 
-  /* Favourites slides its link list in from off-canvas on a phone. Inside the
-     sheet it is a plain list again. */
+  /* Favourites slides its link list in from off-canvas on a phone. Inside the sheet it is a plain list again. */
   .pmenu__sheet .nav__links {
     position: static !important;
     inset: auto !important;
@@ -1706,8 +1521,7 @@ body { padding-left: var(--p-rail-clear); }
     box-shadow: none;
     display: grid;
     gap: 2px;
-    /* The closed panel is collapsed to zero height and clipped; in the sheet
-       it is just part of the list. */
+    /* The closed panel is collapsed to zero height and clipped; in the sheet it is just part of the list. */
     height: auto;
     max-height: none;
     overflow: visible;
@@ -1730,9 +1544,7 @@ body { padding-left: var(--p-rail-clear); }
   .pmenu__sheet svg { flex: 0 0 auto; }
   .pmenu__label { font-size: var(--p-text-md); font-weight: 600; }
 
-  /* One row metric for every sheet, whatever each module's own bar sets. A bar
-     rule scoped to that module outranks the generic sheet rule, which is how
-     Books ended up with three small rows and one large one. */
+  /* One row metric for every sheet, whatever each module's own bar sets. A bar rule scoped to that module outranks the generic sheet rule, which is how Books ended up with three small rows and one large one. */
   .pmenu__sheet a,
   .pmenu__sheet button,
   .pmenu__sheet .nav__link,
@@ -1765,20 +1577,17 @@ body { padding-left: var(--p-rail-clear); }
 /* ---- 32. the rest of the phone ----------------------------------------- */
 
 @media (max-width: 720px) {
-  /* Books: two spines a row, and the phrase reads on the same axis as
-     everything under it. */
+  /* Books: two spines a row, and the phrase reads on the same axis as everything under it. */
   [data-section="books"] .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   [data-section="books"] .hero__main,
   [data-section="books"] .hero__main > *,
   [data-section="books"] .hero__lede,
   [data-section="books"] .hero__col { text-align: center; }
-  /* The module sets text-align on the title itself, which inheritance from the
-     wrapper cannot beat. */
+  /* The module sets text-align on the title itself, which inheritance from the wrapper cannot beat. */
   [data-section="books"] .hero__title,
   [data-section="books"] .hero__eyebrow { text-align: center !important; margin-inline: auto; }
 
-  /* Food: two dishes a row; the field and its sort share the first line and
-     the cuisine chips take the next. */
+  /* Food: two dishes a row; the field and its sort share the first line and the cuisine chips take the next. */
   [data-section="food"] .grid,
   [data-section="food"] .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
@@ -1807,8 +1616,7 @@ body { padding-left: var(--p-rail-clear); }
   /* A search field's own dropdown centres its word. */
   .scopepick, .scopepick select, .scopepick__select { text-align: center; text-align-last: center; }
 
-  /* The home lede sits in the middle of the screen rather than inheriting an
-     inset from the row above it. */
+  /* The home lede sits in the middle of the screen rather than inheriting an inset from the row above it. */
   .hero__copy { padding-inline: var(--p-space-md); }
   .hero__lede { margin-inline: auto; max-width: none; }
 
@@ -1819,10 +1627,8 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 33. the books search bar (phones) --------------------------------
-   The module wraps this bar into two lines on a phone and reorders the
-   magnifier to the end, which left an empty circle floating beside the
-   dropdown. One row: magnifier, field, scope. */
+/* ---- 33. the books search bar (phones) -------------------------------- */
+/* The module wraps this bar into two lines on a phone and reorders the magnifier to the end, which left an empty circle floating beside the dropdown. One row: magnifier, field, scope. */
 
 @media (max-width: 720px) {
   [data-section="books"] .searchbox {
@@ -1849,13 +1655,11 @@ body { padding-left: var(--p-rail-clear); }
   [data-section="books"] .scopepick { order: 2; flex: 0 0 auto; padding-right: 26px; padding-left: 10px; border-left: 0; }
   [data-section="books"] .scopepick select { font-size: var(--p-text-sm); }
 
-  /* The hero picture leads on a phone; it does not need two thirds of the
-     screen to do it. */
+  /* The hero picture leads on a phone; it does not need two thirds of the screen to do it. */
   [data-section="books"] .reader-cut { width: min(230px, 60%) !important; margin-inline: auto; }
 }
 
-/* The bottom two rows are buttons, so the module styles them bigger and
-   centred. In the sheet they are rows like any other. */
+/* The bottom two rows are buttons, so the module styles them bigger and centred. In the sheet they are rows like any other. */
 @media (max-width: 720px) {
   .pmenu__sheet .icon-btn:not(.icon-btn--label) {
     border: 0;
@@ -1870,8 +1674,7 @@ body { padding-left: var(--p-rail-clear); }
     font-weight: 600;
     color: var(--p-ink-soft);
     letter-spacing: 0;
-    /* The module centres the text inside its round buttons; in a row it reads
-       from the left, beside the icon, like every other row. */
+    /* The module centres the text inside its round buttons; in a row it reads from the left, beside the icon, like every other row. */
     text-align: left;
     flex: 1 1 auto;
     min-width: 0;
@@ -1882,18 +1685,15 @@ body { padding-left: var(--p-rail-clear); }
 
   .pmenu__sheet a, .pmenu__sheet button { gap: 12px; }
   .pmenu__sheet a:hover, .pmenu__sheet button:hover { background: var(--p-accent-tint); }
-  /* Wide enough for the longest row, and the module's own inner padding on
-     these buttons is dropped so every label starts at the same x. */
+  /* Wide enough for the longest row, and the module's own inner padding on these buttons is dropped so every label starts at the same x. */
   .pmenu__sheet { min-width: 258px; }
   .pmenu__sheet .icon-btn > svg { margin: 0 !important; }
-  /* The refresh button carries a second, state-swap glyph. In a row it is
-     dead width that pushed the label out of line with the others. */
+  /* The refresh button carries a second, state-swap glyph. In a row it is dead width that pushed the label out of line with the others. */
   .pmenu__sheet .icon-btn > svg ~ svg { display: none !important; }
   .pmenu__sheet .icon-btn { gap: 12px !important; }
 }
 
-/* A module's round tool button keeps a fixed width, which centred its label in
-   the row. In the sheet it is a full-width row. */
+/* A module's round tool button keeps a fixed width, which centred its label in the row. In the sheet it is a full-width row. */
 @media (max-width: 720px) {
   .pmenu__sheet .icon-btn {
     width: 100% !important;
@@ -1903,9 +1703,8 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- 34. consistency between the two sizes -----------------------------
-   Several things had been stated for phones only and so changed appearance
-   between the two. They are stated once, for both. */
+/* ---- 34. consistency between the two sizes ----------------------------- */
+/* Several things had been stated for phones only and so changed appearance between the two. They are stated once, for both. */
 
 /* Food's "Add a dish" is a filled button at every width. */
 [data-section="food"] .btn-add {
@@ -1921,8 +1720,7 @@ body { padding-left: var(--p-rail-clear); }
 [data-section="food"] .btn-add:hover { background: var(--p-ink); color: var(--p-bg); }
 [data-section="food"] .btn-add__plus { color: inherit; }
 
-/* Two dishes a row on a phone. The module's own grid rule is more specific
-   than a bare class, so the section is named here too. */
+/* Two dishes a row on a phone. The module's own grid rule is more specific than a bare class, so the section is named here too. */
 @media (max-width: 720px) {
   [data-section="food"] .cards,
   [data-section="food"] .grid,
@@ -1951,17 +1749,11 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- the styled option list -------------------------------------------
-   Shared by every module; picker.js draws it in place of the browser's own
-   popup on pointer devices. */
-/* The closed control was already ours and the open one never was: the browser
-   draws that popup, honours almost nothing, and gives its items no padding at
-   all. This replaces it on pointer devices. Touch keeps the platform picker. */
+/* ---- the styled option list ------------------------------------------- */
+/* Shared by every module; picker.js draws it in place of the browser's own popup on pointer devices. */
+/* The closed control was already ours and the open one never was: the browser draws that popup, honours almost nothing, and gives its items no padding at all. This replaces it on pointer devices. Touch keeps the platform picker. */
 
-/* Fixed and on <body>, for the same reason the nav menu is: .panel__body
-   scrolls and .topbar has a backdrop-filter, so an absolutely positioned menu
-   would be clipped by the first and trapped by the second. Above the modal
-   (1055) and its backdrop, below the toasts. */
+/* Fixed and on <body>, for the same reason the nav menu is: .panel__body scrolls and .topbar has a backdrop-filter, so an absolutely positioned menu would be clipped by the first and trapped by the second. Above the modal (1055) and its backdrop, below the toasts. */
 .pickmenu {
   position: fixed;
   z-index: 1300;
@@ -1987,8 +1779,7 @@ body { padding-left: var(--p-rail-clear); }
   to { opacity: 1; transform: none; }
 }
 
-/* The whole complaint in one declaration: the value gets the same 14px of air
-   from the edge that every other surface in this app gives its text. */
+/* The whole complaint in one declaration: the value gets the same 14px of air from the edge that every other surface in this app gives its text. */
 .pickmenu__item {
   display: flex;
   align-items: center;
@@ -2013,9 +1804,7 @@ body { padding-left: var(--p-rail-clear); }
   white-space: nowrap;
 }
 
-/* Keyboard and mouse land on the same treatment because they move the same
-   highlight: picker.js walks `active` on mousemove, so a rule for :hover here
-   would light a second row alongside it. */
+/* Keyboard and mouse land on the same treatment because they move the same highlight: picker.js walks `active` on mousemove, so a rule for :hover here would light a second row alongside it. */
 .pickmenu__item.is-active { background: var(--p-accent-tint); }
 
 .pickmenu__item.is-chosen {
@@ -2024,8 +1813,7 @@ body { padding-left: var(--p-rail-clear); }
 }
 .pickmenu__item.is-chosen.is-active { background: var(--p-accent-tint); }
 
-/* A tick in the gutter would move every label along by its width; the weight
-   and the colour already say which one it is. */
+/* A tick in the gutter would move every label along by its width; the weight and the colour already say which one it is. */
 .pickmenu__item.is-off {
   color: var(--p-muted);
   cursor: default;
@@ -2033,9 +1821,8 @@ body { padding-left: var(--p-rail-clear); }
 }
 
 
-/* ---- the page sheet: the modules' own tool buttons ----------------------
-   Cinema names its round tools .icon-btn and books names them .iconbtn, so the
-   row treatment above reached one and left the other as a circle in the list. */
+/* ---- the page sheet: the modules' own tool buttons ---------------------- */
+/* Cinema names its round tools .icon-btn and books names them .iconbtn, so the row treatment above reached one and left the other as a circle in the list. */
 @media (max-width: 720px) {
   .pmenu__sheet .iconbtn {
     display: flex;
@@ -2055,8 +1842,7 @@ body { padding-left: var(--p-rail-clear); }
   .pmenu__sheet .iconbtn > svg { flex: 0 0 auto; width: 18px; height: 18px; margin: 0 !important; }
   .pmenu__sheet .iconbtn:hover { background: var(--p-accent-tint); }
 
-  /* The destinations are one thing and the tools another, so a line separates
-     them rather than the list running on. */
+  /* The destinations are one thing and the tools another, so a line separates them rather than the list running on. */
   .pmenu__sheet > .nav__tools,
   .pmenu__sheet > .topbar__tools > #refreshBtn {
     margin-top: 6px;

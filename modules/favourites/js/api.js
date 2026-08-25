@@ -1,6 +1,4 @@
-// SidPicks - the data layer. Fetches published Google Sheets tabs as CSV and
-// normalises them into { name, image }, cached in sessionStorage so moving
-// between the homepage and a category never refetches the same sheet.
+// SidPicks - the data layer. Fetches published Google Sheets tabs as CSV and normalises them into { name, image }, cached in sessionStorage so moving between the homepage and a category never refetches the same sheet.
 
 import { CONFIG } from "./config.js";
 import { parseCsv } from "./utils.js";
@@ -8,7 +6,7 @@ import { parseCsv } from "./utils.js";
 const CACHE_PREFIX = "sidpicks:sheet:";
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes — fresh enough, kind to Google
 
-/** Build the published-CSV URL for a sheet tab. */
+// Build the published-CSV URL for a sheet tab.
 function csvUrl(gid) {
   return `${CONFIG.sheetBaseUrl}?gid=${encodeURIComponent(gid)}&single=true&output=csv`;
 }
@@ -36,7 +34,7 @@ function writeCache(gid, exhibits) {
   }
 }
 
-/** Turn raw CSV rows into clean exhibit objects. */
+// Turn raw CSV rows into clean exhibit objects.
 function normaliseRows(rows) {
   const exhibits = [];
 
@@ -48,26 +46,20 @@ function normaliseRows(rows) {
     if (index === 0 && name.toLowerCase() === "name") return;
     if (!name) return;
 
-    // A cell may hold one URL, or many (one per line). Split on line
-    // breaks, trim each, drop blanks — giving an ordered image list.
+    // A cell may hold one URL, or many (one per line). Split on line breaks, trim each, drop blanks — giving an ordered image list.
     const images = rawImage
       .split(/[\r\n]+/)
       .map((url) => url.trim())
       .filter(Boolean);
 
-    // Keep `image` (the first URL) for backwards-compatible callers
-    // such as the homepage preview rings.
+    // Keep `image` (the first URL) for backwards-compatible callers such as the homepage preview rings.
     exhibits.push({ name, images, image: images[0] || "" });
   });
 
   return exhibits;
 }
 
-/**
- * Fetch one category's exhibits.
- * @param {string} gid — the Google Sheet tab id
- * @returns {Promise<Array<{name: string, image: string}>>}
- */
+// Fetch one category's exhibits. @param {string} gid — the Google Sheet tab id @returns {Promise<Array<{name: string, image: string}>>}
 export async function fetchCategory(gid) {
   const cached = readCache(gid);
   if (cached) return cached;
@@ -84,13 +76,7 @@ export async function fetchCategory(gid) {
   return exhibits;
 }
 
-/**
- * Fetch every configured category in parallel.
- * Failures never reject the whole batch — each entry reports its
- * own status so the homepage can degrade gracefully per card.
- *
- * @returns {Promise<Map<string, {ok: boolean, exhibits: Array}>>}
- */
+// Fetch every configured category in parallel. Failures never reject the whole batch — each entry reports its own status so the homepage can degrade gracefully per card. @returns {Promise<Map<string, {ok: boolean, exhibits: Array}>>}
 export async function fetchAllCategories() {
   const results = new Map();
 

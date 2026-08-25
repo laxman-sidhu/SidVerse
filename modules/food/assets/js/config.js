@@ -14,14 +14,10 @@ export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIqOzeq
 // "csv" reads the published link, "script" reads live through Apps Script
 export const READ_FROM = "csv";
 
-// The same word the film and book diaries use, so one password opens all three.
-// Apps Script still checks every write against its own ADMIN_PASSWORD property,
-// so this only decides whether the form opens.
+// The same word the film and book diaries use, so one password opens all three. Apps Script still checks every write against its own ADMIN_PASSWORD property, so this only decides whether the form opens.
 export const ADMIN_PASSWORD = "LaxSid@12345";
 
-// baseFolder and uploadPreset are names that live in the Cloudinary account, not
-// here. They keep the module's original spelling on purpose: renaming either one
-// means renaming it in Cloudinary too, and the existing uploads sit under it.
+// baseFolder and uploadPreset are names that live in the Cloudinary account, not here. They keep the module's original spelling on purpose: renaming either one means renaming it in Cloudinary too, and the existing uploads sit under it.
 export const CLOUDINARY = {
   cloudName: "dadtqawh5",
   apiKey: "534744288219611",
@@ -31,5 +27,4 @@ export const CLOUDINARY = {
   uploadPreset: "swaad_uploads"
 };
 
-// the API secret is deliberately not here — it lives in Apps Script Script Properties,
-// because anything in this file is readable by anyone who opens the site
+// the API secret is deliberately not here — it lives in Apps Script Script Properties, because anything in this file is readable by anyone who opens the site

@@ -452,8 +452,7 @@ body.gate-open{overflow:hidden}
 .gate__btn--solid{background:var(--p-accent-ink);border-color:var(--p-accent-ink);color:var(--p-on-accent)}
 .gate__btn--solid:hover{opacity:.92}
 
-/* Stacked and reversed on a phone, so the affirmative sits under the thumb
-   rather than the one that backs out. Same as the film and book diaries. */
+/* Stacked and reversed on a phone, so the affirmative sits under the thumb rather than the one that backs out. Same as the film and book diaries. */
 @media (max-width: 767px){
   .gate{padding:14px}
   .gate__panel{padding:24px 20px 20px}

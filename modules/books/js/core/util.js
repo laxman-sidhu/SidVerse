@@ -6,8 +6,7 @@ export function esc(value) {
     .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
-// \p{L} not \w: \w is ASCII-only and would empty a Devanagari or Japanese title.
-// \p{M} stays because a Devanagari vowel sign is a combining mark, not a letter.
+// \p{L} not \w: \w is ASCII-only and would empty a Devanagari or Japanese title. \p{M} stays because a Devanagari vowel sign is a combining mark, not a letter.
 const PUNCT = /[^\p{L}\p{N}\p{M}\s]/gu;
 
 export function normaliseText(text) {

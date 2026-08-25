@@ -170,8 +170,7 @@ function paint({ from = 0 } = {}) {
 
   dom.collState.hidden = true;
 
-  // Show more grows the grid it already drew; every other repaint replaces it. A
-  // rebuild would drop every poster the browser had decoded and flash the page.
+  // Show more grows the grid it already drew; every other repaint replaces it. A rebuild would drop every poster the browser had decoded and flash the page.
   const grid = from ? dom.collGrid.querySelector(".grid") : null;
   if (grid && grid.children.length === from) {
     grid.insertAdjacentHTML("beforeend", cardsMarkup(items.slice(from, state.shown), { sheet: true }));
@@ -327,8 +326,7 @@ function currentData() {
   return PAGE.views ? watched.library() : watchlist.library(watched);
 }
 
-// Everything on this page is drawn from these fields, so if they match, the live
-// read agrees with the snapshot and there is nothing to redraw.
+// Everything on this page is drawn from these fields, so if they match, the live read agrees with the snapshot and there is nothing to redraw.
 function fingerprint(data) {
   return (data.items || []).map(item => [
     item.id, item.title, item.year, item.category,
@@ -367,9 +365,7 @@ async function load() {
 
   dom.collLoading.hidden = true;
 
-  // paint() replaces the whole grid, so an unconditional repaint here rebuilt
-  // every card two or three seconds in - which reads as the page reloading
-  // itself. Only redraw when the sheet actually moved.
+  // paint() replaces the whole grid, so an unconditional repaint here rebuilt every card two or three seconds in - which reads as the page reloading itself. Only redraw when the sheet actually moved.
   const live = currentData();
   if (painted === null || fingerprint(live) !== painted) paintFrom(live);
 }

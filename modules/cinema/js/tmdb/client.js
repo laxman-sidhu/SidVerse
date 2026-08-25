@@ -2,7 +2,7 @@
 
 import {
   TMDB_API_KEY, TMDB_BASE, TMDB_TTL_MS, IMAGE_BASE,
-  POSTER_SIZE, BACKDROP_SIZE, PROFILE_SIZE, PAGES_PER_REQUEST
+  POSTER_SIZE, BACKDROP_SIZE, PROFILE_SIZE, LOGO_SIZE, PAGES_PER_REQUEST
 } from "../config.js";
 import { getJSON } from "../core/http.js";
 import * as cache from "../core/cache.js";
@@ -230,6 +230,10 @@ export function imageUrl(path, size = POSTER_SIZE) {
 
 export function profileUrl(path) {
   return imageUrl(path, PROFILE_SIZE);
+}
+
+export function logoUrl(path) {
+  return imageUrl(path, LOGO_SIZE);
 }
 
 function firstRuntime(value) {

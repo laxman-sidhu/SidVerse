@@ -14,7 +14,7 @@ const esc = s => String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const num = n => (Math.round(n * 10) / 10).toString();
 const line = (...parts) => parts.filter(Boolean).join(" · ");
 
-/* ---------- load ---------- */
+// ---------- load ----------
 
 export async function init() {
   document.title = `SidVerse - ${SITE.name}`;
@@ -50,9 +50,7 @@ async function load() {
     grid.innerHTML = "";
     emptyEl.hidden = false;
     emptyEl.querySelector(".empty__title").textContent = "The log did not load.";
-    // err.message is a browser string — "Failed to fetch" tells a reader
-    // nothing and reads as a broken page rather than a considered state. The
-    // detail still goes to the console for whoever is debugging.
+    // err.message is a browser string — "Failed to fetch" tells a reader nothing and reads as a broken page rather than a considered state. The detail still goes to the console for whoever is debugging.
     console.error("SidBites: could not read the sheet —", err);
     emptyEl.querySelector(".empty__note").textContent =
       "The sheet did not answer. It may be offline, or this network may be blocking it. Try again in a moment.";
@@ -63,7 +61,7 @@ function hydrate(d) {
   return { ...d, ratingNum: parseFloat(d.rating) || 0, dateObj: parseDate(d.date) };
 }
 
-/* ---------- filters ---------- */
+// ---------- filters ----------
 
 function bindControls() {
   let t;
@@ -123,7 +121,7 @@ function apply() {
   render(list);
 }
 
-/* ---------- render ---------- */
+// ---------- render ----------
 
 function skeletons(n) {
   grid.innerHTML = Array.from({ length: n }, () => `<article class="card card--skeleton"></article>`).join("");
@@ -188,7 +186,7 @@ function reveal() {
   grid.querySelectorAll(".card").forEach(c => io.observe(c));
 }
 
-/* ---------- hero ---------- */
+// ---------- hero ----------
 
 function paintHero() {
   const n = state.all.length;
@@ -235,7 +233,7 @@ function buildReel() {
   track.innerHTML = strip + strip;
 }
 
-/* ---------- lightbox ---------- */
+// ---------- lightbox ----------
 
 const cache = new Map();
 let paintToken = 0;
@@ -324,7 +322,7 @@ async function paintLightbox() {
   warm(state.lbIndex + 2);
 }
 
-/* ---------- shared ---------- */
+// ---------- shared ----------
 
 function fillDatalists() {
   const fill = (id, key) => {

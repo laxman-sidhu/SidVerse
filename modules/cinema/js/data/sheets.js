@@ -18,9 +18,7 @@ const WATCHED_ALIASES = {
   poster: ["poster link", "poster", "poster url", "posterlink", "image"],
   tmdb_id: ["tmdb id", "tmdbid", "tmdb", "id", "tmdb_id"],
   og_title: ["og title", "original title", "ogtitle", "og_title"],
-  // Film-versus-series only. It used to be an alias of industry, and once the
-  // Watchlist carried both columns the earlier one silently won: Type is left of
-  // Industry, so the industry dropdown filled with Movie and Web Series.
+  // Film-versus-series only. It used to be an alias of industry, and once the Watchlist carried both columns the earlier one silently won: Type is left of Industry, so the industry dropdown filled with Movie and Web Series.
   type: ["type", "media type", "mediatype", "kind", "format"],
   industry: ["industry", "source tab", "category", "source", "tab", "media", "list"],
   must_watch: ["must watch", "mustwatch", "must_watch", "must-watch", "priority"],

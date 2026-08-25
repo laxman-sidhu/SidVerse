@@ -1,5 +1,4 @@
-// SidPicks - the homepage. Builds the collection cards from CONFIG, then fills
-// each with a live exhibit count and three preview portraits once sheets load.
+// SidPicks - the homepage. Builds the collection cards from CONFIG, then fills each with a live exhibit count and three preview portraits once sheets load.
 
 import { CONFIG, CARD_THEMES, categoryUrl, displayTitle } from "./config.js";
 import { fetchAllCategories } from "./api.js";
@@ -8,7 +7,7 @@ import { initChrome, observeReveals, staggerReveals } from "./animations.js";
 
 const PLACEHOLDER = "assets/placeholders/exhibit.svg";
 
-/** Build one collection card from the template. */
+// Build one collection card from the template.
 function buildCard(category, index) {
   const theme = CARD_THEMES[index % CARD_THEMES.length];
   const card = cloneTpl("tpl-collection-card");
@@ -26,7 +25,7 @@ function buildCard(category, index) {
   return card;
 }
 
-/** Render all cards immediately (before any network work). */
+// Render all cards immediately (before any network work).
 function renderCards() {
   const grid = qs("#collections-grid");
   grid.replaceChildren(...CONFIG.categories.map(buildCard));
@@ -35,7 +34,7 @@ function renderCards() {
   observeReveals(grid);
 }
 
-/** Fill counts + preview portraits once sheet data arrives. */
+// Fill counts + preview portraits once sheet data arrives.
 async function hydrateCards() {
   const results = await fetchAllCategories();
 

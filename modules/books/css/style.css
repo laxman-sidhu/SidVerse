@@ -12,8 +12,7 @@
   --muted: #6b6978;
   --line: #e8e4f3;
 
-  /* Three states, three colours, and they never mean anything else. The violet
-     is more saturated than --plum so a queued card reads as a state. */
+  /* Three states, three colours, and they never mean anything else. The violet is more saturated than --plum so a queued card reads as a state. */
   --read: #3fa87e;
   --read-tint: #dff3ea;
   --queued: #8b5cf6;
@@ -39,8 +38,7 @@
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  /* Scales the whole desktop layout. 1 is the drawn size; 0.7 is what fits a
-     browser at 100% without feeling oversized. */
+  /* Scales the whole desktop layout. 1 is the drawn size; 0.7 is what fits a browser at 100% without feeling oversized. */
 
   --shell: 1180px;
   /* The filter row on the collection pages: .wide is full-bleed for grids. */
@@ -75,9 +73,7 @@ a { color: inherit; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-/* [hidden] is a UA rule, and ANY author display rule outranks it. Every panel
-   in this file sets display, so without this line hidden means nothing and a
-   closed drawer renders wide open. */
+/* [hidden] is a UA rule, and ANY author display rule outranks it. Every panel in this file sets display, so without this line hidden means nothing and a closed drawer renders wide open. */
 [hidden] { display: none !important; }
 
 /* .shell is a reading width; .wide is for grids of covers, which look starved in one. */
@@ -110,8 +106,7 @@ a { color: inherit; }
   align-items: center;
   gap: 9px;
   text-decoration: none;
-  /* The one part of the bar that may give. Everything else is a control with a
-     hit area, so a bar too wide for the screen has to shorten the name. */
+  /* The one part of the bar that may give. Everything else is a control with a hit area, so a bar too wide for the screen has to shorten the name. */
   min-width: 0;
 }
 
@@ -201,9 +196,7 @@ a { color: inherit; }
   border-radius: 999px;
   padding: 6px 6px 6px 18px;
   box-shadow: var(--shadow);
-  /* width, not just max-width. Auto side margins inside a flex column absorb
-     the free space, so without this the box shrinks to fit its own controls and
-     max-width never binds - which is why widening it alone changed nothing. */
+  /* width, not just max-width. Auto side margins inside a flex column absorb the free space, so without this the box shrinks to fit its own controls and max-width never binds - which is why widening it alone changed nothing. */
   width: 100%;
   max-width: 880px;
 }
@@ -266,8 +259,7 @@ a { color: inherit; }
 /* --- chips and pills ------------------------------------------------------- */
 
 .chipset { display: flex; flex-wrap: wrap; gap: 8px; }
-/* Both edges fade, each only when there is something off-screen that way.
-   js/ui/scrollfade.js sets the classes. */
+/* Both edges fade, each only when there is something off-screen that way. js/ui/scrollfade.js sets the classes. */
 .chiprow {
   display: flex;
   justify-content: center;
@@ -375,11 +367,7 @@ a { color: inherit; }
   transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease), border-color 0.22s var(--ease);
 }
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--lilac); }
-/* Three states, three colours, and the border does the talking so the cover is
-   never obscured. Green is this exact edition; violet is queued; yellow is a
-   DIFFERENT printing of something already on a shelf, which is a weaker claim
-   and deliberately reads as one. The ring is what makes the state visible from
-   across a grid of nine - a border alone is one pixel nobody notices. */
+/* Three states, three colours, and the border does the talking so the cover is never obscured. Green is this exact edition; violet is queued; yellow is a DIFFERENT printing of something already on a shelf, which is a weaker claim and deliberately reads as one. The ring is what makes the state visible from across a grid of nine - a border alone is one pixel nobody notices. */
 .card.is-read { border-color: rgba(63, 168, 126, 0.85); box-shadow: 0 0 0 2px rgba(63, 168, 126, 0.3), var(--shadow-sm); background: linear-gradient(180deg, rgba(63, 168, 126, 0.2), rgba(63, 168, 126, 0.05) 62%); }
 .card.is-queued { border-color: rgba(139, 92, 246, 0.8); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.28), var(--shadow-sm); background: linear-gradient(180deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05) 62%); }
 .card.is-version { border-color: rgba(233, 196, 83, 0.95); box-shadow: 0 0 0 2px rgba(233, 196, 83, 0.42), var(--shadow-sm); background: linear-gradient(180deg, rgba(233, 196, 83, 0.26), rgba(233, 196, 83, 0.07) 62%); }
@@ -485,8 +473,7 @@ a { color: inherit; }
   min-height: 2.7em;
 }
 
-/* Bottom-left of the card, on the controls line: a rating is a fact about the
-   book, not a continuation of the author's name. */
+/* Bottom-left of the card, on the controls line: a rating is a fact about the book, not a continuation of the author's name. */
 .card__rating { display: inline-flex; align-items: baseline; gap: 4px; color: var(--star); font-weight: 700; font-size: 12.5px; white-space: nowrap; }
 .card__ratingn { font-weight: 500; font-size: 11px; color: var(--muted); }
 
@@ -916,9 +903,8 @@ a { color: inherit; }
 .footer__link:hover { color: var(--plum-deep); border-color: var(--lilac); background: var(--tint-1); }
 .footer__link svg { width: 16px; height: 16px; }
 
-/* ===========================================================================
-   Phone. Everything below here is an override and must stay below.
-   =========================================================================== */
+/* =========================================================================== */
+/* Phone. Everything below here is an override and must stay below. =========================================================================== */
 
 @media (max-width: 860px) {
   .detail__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -927,9 +913,7 @@ a { color: inherit; }
 @media (max-width: 720px) {
   .shell, .nav__inner, .wide { padding-left: 16px; padding-right: 16px; }
 
-  /* Three sections, five controls and a name, on a 360px screen. The labels go
-     first, then the gaps, and the bar stays inside the viewport - it used to
-     run past it, which is what pulled everything out of line. */
+  /* Three sections, five controls and a name, on a 360px screen. The labels go first, then the gaps, and the bar stays inside the viewport - it used to run past it, which is what pulled everything out of line. */
   .nav__inner { gap: 8px; padding: 10px 16px; }
   .nav__link span { display: none; }
   .nav__link { padding: 8px 9px; }
@@ -990,15 +974,8 @@ a { color: inherit; }
   .collbar__search input, .selectwrap select { height: 40px; }
 }
 
-/* ===========================================================================
-   DENSITY
-   ===========================================================================
-   The layout is drawn in px at a comfortable reading size, which on a wide
-   screen leaves it feeling oversized at 100% browser zoom. One number scales
-   the whole thing down without touching a single measurement.
-
-   Phones are left alone: 0.7 there is unreadable, and the mobile rules below
-   already size for a narrow viewport. */
+/* =========================================================================== */
+/* DENSITY =========================================================================== The layout is drawn in px at a comfortable reading size, which on a wide screen leaves it feeling oversized at 100% browser zoom. One number scales the whole thing down without touching a single measurement. Phones are left alone: 0.7 there is unreadable, and the mobile rules below already size for a narrow viewport. */
 /* Drawn at true size; the former `zoom: .7` is gone. */
 
 /* --- other editions --------------------------------------------------------- */
@@ -1019,9 +996,7 @@ a { color: inherit; }
 
 /* --- refine panel and paging ------------------------------------------------ */
 
-/* The stage bar: whatever leaves the page on the left, the periods dead centre,
-   the refine toggle on the right. The outer cells are the same width so the
-   pills are centred on the page and not merely on what is left over. */
+/* The stage bar: whatever leaves the page on the left, the periods dead centre, the refine toggle on the right. The outer cells are the same width so the pills are centred on the page and not merely on what is left over. */
 .stage__bar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -1029,17 +1004,14 @@ a { color: inherit; }
   gap: 12px;
   margin-top: 4px;
 }
-/* Placed by hand: a display:none element is not a grid item, so when the period
-   pills went the auto-placed Refine button slid into the middle column. */
+/* Placed by hand: a display:none element is not a grid item, so when the period pills went the auto-placed Refine button slid into the middle column. */
 .stage__bar-l { grid-column: 1; justify-self: start; min-width: 0; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .stage__bar .pillrow { grid-column: 2; }
 .stage__bar-r { grid-column: 3; justify-self: end; }
 .stage__bar .stage__title { margin: 0; }
 .stage__bar .pillrow { justify-content: center; margin: 0; }
 
-/* A closed drawer, not three permanent dropdowns: filters are occasional, and
-   three empty ones sitting above every page of results only ask a question
-   nobody had. */
+/* A closed drawer, not three permanent dropdowns: filters are occasional, and three empty ones sitting above every page of results only ask a question nobody had. */
 .refinebtn {
   display: inline-flex; align-items: center; gap: 8px;
   height: 38px; padding: 0 14px;
@@ -1073,12 +1045,10 @@ a { color: inherit; }
 }
 .refinebtn[aria-expanded="true"] .refinebtn__caret { transform: translateY(1px) rotate(-135deg); }
 
-/* Pastel, not white: a white card on a lilac wash reads as a dialog that has
-   landed on the page rather than part of it. */
+/* Pastel, not white: a white card on a lilac wash reads as a dialog that has landed on the page rather than part of it. */
 .refinewrap { position: relative; }
 
-/* Anchored to the button and out of the flow, so opening it moves nothing.
-   In the flow it pushed the whole grid down and reflowed the page. */
+/* Anchored to the button and out of the flow, so opening it moves nothing. In the flow it pushed the whole grid down and reflowed the page. */
 .refine {
   position: absolute;
   z-index: 40;
@@ -1101,8 +1071,7 @@ a { color: inherit; }
 .refine.is-on { border-color: var(--plum); box-shadow: 0 0 0 1px rgba(139, 127, 217, 0.3), 0 8px 22px rgba(139, 127, 217, 0.16); }
 .refine__reset { align-self: flex-start; font-size: 12.5px; }
 
-/* The label sits above the select here, so the wrapper's arrow has to be
-   measured from the bottom rather than the middle. */
+/* The label sits above the select here, so the wrapper's arrow has to be measured from the bottom rather than the middle. */
 .refine .selectwrap { width: 100%; }
 .refine .selectwrap::after {
   top: auto;
@@ -1114,8 +1083,7 @@ a { color: inherit; }
   max-width: none;
   border-radius: 12px;
   padding-left: 13px;
-  /* 16, not 14: iOS zooms on any focused control under 16px and never zooms
-     back. Compactness comes from the height and the padding instead. */
+  /* 16, not 14: iOS zooms on any focused control under 16px and never zooms back. Compactness comes from the height and the padding instead. */
   font-size: 16px;
   height: 38px;
   font-weight: 500;
@@ -1134,9 +1102,7 @@ a { color: inherit; }
 .refine .selectwrap select:not([data-idle]) { border-color: var(--plum); background: linear-gradient(180deg, var(--p-surface), color-mix(in srgb, rgb(239 232 252) 11%, var(--p-surface))); font-weight: 600; }
 .refine .filters__label { color: var(--plum-deep); opacity: 0.8; letter-spacing: 0.07em; }
 
-/* Two rows rather than three. The heading and Refine share a line - they are
-   the two ends of the same sentence - and the periods take a line of their own
-   that scrolls sideways instead of wrapping into a block of pills. */
+/* Two rows rather than three. The heading and Refine share a line - they are the two ends of the same sentence - and the periods take a line of their own that scrolls sideways instead of wrapping into a block of pills. */
 @media (max-width: 760px) {
   .stage__bar { grid-template-columns: minmax(0, 1fr) auto; row-gap: 12px; }
   .stage__bar-l { grid-column: 1; grid-row: 1; justify-self: start; min-width: 0; }
@@ -1148,8 +1114,7 @@ a { color: inherit; }
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
-    /* Bled to the screen edge, so the last pill scrolls off the page rather
-       than stopping short of it. */
+    /* Bled to the screen edge, so the last pill scrolls off the page rather than stopping short of it. */
     margin: 0 -16px;
     padding: 0 16px;
   }
@@ -1176,8 +1141,7 @@ a { color: inherit; }
 
 /* --- the status row --------------------------------------------------------- */
 
-/* Five buckets over what is loaded. Neither API knows about our shelf, so this
-   one cannot ask again the way Refine does. */
+/* Five buckets over what is loaded. Neither API knows about our shelf, so this one cannot ask again the way Refine does. */
 .statusrow { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 18px; }
 
 .statuspill {
@@ -1235,8 +1199,7 @@ a { color: inherit; }
 
 /* --- the other-edition marker ----------------------------------------------- */
 
-/* Two spellings of one sentence. The label is for a pointer and says it on
-   hover; the button is for a phone and says it on a tap. Never both at once. */
+/* Two spellings of one sentence. The label is for a pointer and says it on hover; the button is for a phone and says it on a tap. Never both at once. */
 .card__info {
   position: absolute;
   top: 8px; right: 8px;
@@ -1264,8 +1227,7 @@ a { color: inherit; }
 
 /* --- the editions page ------------------------------------------------------ */
 
-/* One block per book, each holding a grid of its printings. The cards are the
-   same cards as everywhere else, so the colours mean the same thing here. */
+/* One block per book, each holding a grid of its printings. The cards are the same cards as everywhere else, so the colours mean the same thing here. */
 .edgroups { display: flex; flex-direction: column; gap: 22px; }
 
 .edgroup {
@@ -1300,14 +1262,12 @@ a { color: inherit; }
 .dialog .selectwrap { display: block; }
 .dialog .selectwrap select { width: 100%; }
 
-/* A printing of something QUEUED is still a queued book. Yellow is reserved for
-   "we have read another edition of this", so the tag changes colour with it. */
+/* A printing of something QUEUED is still a queued book. Yellow is reserved for "we have read another edition of this", so the tag changes colour with it. */
 .card__tag--version-queued { background: var(--queued); color: var(--p-on-deep); }
 
 /* --- phones, continued ------------------------------------------------------ */
 
-/* The five buckets are one row or they are three, and three lines of pills
-   above the grid is more furniture than answer. It scrolls like the chip row. */
+/* The five buckets are one row or they are three, and three lines of pills above the grid is more furniture than answer. It scrolls like the chip row. */
 @media (max-width: 560px) {
   .statusrow {
     flex-wrap: nowrap;
@@ -1326,8 +1286,7 @@ a { color: inherit; }
   .hero__title { font-size: clamp(25px, 8vw, 34px); margin-bottom: 10px; }
   .chiprow { padding-top: 12px; }
 
-  /* The scope and the button share the second line evenly, so the box reads as
-     one control with two halves rather than a stray select beside a button. */
+  /* The scope and the button share the second line evenly, so the box reads as one control with two halves rather than a stray select beside a button. */
   .searchbox { padding: 10px; gap: 8px; }
   .searchbox__input { flex: 1 1 100%; padding: 6px 8px 2px; }
   .scopepick { flex: 1 1 0; min-width: 0; padding-left: 0; }
@@ -1352,21 +1311,15 @@ a { color: inherit; }
   .edgroup__head { margin-bottom: 12px; }
 }
 
-/* A little wider than the modal's rails: these cards are the answer here, not a
-   footnote under one. */
+/* A little wider than the modal's rails: these cards are the answer here, not a footnote under one. */
 .edgroup .rail { grid-auto-columns: 168px; }
 @media (max-width: 480px) {
   .edgroup .rail { grid-auto-columns: 132px; }
 }
 
-/* Closed, a group is one row and the surplus cards are marked hidden, so there
-   is nothing to clip: overflow: hidden here used to leave a stripe of every
-   hidden card's border showing under the row, because the ROW GAPS between
-   zero-height tracks still take their space. js/pages/editions.js measures the
-   tracks and does the hiding. */
+/* Closed, a group is one row and the surplus cards are marked hidden, so there is nothing to clip: overflow: hidden here used to leave a stripe of every hidden card's border showing under the row, because the ROW GAPS between zero-height tracks still take their space. js/pages/editions.js measures the tracks and does the hiding. */
 
-/* Below this the name cannot shorten any further without becoming "Book…", so
-   the mark carries the brand on its own and the icons get the room. */
+/* Below this the name cannot shorten any further without becoming "Book…", so the mark carries the brand on its own and the icons get the room. */
 /* A section heading on a phone is a label, not a headline. */
 @media (max-width: 480px) {
   .stage__title { font-size: 17px; }

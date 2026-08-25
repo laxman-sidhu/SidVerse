@@ -10,14 +10,9 @@ import { wireTips } from "../ui/tip.js";
 import { wireEdgeFades } from "../ui/scrollfade.js";
 import * as picker from "../../../../assets/js/picker.js";
 
-// Every printing the Other Versions column knows about, one card each. No API
-// is called: the column IS the answer, already fetched and written down.
+// Every printing the Other Versions column knows about, one card each. No API is called: the column IS the answer, already fetched and written down.
 
-// Collapsed, a group shows ONE ROW - however many cards fit at this width, from
-// two on a phone to a dozen zoomed out. Nothing here knows that number: the
-// grid works it out from the width, so the row is MEASURED after painting and
-// the surplus hidden. This is only a ceiling on how many are worth rendering to
-// fill a row that nobody has measured yet.
+// Collapsed, a group shows ONE ROW - however many cards fit at this width, from two on a phone to a dozen zoomed out. Nothing here knows that number: the grid works it out from the width, so the row is MEASURED after painting and the surplus hidden. This is only a ceiling on how many are worth rendering to fill a row that nobody has measured yet.
 const ROW_MAX = 30;
 
 const state = { book: "", query: "" };
@@ -45,13 +40,11 @@ function toCard(entry, edition) {
     publisher: edition ? edition.publisher : "",
     language: edition ? edition.language : "",
     genre: entry.genre,
-    // The chips are where one printing differs from its neighbours, so they
-    // carry the publisher and the language rather than the shelf they share.
+    // The chips are where one printing differs from its neighbours, so they carry the publisher and the language rather than the shelf they share.
     genres: edition ? [edition.language, edition.publisher].filter(Boolean) : [entry.genre].filter(Boolean),
     description: entry.summary,
     summary: entry.summary,
-    // Ours has a cover on the sheet. Another printing has whatever Open Library
-    // holds for its number, and the title behind it when that 404s.
+    // Ours has a cover on the sheet. Another printing has whatever Open Library holds for its number, and the title behind it when that 404s.
     cover: edition ? coverByIsbn(isbn, "M") : (entry.cover || coverByIsbn(isbn, "M")),
     coverAlt: edition ? coverByIsbn(isbn, "L") : ""
   };
@@ -99,13 +92,10 @@ function groupMarkup(group) {
   if (!items.length) return "";
   items.forEach(book => shown.set(book.id, book));
 
-  // Opened, the printings become a rail that scrolls sideways. A hundred cards
-  // stacked would push every other book off the page, and the whole point of
-  // this one is comparing them against each other.
+  // Opened, the printings become a rail that scrolls sideways. A hundred cards stacked would push every other book off the page, and the whole point of this one is comparing them against each other.
   const open = expanded.has(group.entry.key);
   const drawn = open ? items : items.slice(0, ROW_MAX);
-  // Drawn empty and filled in by settleRows(), because both the label and
-  // whether it appears at all depend on a width nobody has measured yet.
+  // Drawn empty and filled in by settleRows(), because both the label and whether it appears at all depend on a width nobody has measured yet.
   const toggle = `<button class="linkbtn ed__more" type="button" data-toggle="${esc(group.entry.key)}"`
     + ` data-total="${items.length}" hidden></button>`;
   const facts = [group.entry.author, plural(group.editions.length, "other printing", "other printings")].filter(Boolean).join(" · ");
@@ -140,22 +130,17 @@ function paintList() {
   settleRows();
 }
 
-// How many tracks the grid actually made at this width. Asked of the grid
-// rather than worked out from a card width, because the stylesheet owns that
-// number and changes it at two breakpoints.
+// How many tracks the grid actually made at this width. Asked of the grid rather than worked out from a card width, because the stylesheet owns that number and changes it at two breakpoints.
 function columnsIn(grid) {
   const tracks = grid ? getComputedStyle(grid).gridTemplateColumns : "";
   if (tracks && tracks !== "none") return tracks.split(" ").filter(Boolean).length;
-  // A browser that will not resolve the tracks still places the cards, and the
-  // ones on the first row all share its offset.
+  // A browser that will not resolve the tracks still places the cards, and the ones on the first row all share its offset.
   const cards = [...(grid?.children || [])];
   const first = cards[0]?.offsetTop ?? 0;
   return cards.filter(card => card.offsetTop <= first + 2).length || 1;
 }
 
-// One row of cards, and a label that counts what that leaves out. Both change
-// with the window, so this runs on every paint and on every resize - zooming
-// out to fit twelve is a resize, and "Show 30 more" would be a lie afterwards.
+// One row of cards, and a label that counts what that leaves out. Both change with the window, so this runs on every paint and on every resize - zooming out to fit twelve is a resize, and "Show 30 more" would be a lie afterwards.
 function settleRows() {
   el.list.querySelectorAll(".edgroup").forEach(section => {
     const toggle = section.querySelector("[data-toggle]");
@@ -220,8 +205,7 @@ export function start() {
   });
 
   wireCardOpen(el.list, card => shown.get(card?.dataset.bookKey));
-  // Resizing changes how many fit, and therefore whether there is anything left
-  // to show. Measuring again is cheaper than repainting.
+  // Resizing changes how many fit, and therefore whether there is anything left to show. Measuring again is cheaper than repainting.
   window.addEventListener("resize", debounce(settleRows, 150));
 
   if (library.hydrate()) { readlist.hydrate(); refresh(); }

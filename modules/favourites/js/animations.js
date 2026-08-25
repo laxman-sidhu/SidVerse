@@ -1,13 +1,10 @@
-// SidPicks - reveal-on-scroll, navbar blur, hamburger menu, the Galleries
-// dropdown, footer category links, ripple buttons and the sparkle field.
-// The dropdown and footer links are built from CONFIG. Imported by both pages.
+// SidPicks - reveal-on-scroll, navbar blur, hamburger menu, the Galleries dropdown, footer category links, ripple buttons and the sparkle field. The dropdown and footer links are built from CONFIG. Imported by both pages.
 
 import { qs, qsa, cloneTpl, prefersReducedMotion } from "./utils.js";
 import { CONFIG, categoryUrl, displayTitle } from "./config.js";
 
-/* --------------------------------------------------------------------------
- * Reveal on scroll
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Reveal on scroll ------------------------------------------------------------------------
 
 let revealObserver = null;
 
@@ -29,7 +26,7 @@ function getRevealObserver() {
   return revealObserver;
 }
 
-/** Observe every `.reveal` element (call again after injecting content). */
+// Observe every `.reveal` element (call again after injecting content).
 export function observeReveals(scope = document) {
   if (prefersReducedMotion()) {
     qsa(".reveal", scope).forEach((el) => el.classList.add("is-visible"));
@@ -39,20 +36,18 @@ export function observeReveals(scope = document) {
   qsa(".reveal:not(.is-visible)", scope).forEach((el) => observer.observe(el));
 }
 
-/** Stagger helper: sets an incremental reveal delay on a set of cards. */
+// Stagger helper: sets an incremental reveal delay on a set of cards.
 export function staggerReveals(elements, step = 60, cap = 480) {
   elements.forEach((el, i) => {
     el.style.setProperty("--reveal-delay", `${Math.min(i * step, cap)}ms`);
   });
 }
 
-/* --------------------------------------------------------------------------
- * Galleries dropdown (populated from CONFIG so it stays automatic)
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Galleries dropdown (populated from CONFIG so it stays automatic) ------------------------------------------------------------------------
 
-/* --------------------------------------------------------------------------
- * Galleries dropdown (built from CONFIG so it stays automatic)
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Galleries dropdown (built from CONFIG so it stays automatic) ------------------------------------------------------------------------
 
 function initDropdown() {
   const dropdown = qs("[data-dropdown]");
@@ -94,9 +89,8 @@ function initDropdown() {
   });
 }
 
-/* --------------------------------------------------------------------------
- * Footer category links (also built from CONFIG)
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Footer category links (also built from CONFIG) ------------------------------------------------------------------------
 
 function populateFooterCategories() {
   const host = qs("[data-footer-categories]");
@@ -113,9 +107,8 @@ function populateFooterCategories() {
   );
 }
 
-/* --------------------------------------------------------------------------
- * Navbar: blur boost on scroll + hamburger menu
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Navbar: blur boost on scroll + hamburger menu ------------------------------------------------------------------------
 
 function initNavbar() {
   const nav = qs(".nav");
@@ -144,9 +137,7 @@ function initNavbar() {
     links.classList.toggle("is-open", open);
     document.body.classList.toggle("nav-open", open);
 
-    // On mobile, the Galleries dropdown starts open when the sheet opens
-    // (the visitor can still collapse it or navigate elsewhere). Deferring
-    // the open lets the global "click outside" handler settle first.
+    // On mobile, the Galleries dropdown starts open when the sheet opens (the visitor can still collapse it or navigate elsewhere). Deferring the open lets the global "click outside" handler settle first.
     if (isMobile()) {
       if (open) requestAnimationFrame(() => setDropdown(true));
       else setDropdown(false);
@@ -170,9 +161,8 @@ function initNavbar() {
   });
 }
 
-/* --------------------------------------------------------------------------
- * Ripple buttons
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Ripple buttons ------------------------------------------------------------------------
 
 function initRipples() {
   if (prefersReducedMotion()) return;
@@ -195,9 +185,8 @@ function initRipples() {
   });
 }
 
-/* --------------------------------------------------------------------------
- * Ambient sparkles
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Ambient sparkles ------------------------------------------------------------------------
 
 function initSparkles() {
   const scenery = qs(".scenery");
@@ -217,9 +206,8 @@ function initSparkles() {
   }
 }
 
-/* --------------------------------------------------------------------------
- * Boot shared chrome
- * ------------------------------------------------------------------------ */
+// --------------------------------------------------------------------------
+// Boot shared chrome ------------------------------------------------------------------------
 
 export function initChrome() {
   document.documentElement.classList.remove("no-js");

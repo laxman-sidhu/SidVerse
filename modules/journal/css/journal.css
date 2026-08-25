@@ -1,5 +1,4 @@
-/* SidNotes - the reader's stylesheet. Structure only; the colours come from
-   the SidVerse palette through css/theme.css, loaded after this file. */
+/* SidNotes - the reader's stylesheet. Structure only; the colours come from the SidVerse palette through css/theme.css, loaded after this file. */
 
 
 /* Fallback palette. css/theme.css re-points every one of these. */
@@ -7,9 +6,7 @@
   /* paper + ink */
   --paper:#fbf8ff; --paper-edge:#e8def8; --ink:#514669; --ink-soft:#a498c4;
   --grid:#eae1f8;
-  /* accent family (names kept from the original system):
-     --lav = lavender accent, --lav-deep = primary (buttons), --lilac = pale lilac,
-     --blush = pink, --mint = soft sage, --peri = periwinkle, --soft = pale tint */
+  /* accent family (names kept from the original system): --lav = lavender accent, --lav-deep = primary (buttons), --lilac = pale lilac, --blush = pink, --mint = soft sage, --peri = periwinkle, --soft = pale tint */
   --lav:#c3adee; --lav-deep:#9377d6; --lilac:#ddccf7;
   --blush:#efe0f6; --mint:#d9e6ec; --peri:#cbcdf6; --soft:#f3ebfd;
   --shadow:rgba(81,70,105,.16);
@@ -71,11 +68,8 @@ a{color:inherit; text-decoration:none;}
 .el-text .text-body i, .el-text .text-body em{font-style:italic;}
 .el-text .text-body u{text-decoration:underline;}
 
-/* ---- photos: selectable looks (card default, plain, shadow, frame, border) ----
-   SHADOW is now an independent add-on (.has-shadow), so any look can cast a shadow,
-   and removing it removes the shadow entirely. Looks themselves no longer hard-code
-   a shadow — .has-shadow supplies it. PLAIN keeps full transparency (no box) so a
-   cut-out PNG shows only its subject. */
+/* ---- photos: selectable looks (card default, plain, shadow, frame, border) ---- */
+/* SHADOW is now an independent add-on (.has-shadow), so any look can cast a shadow, and removing it removes the shadow entirely. Looks themselves no longer hard-code a shadow — .has-shadow supplies it. PLAIN keeps full transparency (no box) so a cut-out PNG shows only its subject. */
 .el-photo{border-radius:3px;}
 .el-photo img{display:block; width:100%; height:auto; border-radius:1px; pointer-events:none;}
 .el-photo .cap{font-family:var(--hand); font-size:18px; color:var(--ink-soft); text-align:center; margin-top:4px; outline:none; min-height:18px; display:none;}
@@ -91,8 +85,7 @@ a{color:inherit; text-decoration:none;}
 .el-photo.style-plain{padding:0; background:none !important;}
 .el-photo.style-plain img{border-radius:2px;}
 
-/* legacy "shadow" look (older posts): a bare image; shadow comes from .has-shadow which
-   we add automatically for these so they look unchanged. */
+/* legacy "shadow" look (older posts): a bare image; shadow comes from .has-shadow which we add automatically for these so they look unchanged. */
 .el-photo.style-shadow{padding:0; background:none; border-radius:3px;}
 .el-photo.style-shadow img{border-radius:3px;}
 
@@ -117,18 +110,11 @@ a{color:inherit; text-decoration:none;}
 .site-head .rule{width:60px; height:2px; border-radius:3px; background:var(--lav); margin:12px auto 0; opacity:.8;}
 .site-head p{color:var(--ink-soft); margin:14px 0 0; font-size:17px; font-family:var(--serif); font-style:italic; font-weight:500;}
 
-/* homepage identity fonts are the SAME for all three clients: Daun Penh (falling back to
-   Cormorant Garamond where not installed) on the heading and the status texts, with
-   Playfair Display on the story-card titles — set directly in the base rules below. */
+/* homepage identity fonts are the SAME for all three clients: Daun Penh (falling back to Cormorant Garamond where not installed) on the heading and the status texts, with Playfair Display on the story-card titles — set directly in the base rules below. */
 
 
-/* min(260px,100%) lets a track shrink under 260px on a narrow screen; a bare
-   minmax(260px,1fr) cannot, and universal.css makes <body> a flex column, so
-   this grid is a flex item whose min-width:auto held it at its 3x260px
-   min-content and pushed the page sideways at 768px. */
-/* Tracks are sized, not 1fr, so justify-content can centre the whole group.
-   With 1fr tracks the row always filled the box and two posts sat hard left
-   inside a centred 1100px container, which is what read as left-shifted. */
+/* min(260px,100%) lets a track shrink under 260px on a narrow screen; a bare minmax(260px,1fr) cannot, and universal.css makes <body> a flex column, so this grid is a flex item whose min-width:auto held it at its 3x260px min-content and pushed the page sideways at 768px. */
+/* Tracks are sized, not 1fr, so justify-content can centre the whole group. With 1fr tracks the row always filled the box and two posts sat hard left inside a centred 1100px container, which is what read as left-shifted. */
 .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),300px));
   justify-content:center; align-items:start; gap:36px 28px; padding:42px 22px 96px;
   max-width:var(--p-shell); margin:0 auto; min-width:0; width:100%;}

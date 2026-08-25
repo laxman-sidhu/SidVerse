@@ -2,6 +2,11 @@
 
 export const TMDB_API_KEY = "f937245c9deb3cb82511d04b777e096f";
 
+// OMDb carries the three scores TMDB does not: IMDb, Rotten Tomatoes, Metacritic.
+export const OMDB_API_KEY = "3b63be94";
+export const OMDB_BASE = "https://www.omdbapi.com";
+export const OMDB_TTL_MS = 24 * 60 * 60 * 1000;
+
 // Optional. Without it the offline parser handles every search.
 export const GEMINI_API_KEY = "AQ.Ab8RN6KguL0XdOCrMtJcCQP04IfWIpxtcT6lifaX5nkqoxnNPA";
 export const GEMINI_MODEL = "gemini-2.0-flash";
@@ -9,8 +14,7 @@ export const GEMINI_MODEL = "gemini-2.0-flash";
 // The Apps Script web app deployed from inside the workbook: it reads the tabs and writes to them. See docs/PROJECT.md.
 export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5--x2f-OHO4jwZRrFXxXBm9YNFg8e8YCJkh9qiz0-tmZAEXrvH7NSBd6Rzon0KOhw/exec";
 
-// Must match SECRET inside SidCinemas_Bridge.gs exactly. Change both together.
-// This IS the deployed value, not a placeholder, despite how it reads.
+// Must match SECRET inside SidCinemas_Bridge.gs exactly. Change both together. This IS the deployed value, not a placeholder, despite how it reads.
 export const APPS_SCRIPT_TOKEN = "THIS-IS-A-LONG-RANDOM-STRING-FOR-APPS-SCRIPT-TOKEN";
 
 // The /d/<this>/edit part of the spreadsheet URL. Only used by the gviz fallback reader.
@@ -40,13 +44,16 @@ export const IMAGE_BASE = "https://image.tmdb.org/t/p";
 export const POSTER_SIZE = "w500";
 export const BACKDROP_SIZE = "w1280";
 export const PROFILE_SIZE = "w185";
+export const LOGO_SIZE = "w92";
+
+// Streaming availability is per country. The first region TMDB actually answers for wins.
+export const WATCH_REGIONS = ["IN", "US", "GB"];
 
 // Pages of TMDB results fetched per request, and the browse ceiling.
 export const PAGES_PER_REQUEST = 2;
 export const BROWSE_PAGES = 3;
 // The highest TMDB page a browse window may START at. Counts TMDB pages, not clicks.
 export const MAX_BROWSE_PAGE = 25;
-export const TMDB_PAGE_SIZE = 20;
 
 // Runtimes and certifications cost one call per title, so cap the enrichment.
 export const ENRICH_LIMIT = 18;

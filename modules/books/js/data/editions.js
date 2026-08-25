@@ -1,9 +1,7 @@
 import { normaliseIsbn } from "./identity.js";
 import { clean, yearOf } from "../core/util.js";
 
-// One line of the Other Versions cell: ISBN · Language · Publisher · Year, with
-// everything after the ISBN optional. OtherVersions.gs writes it this way and
-// js/books/discover.js builds it the same way, so the three must agree.
+// One line of the Other Versions cell: ISBN · Language · Publisher · Year, with everything after the ISBN optional. OtherVersions.gs writes it this way and js/books/discover.js builds it the same way, so the three must agree.
 
 const LANGUAGES = new Set([
   "English", "Spanish", "French", "German", "Italian", "Portuguese", "Dutch",
@@ -33,8 +31,7 @@ export function parseEditionLine(text) {
   return { isbn, language, publisher: rest.join(" · "), year, line: clean(text) };
 }
 
-// Whole lines, deduplicated by ISBN. "None" and anything not starting with an
-// ISBN yield nothing, exactly as parseVersions() does.
+// Whole lines, deduplicated by ISBN. "None" and anything not starting with an ISBN yield nothing, exactly as parseVersions() does.
 export function parseEditionLines(text) {
   const seen = new Set();
   const out = [];

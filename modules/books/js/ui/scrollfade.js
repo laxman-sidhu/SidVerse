@@ -1,9 +1,4 @@
-// Edge fades on a row that scrolls sideways.
-//
-// Not pure CSS: a mask that is always on fades the first chip even when the row
-// is at its start, which reads as a fault rather than an affordance. So the
-// sides are switched by what is actually off-screen, and the gradient itself
-// stays in the stylesheet as .is-fade-left and .is-fade-right.
+// Edge fades on a row that scrolls sideways. Not pure CSS: a mask that is always on fades the first chip even when the row is at its start, which reads as a fault rather than an affordance. So the sides are switched by what is actually off-screen, and the gradient itself stays in the stylesheet as .is-fade-left and .is-fade-right.
 
 const SLACK = 4;
 

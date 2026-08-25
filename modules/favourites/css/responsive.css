@@ -1,18 +1,9 @@
-/* SidPicks - mobile-first refinements. Breakpoints: mobile 320-480, large
-   mobile 481-767, tablet 768-1023, laptop 1024-1439, desktop 1440+,
-   ultra-wide 1920+. */
+/* SidPicks - mobile-first refinements. Breakpoints: mobile 320-480, large mobile 481-767, tablet 768-1023, laptop 1024-1439, desktop 1440+, ultra-wide 1920+. */
 
-/* --------------------------------------------------------------------------
-   Gallery card sizing
-   The grid uses auto-fill (in components.css), so the number of columns is
-   driven purely by how many cards of `--card-min` fit the current width —
-   zoom out and you simply get more columns, edge to edge. Here we only tune
-   the minimum card width per screen size.
-   -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* Gallery card sizing The grid uses auto-fill (in components.css), so the number of columns is driven purely by how many cards of `--card-min` fit the current width — zoom out and you simply get more columns, edge to edge. Here we only tune the minimum card width per screen size. -------------------------------------------------------------------------- */
 
-/* Phones: force exactly two cards per row (auto-fill with a vw min could
-   collapse to a single column on narrower devices once gutters are
-   subtracted). From 560px up we hand back to the fluid auto-fill grid. */
+/* Phones: force exactly two cards per row (auto-fill with a vw min could collapse to a single column on narrower devices once gutters are subtracted). From 560px up we hand back to the fluid auto-fill grid. */
 .gallery {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -26,9 +17,8 @@
 @media (min-width: 1024px) { .gallery { --card-min: 182px; } }
 @media (min-width: 1600px) { .gallery { --card-min: 196px; } }
 
-/* --------------------------------------------------------------------------
-   Mobile & large mobile (≤ 767px)
-   -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* Mobile & large mobile (≤ 767px) -------------------------------------------------------------------------- */
 
 @media (max-width: 767px) {
 
@@ -39,10 +29,7 @@
 
   .nav__links {
     position: fixed;
-    /* The .nav bar uses backdrop-filter, which makes it the containing
-       block for this fixed sheet — so `inset: 0` would resolve against the
-       66px nav bar and trap the menu in a tiny scrolling box. Size to the
-       viewport explicitly instead so the sheet fills the whole screen. */
+    /* The .nav bar uses backdrop-filter, which makes it the containing block for this fixed sheet — so `inset: 0` would resolve against the 66px nav bar and trap the menu in a tiny scrolling box. Size to the viewport explicitly instead so the sheet fills the whole screen. */
     top: 0;
     left: 0;
     width: 100%;
@@ -50,9 +37,7 @@
     height: 100dvh;
     z-index: 110;
     flex-direction: column;
-    /* `safe center` keeps the menu centred when it fits, and falls back to
-       top-aligned + scrollable (never clipping the top) only when the
-       content is genuinely taller than the screen — so it grows to fit. */
+    /* `safe center` keeps the menu centred when it fits, and falls back to top-aligned + scrollable (never clipping the top) only when the content is genuinely taller than the screen — so it grows to fit. */
     justify-content: safe center;
     align-items: center;
     gap: 0.8rem;
@@ -140,8 +125,7 @@
   }
 
   .nav__dropdown.is-open .nav__dropdown-panel {
-    /* Grow to fit all items — no inner scrollbar. If the whole menu ends
-       up taller than the screen, the sheet (.nav__links) scrolls instead. */
+    /* Grow to fit all items — no inner scrollbar. If the whole menu ends up taller than the screen, the sheet (.nav__links) scrolls instead. */
     max-height: 100vh;
     padding: 0.5rem;
     overflow: hidden;
@@ -219,18 +203,16 @@
   .preview-ring { width: 44px; height: 44px; }
 }
 
-/* --------------------------------------------------------------------------
-   Tablet (768–1023px)
-   -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* Tablet (768–1023px) -------------------------------------------------------------------------- */
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .collections-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   .search { width: min(100%, 520px); }
 }
 
-/* --------------------------------------------------------------------------
-   Laptop and up: richer hover states already defined; widen content
-   -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* Laptop and up: richer hover states already defined; widen content -------------------------------------------------------------------------- */
 
 @media (min-width: 1440px) {
   :root { --content-max: 1360px; }
@@ -241,9 +223,8 @@
   body { font-size: 1.08rem; }
 }
 
-/* --------------------------------------------------------------------------
-   Touch devices: no hover lifts, larger hit areas already ≥44px
-   -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* Touch devices: no hover lifts, larger hit areas already ≥44px -------------------------------------------------------------------------- */
 
 @media (hover: none) {
   .collection-card:hover,

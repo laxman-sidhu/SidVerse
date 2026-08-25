@@ -1,7 +1,6 @@
 import { normaliseText, normaliseAuthor } from "../core/util.js";
 
-// The only true identifier a book has. Both forms convert to 13 first, or
-// 0062315005 never matches 9780062315007.
+// The only true identifier a book has. Both forms convert to 13 first, or 0062315005 never matches 9780062315007.
 export function normaliseIsbn(value) {
   const bare = String(value == null ? "" : value).replace(/[^0-9Xx]/g, "").toUpperCase();
   if (bare.length === 13) return bare;
@@ -13,8 +12,7 @@ export function normaliseIsbn(value) {
   return body + String((10 - (sum % 10)) % 10);
 }
 
-// Google indexes some editions under the 10 and some under the 13, so lookups
-// ask for both. Only a 978 prefix ever had a 10-digit form.
+// Google indexes some editions under the 10 and some under the 13, so lookups ask for both. Only a 978 prefix ever had a 10-digit form.
 export function toIsbn10(value) {
   const bare = String(value == null ? "" : value).replace(/[^0-9Xx]/g, "").toUpperCase();
   if (bare.length === 10) return bare;
@@ -33,8 +31,7 @@ export function isbnForms(value) {
   return [...new Set([thirteen, ten].filter(Boolean))];
 }
 
-// The printing a record claims to BE, as opposed to every printing of the work
-// it happens to list. A record with none of these names no printing at all.
+// The printing a record claims to BE, as opposed to every printing of the work it happens to list. A record with none of these names no printing at all.
 export function ownIsbns(book) {
   return [...new Set([book?.isbn13, book?.isbn10, book?.isbn].map(normaliseIsbn).filter(Boolean))];
 }
@@ -46,9 +43,7 @@ export function carriesIsbn(book, wanted) {
   return ownIsbns(book).includes(want);
 }
 
-// The Other Versions cell, one edition per line, ISBN first. Only the ISBN is
-// read: the rest of the line is for a human and may be reformatted freely.
-// "None" and a line whose first token is not an ISBN both yield nothing.
+// The Other Versions cell, one edition per line, ISBN first. Only the ISBN is read: the rest of the line is for a human and may be reformatted freely. "None" and a line whose first token is not an ISBN both yield nothing.
 export function parseVersions(text) {
   const found = String(text == null ? "" : text)
     .split(/\r?\n/)
@@ -57,8 +52,7 @@ export function parseVersions(text) {
   return [...new Set(found)];
 }
 
-// Open Library has "Paulo Coello" for "Paulo Coelho". One typo should not make
-// a book a stranger, so the WEAKER claim accepts a single edit. find() does not.
+// Open Library has "Paulo Coello" for "Paulo Coelho". One typo should not make a book a stranger, so the WEAKER claim accepts a single edit. find() does not.
 export function nearAuthor(a, b) {
   if (!a || !b) return false;
   if (a === b) return true;
@@ -83,8 +77,7 @@ export function isbnOf(book) {
   return normaliseIsbn(book?.isbn13 || book?.isbn || book?.isbn10 || "");
 }
 
-// Every printing a record knows itself by. Open Library lists a whole work's
-// ISBNs in one array; `versions` may be the sheet's cell text or a parsed list.
+// Every printing a record knows itself by. Open Library lists a whole work's ISBNs in one array; `versions` may be the sheet's cell text or a parsed list.
 export function versionIsbnsOf(book) {
   const raw = [
     ...(Array.isArray(book?.editionIsbns) ? book.editionIsbns : []),
@@ -94,12 +87,7 @@ export function versionIsbnsOf(book) {
   return [...new Set(raw.map(normaliseIsbn).filter(Boolean))];
 }
 
-// The filing form of a title. A leading article is not part of it: every
-// catalogue shelves "The Metamorphosis" under M, and the sheet and the APIs
-// disagree about whether to type it at all. Without this, one card says
-// Metamorphosis, the row says The Metamorphosis, and they are two books.
-// English only - "De" and "Il" are articles in one language and words in
-// another, and merging on those would cost more than it saved.
+// The filing form of a title. A leading article is not part of it: every catalogue shelves "The Metamorphosis" under M, and the sheet and the APIs disagree about whether to type it at all. Without this, one card says Metamorphosis, the row says The Metamorphosis, and they are two books. English only - "De" and "Il" are articles in one language and words in another, and merging on those would cost more than it saved.
 export function filingTitle(text) {
   return normaliseText(text).replace(/^(?:the|a|an)\s+/, "");
 }

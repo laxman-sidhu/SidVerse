@@ -1,51 +1,14 @@
-/* --------------------------------------------------------------------------
-   GALLERY LOGIC  -  windowed / virtualized grid
-   --------------------------------------------------------------------------
-   The page can hold hundreds of photos and videos and stay smooth because it
-   never loads them all at once. Three ideas do the heavy lifting:
-
-   1. RESERVE HEIGHT UP FRONT. Every tile is given its final height the moment
-      the page builds - from real dimensions if the manifest provides them, or
-      from a neutral square placeholder otherwise. So the page has its correct
-      total height (and an accurate scrollbar) before a single image downloads.
-
-   2. MOUNT ON DEMAND. A tile only attaches its real <img>/<video> when it is
-      about to scroll into view (an IntersectionObserver watches each tile with
-      a ~1.5-screen lookahead). Tiles far below the fold cost almost nothing.
-
-   3. UNMOUNT WHEN FAR AWAY. Tiles that scroll more than ~6 screens off get
-      their media detached again, so memory stays flat even with 300+ items.
-      Their reserved height never changes, so nothing shifts.
-
-   Media is loaded from the `assets/gallery/` folder using one of two strategies:
-     1. Directory listing - fetch `assets/gallery/` and parse the HTML index
-        (works on Apache/nginx static servers with autoindex on).
-     2. File-list JSON    - fetch `assets/gallery-index.json`. Works on every static
-        host (GitHub Pages, Netlify, Vercel). Two accepted shapes:
-          { "files": ["a.webp", "b.mp4", ...] }                      (current)
-          { "files": [{ "name": "a.webp", "w": 1200, "h": 800 }, ...] }  (optional)
-        Adding w/h is OPTIONAL - when present, tiles get their exact height with
-        zero layout shift and off-screen images never need to load just to be
-        measured. Plain filename strings keep working exactly as before.
-     Tries (1) first; falls back to (2). If both fail, shows the empty state.
-
-   To regenerate assets/gallery-index.json, run this in cmd from the assets/ folder:
-     (echo {"files":[ & (for %F in (Gallery\*.jpg Gallery\*.jpeg Gallery\*.png Gallery\*.gif Gallery\*.webp Gallery\*.avif Gallery\*.mp4 Gallery\*.webm Gallery\*.mov Gallery\*.m4v) do @echo "%~nxF",) & echo ]}) > gallery-index.json
-   (then remove the trailing comma after the last entry, or use the .bat helper.)
-   -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
+// GALLERY LOGIC - windowed / virtualized grid -------------------------------------------------------------------------- The page can hold hundreds of photos and videos and stay smooth because it never loads them all at once. Three ideas do the heavy lifting: 1. RESERVE HEIGHT UP FRONT. Every tile is given its final height the moment the page builds - from real dimensions if the manifest provides them, or from a neutral square placeholder otherwise. So the page has its correct total height (and an accurate scrollbar) before a single image downloads. 2. MOUNT ON DEMAND. A tile only attaches its real <img>/<video> when it is about to scroll into view (an IntersectionObserver watches each tile with a ~1.5-screen lookahead). Tiles far below the fold cost almost nothing. 3. UNMOUNT WHEN FAR AWAY. Tiles that scroll more than ~6 screens off get their media detached again, so memory stays flat even with 300+ items. Their reserved height never changes, so nothing shifts. Media is loaded from the `assets/gallery/` folder using one of two strategies: 1. Directory listing - fetch `assets/gallery/` and parse the HTML index (works on Apache/nginx static servers with autoindex on). 2. File-list JSON - fetch `assets/gallery-index.json`. Works on every static host (GitHub Pages, Netlify, Vercel). Two accepted shapes: { "files": ["a.webp", "b.mp4", ...] } (current) { "files": [{ "name": "a.webp", "w": 1200, "h": 800 }, ...] } (optional) Adding w/h is OPTIONAL - when present, tiles get their exact height with zero layout shift and off-screen images never need to load just to be measured. Plain filename strings keep working exactly as before. Tries (1) first; falls back to (2). If both fail, shows the empty state. To regenerate assets/gallery-index.json, run this in cmd from the assets/ folder: (echo {"files":[ & (for %F in (Gallery\*.jpg Gallery\*.jpeg Gallery\*.png Gallery\*.gif Gallery\*.webp Gallery\*.avif Gallery\*.mp4 Gallery\*.webm Gallery\*.mov Gallery\*.m4v) do @echo "%~nxF",) & echo ]}) > gallery-index.json (then remove the trailing comma after the last entry, or use the .bat helper.) --------------------------------------------------------------------------
 
 const IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
 const VIDEO_EXT = ['.mp4', '.webm', '.mov', '.m4v'];
 
-/* How far ahead of the viewport (in screen-heights) to start loading a tile,
-   and how far behind to unload it again. Mount window is generous enough that
-   tiles are ready before you reach them; unmount window is large enough that
-   normal scrolling never tears down something you're about to see again. */
+// How far ahead of the viewport (in screen-heights) to start loading a tile, and how far behind to unload it again. Mount window is generous enough that tiles are ready before you reach them; unmount window is large enough that normal scrolling never tears down something you're about to see again.
 const MOUNT_SCREENS  = 1.5;
 const UNMOUNT_SCREENS = 6;
 
-/* Default placeholder shape used to reserve a tile's height before its real
-   dimensions are known (1 = square). Snapped to the true ratio once loaded. */
+// Default placeholder shape used to reserve a tile's height before its real dimensions are known (1 = square). Snapped to the true ratio once loaded.
 const DEFAULT_ASPECT = 1;
 
 function classify(filename) {
@@ -55,8 +18,7 @@ function classify(filename) {
   return null;
 }
 
-/* Normalize one manifest entry to { name, w, h }. Accepts a bare filename
-   string, or an object carrying optional width/height under several key names. */
+// Normalize one manifest entry to { name, w, h }. Accepts a bare filename string, or an object carrying optional width/height under several key names.
 function normalizeEntry(entry) {
   if (typeof entry === 'string') return { name: entry, w: 0, h: 0 };
   if (entry && typeof entry === 'object') {
@@ -69,9 +31,9 @@ function normalizeEntry(entry) {
   return null;
 }
 
-/* ─── FILE-LIST LOADERS ─── */
+// ─── FILE-LIST LOADERS ───
 
-/* Strategy 1: parse a server-side directory listing. Returns [{name,w,h}]. */
+// Strategy 1: parse a server-side directory listing. Returns [{name,w,h}].
 async function fetchByDirectoryListing() {
   try {
     const res = await fetch('assets/gallery/');
@@ -94,7 +56,7 @@ async function fetchByDirectoryListing() {
   }
 }
 
-/* Strategy 2: read assets/gallery-index.json. Returns [{name,w,h}]. */
+// Strategy 2: read assets/gallery-index.json. Returns [{name,w,h}].
 async function fetchByManifest() {
   try {
     const res = await fetch('assets/gallery-index.json', { cache: 'no-store' });
@@ -114,18 +76,14 @@ async function fetchByManifest() {
   }
 }
 
-/* Load the file list using both strategies (directory listing first). */
+// Load the file list using both strategies (directory listing first).
 async function loadGallery() {
   let files = await fetchByDirectoryListing();
   if (files.length === 0) files = await fetchByManifest();
   return files;
 }
 
-/* ─── LAYOUT METRICS ───
-   Read the grid's row unit, gap and a real column width ONCE (and again on
-   resize). Everything downstream computes spans from these cached numbers, so
-   loading an image never forces a per-image layout read - the old code's main
-   source of jank. */
+// ─── LAYOUT METRICS ─── Read the grid's row unit, gap and a real column width ONCE (and again on resize). Everything downstream computes spans from these cached numbers, so loading an image never forces a per-image layout read - the old code's main source of jank.
 const GRID = document.getElementById('galleryGrid');
 const metrics = { colWidth: 0, rowH: 6, gap: 12 };
 let DEFAULT_SPAN = 1;
@@ -135,8 +93,7 @@ function measureMetrics() {
   metrics.rowH = parseFloat(cs.getPropertyValue('grid-auto-rows')) || 6;
   metrics.gap  = parseFloat(cs.getPropertyValue('row-gap'))
               || parseFloat(cs.getPropertyValue('gap')) || 12;
-  // Measure an actual rendered cell - accounts for the `1fr` distribution that
-  // a pure template calculation would miss.
+  // Measure an actual rendered cell - accounts for the `1fr` distribution that a pure template calculation would miss.
   const cell = GRID.firstElementChild;
   if (cell) {
     const w = cell.getBoundingClientRect().width;
@@ -146,8 +103,7 @@ function measureMetrics() {
   DEFAULT_SPAN = spanFor(1, DEFAULT_ASPECT);
 }
 
-/* Convert an aspect ratio into a grid-row span using the cached column width.
-   span N occupies: N*rowH + (N-1)*gap  →  N = (px + gap) / (rowH + gap). */
+// Convert an aspect ratio into a grid-row span using the cached column width. span N occupies: N*rowH + (N-1)*gap → N = (px + gap) / (rowH + gap).
 function spanFor(w, h) {
   if (!w || !h || !metrics.colWidth) return DEFAULT_SPAN || 1;
   const px = metrics.colWidth * (h / w);
@@ -159,11 +115,10 @@ function reserveSpan(it) {
   it.el.style.gridRowEnd = 'span ' + span;
 }
 
-/* ─── ITEM STATE ─── */
+// ─── ITEM STATE ───
 let ITEMS = [];
 
-/* Build a lightweight placeholder cell - no media yet. The real <img>/<video>
-   is attached later by mountMedia() when the tile nears the viewport. */
+// Build a lightweight placeholder cell - no media yet. The real <img>/<video> is attached later by mountMedia() when the tile nears the viewport.
 function createCell(it, i) {
   const el = document.createElement('div');
   el.className = 'gallery-item is-placeholder';
@@ -180,7 +135,7 @@ function createCell(it, i) {
   return el;
 }
 
-/* Attach the real media to a tile. Called when the tile scrolls near view. */
+// Attach the real media to a tile. Called when the tile scrolls near view.
 function mountMedia(it) {
   if (it.mounted) return;
   it.mounted = true;
@@ -228,8 +183,7 @@ function mountMedia(it) {
   }
 }
 
-/* Detach media from a tile that has scrolled far away - frees memory/decoded
-   bitmaps. The reserved height is kept, so re-mounting causes no layout shift. */
+// Detach media from a tile that has scrolled far away - frees memory/decoded bitmaps. The reserved height is kept, so re-mounting causes no layout shift.
 function unmountMedia(it) {
   if (!it.mounted) return;
   it.mounted = false;
@@ -244,9 +198,7 @@ function unmountMedia(it) {
   it.el.classList.add('is-placeholder');
 }
 
-/* ─── WINDOWING (IntersectionObservers) ───
-   mountObs fires when a tile enters the lookahead zone → attach media.
-   evictObs fires when a tile leaves the larger zone → detach media. */
+// ─── WINDOWING (IntersectionObservers) ─── mountObs fires when a tile enters the lookahead zone → attach media. evictObs fires when a tile leaves the larger zone → detach media.
 let mountObs = null;
 let evictObs = null;
 
@@ -276,9 +228,7 @@ function setupObservers() {
   ITEMS.forEach(it => { mountObs.observe(it.el); evictObs.observe(it.el); });
 }
 
-/* Recompute spans on resize (column width changes). Uses each item's known
-   dimensions where it has them, the default square otherwise. Debounced, and
-   does no per-image layout reads. */
+// Recompute spans on resize (column width changes). Uses each item's known dimensions where it has them, the default square otherwise. Debounced, and does no per-image layout reads.
 let resizeTimer = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
@@ -289,10 +239,10 @@ window.addEventListener('resize', () => {
   }, 150);
 }, { passive: true });
 
-/* ─── MODAL STATE & BEHAVIOUR ─── */
+// ─── MODAL STATE & BEHAVIOUR ───
 const galleryState = { items: [], index: 0 };
 
-/* Warm the next/previous image so arrow navigation feels instant. */
+// Warm the next/previous image so arrow navigation feels instant.
 function preloadNeighbors() {
   const n = galleryState.items.length;
   if (n < 2) return;
@@ -347,7 +297,7 @@ function shift(delta) {
   openModalAt(galleryState.index + delta);
 }
 
-/* ─── INIT ─── */
+// ─── INIT ───
 async function init() {
   const loadingEl = document.getElementById('galleryLoading');
   const grid      = document.getElementById('galleryGrid');
@@ -383,8 +333,7 @@ async function init() {
   ITEMS.forEach((it, i) => frag.appendChild(createCell(it, i)));
   grid.appendChild(frag);
 
-  // Phase 2 - measure real geometry, then reserve each tile's true height so
-  // the page is its correct length before any media downloads.
+  // Phase 2 - measure real geometry, then reserve each tile's true height so the page is its correct length before any media downloads.
   measureMetrics();
   ITEMS.forEach(reserveSpan);
 
@@ -400,7 +349,7 @@ async function init() {
   meta.hidden = false;
 }
 
-/* ─── EVENT BINDINGS ─── */
+// ─── EVENT BINDINGS ───
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalPrev').addEventListener('click', (e) => {
   e.stopPropagation();

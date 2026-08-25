@@ -1,6 +1,4 @@
-/* SidVerse - reveal-on-scroll and the theme cross-fade. Sets data-motion on
-   <html>; every rule in motion.css that hides something is scoped to it, so a
-   blocked script leaves the page visible. Off under reduced-motion. */
+// SidVerse - reveal-on-scroll and the theme cross-fade. Sets data-motion on <html>; every rule in motion.css that hides something is scoped to it, so a blocked script leaves the page visible. Off under reduced-motion.
 
 (function () {
   "use strict";
@@ -26,10 +24,8 @@
 
   ready(function () {
 
-    /* ---- 1. mark what should reveal --------------------------------------
-       Rather than asking every page to add attributes by hand, the blocks a
-       page is built from are collected here. A page that has none of these
-       simply gets no reveals. */
+    // ---- 1. mark what should reveal --------------------------------------
+    // Rather than asking every page to add attributes by hand, the blocks a page is built from are collected here. A page that has none of these simply gets no reveals.
 
     var TARGETS = [
       ".rooms__head", ".room",
@@ -52,8 +48,7 @@
       return;
     }
 
-    // Anything already on screen at load is shown immediately — a reveal that
-    // fires for content the reader is already looking at reads as a flash.
+    // Anything already on screen at load is shown immediately — a reveal that fires for content the reader is already looking at reads as a flash.
     var vh = window.innerHeight || document.documentElement.clientHeight;
 
     nodes.forEach(function (el, i) {
@@ -88,19 +83,15 @@
 
       pending.forEach(function (el) { io.observe(el); });
 
-      // A hard stop: if anything is still hidden a few seconds in — a stalled
-      // image, a mis-measured container — it is shown regardless. Content is
-      // never allowed to stay invisible because an effect did not fire.
+      // A hard stop: if anything is still hidden a few seconds in — a stalled image, a mis-measured container — it is shown regardless. Content is never allowed to stay invisible because an effect did not fire.
       window.setTimeout(function () {
         pending.forEach(function (el) { el.classList.add("is-in"); });
       }, 4000);
     }
 
 
-    /* ---- 3. theme cross-fade -------------------------------------------
-       The transition is switched on for the length of the change and off
-       again, so it never slows an ordinary hover. The theme itself is still
-       owned by shell.js — this only softens the moment it flips. */
+    // ---- 3. theme cross-fade -------------------------------------------
+    // The transition is switched on for the length of the change and off again, so it never slows an ordinary hover. The theme itself is still owned by shell.js — this only softens the moment it flips.
 
     var root = document.documentElement;
     var observer = new MutationObserver(function (records) {
@@ -117,7 +108,7 @@
     observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 
 
-    /* ---- 4. a skip link ------------------------------------------------- */
+    // ---- 4. a skip link -------------------------------------------------
 
     var main = document.querySelector("main") || document.querySelector("[role=main]");
     if (main) {

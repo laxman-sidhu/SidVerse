@@ -3,8 +3,7 @@ import { keyOf, looseKeyOf, keysFor, authorText, firstAuthor, normaliseIsbn, isb
 import { normaliseText, normaliseAuthor, titleCase, clean, cleanLines, yearOf, searchTerms, matchesTerms } from "../core/util.js";
 import { readSnapshot, writeSnapshot } from "./snapshot.js";
 
-// One entry per BOOK, not per row: a re-read or a second printing is still
-// one card.
+// One entry per BOOK, not per row: a re-read or a second printing is still one card.
 function toEntry(row) {
   return {
     key: keyOf(row),
@@ -60,9 +59,7 @@ class Library {
       this.byTitle.get(title).push(entry);
       if (entry.isbn && !this.byIsbn.has(entry.isbn)) this.byIsbn.set(entry.isbn, entry);
 
-      // Every OTHER printing of this book, pointing back at the row that was
-      // actually read. An edition already on the shelf is never indexed as a
-      // mere version of itself.
+      // Every OTHER printing of this book, pointing back at the row that was actually read. An edition already on the shelf is never indexed as a mere version of itself.
       for (const isbn of entry.versions) {
         if (isbn === entry.isbn || this.byVersion.has(isbn)) continue;
         this.byVersion.set(isbn, entry);
@@ -94,12 +91,7 @@ class Library {
       for (const entry of this.byKey.values()) if (entry.isbn && carriesIsbn(book, entry.isbn)) return entry;
     }
 
-    // An ISBN settles it both ways: a row with a DIFFERENT number is a
-    // different printing, however well the title and author line up, so a title
-    // match can never turn a stranger's printing green. Silence on either side
-    // says nothing and stays eligible - a row with no ISBN, or a record that
-    // names no printing of its own. Everything else the title alone can claim
-    // is an edition, and versionMatch() is where that claim belongs.
+    // An ISBN settles it both ways: a row with a DIFFERENT number is a different printing, however well the title and author line up, so a title match can never turn a stranger's printing green. Silence on either side says nothing and stays eligible - a row with no ISBN, or a record that names no printing of its own. Everything else the title alone can claim is an edition, and versionMatch() is where that claim belongs.
     const mine = ownIsbns(book);
     const ok = entry => !entry.isbn || !mine.length || mine.includes(entry.isbn);
 
@@ -113,8 +105,7 @@ class Library {
       const hit = this.byKey.get(key);
       if (hit && ok(hit)) return hit;
     }
-    // A query with no author matches on title alone; one that has an author never
-    // reaches here, so two authors are never confused.
+    // A query with no author matches on title alone; one that has an author never reaches here, so two authors are never confused.
     const loose = looseKeyOf(book);
     if (!loose) return null;
     if (firstAuthor(book)) {
@@ -126,31 +117,23 @@ class Library {
 
   has(book) { return Boolean(this.find(book)); }
 
-  // A DIFFERENT printing of a book on the shelf. Deliberately not folded into
-  // find(): "this is read" and "another edition of this is read" are
-  // different claims and the second must never be shown as the first.
+  // A DIFFERENT printing of a book on the shelf. Deliberately not folded into find(): "this is read" and "another edition of this is read" are different claims and the second must never be shown as the first.
   findVersion(book) {
     return this.versionMatch(book).entry;
   }
 
-  // `via` says how sure the answer is. "isbn" means the sheet names this exact
-  // number; "guess" means only the title and author line up, which is the
-  // weaker claim and the one worth offering to file properly.
+  // `via` says how sure the answer is. "isbn" means the sheet names this exact number; "guess" means only the title and author line up, which is the weaker claim and the one worth offering to file properly.
   versionMatch(book) {
     const isbn = isbnOf(book);
     if (isbn && this.byVersion.has(isbn)) return { entry: this.byVersion.get(isbn), via: "isbn" };
 
-    // The one that fires on a trending card: the ISBN on the cover is a coin
-    // flip, but one of the work's other printings is the row on the shelf.
+    // The one that fires on a trending card: the ISBN on the cover is a coin flip, but one of the work's other printings is the row on the shelf.
     for (const other of versionIsbnsOf(book)) {
       if (other === isbn) continue;
       const hit = this.byIsbn.get(other) || this.byVersion.get(other);
       if (hit) return { entry: hit, via: "isbn" };
     }
-    // Same title and author, a number the sheet has never heard of - including
-    // no number at all. Open Library files one book under several work records,
-    // so a printing can be missing from the versions cell and still plainly be
-    // an edition of a row we have.
+    // Same title and author, a number the sheet has never heard of - including no number at all. Open Library files one book under several work records, so a printing can be missing from the versions cell and still plainly be an edition of a row we have.
     const wanted = normaliseAuthor(firstAuthor(book));
     if (wanted) {
       for (const entry of this.byTitle.get(looseKeyOf(book)) || []) {
@@ -169,9 +152,7 @@ class Library {
     book.sheet_author = entry?.author || "";
     book.sheet_genre = entry?.genre || "";
 
-    // Only when this exact edition is NOT on the shelf. A book that is read is
-    // read, and saying "another edition of this was read" over the top of that
-    // is noise.
+    // Only when this exact edition is NOT on the shelf. A book that is read is read, and saying "another edition of this was read" over the top of that is noise.
     const match = entry ? { entry: null, via: "" } : this.versionMatch(book);
     const other = match.entry;
     book.version_read = Boolean(other);
@@ -228,8 +209,7 @@ class Library {
       const genre = entry.genre || "Uncategorised";
       byGenre.set(genre, (byGenre.get(genre) || 0) + 1);
     }
-    // The page counts distinct BOOKS and the sheet counts ROWS, and the two are
-    // allowed to differ: a second printing of something is another row.
+    // The page counts distinct BOOKS and the sheet counts ROWS, and the two are allowed to differ: a second printing of something is another row.
     return {
       books: entries.length,
       rows: this.rows.length,
@@ -250,8 +230,7 @@ class Library {
     return true;
   }
 
-  // One more printing on a row that is already read. Written after the sheet
-  // has taken it, like every other apply*.
+  // One more printing on a row that is already read. Written after the sheet has taken it, like every other apply*.
   applyVersion(book, line) {
     const entry = this.find(book);
     const text = clean(line);

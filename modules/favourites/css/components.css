@@ -42,9 +42,8 @@
   pointer-events: none;
 }
 
-/* ==========================================================================
-   Collection cards (homepage)
-   ========================================================================== */
+/* ========================================================================== */
+/* Collection cards (homepage) ========================================================================== */
 
 .collections-grid {
   display: grid;
@@ -208,13 +207,11 @@
   transform: translateX(5px);
 }
 
-/* ==========================================================================
-   Gallery (category page)
-   ========================================================================== */
+/* ========================================================================== */
+/* Gallery (category page) ========================================================================== */
 
 .gallery {
-  /* Auto-fill packs in as many cards as the viewport allows — zoom out
-     and the row simply gains more columns, with no max container width. */
+  /* Auto-fill packs in as many cards as the viewport allows — zoom out and the row simply gains more columns, with no max container width. */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-min, 172px), 1fr));
   gap: clamp(1rem, 2vw, 1.7rem);
@@ -344,8 +341,7 @@
   transform: scale(1);
 }
 
-/* Image-count chip in the top-left corner — tells you how many images
-   this exhibit holds. Revealed on hover, like the view badge. */
+/* Image-count chip in the top-left corner — tells you how many images this exhibit holds. Revealed on hover, like the view badge. */
 .exhibit-card__count {
   position: absolute;
   top: 14px;
@@ -376,9 +372,7 @@
   transform: scale(1);
 }
 
-/* Touch devices have no hover to reveal a caption, and printing it on every
-   card turned the wall into a list. The pictures stand alone; the name and the
-   count belong to the popup that opens on tap. */
+/* Touch devices have no hover to reveal a caption, and printing it on every card turned the wall into a list. The pictures stand alone; the name and the count belong to the popup that opens on tap. */
 @media (hover: none) {
   .exhibit-card__media::after { opacity: 0; }
   .exhibit-card__name,
@@ -485,12 +479,10 @@
   color: var(--ink-soft);
 }
 
-/* ==========================================================================
-   Modal
-   ========================================================================== */
+/* ========================================================================== */
+/* Modal ========================================================================== */
 
-/* Full-screen immersive overlay — the artwork takes the stage at its
-   natural aspect ratio, with the caption laid over its lower edge. */
+/* Full-screen immersive overlay — the artwork takes the stage at its natural aspect ratio, with the caption laid over its lower edge. */
 .modal {
   position: fixed;
   inset: 0;
@@ -542,16 +534,14 @@
   opacity: 1;
 }
 
-/* The active image drives the size — one clean surface, caption overlaid.
-   The stage is a fixed frame; slides fade + slide across it. */
+/* The active image drives the size — one clean surface, caption overlaid. The stage is a fixed frame; slides fade + slide across it. */
 .modal__stage {
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 40px 120px rgba(var(--p-deep-rgb), 0.6);
   line-height: 0;
-  /* Size is set inline by JS to the active image's aspect ratio; this
-     transition makes shape changes between images feel smooth. */
+  /* Size is set inline by JS to the active image's aspect ratio; this transition makes shape changes between images feel smooth. */
   transition: width var(--dur-med) var(--ease-out),
               height var(--dur-med) var(--ease-out);
 }
@@ -585,9 +575,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  /* Stage is sized per image: portrait images get a full-height stage so
-     `cover` fills it (small crop); landscape/square get an image-shaped
-     stage so `cover` fills it exactly with no crop. */
+  /* Stage is sized per image: portrait images get a full-height stage so `cover` fills it (small crop); landscape/square get an image-shaped stage so `cover` fills it exactly with no crop. */
   object-fit: cover;
   opacity: 0;
   transition: opacity var(--dur-slow) var(--ease-out);
@@ -724,9 +712,8 @@
 
 body.modal-open { overflow: hidden; }
 
-/* ==========================================================================
-   Empty / error states
-   ========================================================================== */
+/* ========================================================================== */
+/* Empty / error states ========================================================================== */
 
 .state-panel {
   max-width: 520px;

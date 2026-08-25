@@ -25,9 +25,7 @@ const bare = value => String(value == null ? "" : value).replace(/[^0-9Xx]/g, ""
 
 // --- Google Books -----------------------------------------------------------
 
-// Quota is counted per project, so several keys are several allowances. Only a
-// quota refusal advances the pointer: a 403 for the wrong country would burn
-// every key in turn and report the last one's error instead of the real fault.
+// Quota is counted per project, so several keys are several allowances. Only a quota refusal advances the pointer: a 403 for the wrong country would burn every key in turn and report the last one's error instead of the real fault.
 let keyAt = 0;
 
 function googleKey() {
@@ -40,8 +38,7 @@ export function outOfQuota(error) {
   return error?.status === 429 || /quota|rateLimitExceeded|userRateLimitExceeded/i.test(text);
 }
 
-// Tries the current key, then each of the others once. Whatever the last one
-// says is what gets reported, because by then they are all spent.
+// Tries the current key, then each of the others once. Whatever the last one says is what gets reported, because by then they are all spent.
 async function askGoogle(build) {
   const keys = (GOOGLE_BOOKS_KEYS || []).filter(Boolean);
   const attempts = Math.max(keys.length, 1);
@@ -107,8 +104,7 @@ function splitCategory(category) {
 
 export function coverByIsbn(isbn, size = "M") {
   if (!isbn) return "";
-  // default=false makes a missing cover 404 rather than return a blank 1x1,
-  // which is what lets the <img> fall back.
+  // default=false makes a missing cover 404 rather than return a blank 1x1, which is what lets the <img> fall back.
   return `${OPEN_LIBRARY_COVERS}/b/isbn/${encodeURIComponent(isbn)}-${size}.jpg?default=false`;
 }
 
@@ -118,8 +114,7 @@ export function coverById(id, size = "M") {
 }
 
 export async function googleVolumes(query, { limit = PAGE_SIZE, start = 0, orderBy = "relevance" } = {}) {
-  // country is not optional: without it Google answers 403 "unknown location"
-  // to browser requests from several countries, India among them.
+  // country is not optional: without it Google answers 403 "unknown location" to browser requests from several countries, India among them.
   const country = GOOGLE_BOOKS_COUNTRY ? `&country=${encodeURIComponent(GOOGLE_BOOKS_COUNTRY)}` : "";
   // Without a key this site draws on the quota every anonymous caller shares.
   const build = key => `${GOOGLE_BOOKS_API}/volumes?q=${encodeURIComponent(query)}`
@@ -143,8 +138,7 @@ export async function googleVolume(id) {
   return payload ? fromGoogle(payload) : null;
 }
 
-// isbn: is an exact-match index, not a text search, so it returns this edition
-// or nothing. Both forms are asked for because they are indexed separately.
+// isbn: is an exact-match index, not a text search, so it returns this edition or nothing. Both forms are asked for because they are indexed separately.
 export async function googleByIsbn(isbn) {
   for (const form of isbnForms(isbn)) {
     const result = await googleVolumes(`isbn:${form}`, { limit: 5 });
@@ -155,10 +149,7 @@ export async function googleByIsbn(isbn) {
   return null;
 }
 
-// A call with something behind it should give up quickly: the point of a
-// fallback is to reach the next source, and three retries at a 20s timeout is a
-// minute of nothing per dead endpoint. Calls with no fallback keep the patient
-// settings.
+// A call with something behind it should give up quickly: the point of a fallback is to reach the next source, and three retries at a 20s timeout is a minute of nothing per dead endpoint. Calls with no fallback keep the patient settings.
 const FAST = { attempts: 1, timeout: 6000 };
 
 // --- Open Library -----------------------------------------------------------
@@ -192,14 +183,12 @@ const SEARCH_FIELDS = [
 
 // search.json and subjects.json return different shapes, so each gets its own reader.
 export function fromOpenLibraryDoc(doc) {
-  // The index lists every edition's ISBN in one flat array, so [0] is a coin
-  // flip. Each form is picked out by its own shape instead.
+  // The index lists every edition's ISBN in one flat array, so [0] is a coin flip. Each form is picked out by its own shape instead.
   const all = (doc.isbn || []).map(bare);
   const thirteen = all.find(value => /^\d{13}$/.test(value)) || "";
   const ten = all.find(value => /^\d{9}[\dX]$/.test(value)) || "";
   const isbn = thirteen || ten;
-  // The rest is the work's other printings, and one may be the row we read.
-  // Not capped: a popular novel keeps its shelf ISBN somewhere past number 150.
+  // The rest is the work's other printings, and one may be the row we read. Not capped: a popular novel keeps its shelf ISBN somewhere past number 150.
   const every = unique(all.map(normaliseIsbn).filter(Boolean));
   return book({
     id: `ol:${clean(doc.key)}`,
@@ -241,8 +230,7 @@ export function fromOpenLibraryWork(work) {
   });
 }
 
-// The bibkeys record is the ONE edition carrying this ISBN, with its own
-// publisher, page count and cover: the Vallardi Italian, not the HarperOne.
+// The bibkeys record is the ONE edition carrying this ISBN, with its own publisher, page count and cover: the Vallardi Italian, not the HarperOne.
 export function fromOpenLibraryBibkey(record, requested = "") {
   const ids = record?.identifiers || {};
   const asked = bare(requested);
@@ -299,12 +287,7 @@ export async function openLibrarySubject(slug, { limit = PAGE_SIZE, offset = 0, 
 export async function openLibraryTrending(period = "weekly", { limit = PAGE_SIZE } = {}) {
   const base = `${OPEN_LIBRARY_API}/trending/${encodeURIComponent(period)}.json`;
   const payload = await cached(`oltr:${period}:${limit}`, async () => {
-    // fields is asked for FIRST and by name. Without it this endpoint answers
-    // with a short default set that carries no isbn at all, which is why a
-    // trending card could not tell it was another printing of something read
-    // while the same book found through search.json could.
-    // An unsupported parameter here is a 400 rather than an ignored argument,
-    // so each step drops one and the last asks for nothing.
+    // fields is asked for FIRST and by name. Without it this endpoint answers with a short default set that carries no isbn at all, which is why a trending card could not tell it was another printing of something read while the same book found through search.json could. An unsupported parameter here is a 400 rather than an ignored argument, so each step drops one and the last asks for nothing.
     try { return await getJSON(`${base}?limit=${limit}&fields=${SEARCH_FIELDS}`, FAST); }
     catch { /* fall through */ }
     try { return await getJSON(`${base}?limit=${limit}`, FAST); }
@@ -342,8 +325,7 @@ export async function openLibraryEditions(key, limit = 20) {
   return await cached(`ole:${path}:${limit}`, () => getJSON(`${OPEN_LIBRARY_API}${path}/editions.json?limit=${limit}`));
 }
 
-// entries[0] is whichever printing was catalogued first, which is how a book
-// ends up showing a Bulgarian publisher beside an English title.
+// entries[0] is whichever printing was catalogued first, which is how a book ends up showing a Bulgarian publisher beside an English title.
 export function pickEdition(entries, wanted = "") {
   const list = (entries || []).filter(Boolean);
   if (!list.length) return null;
@@ -364,8 +346,7 @@ export function pickEdition(entries, wanted = "") {
   return list.slice().sort((a, b) => score(b) - score(a))[0];
 }
 
-// One edition's facts move as a SET. Filling publisher from a search doc and
-// language from a chosen edition is how a book ends up HarperOne and Turkish.
+// One edition's facts move as a SET. Filling publisher from a search doc and language from a chosen edition is how a book ends up HarperOne and Turkish.
 export function applyEdition(base, edition, { keepIsbn = false } = {}) {
   if (!edition) return base;
   base.publisher = clean((edition.publishers || [])[0]) || base.publisher;

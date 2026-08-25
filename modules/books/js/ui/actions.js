@@ -116,9 +116,7 @@ function genreChips(current = "") {
   ).join("") + '<button class="chipbtn chipbtn--other" type="button" data-genre-other>+ Other</button>';
 }
 
-// A trending result has a title, an author and a cover and nothing else, so
-// marking one read wrote a blank Summary and ISBN. The lookup is cached, not the
-// book: the same title arrives as a different object from the modal.
+// A trending result has a title, an author and a cover and nothing else, so marking one read wrote a blank Summary and ISBN. The lookup is cached, not the book: the same title arrives as a different object from the modal.
 const enriching = new Map();
 const editionCache = new Map();
 
@@ -148,8 +146,7 @@ async function enrich(book) {
   const key = book.id || book.title;
   await enrichBasic(book);
 
-  // The sheet has an Other Versions column, so a row written from here fills it
-  // rather than waiting for OtherVersions.gs to be run again by hand.
+  // The sheet has an Other Versions column, so a row written from here fills it rather than waiting for OtherVersions.gs to be run again by hand.
   if (!editionCache.has(key)) editionCache.set(key, otherEditions(book).catch(() => []));
   const editions = await editionCache.get(key);
   book.versions = editionLines(editions);
@@ -188,8 +185,7 @@ function askReadDetails(book) {
 
     state.genre = suggested;
 
-    // Always: the ISBN, cover and year are columns too, and starting now means
-    // the lookup has landed by the time a shelf is picked.
+    // Always: the ISBN, cover and year are columns too, and starting now means the lookup has landed by the time a shelf is picked.
     enrich(book).then(full => {
       if (!needsFilling) return;
       const field = node.querySelector("[data-summary]");
@@ -287,8 +283,7 @@ function askQueueDetails(book) {
   });
 }
 
-// A printing the sheet has never seen, filed against the book it belongs to.
-// The line is built here and written verbatim, so the cell keeps one format.
+// A printing the sheet has never seen, filed against the book it belongs to. The line is built here and written verbatim, so the cell keeps one format.
 function askOtherEdition(book) {
   return new Promise(resolve => {
     const entries = library.list({ sort: "title" });
@@ -406,8 +401,7 @@ export async function toggleRead(book, cardEl, buttonEl) {
   });
 }
 
-// No optimistic repaint here: nothing on the card is true until the sheet has
-// taken the line, and what changes afterwards is the colour of a neighbour.
+// No optimistic repaint here: nothing on the card is true until the sheet has taken the line, and what changes afterwards is the colour of a neighbour.
 export async function fileAsEdition(book, cardEl, buttonEl) {
   if (!library.list().length) {
     toast("Nothing has been marked read yet, so there is nothing to file this under.", "fail", 4200);

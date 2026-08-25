@@ -1,5 +1,4 @@
-// Full RFC 4180, not a split on commas: the summaries hold commas, quotes and
-// line breaks inside a single cell.
+// Full RFC 4180, not a split on commas: the summaries hold commas, quotes and line breaks inside a single cell.
 export function parseCSV(text) {
   const rows = [];
   let row = [];

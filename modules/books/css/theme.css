@@ -1,5 +1,4 @@
-/* SidBooks - retargeted onto the SidVerse palette. Loaded after style.css so
-   these win. Only variables are re-pointed; no rule below is re-styled. */
+/* SidBooks - retargeted onto the SidVerse palette. Loaded after style.css so these win. Only variables are re-pointed; no rule below is re-styled. */
 
 :root {
   --paper:          var(--p-bg);
@@ -78,10 +77,8 @@
 
 
 
-/* ---- the hero portrait -------------------------------------------------
-   The same shape the Food hero uses: a cut-out floating on soft colour, so a
-   background-removed photograph drops straight in. Replace
-   assets/images/siddhesh.jpeg with your own and nothing else changes. */
+/* ---- the hero portrait ------------------------------------------------- */
+/* The same shape the Food hero uses: a cut-out floating on soft colour, so a background-removed photograph drops straight in. Replace assets/images/siddhesh.jpeg with your own and nothing else changes. */
 
 .hero__main {
   display: grid;
@@ -96,29 +93,23 @@
 .reader-cut {
   position: relative;
   justify-self: center;
-  /* Bigger, and pushed off the text column so the search row and the chip
-     rail below it are never crowded or clipped by the picture. */
+  /* Bigger, and pushed off the text column so the search row and the chip rail below it are never crowded or clipped by the picture. */
   width: min(640px, 100%);
   margin-left: clamp(16px, 3vw, 44px);
   margin-right: clamp(0px, 1.5vw, 18px);
   overflow: visible;
 }
 
-/* The dashed orbit and the "mid-chapter" chip are gone: they made the picture
-   read as a decorated card rather than a photograph on the page. */
+/* The dashed orbit and the "mid-chapter" chip are gone: they made the picture read as a decorated card rather than a photograph on the page. */
 
 .reader-cut__blobs { position: absolute; inset: -6% 0; z-index: 0; }
 
-/* One round wash behind the photograph, the same treatment the home portrait
-   uses, so both rooms introduce themselves the same way. */
+/* One round wash behind the photograph, the same treatment the home portrait uses, so both rooms introduce themselves the same way. */
 .rblob { position: absolute; border-radius: 50%; filter: blur(26px); }
 
 .rblob--plum {
-  /* A full circle that still fits its column: sized off height, with width
-     following the aspect ratio, so it closes around the plate without
-     reaching past the row and widening the page. */
-  /* Capped to the column: a circle sized off a tall container was wider than
-     the row and gave the page 38px of horizontal scroll at 1440. */
+  /* A full circle that still fits its column: sized off height, with width following the aspect ratio, so it closes around the plate without reaching past the row and widening the page. */
+  /* Capped to the column: a circle sized off a tall container was wider than the row and gave the page 38px of horizontal scroll at 1440. */
   height: 112%; width: auto; aspect-ratio: 1; max-width: 100%;
   left: 50%; top: 50%; translate: -50% -50%;
   background: radial-gradient(circle at 50% 50%,
@@ -137,8 +128,7 @@
   height: auto;
 }
 
-/* A photograph, framed as a soft round-cornered plate rather than a card with
-   a white border. No border, no lifted card shadow — just a quiet drop. */
+/* A photograph, framed as a soft round-cornered plate rather than a card with a white border. No border, no lifted card shadow — just a quiet drop. */
 .reader-cut__img--photo {
   aspect-ratio: 1 / 1;
   object-fit: cover;
@@ -155,21 +145,18 @@
 }
 
 
-/* One content width. The hero read in a 1180px column while the shelves below
-   it read in the site's own, so the two never lined up on a wide screen. */
+/* One content width. The hero read in a 1180px column while the shelves below it read in the site's own, so the two never lined up on a wide screen. */
 :root, [data-theme="dark"] { --shell: var(--p-shell); }
 .shell { padding-inline: var(--p-gutter); }
 
-/* ---- the hero -----------------------------------------------------------
-   The column reads centred: eyebrow, phrase, line, search, genres, all on one
-   axis, so the eye runs straight down the middle rather than stepping. */
+/* ---- the hero ----------------------------------------------------------- */
+/* The column reads centred: eyebrow, phrase, line, search, genres, all on one axis, so the eye runs straight down the middle rather than stepping. */
 .hero__lede, .hero__col { text-align: center; }
 .hero__lede { margin-inline: auto; }
 .hero__title { margin-inline: auto; }
 .searchbox { margin-inline: auto; }
 
-/* The genre row is one line that scrolls, with the ends faded so it reads as
-   more-to-come rather than as a cut. */
+/* The genre row is one line that scrolls, with the ends faded so it reads as more-to-come rather than as a cut. */
 .chiprow {
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -183,8 +170,7 @@
 .chiprow::-webkit-scrollbar { display: none; }
 .chiprow > * { flex: 0 0 auto; }
 
-/* A soft-cornered plate, not a circle: the round crop cut the corners off the
-   shelves behind and made the photograph read as an avatar. */
+/* A soft-cornered plate, not a circle: the round crop cut the corners off the shelves behind and made the photograph read as an avatar. */
 .reader-cut__img--photo {
   aspect-ratio: 4 / 5;
   border-radius: var(--p-radius-xl);
@@ -197,10 +183,8 @@
 .rblob--plum { border-radius: var(--p-radius-xl); filter: blur(30px); }
 
 
-/* ---- the card bar on a phone --------------------------------------------
-   Three round controls and a rating on a narrow card ran into each other.
-   The controls tuck closer together and the rating gives back a little size,
-   so the two halves of the bar stop meeting in the middle. */
+/* ---- the card bar on a phone -------------------------------------------- */
+/* Three round controls and a rating on a narrow card ran into each other. The controls tuck closer together and the rating gives back a little size, so the two halves of the bar stop meeting in the middle. */
 @media (max-width: 600px) {
   .cardbar { gap: 4px; }
   .cardbar__right { gap: 0; }
@@ -211,10 +195,8 @@
 }
 
 
-/* ---- the book screen ----------------------------------------------------
-   A book used to open in a centred panel. It is a screen of its own now: full
-   bleed, with a bar carrying the room's name and the way back. Everything
-   below the bar is drawn exactly as it was. */
+/* ---- the book screen ---------------------------------------------------- */
+/* A book used to open in a centred panel. It is a screen of its own now: full bleed, with a bar carrying the room's name and the way back. Everything below the bar is drawn exactly as it was. */
 .detail {
   display: block;
   padding: 0;
@@ -242,8 +224,7 @@
   padding: clamp(20px, 4vw, 40px) clamp(16px, 5vw, 64px) 64px;
 }
 
-/* The site rail and its button stay: they are the way out of the module, not
-   just out of this screen. The screen's own content clears them. */
+/* The site rail and its button stay: they are the way out of the module, not just out of this screen. The screen's own content clears them. */
 .detail__topbar { padding-left: calc(var(--p-rail-clear) + 4px); }
 .detail__scroll { padding-left: calc(var(--p-rail-clear) + 26px); }
 
@@ -306,8 +287,7 @@
 }
 
 
-/* The gate's buttons stack on a phone, affirmative on top, matching the film
-   diary and the food log. */
+/* The gate's buttons stack on a phone, affirmative on top, matching the film diary and the food log. */
 @media (max-width: 767px) {
   .dialog__row { flex-direction: column-reverse; flex-wrap: nowrap; }
   .dialog__row .btn { width: 100%; }

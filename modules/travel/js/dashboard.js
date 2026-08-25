@@ -1,15 +1,9 @@
-/* SidTrails - the travel dashboard, in one file. Reads Google Sheets CSV via
-   PapaParse, falling back to embedded sample data so it works out of the box. */
+// SidTrails - the travel dashboard, in one file. Reads Google Sheets CSV via PapaParse, falling back to embedded sample data so it works out of the box.
 (() => {
   'use strict';
 
-  /* ============================================================
-     1. CONFIG - Google Sheet endpoints.
-     The dashboard auto-refreshes from the sheet every REFRESH_MS.
-     It tries the published-to-web URL first (works whenever the sheet
-     is "published to web"), then falls back to /export?format=csv
-     (works whenever the sheet is shared as "anyone with the link").
-     ============================================================ */
+  // ============================================================
+  // 1. CONFIG - Google Sheet endpoints. The dashboard auto-refreshes from the sheet every REFRESH_MS. It tries the published-to-web URL first (works whenever the sheet is "published to web"), then falls back to /export?format=csv (works whenever the sheet is shared as "anyone with the link"). ============================================================
   const CONFIG = {
     // The long token after /d/e/ that you get from File → Share → Publish to web
     PUB_TOKEN: "2PACX-1vRu5WZo8jYshhWVSUIYIHqWZFcwOC2tWeeQcJMowqYw5LG7CMjecBMhGT9iHX8tnLFIp6ob44QbJ6Ge",
@@ -24,35 +18,8 @@
     REFRESH_MS: 5 * 60 * 1000,   // re-fetch every 5 minutes
   };
 
-  /* ============================================================
-     EMAILJS CONFIG - fill these in from your EmailJS dashboard
-     ------------------------------------------------------------
-     1. Sign up at https://www.emailjs.com (free tier is fine)
-     2. Add an email service (Gmail / Outlook / etc.) - note the SERVICE ID
-     3. Create an email template (suggested template variables below)
-     4. Copy your PUBLIC KEY from Account → General
-     ------------------------------------------------------------
-     Recommended template body in the EmailJS dashboard:
-  
-     Subject:  New postcard from {{from_name}} - trip to {{destination}}
-  
-     Body:
-     Hi Sid,
-  
-     A new postcard just landed.
-  
-         Name:        {{from_name}}
-         Trip type:   {{trip_type}}
-         Destination: {{destination}}
-         Contact:     {{contact_info}}
-  
-     Message:
-     {{message}}
-  
-     ------------------------------------------------------------
-     The form below sends these exact variables:
-       from_name, destination, trip_type, message, contact_info
-     ============================================================ */
+  // ============================================================
+  // EMAILJS CONFIG - fill these in from your EmailJS dashboard ------------------------------------------------------------ 1. Sign up at https://www.emailjs.com (free tier is fine) 2. Add an email service (Gmail / Outlook / etc.) - note the SERVICE ID 3. Create an email template (suggested template variables below) 4. Copy your PUBLIC KEY from Account → General ------------------------------------------------------------ Recommended template body in the EmailJS dashboard: Subject: New postcard from {{from_name}} - trip to {{destination}} Body: Hi Sid, A new postcard just landed. Name: {{from_name}} Trip type: {{trip_type}} Destination: {{destination}} Contact: {{contact_info}} Message: {{message}} ------------------------------------------------------------ The form below sends these exact variables: from_name, destination, trip_type, message, contact_info ============================================================
   const EMAILJS_CONFIG = {
     PUBLIC_KEY: "RVmNzVgh6Ro61mHV2",
     SERVICE_ID: "service_9u1wy35",
@@ -68,9 +35,8 @@
   ];
 
 
-  /* ============================================================
-     3. UTILITIES
-     ============================================================ */
+  // ============================================================
+  // 3. UTILITIES ============================================================
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -81,16 +47,8 @@
     return s === 'true' || s === 'yes' || s === '1' || s === 'done' || s === 'completed' || s === 'complete';
   };
 
-  /* ---------------------------------------------------------------------------
-     DATES
-     ---------------------------------------------------------------------------
-     Everything arrives from the sheet as CSV text, so there are no Date objects
-     to lean on - only whatever string the cell *displays*. `new Date(str)` is the
-     wrong tool for that: it reads slash dates as US M/D/Y, so "1/12/2024" came
-     back as 12 January instead of 1 December, and "25/12/2024" came back Invalid
-     (which silently blanked the date chip). This parser handles the shapes the
-     sheet actually produces and prefers DD/MM, disambiguating whenever it can.
-     --------------------------------------------------------------------------- */
+  // ---------------------------------------------------------------------------
+  // DATES --------------------------------------------------------------------------- Everything arrives from the sheet as CSV text, so there are no Date objects to lean on - only whatever string the cell *displays*. `new Date(str)` is the wrong tool for that: it reads slash dates as US M/D/Y, so "1/12/2024" came back as 12 January instead of 1 December, and "25/12/2024" came back Invalid (which silently blanked the date chip). This parser handles the shapes the sheet actually produces and prefers DD/MM, disambiguating whenever it can. ---------------------------------------------------------------------------
   const MONTH_IDX = {
     jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
     jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
@@ -139,15 +97,13 @@
     return isNaN(d) ? null : d;
   };
 
-  /* A cell may hold one line per visit ("Dec 2024\nMay 2026"). Sheets forces such
-     a cell to plain text and Papa keeps the newline inside the quoted field, so it
-     arrives verbatim. Split it into trimmed, non-empty parts. */
+  // A cell may hold one line per visit ("Dec 2024\nMay 2026"). Sheets forces such a cell to plain text and Papa keeps the newline inside the quoted field, so it arrives verbatim. Split it into trimmed, non-empty parts.
   const splitCell = (v) => String(v == null ? '' : v)
     .split(/\r?\n/)
     .map(s => s.trim())
     .filter(s => s !== '');
 
-  /* The newest date in a (possibly multi-line) cell - used for sorting and display. */
+  // The newest date in a (possibly multi-line) cell - used for sorting and display.
   const latestDateIn = (v) => {
     const ds = splitCell(v).map(parseDate).filter(Boolean);
     if (!ds.length) return null;
@@ -169,11 +125,7 @@
     return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   };
 
-  /* Canonical column names per tab. Each entry maps the canonical name
-     to a list of acceptable aliases (case-insensitive, whitespace-insensitive).
-     When a sheet row comes in, we rewrite its keys to the canonical form.
-     This is what makes column reordering, header whitespace, and minor
-     renames safe - the downstream code can always say row["Visit Date"]. */
+  // Canonical column names per tab. Each entry maps the canonical name to a list of acceptable aliases (case-insensitive, whitespace-insensitive). When a sheet row comes in, we rewrite its keys to the canonical form. This is what makes column reordering, header whitespace, and minor renames safe - the downstream code can always say row["Visit Date"].
   const SCHEMA = {
     Places: {
       "Place": ["place", "destination", "city"],
@@ -236,9 +188,7 @@
     },
   };
 
-  /* Build a quick lookup: lowercased-trimmed-alias → canonical name.
-     The result depends only on the (constant) schema, so it's memoized per
-     schema object - previously this was rebuilt for every row of every sheet. */
+  // Build a quick lookup: lowercased-trimmed-alias → canonical name. The result depends only on the (constant) schema, so it's memoized per schema object - previously this was rebuilt for every row of every sheet.
   const _aliasMapCache = new WeakMap();
   function buildAliasMap(schemaForTab) {
     const cached = _aliasMapCache.get(schemaForTab);
@@ -255,7 +205,7 @@
     return map;
   }
 
-  /* Apply schema: rewrite row keys to canonical names. Unknown columns are kept as-is. */
+  // Apply schema: rewrite row keys to canonical names. Unknown columns are kept as-is.
   function applySchema(row, schemaForTab) {
     if (!row || !schemaForTab) return row;
     const aliasMap = buildAliasMap(schemaForTab);
@@ -267,8 +217,7 @@
     return out;
   }
 
-  /* Normalize a raw PapaParse row: trim whitespace from headers and string values,
-     filter out completely-empty rows. Returns the cleaned row, or null if empty. */
+  // Normalize a raw PapaParse row: trim whitespace from headers and string values, filter out completely-empty rows. Returns the cleaned row, or null if empty.
   const normalizeRow = (row) => {
     if (!row) return null;
     const out = {};
@@ -292,7 +241,7 @@
     return s.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
   };
 
-  /* Escape a value before it goes into an innerHTML template. */
+  // Escape a value before it goes into an innerHTML template.
   const escHtml = (s) => String(s == null ? '' : s)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -308,7 +257,7 @@
   };
   const hideBanner = () => $('#loadingBanner').classList.remove('show');
 
-  /* Animated counter from 0 → target */
+  // Animated counter from 0 → target
   const animateCount = (el, target, duration = 1400) => {
     if (target === 0 || target === null || target === undefined) {
       el.textContent = '0';
@@ -326,15 +275,10 @@
     requestAnimationFrame(step);
   };
 
-  /* ============================================================
-     4. DATA FETCH - Google Sheets via PapaParse.
-     Tries published-to-web URL first, falls back to /export.
-     Normalizes rows and trims headers so column reordering or
-     stray whitespace in headers won't break analytics.
-     ============================================================ */
+  // ============================================================
+  // 4. DATA FETCH - Google Sheets via PapaParse. Tries published-to-web URL first, falls back to /export. Normalizes rows and trims headers so column reordering or stray whitespace in headers won't break analytics. ============================================================
 
-  // Try a single URL with PapaParse. Resolves with cleaned rows + meta,
-  // or rejects with details we can show in the diagnostic panel.
+  // Try a single URL with PapaParse. Resolves with cleaned rows + meta, or rejects with details we can show in the diagnostic panel.
   function fetchCsvFromUrl(url, schemaForTab) {
     return new Promise((resolve, reject) => {
       Papa.parse(url, {
@@ -343,8 +287,7 @@
         skipEmptyLines: 'greedy',  // skip rows where every field is empty
         transformHeader: (h) => String(h).trim(),  // strip header whitespace
         complete: (res) => {
-          // Clean each row: trim values, drop empty rows, then rewrite keys
-          // to canonical names so the rest of the app is column-order-proof.
+          // Clean each row: trim values, drop empty rows, then rewrite keys to canonical names so the rest of the app is column-order-proof.
           const rows = (res.data || [])
             .map(normalizeRow)
             .filter(Boolean)
@@ -437,28 +380,11 @@
 `;
   }
 
-  /* ============================================================
-     5. ANALYTICS - All derived metrics live here.
-     ============================================================ */
+  // ============================================================
+  // 5. ANALYTICS - All derived metrics live here. ============================================================
 
-  /* ---------------------------------------------------------------------------
-     MULTI-VISIT MODEL
-     ---------------------------------------------------------------------------
-     One row = one PLACE, not one trip. A place you went back to keeps its single
-     row; the per-visit columns just gain a line each, and line N of every column
-     describes the same trip:
-
-         Visit Date     Trip Duration    Travel With    (Rating, Best Memory too)
-         Dec 2024   →        2        →    Family        ← visit 1
-         May 2026   →        4        →    Friends       ← visit 2
-
-     A column holding a single value applies to every visit, so you only repeat
-     yourself when something actually changed.
-
-     The split that follows from this:
-       · PLACE-level stats dedupe   - Munnar is 1 place, 1 map pin, 1 card
-       · VISIT-level stats iterate  - 6 total days, and it shows in BOTH 2024 & 2026
-     --------------------------------------------------------------------------- */
+  // ---------------------------------------------------------------------------
+  // MULTI-VISIT MODEL --------------------------------------------------------------------------- One row = one PLACE, not one trip. A place you went back to keeps its single row; the per-visit columns just gain a line each, and line N of every column describes the same trip: Visit Date Trip Duration Travel With (Rating, Best Memory too) Dec 2024 → 2 → Family ← visit 1 May 2026 → 4 → Friends ← visit 2 A column holding a single value applies to every visit, so you only repeat yourself when something actually changed. The split that follows from this: · PLACE-level stats dedupe - Munnar is 1 place, 1 map pin, 1 card · VISIT-level stats iterate - 6 total days, and it shows in BOTH 2024 & 2026 ---------------------------------------------------------------------------
   function buildVisits(row) {
     const dates = splitCell(row['Visit Date']);
     const durs = splitCell(row['Trip Duration (Days)']);
@@ -483,7 +409,7 @@
     return visits;
   }
 
-  /* Attach the visit list + the place-level values derived from it. */
+  // Attach the visit list + the place-level values derived from it.
   function withVisits(p) {
     const visits = buildVisits(p);
     const dated = visits.filter(v => v.date);
@@ -515,15 +441,13 @@
     const completedGoals = goals.filter(g => truthy(g.Completed) || (g.Status || '').toLowerCase() === 'completed');
     const summitedTreks = treks.filter(t => truthy(t.Status));
 
-    // Counters
-    // States are counted only for India - international travel adds to countries instead.
+    // Counters States are counted only for India - international travel adds to countries instead.
     const isIndia = (p) => (p.Country || '').toString().toLowerCase().trim() === 'india';
     const states = unique(visitedPlaces.filter(isIndia).map(p => p.State));
     const countries = unique(visitedPlaces.map(p => p.Country));
     const regions = unique(visitedPlaces.map(p => p.Region));
 
-    /* Every individual trip, flattened out of the places. A place visited twice
-       contributes two entries here but stays ONE place in the counters above. */
+    // Every individual trip, flattened out of the places. A place visited twice contributes two entries here but stays ONE place in the counters above.
     const allVisits = [];
     visitedPlaces.forEach(p => p._visits.forEach(v => allVisits.push({ ...v, place: p })));
 
@@ -545,10 +469,7 @@
     const typeCounter = counterOf(visitedPlaces, 'Type');
     const regionCounter = counterOf(visitedPlaces, 'Region');
 
-    /* Companions are credited with a PLACE, deduped on the (person → place) pair.
-       Munnar with Family in 2024 and Friends in 2026 gives each of them Munnar once.
-       Munnar with Family BOTH times still gives Family Munnar once - it's one place,
-       twice - so the tile never reads "2 places" and list "Munnar, Munnar". */
+    // Companions are credited with a PLACE, deduped on the (person → place) pair. Munnar with Family in 2024 and Friends in 2026 gives each of them Munnar once. Munnar with Family BOTH times still gives Family Munnar once - it's one place, twice - so the tile never reads "2 places" and list "Munnar, Munnar".
     const companionPlaces = {};
     visitedPlaces.forEach(p => {
       p._companions.forEach(c => {
@@ -562,8 +483,7 @@
     const companionPlaceMap = {};
     Object.entries(companionPlaces).forEach(([name, set]) => { companionPlaceMap[name] = Array.from(set); });
 
-    /* By year / month - driven by VISITS, so a place you returned to lights up
-       every year you went. */
+    // By year / month - driven by VISITS, so a place you returned to lights up every year you went.
     const byYear = {};
     const byMonth = Array(12).fill(0);
     const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -635,11 +555,10 @@
     };
   }
 
-  /* ============================================================
-     6. RENDERERS - One function per section
-     ============================================================ */
+  // ============================================================
+  // 6. RENDERERS - One function per section ============================================================
 
-  /* ----- 6a. Hero ticker ----- */
+  // ----- 6a. Hero ticker -----
   function renderHeroStats(a) {
     // Populate the floating hero card with the most recently visited place
     const visited = (a.raw.places || []).filter(p => truthy(p.Status));
@@ -663,7 +582,7 @@
     }
   }
 
-  /* ----- 6b. KPI grid (clickable, each jumps to its section) ----- */
+  // ----- 6b. KPI grid (clickable, each jumps to its section) -----
   function renderKPIs(a) {
     const cards = [
       { label: 'Places visited', num: a.counters.placesVisited, sub: `${a.counters.placesPending} on the wishlist`, icon: '📍', accent: 'var(--mocha)', accentSoft: 'rgba(163, 119, 78, 0.20)', accentPale: 'var(--mocha-pale)', target: '#places' },
@@ -692,10 +611,8 @@
     });
   }
 
-  /* ----- 6c-bis. Travelogue - "The journey, in numbers" (Wrapped) -----
-     Place-based analytics (never counts "trips", since one journey can
-     cover several places). Reuses the analytics object computed from the
-     Google Sheet; renders only what the data supports and skips the rest. */
+  // ----- 6c-bis. Travelogue - "The journey, in numbers" (Wrapped) -----
+  // Place-based analytics (never counts "trips", since one journey can cover several places). Reuses the analytics object computed from the Google Sheet; renders only what the data supports and skips the rest.
   let twDidAnimate = false;
   let twObserver = null;
 
@@ -717,7 +634,7 @@
     const regionCounter = a.breakdowns.regionCounter || [];
     const stateCounter = a.breakdowns.stateCounter || [];
 
-    /* Map each category value -> list of place names (for tooltips & tags). */
+    // Map each category value -> list of place names (for tooltips & tags).
     const placesByKey = (key) => {
       const m = {};
       visited.forEach(p => {
@@ -730,13 +647,12 @@
     const byType = placesByKey('Type');
     const byRegion = placesByKey('Region');
     const byState = placesByKey('State');
-    // Companions come pre-deduped on the (person -> place) pair, so a place you
-    // visited twice with the same person is listed once, not twice.
+    // Companions come pre-deduped on the (person -> place) pair, so a place you visited twice with the same person is listed once, not twice.
     const byCompanion = a.breakdowns.companionPlaceMap || {};
 
     const tiles = [];
 
-    /* Horizontal bar rows that reveal their places on hover / tap. */
+    // Horizontal bar rows that reveal their places on hover / tap.
     const barRows = (entries, max, placeMap) => entries.map(([name, n]) => {
       const w = Math.max(4, Math.round((n / max) * 100));
       const list = (placeMap[name] || []).join(', ');
@@ -852,7 +768,7 @@
     bentoEl.innerHTML = tiles.join('');
     twAttachTips(section);
 
-    /* ---------- animate on scroll into view (once) ---------- */
+    // ---------- animate on scroll into view (once) ----------
     const runAnims = () => {
       section.classList.add('tw-animate');
       $$('.tw-fill', section).forEach(el => { el.style.width = (el.dataset.w || 0) + '%'; });
@@ -878,8 +794,7 @@
     }
   }
 
-  /* Shared tooltip for the "in numbers" section - reveals the places behind a
-     bar / ring on hover (desktop) and on tap (mobile, where hover doesn't exist). */
+  // Shared tooltip for the "in numbers" section - reveals the places behind a bar / ring on hover (desktop) and on tap (mobile, where hover doesn't exist).
   let twTipReady = false;
   function twAttachTips(section) {
     let tip = document.getElementById('twTip');
@@ -933,7 +848,7 @@
     }
   }
 
-  /* ----- 6d. Places - Visited (with images) + Wishlist (text) ----- */
+  // ----- 6d. Places - Visited (with images) + Wishlist (text) -----
   let placesState = { search: '', type: '', tab: 'all', all: [], visitedRendered: [], wishlistRendered: [], latestKey: '' };
 
   function renderPlaces(a) {
@@ -1068,8 +983,7 @@
 `;
     }).join('');
 
-    // Click handling is delegated from #visitedGrid (wired once in bindEvents);
-    // we just record the list the cards were rendered from.
+    // Click handling is delegated from #visitedGrid (wired once in bindEvents); we just record the list the cards were rendered from.
     placesState.visitedRendered = list;
   }
 
@@ -1096,15 +1010,8 @@
     placesState.wishlistRendered = list;
   }
 
-  /* ===========================================================================
-     MODAL IMAGE CONTROLLER
-     ---------------------------------------------------------------------------
-     The photo modal shows a single image from the record's Image_URL column.
-     The image fills the stage: landscape images stretch to the full width,
-     portrait images stretch to the full height (scaling up small/low-res
-     sources, which may look soft - that's expected). If there's no valid
-     image, the friendly empty state is shown instead.
-     =========================================================================== */
+  // ===========================================================================
+  // MODAL IMAGE CONTROLLER --------------------------------------------------------------------------- The photo modal shows a single image from the record's Image_URL column. The image fills the stage: landscape images stretch to the full width, portrait images stretch to the full height (scaling up small/low-res sources, which may look soft - that's expected). If there's no valid image, the friendly empty state is shown instead. ===========================================================================
   function fitModalImage() {
     const imgEl = $('#actModalImg');
     const stage = imgEl ? imgEl.parentElement : null;
@@ -1140,8 +1047,7 @@
 
     if (!clean || !isHttp) { showEmpty(); return; }
 
-    // Reset any sizing from a previous image; fitModalImage() picks the
-    // fill axis once the real dimensions are known.
+    // Reset any sizing from a previous image; fitModalImage() picks the fill axis once the real dimensions are known.
     imgEl.style.width = '';
     imgEl.style.height = '';
     imgEl.style.display = '';
@@ -1156,14 +1062,8 @@
   }
 
 
-  /* ---------------------------------------------------------------------------
-     THE PHOTO MODAL IS A PHOTO VIEWER.
-     ---------------------------------------------------------------------------
-     It shows the picture, the name, and a status tag - and for a place, the
-     memory. Everything else (location, region, type, dates, "famous for") is
-     already on the card you clicked, so repeating it here just crowded the
-     image out. The meta row is deliberately left empty for every record type.
-     --------------------------------------------------------------------------- */
+  // ---------------------------------------------------------------------------
+  // THE PHOTO MODAL IS A PHOTO VIEWER. --------------------------------------------------------------------------- It shows the picture, the name, and a status tag - and for a place, the memory. Everything else (location, region, type, dates, "famous for") is already on the card you clicked, so repeating it here just crowded the image out. The meta row is deliberately left empty for every record type. ---------------------------------------------------------------------------
   function openPlaceModal(p) {
     const modal = $('#actModal');
     if (!modal) return;
@@ -1187,10 +1087,9 @@
     document.body.style.overflow = 'hidden';
   }
 
-  /* ----- 6e2. Monuments & Landmarks - heritage section with tab switcher ----- */
-  /* ---------------------------------------------------------------------------
-     Monuments state - region filter only (no pagination, all rows shown).
-     --------------------------------------------------------------------------- */
+  // ----- 6e2. Monuments & Landmarks - heritage section with tab switcher -----
+  // ---------------------------------------------------------------------------
+  // Monuments state - region filter only (no pagination, all rows shown). ---------------------------------------------------------------------------
   const monState = {
     region: 'all',  // 'all' | 'north' | 'south' | 'east' | 'west' | 'central'
     cache: { visited: [], wishlist: [], analytics: null },
@@ -1213,9 +1112,7 @@
     $('#monVisitedCount').textContent = visited.length;
     $('#monWishlistCount').textContent = wishlist.length;
 
-    /* Region dropdown, built from the sheet. Filtering compares the exact value,
-       which also fixes a latent bug in the old pills: they matched by substring,
-       so a "North East India" monument was caught by BOTH the North and East pills. */
+    // Region dropdown, built from the sheet. Filtering compares the exact value, which also fixes a latent bug in the old pills: they matched by substring, so a "North East India" monument was caught by BOTH the North and East pills.
     const sel = $('#monRegionFilter');
     if (sel) {
       const counts = {};
@@ -1234,8 +1131,7 @@
     applyMonFilter();
   }
 
-  /* Apply the current region filter to both visited + wishlist tables.
-     Renders ALL matching rows - sticky header makes long lists scrollable. */
+  // Apply the current region filter to both visited + wishlist tables. Renders ALL matching rows - sticky header makes long lists scrollable.
   function applyMonFilter() {
     const a = monState.cache.analytics;
     if (!a) return;
@@ -1291,14 +1187,12 @@
       wBody.innerHTML = wishlistAll.map((m, i) => buildRow(m, 'wishlist', i)).join('');
     }
 
-    // Record the lists the rows were rendered from; clicks/keys are delegated
-    // from the table bodies (wired once in bindEvents), so arrows browse within
-    // the same region-filtered table.
+    // Record the lists the rows were rendered from; clicks/keys are delegated from the table bodies (wired once in bindEvents), so arrows browse within the same region-filtered table.
     monState.rendered.visited = visitedAll;
     monState.rendered.wishlist = wishlistAll;
   }
 
-  /* Monument photo modal - photo + name + status, nothing else */
+  // Monument photo modal - photo + name + status, nothing else
   function openMonumentModal(m) {
     if (!m) return;
     const modal = $('#actModal');
@@ -1317,7 +1211,7 @@
     document.body.style.overflow = 'hidden';
   }
 
-  /* ----- 6f. Goals - Bucket List ----- */
+  // ----- 6f. Goals - Bucket List -----
   function renderGoals(a) {
     const goals = a.raw.goals;
     if (!goals || goals.length === 0) {
@@ -1332,8 +1226,7 @@
     const overallPct = Math.round((completedCount / goals.length) * 100);
     $('#goalsCompletedPct').textContent = overallPct + '%';
 
-    // Featured journey - prefer an in-progress goal whose target fits the 12-dot
-    // display (target <= 12) so every dot is meaningful; fall back to most progress.
+    // Featured journey - prefer an in-progress goal whose target fits the 12-dot display (target <= 12) so every dot is meaningful; fall back to most progress.
     const allCandidates = goals
       .filter(g => !truthy(g.Completed))
       .map(g => {
@@ -1343,8 +1236,7 @@
       })
       .filter(x => x.progress > 0);
 
-    // Prefer goals that fit cleanly in 12 dots (e.g. Jyotirlinga = 12): the goal
-    // closest to filling all 12 dots wins the featured bar, then highest progress.
+    // Prefer goals that fit cleanly in 12 dots (e.g. Jyotirlinga = 12): the goal closest to filling all 12 dots wins the featured bar, then highest progress.
     const fitting = allCandidates.filter(x => x.target <= 12).sort((a, b) => (b.target - a.target) || (b.progress - a.progress));
     const rest = allCandidates.filter(x => x.target > 12).sort((a, b) => b.progress - a.progress);
     const candidates = [...fitting, ...rest];
@@ -1425,7 +1317,7 @@
     }, 200);
   }
 
-  /* ----- 6g. Activities ----- */
+  // ----- 6g. Activities -----
   let activityFilter = null; // null = show all; otherwise a Category string
   let activitiesRendered = []; // current (filtered) list the cards were built from, for delegated clicks
 
@@ -1495,12 +1387,11 @@
 `;
     }).join('');
 
-    // Click/keyboard handling is delegated from #activitiesGrid (wired once in
-    // bindEvents); arrows browse the currently visible (filtered) activities.
+    // Click/keyboard handling is delegated from #activitiesGrid (wired once in bindEvents); arrows browse the currently visible (filtered) activities.
     activitiesRendered = activities;
   }
 
-  /* Activity photo modal - photo + name + status, nothing else */
+  // Activity photo modal - photo + name + status, nothing else
   function openActivityModal(act) {
     if (!act) return;
     const modal = $('#actModal');
@@ -1528,16 +1419,8 @@
     syncModalNav();
   }
 
-  /* ============================================================
-     6g-bis. TREKS - peaks, ridgelines & summits
-     ------------------------------------------------------------
-     Fully sheet-driven: add a row to the Treks tab and it appears
-     here on the next refresh. Status TRUE => a "summited" photo card
-     with a summit seal; anything else => a "planned" trail card.
-     Region pills, stat tiles and the summit-progress ridge are all
-     derived from the data, so a brand-new region or state needs no
-     code change.
-     ============================================================ */
+  // ============================================================
+  // 6g-bis. TREKS - peaks, ridgelines & summits ------------------------------------------------------------ Fully sheet-driven: add a row to the Treks tab and it appears here on the next refresh. Status TRUE => a "summited" photo card with a summit seal; anything else => a "planned" trail card. Region pills, stat tiles and the summit-progress ridge are all derived from the data, so a brand-new region or state needs no code change. ============================================================
   const trekState = {
     search: '',
     tab: 'all',          // 'all' | 'summited' | 'planned'
@@ -1547,8 +1430,7 @@
     latestKey: '',       // Trek name of the most recent climb (gets the "Latest" sticker)
   };
 
-  /* Region -> colour class. Only drives the pill colour; filtering always
-     compares the raw sheet value, so an unknown region still works. */
+  // Region -> colour class. Only drives the pill colour; filtering always compares the raw sheet value, so an unknown region still works.
   const trekRegionClass = (r) => {
     const s = String(r || '').toLowerCase().replace(/[^a-z]/g, '');
     if (s.includes('northeast')) return 'region-northeast';
@@ -1560,8 +1442,7 @@
     return 'region-default';
   };
 
-  /* Ridge geometry for the summit-progress graphic (viewBox 1000 x 130).
-     Ascends left -> right, so "progress" reads as climbing toward the peak. */
+  // Ridge geometry for the summit-progress graphic (viewBox 1000 x 130). Ascends left -> right, so "progress" reads as climbing toward the peak.
   const TREK_RIDGE = [
     [0, 116], [70, 100], [140, 108], [215, 84], [285, 94], [360, 70], [430, 80],
     [505, 56], [575, 66], [650, 42], [725, 52], [800, 30], [870, 40], [940, 18], [1000, 10],
@@ -1608,7 +1489,7 @@
     applyTrekFilters();
   }
 
-  /* ----- Summit progress: a ridgeline that draws itself as treks get done ----- */
+  // ----- Summit progress: a ridgeline that draws itself as treks get done -----
   function renderTrekProgress(a, latest) {
     const el = $('#trekProgress');
     if (!el) return;
@@ -1667,8 +1548,7 @@
     </div>
   </div>`;
 
-    // Dash the ridge so it can "draw" up to the current percentage, and park the
-    // flag at base camp - it climbs to the end of the trail when the animation runs.
+    // Dash the ridge so it can "draw" up to the current percentage, and park the flag at base camp - it climbs to the end of the trail when the animation runs.
     const path = $('#trekRidgePath');
     const flag = $('#trekFlag');
     if (path) {
@@ -1706,9 +1586,7 @@
       if (num) animateCount(num, parseInt(num.dataset.count, 10) || 0);
     };
 
-    // Animate the first time the section scrolls into view. On later refreshes
-    // (the 5-minute re-fetch) re-run it after a paint, so the trail redraws to
-    // the new value instead of jumping.
+    // Animate the first time the section scrolls into view. On later refreshes (the 5-minute re-fetch) re-run it after a paint, so the trail redraws to the new value instead of jumping.
     if (trekDidAnimate) {
       requestAnimationFrame(() => requestAnimationFrame(runTrekAnims));
       return;
@@ -1729,7 +1607,7 @@
     trekObserver.observe($('#treks'));
   }
 
-  /* ----- Status + region dropdowns, both built from the sheet ----- */
+  // ----- Status + region dropdowns, both built from the sheet -----
   function renderTrekFilters(treks, regionValues) {
     const done = treks.filter(t => truthy(t.Status)).length;
 
@@ -1759,7 +1637,7 @@
     }
   }
 
-  /* ----- Filter + render the single grid ----- */
+  // ----- Filter + render the single grid -----
   function applyTrekFilters() {
     const { search, tab, region, all } = trekState;
 
@@ -1777,14 +1655,12 @@
     if (tab === 'summited') filtered = filtered.filter(t => truthy(t.Status));
     else if (tab === 'planned') filtered = filtered.filter(t => !truthy(t.Status));
 
-    /* One list, kept in the original sheet/data order - no re-sorting. The
-       completed cards' solid green highlight is what tells the two states
-       apart, so the sequence on screen matches the source data exactly. */
+    // One list, kept in the original sheet/data order - no re-sorting. The completed cards' solid green highlight is what tells the two states apart, so the sequence on screen matches the source data exactly.
     renderTrekCards(filtered);
   }
 
-  /* ----- Trek cards. Both states use the same photo-thumbnail card; completed
-          ones just carry a green tint and a small "Completed" tag. ----- */
+  // ----- Trek cards. Both states use the same photo-thumbnail card; completed
+  // ones just carry a green tint and a small "Completed" tag. -----
   function trekCard(t, i, done) {
     const name = String(t.Trek || 'Unnamed trek');
     const date = latestDateIn(t['Visit Date']);
@@ -1836,8 +1712,7 @@
     trekState.rendered = list;
   }
 
-  /* Trek photo modal - photo + name + status. Prev/Next still browses whatever
-     filtered trek list you opened it from. */
+  // Trek photo modal - photo + name + status. Prev/Next still browses whatever filtered trek list you opened it from.
   function openTrekModal(t) {
     if (!t) return;
     const modal = $('#actModal');
@@ -1856,18 +1731,11 @@
     document.body.style.overflow = 'hidden';
   }
 
-  /* ---------------------------------------------------------------------------
-     MODAL NAVIGATION - browse cards within one section without closing
-     ---------------------------------------------------------------------------
-     Each section (Places, Heritage, Adventures) hands the shared photo modal the
-     exact visible list it was clicked from, the clicked index, and the render
-     function for that record type. Prev / Next then walk that list (wrapping
-     around at the ends) and re-render in place.
-     --------------------------------------------------------------------------- */
+  // ---------------------------------------------------------------------------
+  // MODAL NAVIGATION - browse cards within one section without closing --------------------------------------------------------------------------- Each section (Places, Heritage, Adventures) hands the shared photo modal the exact visible list it was clicked from, the clicked index, and the render function for that record type. Prev / Next then walk that list (wrapping around at the ends) and re-render in place. ---------------------------------------------------------------------------
   let modalNav = { list: [], index: -1, render: null };
 
-  /* Warm the browser cache for the neighbouring images so Prev/Next feels instant.
-     Only real http(s) URLs are touched, and each URL is only ever preloaded once. */
+  // Warm the browser cache for the neighbouring images so Prev/Next feels instant. Only real http(s) URLs are touched, and each URL is only ever preloaded once.
   const _preloadedModalImgs = new Set();
   function preloadModalUrl(url) {
     const clean = (url == null ? '' : String(url)).trim();
@@ -1920,7 +1788,7 @@
     }
   }
 
-  /* ----- 6h. Map with Leaflet + geocoding cache ----- */
+  // ----- 6h. Map with Leaflet + geocoding cache -----
   let mapInstance = null;
   let clusterGroup = null;
   const geocodeCache = new Map();
@@ -1928,9 +1796,7 @@
 
   async function geocode(rawQuery) {
     geocodeDidFetch = false;
-    // Parentheses in a place field (e.g. "Bari Village (Igatpuri)") don't match
-    // any OpenStreetMap entry and cause the whole lookup to fail — flatten them
-    // into plain comma-separated parts so the location still resolves.
+    // Parentheses in a place field (e.g. "Bari Village (Igatpuri)") don't match any OpenStreetMap entry and cause the whole lookup to fail — flatten them into plain comma-separated parts so the location still resolves.
     const query = String(rawQuery)
       .replace(/\s*\(\s*([^)]*?)\s*\)\s*/g, ', $1, ')
       .replace(/(\s*,\s*)+/g, ', ')
@@ -2026,16 +1892,13 @@
 
     showBanner('Mapping my destinations…', true);
     const bounds = [];
-    // OpenStreetMap's free geocoder asks for max ~1 request/second; spacing the
-    // uncached calls keeps it from silently dropping pins (results are cached, so
-    // only the very first load waits — reloads are instant).
+    // OpenStreetMap's free geocoder asks for max ~1 request/second; spacing the uncached calls keeps it from silently dropping pins (results are cached, so only the very first load waits — reloads are instant).
     const GEO_DELAY = 1000;
     for (let i = 0; i < targets.length; i++) {
       const t = targets[i];
       let coords = await geocode(t.query);
       if (geocodeDidFetch) { await new Promise(r => setTimeout(r, GEO_DELAY)); }
-      // If the specific "Trek, Village, State, Country" string didn't resolve,
-      // fall back to progressively simpler queries so the pin still appears.
+      // If the specific "Trek, Village, State, Country" string didn't resolve, fall back to progressively simpler queries so the pin still appears.
       if (!coords && Array.isArray(t.fallbacks)) {
         for (const fq of t.fallbacks) {
           if (!fq) continue;
@@ -2065,12 +1928,10 @@
     showBanner('✓ Map ready');
   }
 
-  /* ============================================================
-     7. EVENT BINDINGS
-     ============================================================ */
+  // ============================================================
+  // 7. EVENT BINDINGS ============================================================
   function bindEvents() {
-    // Nav scroll effect - passive (won't block scrolling) and only touches the
-    // DOM when the scrolled state actually flips, not on every scroll event.
+    // Nav scroll effect - passive (won't block scrolling) and only touches the DOM when the scrolled state actually flips, not on every scroll event.
     const nav = $('#navbar');
     let navScrolled = false;
     window.addEventListener('scroll', () => {
@@ -2126,14 +1987,8 @@
     $('#placeTypeFilter').addEventListener('change', (e) => { placesState.type = e.target.value; applyPlaceFilters(); });
     $('#placeStatusFilter').addEventListener('change', (e) => { placesState.tab = e.target.value; applyPlaceFilters(); });
 
-    /* ---------------------------------------------------------------------------
-       DELEGATED CARD / ROW INTERACTIONS
-       Instead of attaching a listener to every card or row on each render (which
-       re-bound everything on every search keystroke, filter, and refresh), each
-       container carries a single listener. Handlers read the clicked item's index
-       and the list it was rendered from, so behaviour - including Prev/Next within
-       the same filtered view - is identical.
-       --------------------------------------------------------------------------- */
+    // ---------------------------------------------------------------------------
+    // DELEGATED CARD / ROW INTERACTIONS Instead of attaching a listener to every card or row on each render (which re-bound everything on every search keystroke, filter, and refresh), each container carries a single listener. Handlers read the clicked item's index and the list it was rendered from, so behaviour - including Prev/Next within the same filtered view - is identical. ---------------------------------------------------------------------------
     const isActivationKey = (e) => e.key === 'Enter' || e.key === ' ';
 
     // Places - visited grid
@@ -2179,9 +2034,8 @@
       if (card) { e.preventDefault(); openActFrom(card); }
     });
 
-    /* ----- Treks -----
-       Cards, tabs and region pills are all re-rendered from the sheet, so every
-       listener is delegated from a container that never gets replaced. */
+    // ----- Treks -----
+    // Cards, tabs and region pills are all re-rendered from the sheet, so every listener is delegated from a container that never gets replaced.
     const trekGrid = $('#trekGrid');
     if (trekGrid) {
       const openTrekFrom = (card) => openInModal(trekState.rendered, parseInt(card.dataset.idx, 10), openTrekModal);
@@ -2221,8 +2075,7 @@
     const monRegion = $('#monRegionFilter');
     if (monRegion) monRegion.addEventListener('change', (e) => { monState.region = e.target.value; applyMonFilter(); });
 
-    // Contact form - sends via EmailJS
-    // Initialize EmailJS if the SDK loaded and a real public key is configured
+    // Contact form - sends via EmailJS Initialize EmailJS if the SDK loaded and a real public key is configured
     if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY && !EMAILJS_CONFIG.PUBLIC_KEY.startsWith('YOUR_')) {
       try { emailjs.init({ publicKey: EMAILJS_CONFIG.PUBLIC_KEY }); }
       catch (e) { console.warn('EmailJS init failed:', e); }
@@ -2276,9 +2129,8 @@
     });
   }
 
-  /* ============================================================
-     8. BOOT
-     ============================================================ */
+  // ============================================================
+  // 8. BOOT ============================================================
   async function boot() {
     bindEvents();
     if (window.AOS) AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 50 });

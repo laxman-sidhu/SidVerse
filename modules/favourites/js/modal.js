@@ -1,6 +1,4 @@
-// SidPicks - the exhibit modal. One exhibit fullscreen; more than one image
-// turns it into a wrap-around carousel with arrows, dots, keyboard and swipe.
-// Closes on the button, Escape, or a click on the backdrop.
+// SidPicks - the exhibit modal. One exhibit fullscreen; more than one image turns it into a wrap-around carousel with arrows, dots, keyboard and swipe. Closes on the button, Escape, or a click on the backdrop.
 
 import { qs, cloneTpl, hydrateImage } from "./utils.js";
 
@@ -27,13 +25,7 @@ function ensureRefs() {
   return true;
 }
 
-/**
- * Size the stage so the ACTIVE image is as large as possible within the
- * viewport while keeping its natural aspect ratio. Because every slide
- * fills the stage with object-fit: contain, sizing to the current image
- * makes it fill the frame perfectly, and the size animates as you move
- * between images of different shapes.
- */
+// Size the stage so the ACTIVE image is as large as possible within the viewport while keeping its natural aspect ratio. Because every slide fills the stage with object-fit: contain, sizing to the current image makes it fill the frame perfectly, and the size animates as you move between images of different shapes.
 function sizeStage() {
   if (!stageEl || !slides.length) return;
   const img = slides[current] && slides[current].querySelector("img");
@@ -56,11 +48,7 @@ function sizeStage() {
   let sw = nw * containScale;
   let sh = nh * containScale;
 
-  // Portrait images that end up shorter than the area leave a big gap above
-  // the bottom-fixed dots. Grow clearly-portrait images to fill more height,
-  // cropping the sides only slightly (object-fit: cover), up to a capped
-  // amount. Landscape, square and near-square images are left contained
-  // (no crop), centred as usual.
+  // Portrait images that end up shorter than the area leave a big gap above the bottom-fixed dots. Grow clearly-portrait images to fill more height, cropping the sides only slightly (object-fit: cover), up to a capped amount. Landscape, square and near-square images are left contained (no crop), centred as usual.
   const MAX_CROP = 0.18; // at most ~18% trimmed from each side
   const isPortrait = nw / nh <= 0.78; // clearly taller than wide (2:3, 3:4…)
   if (isPortrait && sw >= availW - 1 && availH - sh > 2) {
@@ -72,7 +60,7 @@ function sizeStage() {
   stageEl.style.height = `${Math.round(sh)}px`;
 }
 
-/** Build one slide element for a given URL (from the #tpl-modal-slide template). */
+// Build one slide element for a given URL (from the #tpl-modal-slide template).
 function makeSlide(url) {
   const slide = cloneTpl("tpl-modal-slide");
   const img = qs("img", slide);
@@ -87,7 +75,7 @@ function makeSlide(url) {
   return slide;
 }
 
-/** Render slides + dots for the current `images` set. */
+// Render slides + dots for the current `images` set.
 function buildCarousel() {
   trackEl.replaceChildren();
   dotsEl.replaceChildren();
@@ -115,7 +103,7 @@ function buildCarousel() {
   }
 }
 
-/** Move to `index` (with wrap-around), sliding in the shortest direction. */
+// Move to `index` (with wrap-around), sliding in the shortest direction.
 function goTo(index, dirHint) {
   const total = slides.length;
   if (total < 2) return;
@@ -169,7 +157,7 @@ function goTo(index, dirHint) {
 function next() { goTo(current + 1, 1); }
 function prev() { goTo(current - 1, -1); }
 
-/** Open the modal for one exhibit. `image` may be a URL or an array. */
+// Open the modal for one exhibit. `image` may be a URL or an array.
 export function openModal({ name, image, images: imageList }, trigger = null) {
   if (!modal && !ensureRefs()) return;
 
@@ -188,8 +176,7 @@ export function openModal({ name, image, images: imageList }, trigger = null) {
     countEl.hidden = false;
   }
 
-  // Size the stage without animating on open (avoids a grow-from-zero
-  // flash); the smooth size transition is restored for navigation.
+  // Size the stage without animating on open (avoids a grow-from-zero flash); the smooth size transition is restored for navigation.
   stageEl.style.transition = "none";
   stageEl.style.width = "";
   stageEl.style.height = "";
@@ -224,7 +211,7 @@ export function closeModal() {
   }
 }
 
-/** Wire up close + navigation interactions. Call once per page. */
+// Wire up close + navigation interactions. Call once per page.
 export function initModal() {
   if (!ensureRefs()) return;
 

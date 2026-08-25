@@ -54,9 +54,7 @@ function cell(label, value) {
 
 function links(book) {
   const out = [];
-  // A scanned copy, where one exists. Neither API hosts a file, so this points
-  // at the Internet Archive: readable and downloadable when the scan is public,
-  // borrow-only otherwise, and absent when there is no scan at all.
+  // A scanned copy, where one exists. Neither API hosts a file, so this points at the Internet Archive: readable and downloadable when the scan is public, borrow-only otherwise, and absent when there is no scan at all.
   const ebook = ebookLinks(book);
   if (ebook) {
     out.push(`<a class="btn btn--read" href="${esc(ebook.read)}" target="_blank" rel="noopener">${esc(ebook.label)}</a>`);
@@ -209,8 +207,7 @@ export async function openDetail(seed) {
 
 // --- other editions ---------------------------------------------------------
 
-// Not a catalogue: the only question worth answering is whether a different
-// printing is already on one of our shelves.
+// Not a catalogue: the only question worth answering is whether a different printing is already on one of our shelves.
 async function loadEditions(scroll) {
   const section = scroll.querySelector("[data-editions]");
   const slot = scroll.querySelector("[data-editions-body]");
@@ -235,8 +232,7 @@ async function loadEditions(scroll) {
   section.hidden = false;
 }
 
-// A note only earns its place when the match is a DIFFERENT printing: saying
-// "this is read" about the edition already open says nothing.
+// A note only earns its place when the match is a DIFFERENT printing: saying "this is read" about the edition already open says nothing.
 function elsewhereNote(read, queued, book) {
   const here = new Set([book.isbn13, book.isbn10].filter(Boolean));
   const notes = [];
@@ -252,8 +248,7 @@ function elsewhereNote(read, queued, book) {
   return notes.join("");
 }
 
-// The printings already written down for it, which is the editions page's job
-// to list rather than this modal's.
+// The printings already written down for it, which is the editions page's job to list rather than this modal's.
 function onFileNote(entry) {
   const count = entry?.versions?.length || 0;
   if (!count) return "";
@@ -278,8 +273,7 @@ async function loadRail(scroll, name, producer) {
   wireEdgeFades(rail);
 }
 
-// Bound once per grid: stopPropagation is not enough when the card handler
-// sits on the same container.
+// Bound once per grid: stopPropagation is not enough when the card handler sits on the same container.
 export function wireCardOpen(host, lookup) {
   if (!host) return;
   const open = target => {

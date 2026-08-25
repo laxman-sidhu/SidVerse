@@ -1,39 +1,10 @@
-    /* ════════════════════════════════════════════════════════════════════════════
-   SidTrails - Travel Dashboard Stylesheet
-   ────────────────────────────────────────────────────────────────────────────
-   TABLE OF CONTENTS
-   ────────────────────────────────────────────────────────────────────────────
-     §01  DESIGN TOKENS            CSS variables: palette, fonts, radii, shadows
-     §02  TYPOGRAPHY               Base type scale, italic accent, eyebrow
-     §03  LAYOUT                   Container, full-bleed, section-head
-     §04  NAVBAR                   Top nav, mobile toggle, scroll states
-     §05  HERO                     Background image, headline, fan gallery
-     §06  HERO FAN GALLERY         4 angled 9:16 photo cards (right side)
-     §07  KPI CARDS                6 stat tiles at top of page
-     §08  MAP                      Leaflet map + legend
-     §09  PLACES                   Visited + Wishlist cards + tabs
-     §10  MONUMENTS                Heritage table + tabs (Visited / On list)
-     §11  MODAL                    Fullscreen photo viewer
-     §12  TIMELINE                 (legacy - kept for reference)
-     §13  GOALS                    Bucket list section (dark theme)
-     §14  ACTIVITIES               Filter cards + activity cards
-     §14b TREKS                    Summit progress ridge, seals, trail cards
-     §15  CONTACT                  Dark section + EmailJS form
-     §16  FOOTER                   Quote, columns, mini-stats, signoff
-     §17  LOADING & UTILITY        Loader, diagnostic panel, selection
-     §18  MOBILE RESPONSIVE        Consolidated mobile + tablet rules
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ SidTrails - Travel Dashboard Stylesheet ──────────────────────────────────────────────────────────────────────────── TABLE OF CONTENTS ──────────────────────────────────────────────────────────────────────────── §01 DESIGN TOKENS CSS variables: palette, fonts, radii, shadows §02 TYPOGRAPHY Base type scale, italic accent, eyebrow §03 LAYOUT Container, full-bleed, section-head §04 NAVBAR Top nav, mobile toggle, scroll states §05 HERO Background image, headline, fan gallery §06 HERO FAN GALLERY 4 angled 9:16 photo cards (right side) §07 KPI CARDS 6 stat tiles at top of page §08 MAP Leaflet map + legend §09 PLACES Visited + Wishlist cards + tabs §10 MONUMENTS Heritage table + tabs (Visited / On list) §11 MODAL Fullscreen photo viewer §12 TIMELINE (legacy - kept for reference) §13 GOALS Bucket list section (dark theme) §14 ACTIVITIES Filter cards + activity cards §14b TREKS Summit progress ridge, seals, trail cards §15 CONTACT Dark section + EmailJS form §16 FOOTER Quote, columns, mini-stats, signoff §17 LOADING & UTILITY Loader, diagnostic panel, selection §18 MOBILE RESPONSIVE Consolidated mobile + tablet rules ════════════════════════════════════════════════════════════════════════════ */
 
-    /* ════════════════════════════════════════════════════════════════════════════
-   §01 - DESIGN TOKENS
-   Editorial travel-magazine palette: pastels + mint + lavender accents.
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ §01 - DESIGN TOKENS Editorial travel-magazine palette: pastels + mint + lavender accents. ════════════════════════════════════════════════════════════════════════════ */
     :root {
-      /* Palette: deepened editorial pastels - grounded enough to read with real
-     contrast, soft enough to stay unmistakably pastel. Mint + lavender for range. */
+      /* Palette: deepened editorial pastels - grounded enough to read with real contrast, soft enough to stay unmistakably pastel. Mint + lavender for range. */
 
-      /* Backgrounds - a warm blush canvas with a touch more presence than near-white,
-     so the crisp white cards pop against it. */
+      /* Backgrounds - a warm blush canvas with a touch more presence than near-white, so the crisp white cards pop against it. */
       --bg: var(--p-bg);
       --bg-2: var(--p-bg-2);
       --paper: var(--p-surface);
@@ -46,8 +17,7 @@
       --line: var(--p-line);
       --line-soft: var(--p-line-soft);
 
-      /* Deepened pastel families - main (readable accent on white),
-     soft (mid pastel for fills/borders), pale (lightest wash). */
+      /* Deepened pastel families - main (readable accent on white), soft (mid pastel for fills/borders), pale (lightest wash). */
 
       /* Rose */
       --pink: var(--p-accent-ink);
@@ -89,8 +59,7 @@
       --mocha-soft: var(--p-butter);
       --mocha-pale: var(--tv-butter-wash);
 
-      /* Deep plum for dark sections - lifted & cleaner than near-black,
-     harmonised with the footer's plum. */
+      /* Deep plum for dark sections - lifted & cleaner than near-black, harmonised with the footer's plum. */
       --navy-deep: var(--p-deep);
       --navy: var(--p-deep);
       --navy-mid: var(--p-deep-2);
@@ -147,14 +116,8 @@
       --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* ============================================
-   SECTION PALETTE OVERRIDE
-   The hero, navbar, bucket-list (goals) and "travel with me" (contact)
-   sections use the original SidTrails palette (brighter candy pastels),
-   while every other section keeps the deepened Pastel palette above.
-   Re-declaring the tokens on these section roots makes every var()
-   reference inside them resolve to the SidTrails values via inheritance.
-   ============================================ */
+    /* ============================================ */
+    /* SECTION PALETTE OVERRIDE The hero, navbar, bucket-list (goals) and "travel with me" (contact) sections use the original SidTrails palette (brighter candy pastels), while every other section keeps the deepened Pastel palette above. Re-declaring the tokens on these section roots makes every var() reference inside them resolve to the SidTrails values via inheritance. ============================================ */
     .navbar,
     .hero,
     .goals-section,
@@ -163,20 +126,14 @@
       --bg-2: var(--p-bg-2);
       --paper-2: var(--p-surface-2);
 
-      /* These four were the source of every invisible label on this page.
-         --ink was pointed at --p-deep (a band colour that goes near-black in
-         dark, measured 1.16:1 on a dark surface) and --muted at --p-line (a
-         BORDER colour, 1.27:1 in light and 1.33:1 in dark — unreadable in both).
-         They are text roles and now take text tokens. --line stays a border. */
+      /* These four were the source of every invisible label on this page. --ink was pointed at --p-deep (a band colour that goes near-black in dark, measured 1.16:1 on a dark surface) and --muted at --p-line (a BORDER colour, 1.27:1 in light and 1.33:1 in dark — unreadable in both). They are text roles and now take text tokens. --line stays a border. */
       --ink: var(--p-ink);
       --ink-soft: var(--p-ink-soft);
       --muted: var(--p-muted);
       --line: var(--p-line);
       --line-soft: color-mix(in srgb, var(--p-line-soft) 19%, var(--p-surface));
 
-      /* These were the SidTrails brand pinks — the loudest colour left on the
-         site. They now read from the module accent, so the wordmark and the
-         hero CTA belong to the same family as the rest of Travel. */
+      /* These were the SidTrails brand pinks — the loudest colour left on the site. They now read from the module accent, so the wordmark and the hero CTA belong to the same family as the rest of Travel. */
       --pink: var(--p-accent-ink);
       --pink-soft: var(--p-accent);
       --pink-pale: var(--p-accent-tint);
@@ -259,9 +216,8 @@
       mix-blend-mode: multiply;
     }
 
-    /* ============================================
-   TYPOGRAPHY - Fraunces (display) + Inter (body) + Caveat (narration)
-   ============================================ */
+    /* ============================================ */
+    /* TYPOGRAPHY - Fraunces (display) + Inter (body) + Caveat (narration) ============================================ */
     h1,
     h2,
     h3,
@@ -328,9 +284,8 @@
       letter-spacing: 0;
     }
 
-    /* ============================================
-   LAYOUT
-   ============================================ */
+    /* ============================================ */
+    /* LAYOUT ============================================ */
     .container {
       width: 100%;
       max-width: var(--p-shell);
@@ -356,10 +311,7 @@
       }
     }
 
-    /* Full-bleed: spans the full viewport width with symmetric gutters on both
-   sides. Cards inside this container will fill the row with flex layout,
-   so the outermost cards' edges always sit exactly at the gutter line -
-   leftmost card left-edge = rightmost card right-edge mirrored. */
+    /* Full-bleed: spans the full viewport width with symmetric gutters on both sides. Cards inside this container will fill the row with flex layout, so the outermost cards' edges always sit exactly at the gutter line - leftmost card left-edge = rightmost card right-edge mirrored. */
     .full-bleed {
       width: 100vw;
       position: relative;
@@ -400,8 +352,7 @@
       margin-bottom: 1.3rem;
       gap: 0.25rem;
       text-align: center;
-      /* Full viewport width with the same gutter as the card grids - so the
-     centered heading sits between the same left/right edges as the cards */
+      /* Full viewport width with the same gutter as the card grids - so the centered heading sits between the same left/right edges as the cards */
       width: 100vw;
       position: relative;
       left: 50%;
@@ -463,9 +414,8 @@
       }
     }
 
-    /* ============================================
-   NAVBAR
-   ============================================ */
+    /* ============================================ */
+    /* NAVBAR ============================================ */
     .navbar {
       position: fixed;
       top: 0;
@@ -674,9 +624,8 @@
       }
     }
 
-    /* ============================================
-   HERO
-   ============================================ */
+    /* ============================================ */
+    /* HERO ============================================ */
     .hero {
       min-height: 92vh;
       padding: 9rem 0 6rem;
@@ -918,9 +867,8 @@
       color: var(--paper);
     }
 
-    /* ============================================
-   HERO FANNED PHOTO GALLERY (right side)
-   ============================================ */
+    /* ============================================ */
+    /* HERO FANNED PHOTO GALLERY (right side) ============================================ */
     .hero-visual {
       position: relative;
       display: flex;
@@ -942,10 +890,7 @@
       height: 480px;
     }
 
-    /* Every card is one box; where it sits and how big it reads is the slot it
-   currently holds, written by js/hero-fan.js as --fx, --fz and --fk. That way
-   a card moving up a place GROWS into the place rather than the places being
-   fixed to whichever card happens to be there. */
+    /* Every card is one box; where it sits and how big it reads is the slot it currently holds, written by js/hero-fan.js as --fx, --fz and --fk. That way a card moving up a place GROWS into the place rather than the places being fixed to whichever card happens to be there. */
     .fan-card {
       position: relative;
       margin: 0 0 0 var(--fml, -34px);
@@ -972,8 +917,7 @@
       display: block;
     }
 
-    /* The track is the fan's own box, so the cards inside it are placed against
-   a stable origin rather than against each other. */
+    /* The track is the fan's own box, so the cards inside it are placed against a stable origin rather than against each other. */
     @keyframes fanIn {
       from {
         opacity: 0;
@@ -1092,9 +1036,8 @@
       }
     }
 
-    /* ============================================
-   KPI CARDS - elegant, number-led
-   ============================================ */
+    /* ============================================ */
+    /* KPI CARDS - elegant, number-led ============================================ */
     .stats-inner {
       max-width: var(--p-shell);
       margin: 0 auto;
@@ -1274,9 +1217,8 @@
       color: white;
     }
 
-    /* ============================================
-   MAP
-   ============================================ */
+    /* ============================================ */
+    /* MAP ============================================ */
     .map-section {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 50%, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 100%);
     }
@@ -1400,9 +1342,8 @@
       transform: rotate(45deg);
     }
 
-    /* ============================================
-   PLACES - Visited (with images) + Wishlist
-   ============================================ */
+    /* ============================================ */
+    /* PLACES - Visited (with images) + Wishlist ============================================ */
 
     /* Filter bar (status + search + type) */
     .places-tabs {
@@ -1555,10 +1496,7 @@
       letter-spacing: 0.01em;
     }
 
-    /* Visited grid - image cards. Mirrors the wishlist (non-visited) grid: the
-   `1fr` tracks fill the full container width, so the leftmost card sits flush
-   to the left edge and the rightmost to the right edge - the outer padding
-   stays fixed and consistent with the wishlist section at every width. */
+    /* Visited grid - image cards. Mirrors the wishlist (non-visited) grid: the `1fr` tracks fill the full container width, so the leftmost card sits flush to the left edge and the rightmost to the right edge - the outer padding stays fixed and consistent with the wishlist section at every width. */
     .visited-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1628,8 +1566,7 @@
       letter-spacing: -0.05em;
     }
 
-    /* Type chip - now sits in the card body (moved off the thumbnail).
-   Pale-pink pill matching the wishlist tag, comes from the `Type` column. */
+    /* Type chip - now sits in the card body (moved off the thumbnail). Pale-pink pill matching the wishlist tag, comes from the `Type` column. */
     .visited-card .place-type {
       display: inline-block;
       align-self: flex-start;
@@ -1695,10 +1632,7 @@
       border-left: 3px solid var(--pink);
     }
 
-    /* Desktop meta row - three fixed columns so the row lines up across cards
-   regardless of memory length: date pinned left, duration centered, travel-
-   with pinned right. `margin-top: auto` pushes the whole row to the bottom of
-   the (equal-height) card so every card's meta sits at the same height. */
+    /* Desktop meta row - three fixed columns so the row lines up across cards regardless of memory length: date pinned left, duration centered, travel- with pinned right. `margin-top: auto` pushes the whole row to the bottom of the (equal-height) card so every card's meta sits at the same height. */
     .visited-card .meta {
       display: flex;
       flex-wrap: nowrap;
@@ -1820,10 +1754,7 @@
       margin-bottom: 0.5rem;
     }
 
-    /* "Famous For" floating tooltip - appears on hover ABOVE the card without
-   changing the card's size (mirrors the bucket-list notes tooltip). The text
-   lives in the card's data-famous attribute; on touch/mobile it is suppressed
-   and shown in the place popup instead. */
+    /* "Famous For" floating tooltip - appears on hover ABOVE the card without changing the card's size (mirrors the bucket-list notes tooltip). The text lives in the card's data-famous attribute; on touch/mobile it is suppressed and shown in the place popup instead. */
     .wishlist-card[data-famous]:hover::after {
       content: attr(data-famous);
       position: absolute;
@@ -1874,9 +1805,8 @@
       font-style: italic;
     }
 
-    /* ============================================
-   MONUMENTS & LANDMARKS - heritage section
-   ============================================ */
+    /* ============================================ */
+    /* MONUMENTS & LANDMARKS - heritage section ============================================ */
     .monuments-section {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-surface-3) 25%, var(--p-surface)) 0%, color-mix(in srgb, var(--p-danger) var(--tv-band), var(--p-surface)) 55%, color-mix(in srgb, var(--p-danger) var(--tv-band), var(--p-surface)) 100%);
       position: relative;
@@ -1995,8 +1925,7 @@
       }
     }
 
-    /* On phones, scroll the table sideways inside its own box instead of
-   pushing it off the right edge of the screen. */
+    /* On phones, scroll the table sideways inside its own box instead of pushing it off the right edge of the screen. */
     @media (max-width: 768px) {
       .mon-table-wrap {
         overflow-x: auto;
@@ -2010,16 +1939,13 @@
       }
     }
 
-    /* ============================================
-   MONUMENTS TABLE - clean tabular layout
-   ============================================ */
+    /* ============================================ */
+    /* MONUMENTS TABLE - clean tabular layout ============================================ */
     .mon-table-wrap {
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      /* No overflow:hidden - would create a scroll container that traps sticky thead.
-     Horizontal scrolling on small screens is handled by hiding columns
-     in the mobile responsive section. */
+      /* No overflow:hidden - would create a scroll container that traps sticky thead. Horizontal scrolling on small screens is handled by hiding columns in the mobile responsive section. */
       max-width: var(--p-shell);
       margin: 0 auto;
     }
@@ -2031,9 +1957,7 @@
     }
 
     .mon-table thead th {
-      /* --ink flips with the theme, so this header inverted into the brightest
-         slab on the page in dark. The bands that are meant to read as deep
-         stay deep in both themes. */
+      /* --ink flips with the theme, so this header inverted into the brightest slab on the page in dark. The bands that are meant to read as deep stay deep in both themes. */
       background: var(--p-deep);
       color: var(--p-on-deep);
       padding: 0.95rem 1.2rem;
@@ -2199,13 +2123,7 @@
       }
     }
 
-    /* ════════════════════════════════════════════════════════════════════════════
-   SHARED CONTROLS - dropdowns + filter bars
-   ────────────────────────────────────────────────────────────────────────────
-   One dropdown style for every filter on the page (place status, place type,
-   trek status, trek region, monument region). The native arrow is replaced with
-   an inline SVG chevron so the control looks the same in every browser.
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ SHARED CONTROLS - dropdowns + filter bars ──────────────────────────────────────────────────────────────────────────── One dropdown style for every filter on the page (place status, place type, trek status, trek region, monument region). The native arrow is replaced with an inline SVG chevron so the control looks the same in every browser. ════════════════════════════════════════════════════════════════════════════ */
     .nice-select {
       appearance: none;
       -webkit-appearance: none;
@@ -2341,9 +2259,8 @@
       box-shadow: 0 3px 10px rgba(var(--p-deep-rgb), 0.22);
     }
 
-    /* ============================================
-   MODAL
-   ============================================ */
+    /* ============================================ */
+    /* MODAL ============================================ */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -2495,28 +2412,21 @@
       color: var(--ink-soft);
     }
 
-    /* ============================================
-   GOALS - Bucket List (dark)
-   ============================================ */
-    /* ============================================
-   GOALS SECTION - clean dark theme
-   ============================================ */
+    /* ============================================ */
+    /* GOALS - Bucket List (dark) ============================================ */
+    /* ============================================ */
+    /* GOALS SECTION - clean dark theme ============================================ */
     /* Stats + Places: soft pink, warming into the orange bucket section below */
     #stats {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 100%);
     }
 
-    /* Cools out of the pink into lavender so the lavender bucket-list below blends
-       in seamlessly (pink -> lavender, no warm band between them). */
+    /* Cools out of the pink into lavender so the lavender bucket-list below blends in seamlessly (pink -> lavender, no warm band between them). */
     #places {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-pink) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 52%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 100%);
     }
 
-    /* BUCKET LIST - lavender pastel. Starts in the lavender handed down by Places,
-       holds lavender through most of the body, then makes a tight, light, warm
-       hand-off to cream at the very bottom. Lavender and yellow are near-opposite
-       hues, so the warm bridge is kept high-value (light) and thin to avoid the
-       muddy grey a straight lavender->yellow blend would produce. */
+    /* BUCKET LIST - lavender pastel. Starts in the lavender handed down by Places, holds lavender through most of the body, then makes a tight, light, warm hand-off to cream at the very bottom. Lavender and yellow are near-opposite hues, so the warm bridge is kept high-value (light) and thin to avoid the muddy grey a straight lavender->yellow blend would produce. */
     .goals-section {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 52%, var(--p-surface-2) 72%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 88%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 100%);
       position: relative;
@@ -2533,10 +2443,7 @@
     }
 
     .goals-section .container {
-      /* Intentionally NOT positioned: this lets the absolutely-positioned
-         .goals-stat-pill (which now lives inside the container) anchor to the
-         full-width section and float to its top-right on desktop, exactly as
-         before. On mobile the pill switches to static and flows below the intro. */
+      /* Intentionally NOT positioned: this lets the absolutely-positioned .goals-stat-pill (which now lives inside the container) anchor to the full-width section and float to its top-right on desktop, exactly as before. On mobile the pill switches to static and flows below the intro. */
       position: static;
     }
 
@@ -2704,10 +2611,8 @@
     }
 
     /* Goal cards */
-    /* ============================================
-   GOAL CARDS - strict 3-zone flex layout
-   Header (cat + title, fixed) / Middle (progress) / Footer (pinned)
-   ============================================ */
+    /* ============================================ */
+    /* GOAL CARDS - strict 3-zone flex layout Header (cat + title, fixed) / Middle (progress) / Footer (pinned) ============================================ */
     .goals-grid-new {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -2761,9 +2666,7 @@
       border-radius: 6px 0 0 6px;
     }
 
-    /* In-progress state - amber/butter highlight for goals that have been started
-       but not finished. Mirrors the completed card's green treatment so the three
-       states (not started / in progress / done) read as one family. */
+    /* In-progress state - amber/butter highlight for goals that have been started but not finished. Mirrors the completed card's green treatment so the three states (not started / in progress / done) read as one family. */
     .goal-card.in-progress {
       background: color-mix(in srgb, var(--p-wait) var(--tv-band), var(--p-surface));
       border-color: color-mix(in srgb, var(--p-wait) var(--tv-edge), var(--p-line));
@@ -2804,9 +2707,7 @@
       color: var(--p-ink);
     }
 
-    /* Completed tick - sits in the footer's right slot (where the status pill is
-   on unfinished goals). In-flow so `justify-content: space-between` on the
-   footer pins the difficulty chip left and this tick to the bottom-right. */
+    /* Completed tick - sits in the footer's right slot (where the status pill is on unfinished goals). In-flow so `justify-content: space-between` on the footer pins the difficulty chip left and this tick to the bottom-right. */
     .goal-card .goal-check {
       width: 24px;
       height: 24px;
@@ -3052,12 +2953,9 @@
       border-color: var(--pink);
     }
 
-    /* ============================================
-   ACTIVITIES
-   ============================================ */
-    /* ADVENTURES - yellow pastel. Picks up the cream handed down by the Bucket List
-       and ramps to full yellow quickly (so the section reads solidly yellow from the
-       top), then fades to green for the Treks section below. */
+    /* ============================================ */
+    /* ACTIVITIES ============================================ */
+    /* ADVENTURES - yellow pastel. Picks up the cream handed down by the Bucket List and ramps to full yellow quickly (so the section reads solidly yellow from the top), then fades to green for the Treks section below. */
     .activities-section {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 24%, color-mix(in srgb, var(--p-butter) var(--tv-band), var(--p-surface)) 60%, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 84%, color-mix(in srgb, var(--p-ok) var(--tv-band), var(--p-surface)) 100%);
     }
@@ -3353,14 +3251,7 @@
       font-style: italic;
     }
 
-    /* ════════════════════════════════════════════════════════════════════════════
-   §14b - TREKS
-   ────────────────────────────────────────────────────────────────────────────
-   Green pastel section between Adventures (lavender) and Heritage (tan).
-   Every trek uses the same photo-thumbnail card; completed ones just carry a
-   green tint, a green rail and a small "Completed" tag, so the two states read
-   as one family rather than two different components.
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ §14b - TREKS ──────────────────────────────────────────────────────────────────────────── Green pastel section between Adventures (lavender) and Heritage (tan). Every trek uses the same photo-thumbnail card; completed ones just carry a green tint, a green rail and a small "Completed" tag, so the two states read as one family rather than two different components. ════════════════════════════════════════════════════════════════════════════ */
     .treks-section {
       position: relative;
     }
@@ -3534,10 +3425,7 @@
       stroke-dasharray: 5 6;
     }
 
-    /* No `vector-effect: non-scaling-stroke` here on purpose. It would move the
-   stroke (and therefore stroke-dasharray/offset) into screen space, while
-   getTotalLength() reports user-space units - the mismatch made the dash
-   pattern wrap and re-draw a phantom segment near the summit. */
+    /* No `vector-effect: non-scaling-stroke` here on purpose. It would move the stroke (and therefore stroke-dasharray/offset) into screen space, while getTotalLength() reports user-space units - the mismatch made the dash pattern wrap and re-draw a phantom segment near the summit. */
     .tp-fill {
       fill: none;
       stroke: url(#trekRidgeGrad);
@@ -3619,15 +3507,10 @@
       box-shadow: 0 0 0 4px rgba(var(--p-ok-rgb), 0.22);
     }
 
-    /* ── Cards: one grid, two tints ────────────────────────────────────────────
-   Every trek sits in the same grid; completed ones are marked by a green border
-   and a green tint, not by living in a separate block. Geometry is deliberately
-   identical to .visited-grid in Places, so the two sections line up. */
+    /* ── Cards: one grid, two tints ──────────────────────────────────────────── Every trek sits in the same grid; completed ones are marked by a green border and a green tint, not by living in a separate block. Geometry is deliberately identical to .visited-grid in Places, so the two sections line up. */
     .trek-grid {
       display: grid;
-      /* Same centred auto-fit alignment as .visited-grid, but a wider track: a trek
-     card carries a thumbnail, a region chip AND two lines of "famous for", so the
-     200px track Places uses squeezed it too thin. */
+      /* Same centred auto-fit alignment as .visited-grid, but a wider track: a trek card carries a thumbnail, a region chip AND two lines of "famous for", so the 200px track Places uses squeezed it too thin. */
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1rem;
       justify-content: center;
@@ -3669,9 +3552,7 @@
       outline-offset: 3px;
     }
 
-    /* Completed: a solid green identity so finished climbs clearly stand apart
-       from the planned (plain white) cards - a stronger green border, a soft green
-       glow, and a green-tinted body band beneath the photo. */
+    /* Completed: a solid green identity so finished climbs clearly stand apart from the planned (plain white) cards - a stronger green border, a soft green glow, and a green-tinted body band beneath the photo. */
     .trek-card.done {
       border: 2px solid var(--p-ok);
       box-shadow: 0 6px 18px -7px rgba(var(--p-ok-rgb), 0.45);
@@ -3701,8 +3582,7 @@
       background: linear-gradient(135deg, var(--mint-soft), var(--sky-soft));
     }
 
-    /* Sits permanently behind the photo, so a trek with no Image_URL - or one whose
-   host blocks the request - still renders as a proper card, never a grey box. */
+    /* Sits permanently behind the photo, so a trek with no Image_URL - or one whose host blocks the request - still renders as a proper card, never a grey box. */
     .tc-fallback {
       position: absolute;
       inset: 0;
@@ -3890,8 +3770,7 @@
     }
 
     /* ── "Latest" sticker - shared by the newest trek and the newest place ── */
-    /* The butter gradient is fixed in both themes, so the ink is fixed too:
-       --p-ink flips to near-white on dark paper and vanished against it. */
+    /* The butter gradient is fixed in both themes, so the ink is fixed too: --p-ink flips to near-white on dark paper and vanished against it. */
     .tc-latest,
     .latest-sticker {
       position: absolute;
@@ -4027,9 +3906,8 @@
       border-color: rgba(var(--p-ok-rgb), 0.32);
     }
 
-    /* ============================================
-   ACTIVITY PHOTO MODAL - fullscreen viewer
-   ============================================ */
+    /* ============================================ */
+    /* ACTIVITY PHOTO MODAL - fullscreen viewer ============================================ */
     .act-modal-overlay {
       position: fixed;
       inset: 0;
@@ -4237,9 +4115,7 @@
       margin-bottom: 0;
     }
 
-    /* The meta row is empty on every record type now, and a place with no memory
-   leaves the extra row empty too - collapse both so they don't leave dead space
-   under the title. */
+    /* The meta row is empty on every record type now, and a place with no memory leaves the extra row empty too - collapse both so they don't leave dead space under the title. */
     .act-modal-meta:empty,
     #actModalExtra:empty {
       display: none;
@@ -4328,9 +4204,7 @@
       border-color: rgba(var(--p-wait-rgb), 0.25);
     }
 
-    /* This used to be `white-space: nowrap` + `text-overflow: ellipsis`, which
-   quietly chopped every memory longer than the modal was wide - worst on phones.
-   It wraps now, and is free to run to as many lines as it needs. */
+    /* This used to be `white-space: nowrap` + `text-overflow: ellipsis`, which quietly chopped every memory longer than the modal was wide - worst on phones. It wraps now, and is free to run to as many lines as it needs. */
     .am-memory {
       font-family: var(--font-hand);
       font-size: 1.35rem;
@@ -4423,8 +4297,7 @@
       }
     }
 
-    /* Lighter, snappier feel on devices that prefer reduced motion -
-   skips the heavier entrance animations without changing the design. */
+    /* Lighter, snappier feel on devices that prefer reduced motion - skips the heavier entrance animations without changing the design. */
     @media (prefers-reduced-motion: reduce) {
 
       *,
@@ -4437,9 +4310,8 @@
       }
     }
 
-    /* ============================================
-   CONTACT - Travel with me
-   ============================================ */
+    /* ============================================ */
+    /* CONTACT - Travel with me ============================================ */
     .form-group {
       margin-bottom: 0.9rem;
     }
@@ -4798,9 +4670,7 @@
       }
     }
 
-    /* Form header - title at top of card. The right padding reserves room for the
-       ✉ badge in the corner so the sub-text never runs underneath it, at any width
-       (including the narrow two-column tablet layout). */
+    /* Form header - title at top of card. The right padding reserves room for the ✉ badge in the corner so the sub-text never runs underneath it, at any width (including the narrow two-column tablet layout). */
     .form-header {
       margin-bottom: 1.2rem;
       padding-right: 3.5rem;
@@ -4858,9 +4728,7 @@
       font-size: var(--p-text-sm);
     }
 
-    /* The wait between pressing send and the postcard landing. A ring turning
-       in the room's own green, and a sheen crossing the strip, so the pause
-       reads as something in flight rather than a box of grey text. */
+    /* The wait between pressing send and the postcard landing. A ring turning in the room's own green, and a sheen crossing the strip, so the pause reads as something in flight rather than a box of grey text. */
     .form-status.is-sending {
       background: linear-gradient(180deg,
           rgba(var(--p-accent-rgb), 0.14),
@@ -4926,9 +4794,8 @@
       border: 1px solid rgba(var(--p-lavender-rgb), 0.55);
     }
 
-    /* ============================================
-   FOOTER - Rich, multi-column
-   ============================================ */
+    /* ============================================ */
+    /* FOOTER - Rich, multi-column ============================================ */
     .site-footer {
       position: relative;
       overflow: hidden;
@@ -5005,9 +4872,8 @@
       }
     }
 
-    /* ============================================
-   LOADING STATES & UTILITY
-   ============================================ */
+    /* ============================================ */
+    /* LOADING STATES & UTILITY ============================================ */
     .skeleton {
       background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg) 50%, var(--bg-2) 75%);
       background-size: 200% 100%;
@@ -5229,13 +5095,7 @@
     }
 
 
-    /* ════════════════════════════════════════════════════════════════════════════
-   §18 - MOBILE RESPONSIVE
-   ────────────────────────────────────────────────────────────────────────────
-   Consolidated responsive rules. Earlier sections each define their own
-   targeted media queries; this block fills the remaining gaps and tunes
-   layout, spacing, and type for tablet (≤900px) and phone (≤600px / ≤480px).
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ §18 - MOBILE RESPONSIVE ──────────────────────────────────────────────────────────────────────────── Consolidated responsive rules. Earlier sections each define their own targeted media queries; this block fills the remaining gaps and tunes layout, spacing, and type for tablet (≤900px) and phone (≤600px / ≤480px). ════════════════════════════════════════════════════════════════════════════ */
 
     /* ─── Tablet (≤ 900px) ─── */
     @media (max-width: 900px) {
@@ -5464,8 +5324,7 @@
         padding: 1.6rem 1.2rem 1.4rem;
       }
 
-      /* Shrink the ✉ badge and pull it into the corner on small screens (the
-         header already reserves space for it via padding-right). */
+      /* Shrink the ✉ badge and pull it into the corner on small screens (the header already reserves space for it via padding-right). */
       .contact-form-card::after {
         width: 34px;
         height: 34px;
@@ -5634,28 +5493,13 @@
         transform: none;
       }
 
-      /* No hover on touch → never show the wishlist "Famous For" tooltip on the
-     card; it appears in the place popup instead. */
+      /* No hover on touch → never show the wishlist "Famous For" tooltip on the card; it appears in the place popup instead. */
       .wishlist-card[data-famous]:hover::after {
         content: none !important;
       }
     }
 
-    /* ════════════════════════════════════════════════════════════════════════════
-   §18b - MOBILE FIXES  (horizontal overflow + two-per-row card grids)
-   ────────────────────────────────────────────────────────────────────────────
-   Two problems addressed:
-   (1) On phones the page nudged off the right edge. Root cause: the hero's
-       fanned photos have fixed pixel widths + flex-shrink:0, which inflated the
-       single-column grid track and dragged the hero text / float-card past the
-       viewport. Letting the hero grid items shrink (min-width:0) pins the column
-       back to the container width; the fan is only scaled visually, so nothing
-       meaningful is clipped.
-   (2) The card grids used auto-fit/minmax(180–200px), which collapses to ONE
-       column on a ~320px-wide phone. We switch them to an explicit 2-column
-       layout with minmax(0,1fr) so two cards always sit side-by-side and long
-       words / images can't blow a row past the screen edge.
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ §18b - MOBILE FIXES (horizontal overflow + two-per-row card grids) ──────────────────────────────────────────────────────────────────────────── Two problems addressed: (1) On phones the page nudged off the right edge. Root cause: the hero's fanned photos have fixed pixel widths + flex-shrink:0, which inflated the single-column grid track and dragged the hero text / float-card past the viewport. Letting the hero grid items shrink (min-width:0) pins the column back to the container width; the fan is only scaled visually, so nothing meaningful is clipped. (2) The card grids used auto-fit/minmax(180–200px), which collapses to ONE column on a ~320px-wide phone. We switch them to an explicit 2-column layout with minmax(0,1fr) so two cards always sit side-by-side and long words / images can't blow a row past the screen edge. ════════════════════════════════════════════════════════════════════════════ */
 
     /* Belt-and-suspenders: clip any residual horizontal overflow at the root too */
     html {
@@ -5680,8 +5524,7 @@
       }
     }
 
-    /* (2) Phone (≤600px): card grids pack neatly - bigger cards (visited photos +
-   bucket-list) go two-up; the lighter cards (wishlist + activities) go three-up. */
+    /* (2) Phone (≤600px): card grids pack neatly - bigger cards (visited photos + bucket-list) go two-up; the lighter cards (wishlist + activities) go three-up. */
     @media (max-width: 600px) {
 
       .visited-grid,
@@ -5764,8 +5607,7 @@
         font-size: 0.86rem;
       }
 
-      /* Difficulty chip + status pill share a single row: difficulty pinned left,
-     status pinned right. Chips shrink a touch so both fit on a narrow card. */
+      /* Difficulty chip + status pill share a single row: difficulty pinned left, status pinned right. Chips shrink a touch so both fit on a narrow card. */
       .goal-footer {
         flex-direction: row;
         flex-wrap: nowrap;
@@ -5791,9 +5633,7 @@
         flex-shrink: 0;
       }
 
-      /* Notes tooltip - on narrow screens a centered tooltip wider than the card
-     ran off the screen edge. Pin it to the card's own width (left:0/right:0)
-     so it always stays on-screen; the note simply wraps to more lines. */
+      /* Notes tooltip - on narrow screens a centered tooltip wider than the card ran off the screen edge. Pin it to the card's own width (left:0/right:0) so it always stays on-screen; the note simply wraps to more lines. */
       .goal-card[data-notes]:hover::after {
         left: 0;
         right: 0;
@@ -5842,8 +5682,7 @@
         right: 0.45rem;
       }
 
-      /* Wishlist tiles (now three-up): shrink type/name/blurb so three fit cleanly,
-     and drop the decorative hover-only corner arrow (no hover on touch). */
+      /* Wishlist tiles (now three-up): shrink type/name/blurb so three fit cleanly, and drop the decorative hover-only corner arrow (no hover on touch). */
       .wishlist-card {
         padding: 0.6rem 0.6rem;
       }
@@ -5892,17 +5731,7 @@
       }
     }
 
-    /* ════════════════════════════════════════════════════════════════════════════
-   §18c - MOBILE HERO 2×2 GRID + 2-UP ADVENTURE SELECTORS
-   ────────────────────────────────────────────────────────────────────────────
-   Desktop is left exactly as-is. On phones (≤600px):
-   (1) The hero "fan" (a 3D, overlapping deck that hid its 3rd & 4th cards on
-       small screens) is flattened into a clean 2×2 grid so ALL FOUR photos
-       are visible.
-   (2) The Water / Air / Snow / Land selector cards (.activity-stat) sit
-       two-per-row instead of one, by overriding their flex basis + min-width.
-   Placed last in the stylesheet so it overrides the earlier hide + scale rules.
-   ════════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════════════ §18c - MOBILE HERO 2×2 GRID + 2-UP ADVENTURE SELECTORS ──────────────────────────────────────────────────────────────────────────── Desktop is left exactly as-is. On phones (≤600px): (1) The hero "fan" (a 3D, overlapping deck that hid its 3rd & 4th cards on small screens) is flattened into a clean 2×2 grid so ALL FOUR photos are visible. (2) The Water / Air / Snow / Land selector cards (.activity-stat) sit two-per-row instead of one, by overriding their flex basis + min-width. Placed last in the stylesheet so it overrides the earlier hide + scale rules. ════════════════════════════════════════════════════════════════════════════ */
     @media (max-width: 600px) {
 
       /* ── (1) Hero photos → 2×2 grid, all four visible ── */
@@ -5926,9 +5755,7 @@
         /* cancel the 3D stage */
       }
 
-      /* Flatten every card into a full-width grid tile - overrides the fan's
-     rotateY/translateZ transforms, fixed pixel widths, negative margins,
-     stacked z-index AND the display:none hides applied at ≤600px / ≤380px. */
+      /* Flatten every card into a full-width grid tile - overrides the fan's rotateY/translateZ transforms, fixed pixel widths, negative margins, stacked z-index AND the display:none hides applied at ≤600px / ≤380px. */
       .hero-fan .fan-card,
       .hero-fan .fan-card:first-child,
       .hero-fan .fan-card:nth-child(1),
@@ -5994,13 +5821,8 @@
       }
     }
 
-    /* ============================================
-   TRAVELOGUE - "The journey, in numbers"
-   A single editorial analytics section placed
-   after the map. Built entirely from the same
-   Google Sheet data; renders only what the data
-   can support and silently skips the rest.
-   ============================================ */
+    /* ============================================ */
+    /* TRAVELOGUE - "The journey, in numbers" A single editorial analytics section placed after the map. Built entirely from the same Google Sheet data; renders only what the data can support and silently skips the rest. ============================================ */
     #wrapped {
       background: linear-gradient(180deg, color-mix(in srgb, var(--p-sky) var(--tv-band), var(--p-surface)) 0%, color-mix(in srgb, var(--p-sky) var(--tv-band), var(--p-surface)) 50%, color-mix(in srgb, var(--p-lavender) var(--tv-band), var(--p-surface)) 100%);
       padding: 4rem 0 4.5rem;
@@ -6571,11 +6393,8 @@
       }
     }
 
-/* ============================================================
-   §19  ELEVATION LAYER  (additive only — global chrome + paint)
-   Adds focus states, scroll trail, refined resting shadows,
-   section-head accent, and optical sizing. No layout overrides.
-   ============================================================ */
+/* ============================================================ */
+/* §19 ELEVATION LAYER (additive only — global chrome + paint) Adds focus states, scroll trail, refined resting shadows, section-head accent, and optical sizing. No layout overrides. ============================================================ */
 
 :root {
   --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
@@ -6709,9 +6528,8 @@ textarea:focus-visible,
   }
 }
 
-/* ============================================================
-   §20  POLISH  (paint-only refinements — no layout changes)
-   ============================================================ */
+/* ============================================================ */
+/* §20 POLISH (paint-only refinements — no layout changes) ============================================================ */
 
 /* Crisper type rendering across the page */
 html {
@@ -6753,9 +6571,8 @@ html {
   box-shadow: 0 22px 50px rgba(var(--p-deep-rgb), 0.20);
 }
 
-/* ============================================================
-   §21  MOBILE HERO + AESTHETIC TOUCHES
-   ============================================================ */
+/* ============================================================ */
+/* §21 MOBILE HERO + AESTHETIC TOUCHES ============================================================ */
 
 /* Anchor targets clear the sticky navbar when jumping via the CTAs/nav */
 section[id] {
@@ -6807,17 +6624,7 @@ section[id] {
 }
 
 
-/* ══════════════════════════════════════════════════════════════════════════
-   §19  PHONE: CAPTIONS OFF THE THUMBNAIL
-   The grids go two-up on a phone, leaving the photo about 165px wide - not
-   enough to read a name over. The caption comes off the picture and onto the
-   card: name on one line, place on the next, each scrolling sideways on its
-   own when the words are longer than the card.
-
-   No markup moves. The image box keeps the photo in a padding band at the top
-   and every picture layer is pinned to that band, so the caption - still a
-   child of the box - simply flows underneath it. Colours are in theme.css.
-   ══════════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════ §19 PHONE: CAPTIONS OFF THE THUMBNAIL The grids go two-up on a phone, leaving the photo about 165px wide - not enough to read a name over. The caption comes off the picture and onto the card: name on one line, place on the next, each scrolling sideways on its own when the words are longer than the card. No markup moves. The image box keeps the photo in a padding band at the top and every picture layer is pinned to that band, so the caption - still a child of the box - simply flows underneath it. Colours are in theme.css. ══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 600px) {
 

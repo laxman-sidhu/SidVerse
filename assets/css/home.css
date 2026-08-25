@@ -13,8 +13,7 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
   gap: clamp(24px, 4vw, 64px);
   align-items: center;
-  /* Off the rail rather than hard against it, and the words read centred
-     inside the column they are given. */
+  /* Off the rail rather than hard against it, and the words read centred inside the column they are given. */
   padding-left: clamp(0px, 1.6vw, 28px);
 }
 
@@ -74,11 +73,8 @@
 
 .hero__jump:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -10px rgba(var(--p-accent-rgb), .95); }
 
-/* ---- the portrait -------------------------------------------------------
-   A cut-out floating on colour rather than sitting in a frame. One static
-   elliptical glow behind it: the earlier version was a circle wider than its
-   column, so what showed through read as a rectangular slab, and it tracked
-   the pointer, which made the whole hero restless. */
+/* ---- the portrait ------------------------------------------------------- */
+/* A cut-out floating on colour rather than sitting in a frame. One static elliptical glow behind it: the earlier version was a circle wider than its column, so what showed through read as a rectangular slab, and it tracked the pointer, which made the whole hero restless. */
 
 .hero__cut {
   position: relative;
@@ -87,18 +83,10 @@
   aspect-ratio: 880 / 1186;
   margin-inline: 0 clamp(0px, 3vw, 54px);
   overflow: visible;
+  perspective: 1400px;
 }
 
-/* A whole circle behind the figure.
-
-   Two things had been squaring it off. The box is 880x1186, so `width: 128%`
-   made a circle wider than the frame and the sides were cut away — only its
-   middle band showed, which reads as a rectangle. And `blur()` on an element
-   whose paint reaches its own edge smears that edge into a straight line.
-
-   So: the circle is sized off the SHORTER axis and kept inside the box, its
-   gradient fades to nothing well before the boundary, and there is no blur to
-   drag a hard edge outward. */
+/* A whole circle behind the figure. Two things had been squaring it off. The box is 880x1186, so `width: 128%` made a circle wider than the frame and the sides were cut away — only its middle band showed, which reads as a rectangle. And `blur()` on an element whose paint reaches its own edge smears that edge into a straight line. So: the circle is sized off the SHORTER axis and kept inside the box, its gradient fades to nothing well before the boundary, and there is no blur to drag a hard edge outward. */
 .hero__cut::before {
   content: "";
   position: absolute;
@@ -124,19 +112,16 @@
   z-index: 1;
   width: 100%;
   height: auto;
-  /* No drop-shadow. The cut-out's alpha channel carries faint residue from the
-     background removal, and drop-shadow builds its silhouette from ANY
-     non-zero alpha — so it painted a soft dark rectangle over the whole frame.
-     Invisible on dark paper, obvious on light. The glow behind gives the
-     figure its lift instead. */
+  /* The hinge for the entrance: the base stays planted, the head travels. */
+  transform-origin: 50% 100%;
+  /* No drop-shadow. The cut-out's alpha channel carries faint residue from the background removal, and drop-shadow builds its silhouette from ANY non-zero alpha — so it painted a soft dark rectangle over the whole frame. Invisible on dark paper, obvious on light. The glow behind gives the figure its lift instead. */
   -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
 }
 
 @media (max-width: 860px) {
   .hero__grid { grid-template-columns: 1fr; padding-left: 0; gap: 4px; }
-  /* The portrait led on a phone and pushed the headline below the fold. It
-     follows the words now, and at a size that leaves room for them. */
+  /* The portrait led on a phone and pushed the headline below the fold. It follows the words now, and at a size that leaves room for them. */
   .hero__cut { order: 2; width: min(240px, 58%); justify-self: center; margin-inline: 0; }
   .hero__copy { order: 1; transform: none; }
   .hero__title { font-size: clamp(2rem, 9vw, 2.6rem); }
@@ -164,8 +149,7 @@
 
 .rooms__title { font-size: clamp(1.5rem, 3vw, 2rem); }
 
-/* Six rooms, so the column count is set rather than left to auto-fit: three
-   across gives two full rows, where auto-fit gave four then a ragged two. */
+/* Six rooms, so the column count is set rather than left to auto-fit: three across gives two full rows, where auto-fit gave four then a ragged two. */
 .rooms__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -318,9 +302,8 @@
 .foot__link .ig { width: 18px; height: 18px; }
 
 
-/* ---- the opening -------------------------------------------------------
-   The hero settles in from above on load: eyebrow, headline, lede, buttons,
-   then the portrait, each a beat after the one before. */
+/* ---- the opening ------------------------------------------------------- */
+/* The hero settles in from above on load: eyebrow, headline, lede, buttons, then the portrait, each a beat after the one before. */
 
 @media (prefers-reduced-motion: no-preference) {
   .hero__eyebrow, .hero__title, .hero__lede, .hero__meta {
@@ -332,11 +315,9 @@
   .hero__lede    { animation-delay: .22s; }
   .hero__meta    { animation-delay: .32s; }
 
-  /* The portrait arrives differently from the words: rather than sliding in
-     as a block, it is uncovered from the top down while it settles, so the
-     figure appears to draw itself onto the page. */
-  .hero__cut img { animation: hero-reveal 1.45s var(--p-ease) .12s both; }
-  .hero__cut::before { animation: hero-glow 1.3s var(--p-ease) .2s both; }
+  /* The portrait arrives differently from the words: it tips up onto the page from its own feet, so nothing crosses the frame and nothing goes soft. */
+  .hero__cut img { animation: hero-stand 1.15s var(--p-ease) .12s both; }
+  .hero__cut::before { animation: hero-glow 1.5s var(--p-ease) both; }
 }
 
 @keyframes hero-drop {
@@ -344,31 +325,16 @@
   to   { opacity: 1; transform: none; }
 }
 
-/* The figure is uncovered from the head down while it settles the last few
-   pixels, so it appears to be drawn onto the page rather than to slide in.
-   clip-path carries the sweep because it interpolates where a mask gradient
-   does not; the mask stays for the soft foot the cutout has always had. */
-@keyframes hero-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(-42px) scale(.985);
-    clip-path: inset(0 0 100% 0);
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 0%);
-    mask-image: linear-gradient(180deg, #000 0%, transparent 0%);
-  }
-  55% {
-    opacity: 1;
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    clip-path: inset(0 0 0 0);
-    -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
-  }
+/* Hinged at the feet rather than the middle, so the head travels and the base stays put. The perspective lives on .hero__cut. */
+@keyframes hero-stand {
+  from { opacity: 0; transform: rotateX(14deg) scale(.96); }
+  55%  { opacity: 1; }
+  to   { opacity: 1; transform: none; }
 }
 
+/* The glow opens a beat ahead of the figure, so the colour is already there. */
 @keyframes hero-glow {
-  from { opacity: 0; scale: .9; }
+  from { opacity: 0; scale: .84; }
+  60%  { opacity: 1; }
   to   { opacity: 1; scale: 1; }
 }

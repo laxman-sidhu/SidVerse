@@ -116,8 +116,7 @@ function sameCard(card, item) {
   return Boolean(item) && card.dataset.id === String(item.id) && card.dataset.media === item.media_type;
 }
 
-// Load more appends to the grids already drawn so the posters on screen keep their place.
-// Anything that is not a clean append reports false and takes the full repaint instead.
+// Load more appends to the grids already drawn so the posters on screen keep their place. Anything that is not a clean append reports false and takes the full repaint instead.
 function growSections(sections) {
   if (dom.resultSections.children.length !== sections.length) return false;
 

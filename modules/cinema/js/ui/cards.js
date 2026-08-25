@@ -121,8 +121,7 @@ function sheetCardMarkup(item, { index = 0 } = {}) {
     + "</article>";
 }
 
-// Just the cards. Load more appends these to the grid already on screen, so the
-// stagger restarts at zero and only the arrivals animate.
+// Just the cards. Load more appends these to the grid already on screen, so the stagger restarts at zero and only the arrivals animate.
 export function cardsMarkup(items, { showDate = false, sheet = false } = {}) {
   const render = sheet ? sheetCardMarkup : cardMarkup;
   return items.map((item, index) => render(item, { index, showDate })).join("");

@@ -23,8 +23,7 @@ function shape(raw) {
     tmdb_id: parseId(raw.tmdb_id),
     year: parseId(raw.year)
   };
-  // Type says film-versus-series; Industry is the category the page groups by.
-  // Falling back to Industry keeps rows written before Type existed readable.
+  // Type says film-versus-series; Industry is the category the page groups by. Falling back to Industry keeps rows written before Type existed readable.
   const kind = record.type || record.industry;
   // media is what the card renders as; media_hint is what the row KNOWS, and is "" when Type is blank so it matches either kind.
   record.media = mediaForIndustry(kind);

@@ -13,8 +13,7 @@ import { search, trending, browse, SCOPES, TRENDING_PERIODS, googleTrouble, expl
 import * as picker from "../../../../assets/js/picker.js";
 
 const shown = new Map();
-// Every book loaded, in order. The grid is a filtered view of it, so narrowing
-// to Read never discards a page already paid for.
+// Every book loaded, in order. The grid is a filtered view of it, so narrowing to Read never discards a page already paid for.
 let results = [];
 let mode = "trending";
 let state = { scope: "auto", phrase: "", subject: "", sort: "", language: "", era: "", ebook: "", period: "weekly", page: 1 };
@@ -28,8 +27,7 @@ const STATUSES = [
   { key: "all", label: "All", test: () => true },
   { key: "read", label: "Read", test: book => Boolean(book.read) },
   { key: "version", label: "Other edition", test: book => !book.read && !book.queued && Boolean(book.version_read) },
-  // A printing of a queued book is drawn violet, so it is counted here rather
-  // than under Other edition: every bucket holds one colour.
+  // A printing of a queued book is drawn violet, so it is counted here rather than under Other edition: every bucket holds one colour.
   { key: "readlist", label: "Readlist", test: book => Boolean(book.queued) || (!book.read && !book.version_read && Boolean(book.version_queued)) },
   { key: "new", label: "New to us", test: book => !book.read && !book.queued && !book.version_read && !book.version_queued }
 ];
@@ -38,9 +36,7 @@ function statusTest(key) {
   return (STATUSES.find(entry => entry.key === key) || STATUSES[0]).test;
 }
 
-// Refine shortlists what is already on screen. It asks nothing of either API -
-// the search bar is for asking a new question - so every option here is one the
-// cards themselves can answer.
+// Refine shortlists what is already on screen. It asks nothing of either API - the search bar is for asking a new question - so every option here is one the cards themselves can answer.
 const REFINE_SORTS = [
   { key: "", label: "As they came" },
   { key: "rating", label: "Highest rated", by: (a, b) => (b.rating || 0) - (a.rating || 0) },
@@ -83,8 +79,7 @@ function refined(book) {
   return true;
 }
 
-// What Refine has left. The status buckets count within it, so the two read as
-// one narrowing rather than two that disagree.
+// What Refine has left. The status buckets count within it, so the two read as one narrowing rather than two that disagree.
 function pool() {
   const list = results.filter(refined);
   const sort = REFINE_SORTS.find(entry => entry.key === state.sort);
@@ -101,8 +96,7 @@ function annotate(book) {
   return book;
 }
 
-// Built from the results in hand, and counted, so nothing on offer here can
-// empty the grid. A language nothing is written in is not shown at all.
+// Built from the results in hand, and counted, so nothing on offer here can empty the grid. A language nothing is written in is not shown at all.
 function paintRefineOptions() {
   const option = (value, label, selected) => `<option value="${esc(value)}"${value === selected ? " selected" : ""}>${esc(label)}</option>`;
   const count = test => results.filter(test).length;
@@ -143,8 +137,7 @@ function render(note = el.note.textContent) {
   const items = visible();
   paintStatus();
   if (!results.length) {
-    // The reason is already printed above the grid; saying it twice reads as
-    // two separate failures.
+    // The reason is already printed above the grid; saying it twice reads as two separate failures.
     el.grid.innerHTML = emptyState("Nothing here", note ? "" : "Try another spelling, or a different kind of search.");
   } else if (!items.length) {
     el.grid.innerHTML = emptyState("None of these", "Nothing in this batch is filed that way. Try All.");
@@ -154,14 +147,12 @@ function render(note = el.note.textContent) {
   paintMore();
 }
 
-// Appending, not repainting: a page that redrew from the top would throw away
-// the reader's place every time they asked for more.
+// Appending, not repainting: a page that redrew from the top would throw away the reader's place every time they asked for more.
 function append(books) {
   const fresh = books.filter(book => !shown.has(book.id || book.title));
   fresh.forEach(book => { annotate(book); shown.set(book.id || book.title, book); results.push(book); });
   paintRefineOptions();
-  // A sort cannot be honoured by adding to the end, so a refined view repaints.
-  // An unrefined one appends, which is what keeps the reader's place.
+  // A sort cannot be honoured by adding to the end, so a refined view repaints. An unrefined one appends, which is what keeps the reader's place.
   if (state.sort || state.language || state.era || state.ebook) { render(); return fresh.length; }
   const showing = fresh.filter(statusTest(status));
   if (showing.length) {
@@ -172,8 +163,7 @@ function append(books) {
   return fresh.length;
 }
 
-// Counted over everything loaded, not what is drawn, so choosing one does not
-// move the others. An empty bucket goes inert rather than reflowing the row.
+// Counted over everything loaded, not what is drawn, so choosing one does not move the others. An empty bucket goes inert rather than reflowing the row.
 function paintStatus() {
   if (!el.status) return;
   const inPool = pool();
@@ -231,8 +221,7 @@ function loading(headline) {
   el.grid.innerHTML = skeletonGrid(PAGE_SIZE / 2);
 }
 
-// Said above the results, not in the panel: it is a fact about the answer on
-// screen, and in the panel it was a caption nobody had a reason to read.
+// Said above the results, not in the panel: it is a fact about the answer on screen, and in the panel it was a caption nobody had a reason to read.
 function withFilterNote(note) {
   const bits = filterLabels();
   if (!bits.length) return note;
@@ -255,8 +244,7 @@ function toggleRefine(open) {
   el.refineToggle.setAttribute("aria-expanded", next ? "true" : "false");
 }
 
-// The reset only appears once there is something to reset, and the count on the
-// closed button is the only way to know a filter is still on.
+// The reset only appears once there is something to reset, and the count on the closed button is the only way to know a filter is still on.
 function paintFilterState() {
   const active = [state.sort, state.language, state.era, state.ebook].filter(Boolean).length;
   const on = active > 0;
@@ -265,8 +253,7 @@ function paintFilterState() {
   el.refineToggle.classList.toggle("is-on", on);
   el.refineCount.hidden = !on;
   el.refineCount.textContent = String(active);
-  // data-idle marks a select still on its default, which is what the stylesheet
-  // uses to tint only the ones actually narrowing anything.
+  // data-idle marks a select still on its default, which is what the stylesheet uses to tint only the ones actually narrowing anything.
   [el.sort, el.language, el.era, el.ebook].forEach(node => {
     if (node.value) node.removeAttribute("data-idle"); else node.setAttribute("data-idle", "");
   });
@@ -287,8 +274,7 @@ const TRENDING_NOTE = {
   none: () => "Nothing answered right now"
 };
 
-// The real reason, not a friendly nothing: whatever went wrong upstream is what
-// tells you which endpoint to look at.
+// The real reason, not a friendly nothing: whatever went wrong upstream is what tells you which endpoint to look at.
 function trendingNote(result, label) {
   const headline = (TRENDING_NOTE[result.source] || TRENDING_NOTE.none)(label);
   if (result.source === "trending" || !result.problems?.length) return headline;
@@ -320,8 +306,7 @@ async function runSearch() {
   try {
     const result = await search({ scope: state.scope, phrase: state.phrase, page: state.page });
     total = result.total || 0;
-    // Name the index when it was not the usual one. A path that wrote its own
-    // note keeps it: "fewer words" is bad advice about an ISBN.
+    // Name the index when it was not the usual one. A path that wrote its own note keeps it: "fewer words" is bad advice about an ISBN.
     const note = result.note || (result.items.length
       ? (result.source === "openlibrary" ? "From Open Library" : (googleTrouble() ? explain(googleTrouble()) : ""))
       : "Nothing came back. Try the Anything scope, or fewer words.");
@@ -332,8 +317,7 @@ async function runSearch() {
   }
 }
 
-// Also where a refinement with no subject and no phrase lands: a sort on its
-// own is a question Open Library can answer.
+// Also where a refinement with no subject and no phrase lands: a sort on its own is a question Open Library can answer.
 function browseLabel() {
   const subject = SUBJECTS.find(entry => entry.slug === state.subject)?.label || state.subject.replace(/_/g, " ");
   return subject ? titleCase(subject) : "Browsing";
@@ -353,8 +337,7 @@ async function runBrowse() {
       : "Nothing came back with those filters. Try loosening one, or pick a subject to narrow within.";
     paint(result.items, label, note);
   } catch (error) {
-    // The real reason. "That shelf did not answer" hid a timeout, a refusal and
-    // a bad parameter behind one sentence that suggested none of them.
+    // The real reason. "That shelf did not answer" hid a timeout, a refusal and a bad parameter behind one sentence that suggested none of them.
     paint([], label, explain(error?.message) || "That shelf did not answer. Try another one.");
   }
 }
@@ -454,8 +437,7 @@ export function start() {
 
   el.refineToggle.addEventListener("click", () => toggleRefine());
 
-  // A dropdown that only closes by pressing the same button again is a panel
-  // people leave open by accident.
+  // A dropdown that only closes by pressing the same button again is a panel people leave open by accident.
   document.addEventListener("click", event => {
     if (el.refine.hidden) return;
     if (event.target.closest(".refinewrap")) return;
@@ -501,8 +483,7 @@ export function start() {
 
   const lookup = card => shown.get(card?.dataset.bookKey);
   wireCardOpen(el.grid, lookup);
-  // Filing an edition changes what OTHER cards in the grid mean, so every
-  // write settles the whole grid rather than only the card that was pressed.
+  // Filing an edition changes what OTHER cards in the grid mean, so every write settles the whole grid rather than only the card that was pressed.
   wireCardActions(el.grid, lookup, () => refreshFlags());
 
   wireReload(async () => {

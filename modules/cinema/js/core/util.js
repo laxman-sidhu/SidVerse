@@ -105,10 +105,7 @@ export function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
-// <body> carries a CSS zoom above 1024px. A fixed element inside it reads its own
-// px in that scaled space, while getBoundingClientRect() reports real viewport
-// pixels - so anything placed from a measured rect lands short unless it divides
-// by this first. Returns 1 wherever zoom is absent or unsupported.
+// <body> carries a CSS zoom above 1024px. A fixed element inside it reads its own px in that scaled space, while getBoundingClientRect() reports real viewport pixels - so anything placed from a measured rect lands short unless it divides by this first. Returns 1 wherever zoom is absent or unsupported.
 export function pageScale(element) {
   let scale = 1;
   for (let node = element; node && node.nodeType === 1; node = node.parentElement) {

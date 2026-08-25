@@ -57,8 +57,7 @@ export async function getText(url, options = {}) {
   }
 }
 
-// text/plain is the one JSON carrier that never triggers a CORS preflight, which
-// Apps Script cannot answer. Changing this header breaks every write.
+// text/plain is the one JSON carrier that never triggers a CORS preflight, which Apps Script cannot answer. Changing this header breaks every write.
 export async function postPlain(url, payload, options = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), options.timeout || 25000);

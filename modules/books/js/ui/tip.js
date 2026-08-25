@@ -1,5 +1,4 @@
-// A tooltip inside a card is always a cropped tooltip: .card and .card__cover
-// are both overflow:hidden and must stay so. This one lives on <body>.
+// A tooltip inside a card is always a cropped tooltip: .card and .card__cover are both overflow:hidden and must stay so. This one lives on <body>.
 
 let node = null;
 let anchor = null;
@@ -13,10 +12,7 @@ function shell() {
   return node;
 }
 
-// Placed by measurement, not by arithmetic. :root carries zoom on a wide
-// screen, and whether that scales a fixed element's own offsets differs by
-// browser - so the bubble is parked at 0,0, asked where that actually landed,
-// and moved by the difference. Correct under either answer.
+// Placed by measurement, not by arithmetic. :root carries zoom on a wide screen, and whether that scales a fixed element's own offsets differs by browser - so the bubble is parked at 0,0, asked where that actually landed, and moved by the difference. Correct under either answer.
 function place(target) {
   const tip = shell();
   tip.style.top = "0px";

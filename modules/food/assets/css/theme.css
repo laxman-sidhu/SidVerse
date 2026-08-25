@@ -1,6 +1,4 @@
-/* SidBites - retargeted onto the SidVerse palette. Loaded after style.css so
-   these win. The sage page becomes the same paper as everywhere else; turmeric
-   stays, because that is what this module is. */
+/* SidBites - retargeted onto the SidVerse palette. Loaded after style.css so these win. The sage page becomes the same paper as everywhere else; turmeric stays, because that is what this module is. */
 
 :root {
   --sage:           var(--p-bg);
@@ -44,8 +42,7 @@
 
 
 
-/* Cards were the module's dark plum; they follow the paper now, so they need a
-   drawn edge to stay cards. */
+/* Cards were the module's dark plum; they follow the paper now, so they need a drawn edge to stay cards. */
 .card, .topcard { border: 1px solid var(--line); box-shadow: var(--p-shadow-sm); }
 .card__score { border: 1px solid var(--line); }
 
@@ -65,9 +62,7 @@ body { color: var(--ink); }
 .hero { max-width: var(--p-shell); margin-inline: auto; }
 
 
-/* The hero blobs and the --turmeric accent were the loudest colour on the
-   site: a saturated marigold (#E9A227) and an orange sun blob, against a module
-   accent that is soft peach. They read from the palette now. */
+/* The hero blobs and the --turmeric accent were the loudest colour on the site: a saturated marigold (#E9A227) and an orange sun blob, against a module accent that is soft peach. They read from the palette now. */
 :root, [data-theme="dark"] { --turmeric: var(--p-accent-ink); }
 
 .blob--sun {
@@ -83,10 +78,8 @@ body { color: var(--ink); }
 }
 
 
-/* ---- the hero -----------------------------------------------------------
-   The keeper photograph is not a clean cut-out: it carries a pale rectangle
-   of its own background at the plate. Feathering the lower edge sinks it into
-   the paper the same way the front page treats its portrait. */
+/* ---- the hero ----------------------------------------------------------- */
+/* The keeper photograph is not a clean cut-out: it carries a pale rectangle of its own background at the plate. Feathering the lower edge sinks it into the paper the same way the front page treats its portrait. */
 .keeper__img {
   -webkit-mask-image: radial-gradient(118% 92% at 50% 34%, #000 62%, transparent 88%);
   mask-image: radial-gradient(118% 92% at 50% 34%, #000 62%, transparent 88%);
@@ -96,18 +89,12 @@ body { color: var(--ink); }
 .hero { padding-block: clamp(30px, 4.6vw, 58px) 0; align-items: center; }
 .hero__stat { margin-top: 10px; }
 
-/* The search row is the page's one control bar; it reads as a bar rather than
-   a field adrift at the far left. */
+/* The search row is the page's one control bar; it reads as a bar rather than a field adrift at the far left. */
 .searchrow, .toolbar { gap: var(--p-space-md); }
 
 
-/* ---- the inverted pair --------------------------------------------------
-   This module's --plum was a dark fill and --cream the light text on it, and
-   the retarget mapped them the wrong way round: --cream became the ink and
-   --plum the paper. Anywhere they were used as a pair the result inverted, so
-   the hero's numbers came out white on white and the password field came out a
-   dark slab in light mode. Fixed at the usages rather than at the variables,
-   because --cream doubles as plain text on a card. */
+/* ---- the inverted pair -------------------------------------------------- */
+/* This module's --plum was a dark fill and --cream the light text on it, and the retarget mapped them the wrong way round: --cream became the ink and --plum the paper. Anywhere they were used as a pair the result inverted, so the hero's numbers came out white on white and the password field came out a dark slab in light mode. Fixed at the usages rather than at the variables, because --cream doubles as plain text on a card. */
 
 .hero__stat b { color: var(--p-accent-ink); font-weight: 600; }
 .hero__stat em { color: var(--p-accent-ink); font-weight: 600; }
@@ -134,8 +121,7 @@ body { color: var(--ink); }
   border-color: var(--p-surface);
 }
 
-/* Filled controls take the accent pair, so what sits on them is always its
-   opposite in either theme. */
+/* Filled controls take the accent pair, so what sits on them is always its opposite in either theme. */
 .tab.is-on,
 .crumb.is-last,
 .btn--primary,
@@ -151,13 +137,10 @@ body { color: var(--ink); }
 .card__score.is-top { background: var(--p-accent-ink); color: var(--p-on-accent); }
 
 
-/* ---- the entry form -----------------------------------------------------
-   It read as one long unbroken scroll of labels on bare paper. Each step is a
-   panel now, so the page has four clear stages instead of a column of fields,
-   and the actions sit on a bar of their own at the end. */
+/* ---- the entry form ----------------------------------------------------- */
+/* It read as one long unbroken scroll of labels on bare paper. Each step is a panel now, so the page has four clear stages instead of a column of fields, and the actions sit on a bar of their own at the end. */
 
-/* The form read in a 470px column on a 1440px screen. It reads in a proper
-   two-column layout on a wide screen and stacks on a narrow one. */
+/* The form read in a 470px column on a 1440px screen. It reads in a proper two-column layout on a wide screen and stacks on a narrow one. */
 .page { max-width: 1080px; }
 
 .form {
@@ -167,8 +150,7 @@ body { color: var(--ink); }
   gap: 20px;
 }
 
-/* The photo step is the tall one, so it takes a column of its own and the
-   action bar spans the full width beneath both. */
+/* The photo step is the tall one, so it takes a column of its own and the action bar spans the full width beneath both. */
 .form .group:nth-of-type(4) { grid-row: span 3; }
 .form__actions, .form .actions { grid-column: 1 / -1; }
 
@@ -203,8 +185,7 @@ body { color: var(--ink); }
 /* Rows collapse rather than squeezing two fields into a phone's width. */
 @media (max-width: 620px) { .field-row { grid-template-columns: 1fr; } }
 
-/* The verdict row: a date and a slider are different shapes, so they get their
-   own widths instead of an even split. */
+/* The verdict row: a date and a slider are different shapes, so they get their own widths instead of an even split. */
 .form .group:nth-of-type(3) .field-row { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
 
 .rating-out { color: var(--p-accent-ink); font-weight: 700; font-size: 1.3rem; }
@@ -263,18 +244,14 @@ body { color: var(--ink); }
 .wash { display: none; }
 
 
-/* ---- the hero block -----------------------------------------------------
-   `overflow: hidden` on the band was clipping the phrase's translation
-   tooltip, so hovering the headline appeared to do nothing. The blobs are
-   clipped on their own wrapper instead. */
+/* ---- the hero block ----------------------------------------------------- */
+/* `overflow: hidden` on the band was clipping the phrase's translation tooltip, so hovering the headline appeared to do nothing. The blobs are clipped on their own wrapper instead. */
 .hero { overflow: visible; }
 
-/* The blobs are decoration and must not widen the page; they are clipped on
-   their own wrapper so the band can stay visible for the tooltip. */
+/* The blobs are decoration and must not widen the page; they are clipped on their own wrapper so the band can stay visible for the tooltip. */
 .keeper__blobs { overflow: hidden; max-width: 100%; }
 
-/* The four lines above the log read as one stacked caption rather than four
-   loose paragraphs: a ruled eyebrow, the phrase, the count, then the byline. */
+/* The four lines above the log read as one stacked caption rather than four loose paragraphs: a ruled eyebrow, the phrase, the count, then the byline. */
 .hero__text { display: grid; gap: 14px; }
 
 .eyebrow {
@@ -315,9 +292,8 @@ body { color: var(--ink); }
 }
 
 
-/* ---- the controls row ---------------------------------------------------
-   It used to pin itself under the bar, so the search field and the cuisine
-   chips sat over the log while it scrolled. It is part of the page now. */
+/* ---- the controls row --------------------------------------------------- */
+/* It used to pin itself under the bar, so the search field and the cuisine chips sat over the log while it scrolled. It is part of the page now. */
 .controls {
   position: static;
   background: transparent;
@@ -329,13 +305,9 @@ body { color: var(--ink); }
 .hero__stat i { font-style: normal; color: var(--p-line); }
 
 
-/* ---- the lightbox -------------------------------------------------------
-   The figure was centred as a block, so a tall picture left a band of dead
-   space under the caption. It fills the screen instead: the picture takes
-   whatever height is going and the caption sits under it at the bottom. */
-/* A grid row sized to its content cannot be filled by a child asking for
-   `height: 100%` — the two define each other. A flex column can: the picture
-   takes the free space and the caption keeps its own. */
+/* ---- the lightbox ------------------------------------------------------- */
+/* The figure was centred as a block, so a tall picture left a band of dead space under the caption. It fills the screen instead: the picture takes whatever height is going and the caption sits under it at the bottom. */
+/* A grid row sized to its content cannot be filled by a child asking for `height: 100%` — the two define each other. A flex column can: the picture takes the free space and the caption keeps its own. */
 .lightbox { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
 .lb__figure {
@@ -348,9 +320,7 @@ body { color: var(--ink); }
   max-height: 100%;
 }
 
-/* A grid row sized `auto` takes its height FROM the picture, so a percentage
-   height on the picture has nothing to resolve against and falls back to its
-   natural size. A flex box with a resolved height does not have that cycle. */
+/* A grid row sized `auto` takes its height FROM the picture, so a percentage height on the picture has nothing to resolve against and falls back to its natural size. A flex box with a resolved height does not have that cycle. */
 .lb__media {
   flex: 1 1 auto;
   min-height: 0;
@@ -363,8 +333,7 @@ body { color: var(--ink); }
 
 .lb__cap { flex: 0 0 auto; }
 
-/* `max-height: 100%` on a flex-sized parent is unreliable; filling the box and
-   letting object-fit letterbox the picture always holds. */
+/* `max-height: 100%` on a flex-sized parent is unreliable; filling the box and letting object-fit letterbox the picture always holds. */
 .lb__media { overflow: hidden; }
 
 .lb__media img {
@@ -389,9 +358,8 @@ body { color: var(--ink); }
 }
 
 
-/* ---- the lock ----------------------------------------------------------
-   The form inherits the entry form's two-column grid, which put the password
-   beside the button. It is one column: field, then button under it. */
+/* ---- the lock ---------------------------------------------------------- */
+/* The form inherits the entry form's two-column grid, which put the password beside the button. It is one column: field, then button under it. */
 #lockPanel .form {
   display: grid;
   grid-template-columns: 1fr;
@@ -404,8 +372,7 @@ body { color: var(--ink); }
 #lockPanel .btn--wide { width: 100%; }
 #lockPanel .form__error { grid-column: 1; margin: 0; color: var(--p-danger); font-size: var(--p-text-sm); }
 
-/* The date field and its slider are different shapes; the slider needs the
-   room, and the two should not sit on the same baseline by accident. */
+/* The date field and its slider are different shapes; the slider needs the room, and the two should not sit on the same baseline by accident. */
 .form input[type=date] { width: 100%; }
 
 @media (max-width: 720px) {
@@ -423,16 +390,13 @@ body { color: var(--ink); }
 }
 
 
-/* The hero's art sits in a later stacking context than its words, so the
-   translation bubble was painting behind the band. */
+/* The hero's art sits in a later stacking context than its words, so the translation bubble was painting behind the band. */
 .hero__text { position: relative; z-index: 3; }
 .hero__line.langline { position: relative; z-index: 4; }
 
 
-/* ---- the entry form, laid out ------------------------------------------
-   Panels were flowing into two columns by source order, which left one column
-   short and the row ragged. Each panel is placed, so the form reads as two
-   even columns with the actions across the foot. */
+/* ---- the entry form, laid out ------------------------------------------ */
+/* Panels were flowing into two columns by source order, which left one column short and the row ragged. Each panel is placed, so the form reads as two even columns with the actions across the foot. */
 @media (min-width: 901px) {
   .form {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -447,8 +411,7 @@ body { color: var(--ink); }
   .form__actions, .form .actions { grid-column: 1 / -1; }
 }
 
-/* The verdict row: a date and a slider are different shapes and must not be
-   forced to share a column ratio that squeezes either. */
+/* The verdict row: a date and a slider are different shapes and must not be forced to share a column ratio that squeezes either. */
 .form .group:nth-of-type(3) .field-row {
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
@@ -459,13 +422,7 @@ body { color: var(--ink); }
 }
 
 
-/* The headline reveals itself with `clip-path: inset(0 0 100% 0)` animating
-   open. A clip-path clips EVERYTHING outside the element's box, including the
-   translation bubble that hangs above it — which is why the tooltip measured
-   correctly, reported full opacity, and still painted nothing.
-
-   The reveal is kept; it just finishes at an inset large enough to clip
-   nothing, instead of at the element's own edges. */
+/* The headline reveals itself with `clip-path: inset(0 0 100% 0)` animating open. A clip-path clips EVERYTHING outside the element's box, including the translation bubble that hangs above it — which is why the tooltip measured correctly, reported full opacity, and still painted nothing. The reveal is kept; it just finishes at an inset large enough to clip nothing, instead of at the element's own edges. */
 .hero__line { animation-name: food-headline-reveal; }
 
 @keyframes food-headline-reveal {
@@ -473,8 +430,7 @@ body { color: var(--ink); }
   to   { clip-path: inset(-400px -400px -400px -400px); }
 }
 
-/* The page's own heading reads centred, and its line is not held to a column
-   narrower than the form beneath it. */
+/* The page's own heading reads centred, and its line is not held to a column narrower than the form beneath it. */
 .page__head { text-align: center; }
 .page__head .page__sub, .page__head p { max-width: none; margin-inline: auto; }
 

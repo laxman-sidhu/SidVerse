@@ -1,5 +1,4 @@
-/* SidVerse - the front page. Drawn entirely from site.config.js, so adding a
-   section there adds a card here. */
+// SidVerse - the front page. Drawn entirely from site.config.js, so adding a section there adds a card here.
 
 (function () {
   "use strict";
@@ -65,11 +64,9 @@
     var rooms = document.querySelector("[data-rooms]");
     if (rooms) {
       rooms.innerHTML = SECTIONS.map(function (s) {
-        // No <img> without a URL: the tinted panel behind it is a better empty
-        // state than a broken-image glyph.
+        // No <img> without a URL: the tinted panel behind it is a better empty state than a broken-image glyph.
         var shot = s.image
-          // A remote thumbnail can 403 on hotlink or simply go away. If it does,
-          // the <img> removes itself and the tinted panel behind it shows.
+          // A remote thumbnail can 403 on hotlink or simply go away. If it does, the <img> removes itself and the tinted panel behind it shows.
           ? '<img src="' + esc(s.image) + '" alt="" loading="lazy" decoding="async"'
             + ' onerror="this.remove()">'
           : "";

@@ -1,6 +1,4 @@
-// SidPicks - the category page. Reads ?category=<slug>, resolves the collection
-// from CONFIG, then renders the gallery with search, skeletons, empty and error
-// states and the exhibit modal. All markup lives in category.html's <template>s.
+// SidPicks - the category page. Reads ?category=<slug>, resolves the collection from CONFIG, then renders the gallery with search, skeletons, empty and error states and the exhibit modal. All markup lives in category.html's <template>s.
 
 import { findCategoryBySlug } from "./config.js";
 import { fetchCategory } from "./api.js";
@@ -19,9 +17,8 @@ const searchCountEl = qs("#search-count");
 let category = null;
 let exhibits = [];
 
-/* -------------------------------------------------------------------------
- * States (built from the #tpl-state template)
- * ----------------------------------------------------------------------- */
+// -------------------------------------------------------------------------
+// States (built from the #tpl-state template) -----------------------------------------------------------------------
 
 function showState({ illus, title, text, alert = false, onRetry = null }) {
   const panel = cloneTpl("tpl-state");
@@ -79,9 +76,8 @@ function showNoMatches(query) {
   });
 }
 
-/* -------------------------------------------------------------------------
- * Gallery rendering (from the #tpl-exhibit-card template)
- * ----------------------------------------------------------------------- */
+// -------------------------------------------------------------------------
+// Gallery rendering (from the #tpl-exhibit-card template) -----------------------------------------------------------------------
 
 function buildExhibitCard(exhibit, index) {
   const card = cloneTpl("tpl-exhibit-card");
@@ -127,9 +123,8 @@ function updateCounts(visible, total, query) {
     : `${visible} exhibits match`;
 }
 
-/* -------------------------------------------------------------------------
- * Search + modal wiring
- * ----------------------------------------------------------------------- */
+// -------------------------------------------------------------------------
+// Search + modal wiring -----------------------------------------------------------------------
 
 function handleQuery(query) {
   const filtered = query
@@ -150,9 +145,8 @@ function handleGalleryClick(event) {
   if (exhibit) openModal(exhibit, card);
 }
 
-/* -------------------------------------------------------------------------
- * Boot
- * ----------------------------------------------------------------------- */
+// -------------------------------------------------------------------------
+// Boot -----------------------------------------------------------------------
 
 async function loadExhibits() {
   showSkeletons();

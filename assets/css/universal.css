@@ -1,13 +1,8 @@
-/* SidVerse - universal chrome. Loaded after each module's own stylesheet to
-   give every bar and footer the same surface, height, blur and type. Selectors
-   are shared on purpose; a module using a different class keeps its own look. */
+/* SidVerse - universal chrome. Loaded after each module's own stylesheet to give every bar and footer the same surface, height, blur and type. Selectors are shared on purpose; a module using a different class keeps its own look. */
 
 
-/* ---- the paper ---------------------------------------------------------
-   One background for the whole site. Four pastel washes — lilac, blush,
-   meadow and butter — over the module's own accent tint, so every room reads
-   as the same paper with its own light falling on it. Fixed, so it does not
-   scroll away and leave a seam. */
+/* ---- the paper --------------------------------------------------------- */
+/* One background for the whole site. Four pastel washes — lilac, blush, meadow and butter — over the module's own accent tint, so every room reads as the same paper with its own light falling on it. Fixed, so it does not scroll away and leave a seam. */
 
 html { background: var(--p-bg); }
 
@@ -23,8 +18,7 @@ body {
   background-size: 100% 100%;
 }
 
-/* On dark paper the same washes read as glare. They stay, at a quarter of the
-   strength, so the page keeps its depth without lifting the black. */
+/* On dark paper the same washes read as glare. They stay, at a quarter of the strength, so the page keeps its depth without lifting the black. */
 [data-theme="dark"] body {
   background-image:
     radial-gradient(78% 52% at 8% 0%,    rgba(var(--p-accent-rgb), .09), transparent 62%),
@@ -84,8 +78,7 @@ input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
-/* The native picker indicators are drawn by the browser and stay black on a
-   dark page unless the scheme is declared. */
+/* The native picker indicators are drawn by the browser and stay black on a dark page unless the scheme is declared. */
 select, input[type="date"], input[type="number"], input[type="time"] { color-scheme: inherit; }
 
 
@@ -103,16 +96,14 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 ::selection { background: color-mix(in srgb, var(--p-accent) 32%, transparent); color: var(--p-ink); }
 
 
-/* ---- images ------------------------------------------------------------
-   Photographs glare on a dark page. This takes the edge off without washing
-   the colour out, and never touches anything in light. */
+/* ---- images ------------------------------------------------------------ */
+/* Photographs glare on a dark page. This takes the edge off without washing the colour out, and never touches anything in light. */
 
 [data-theme="dark"] img:not([src$=".svg"]) { filter: brightness(.93) contrast(1.02); }
 
 
-/* ---- the universal footer ----------------------------------------------
-   The module's own line on the left, the same signature on the right.
-   Injected by shell.js so every module gets an identical one. */
+/* ---- the universal footer ---------------------------------------------- */
+/* The module's own line on the left, the same signature on the right. Injected by shell.js so every module gets an identical one. */
 
 [data-retired] { display: none !important; }
 
@@ -120,9 +111,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   position: relative;
   z-index: 1;
   margin-top: auto;
-  /* The body is padded to clear the rail, which would leave a bare corner
-     under it. The footer's SURFACE reaches back to the screen edge; its
-     CONTENT stays centred in the space after the rail. */
+  /* The body is padded to clear the rail, which would leave a bare corner under it. The footer's SURFACE reaches back to the screen edge; its CONTENT stays centred in the space after the rail. */
   margin-left: calc(-1 * var(--pfoot-bleed, var(--p-rail-clear)));
   padding: 30px 0 46px var(--pfoot-bleed, var(--p-rail-clear));
   border-top: 1px solid var(--p-line);
@@ -137,9 +126,8 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 
 .pfeat-band .pfeat { margin-bottom: 0; }
 
-/* ---- the footer feature card -------------------------------------------
-   A module with one place worth going puts it here as a card rather than a
-   small link. Everything is a token, so it turns over with the theme. */
+/* ---- the footer feature card ------------------------------------------- */
+/* A module with one place worth going puts it here as a card rather than a small link. Everything is a token, so it turns over with the theme. */
 .pfeat {
   display: grid;
   grid-template-columns: 1.4fr auto;
@@ -151,18 +139,14 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   padding: clamp(20px, 3vw, 34px) clamp(20px, 3vw, 38px);
   border: 1px solid var(--p-line);
   border-radius: var(--p-radius-lg, 16px);
-  /* Paper, not a wash. The accent belongs to the eyebrow, the italic word and
-     the button; spread across the whole card it read as a green panel against
-     a page that uses its accent in small touches. */
+  /* Paper, not a wash. The accent belongs to the eyebrow, the italic word and the button; spread across the whole card it read as a green panel against a page that uses its accent in small touches. */
   background: linear-gradient(150deg, var(--p-surface), var(--p-surface-2));
   text-decoration: none;
   isolation: isolate;
   transition: transform .35s var(--p-ease), border-color .35s var(--p-ease), box-shadow .35s var(--p-ease);
 }
 
-/* The album card is a photo invitation, so it hovers in the site's pink and
-   lavender rather than the room's own accent — in Travel that accent is green,
-   which read as a hard border rather than a soft lift. */
+/* The album card is a photo invitation, so it hovers in the site's pink and lavender rather than the room's own accent — in Travel that accent is green, which read as a hard border rather than a soft lift. */
 .pfeat {
   --pfeat-glow: color-mix(in srgb, var(--p-pink) 55%, var(--p-lavender));
 }
@@ -274,8 +258,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
     grid-template-columns: 1fr;
     gap: 20px;
     text-align: center;
-    /* It sat flush against both screen edges: the card is capped, not inset,
-       so the gutter has to come from its own margin. */
+    /* It sat flush against both screen edges: the card is capped, not inset, so the gutter has to come from its own margin. */
     margin-inline: var(--p-space-md);
     padding: 22px 18px;
   }
@@ -308,8 +291,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 
 .pfoot__links { display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* A footer link is somewhere to go, so it is drawn as a button rather than as
-   underlined text in the middle of a sign-off. */
+/* A footer link is somewhere to go, so it is drawn as a button rather than as underlined text in the middle of a sign-off. */
 .pfoot__link {
   display: inline-flex;
   align-items: center;
@@ -365,11 +347,8 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 @media (prefers-reduced-motion: reduce) { .pfoot__heart { animation: none; } }
 
 
-/* ---- full-width bands ---------------------------------------------------
-   `body` is padded to clear the rail, which would leave every bar and footer
-   starting 74px in and a bare strip beside them. The BAND reaches back to the
-   screen edge; its CONTENT starts after the rail, so it lines up with the page
-   below. Same trick as .pfoot. */
+/* ---- full-width bands --------------------------------------------------- */
+/* `body` is padded to clear the rail, which would leave every bar and footer starting 74px in and a bare strip beside them. The BAND reaches back to the screen edge; its CONTENT starts after the rail, so it lines up with the page below. Same trick as .pfoot. */
 
 .topbar, .navbar, .nav, .site-topbar,
 .footer, .site-footer, .page-footer, .foot {
@@ -392,9 +371,8 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 .shell, .container, .wrap, .page__inner { margin-inline: auto; }
 
 
-/* ---- the module wordmark, iconed ---------------------------------------
-   Every bar names its room the same way: a tinted tile holding the room's own
-   icon, then the name in the display face. */
+/* ---- the module wordmark, iconed --------------------------------------- */
+/* Every bar names its room the same way: a tinted tile holding the room's own icon, then the name in the display face. */
 
 .pmark { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
 
@@ -422,25 +400,23 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 }
 
 
-/* ---- the hero language line --------------------------------------------
-   Each room opens with a phrase in the language its name suggests. The
-   translation is held back until hover or focus, so the line reads as a title
-   first and explains itself second. */
+/* ---- the hero language line -------------------------------------------- */
+/* Each room opens with a phrase in the language its name suggests. The translation is held back until hover or focus, so the line reads as a title first and explains itself second. */
 
 .langline { position: relative; display: inline-block; }
 
 .langline__gloss {
   position: absolute;
   left: 0;
-  /* Always above the phrase: below it the bubble covered whatever the hero
-     put underneath — a mode switch, a search bar. */
+  /* Always above the phrase: below it the bubble covered whatever the hero put underneath — a mode switch, a search bar. */
   bottom: calc(100% + 10px);
   top: auto;
   z-index: 90;
   padding: 7px 14px;
   border-radius: var(--p-pill);
-  background: var(--p-accent-ink);
-  color: var(--p-on-accent);
+  border: 1px solid var(--p-gloss-line);
+  background: var(--p-gloss-bg);
+  color: var(--p-gloss-ink);
   box-shadow: var(--p-shadow);
   font-family: var(--p-body);
   font-size: 12.5px;
@@ -454,9 +430,7 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   transition: opacity .22s var(--p-ease), translate .22s var(--p-ease);
 }
 
-/* Hover is scoped to devices that have one. A tap on a touch screen leaves an
-   emulated hover behind, which held the translation open after the class had
-   already been removed. */
+/* Hover is scoped to devices that have one. A tap on a touch screen leaves an emulated hover behind, which held the translation open after the class had already been removed. */
 @media (hover: hover) {
   .langline:hover .langline__gloss { opacity: 1; translate: 0 0; }
 }
@@ -491,9 +465,8 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
 }
 
 
-/* ---- the module wordmark ------------------------------------------------
-   Every module names itself in its own bar. The name differs, the way it is
-   drawn should not. */
+/* ---- the module wordmark ------------------------------------------------ */
+/* Every module names itself in its own bar. The name differs, the way it is drawn should not. */
 
 .brand, .navbar__brand, .topbar__brand, .nav__brand, .logo, .wordmark {
   font-family: var(--p-display) !important;
@@ -502,14 +475,10 @@ select, input[type="date"], input[type="number"], input[type="time"] { color-sch
   letter-spacing: -.01em;
 }
 
-/* The second line under a wordmark is decoration, and it made the bars
-   inconsistent with one another. */
+/* The second line under a wordmark is decoration, and it made the bars inconsistent with one another. */
 .brand__sub, .navbar__brand-sub, .logo__sub { display: none !important; }
 
-/* A footer floats up under the content on a short page — a collection with
-   nothing in it yet, or a sheet that has not answered. This pins it to the
-   bottom. Cinema keeps its own footer rather than the injected one, so both
-   are matched. */
+/* A footer floats up under the content on a short page — a collection with nothing in it yet, or a sheet that has not answered. This pins it to the bottom. Cinema keeps its own footer rather than the injected one, so both are matched. */
 body:has(> .pfoot),
 body:has(> .footer),
 body:has(> .site-footer) {
@@ -521,8 +490,7 @@ body:has(> .site-footer) {
 
 body > .footer, body > .site-footer { margin-top: auto; }
 
-/* The shell's own furniture is fixed or absolute, so it must never be given a
-   share of the column's free space. */
+/* The shell's own furniture is fixed or absolute, so it must never be given a share of the column's free space. */
 body > .psb,
 body > .psb__rail,
 body > .psb__scrim,

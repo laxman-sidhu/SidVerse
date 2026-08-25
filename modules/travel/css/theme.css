@@ -1,11 +1,4 @@
-/* SidTrails - retargeted onto the SidVerse palette. Loaded after style.css so
-   these win. The pastel families are re-pointed rather than collapsed onto one
-   accent: they are how one card is told from another on this dashboard.
-
-   KNOWN LIMIT: style.css carries roughly 380 colours written as literal hex or
-   rgba() rather than through a variable, and those cannot be reached from here.
-   Dark mode on this module is therefore partial - the shell, the cards and the
-   type follow, but some washes keep their light values. See docs/PROJECT.md. */
+/* SidTrails - retargeted onto the SidVerse palette. Loaded after style.css so these win. The pastel families are re-pointed rather than collapsed onto one accent: they are how one card is told from another on this dashboard. KNOWN LIMIT: style.css carries roughly 380 colours written as literal hex or rgba() rather than through a variable, and those cannot be reached from here. Dark mode on this module is therefore partial - the shell, the cards and the type follow, but some washes keep their light values. See docs/PROJECT.md. */
 
 :root {
   --bg:               var(--p-bg);
@@ -25,10 +18,7 @@
   --mint:             var(--p-accent-deep);
   --mint-soft:        var(--p-accent-soft);
   --mint-pale:        var(--p-accent-tint);
-  /* These were literals, identical in the light and dark blocks — so the dark
-     theme inherited pale pink surfaces (#faedf1) that stayed near-white on
-     dark paper, and the gallery's heading stayed pink while the module accent
-     was blue. All six now read from the accent, which flips with the theme. */
+  /* These were literals, identical in the light and dark blocks — so the dark theme inherited pale pink surfaces (#faedf1) that stayed near-white on dark paper, and the gallery's heading stayed pink while the module accent was blue. All six now read from the accent, which flips with the theme. */
   --pink:             var(--p-accent-ink);
   --pink-soft:        var(--p-accent);
   --pink-pale:        var(--p-accent-tint);
@@ -93,9 +83,7 @@
 }
 
 [data-theme="dark"] {
-  /* Every *-pale below is a background tint. They were copied from the light
-     block unchanged, so on dark paper they rendered as near-white chips. Each
-     is now the same hue blended into the dark surface. */
+  /* Every *-pale below is a background tint. They were copied from the light block unchanged, so on dark paper they rendered as near-white chips. Each is now the same hue blended into the dark surface. */
 
   --bg:               var(--p-bg);
   --bg-2:             var(--p-bg-2);
@@ -114,10 +102,7 @@
   --mint:             var(--p-accent-deep);
   --mint-soft:        var(--p-accent-soft);
   --mint-pale:        var(--p-accent-tint);
-  /* These were literals, identical in the light and dark blocks — so the dark
-     theme inherited pale pink surfaces (#faedf1) that stayed near-white on
-     dark paper, and the gallery's heading stayed pink while the module accent
-     was blue. All six now read from the accent, which flips with the theme. */
+  /* These were literals, identical in the light and dark blocks — so the dark theme inherited pale pink surfaces (#faedf1) that stayed near-white on dark paper, and the gallery's heading stayed pink while the module accent was blue. All six now read from the accent, which flips with the theme. */
   --pink:             var(--p-accent-ink);
   --pink-soft:        var(--p-accent);
   --pink-pale:        var(--p-accent-tint);
@@ -185,9 +170,7 @@
   color-scheme: dark;
 }
 
-/* The bar is deliberately transparent over the hero photograph and only takes a
-   surface once the page has scrolled — dashboard.js adds .scrolled. universal.css
-   gives every module's bar a surface, so that first state is restored here. */
+/* The bar is deliberately transparent over the hero photograph and only takes a surface once the page has scrolled — dashboard.js adds .scrolled. universal.css gives every module's bar a surface, so that first state is restored here. */
 .navbar:not(.scrolled) {
   background: transparent !important;
   border-bottom-color: transparent !important;
@@ -200,11 +183,8 @@
 
 .navbar { top: 0; }
 
-/* ---- the hero reaches the screen edge ----------------------------------
-   The page is padded to clear the rail, which cropped the hero photograph at
-   the rail's edge. The band's SURFACE reaches back; the padding puts its
-   CONTENT exactly where it was, so it stays centred with the rest of the
-   page. */
+/* ---- the hero reaches the screen edge ---------------------------------- */
+/* The page is padded to clear the rail, which cropped the hero photograph at the rail's edge. The band's SURFACE reaches back; the padding puts its CONTENT exactly where it was, so it stays centred with the rest of the page. */
 .hero {
   margin-left: calc(-1 * var(--p-rail-clear));
   padding-left: var(--p-rail-clear);
@@ -215,8 +195,7 @@
 body { color: var(--ink); }
 h1, h2, h3 { color: inherit; }
 
-/* The hero band bleeds to the screen edge behind the floating rail, so it
-   reaches back by the rail's width and pads its content by the same. */
+/* The hero band bleeds to the screen edge behind the floating rail, so it reaches back by the rail's width and pads its content by the same. */
 @media (min-width: 721px) {
   .hero {
     margin-left: calc(-1 * var(--p-rail-clear));
@@ -229,16 +208,10 @@ h1, h2, h3 { color: inherit; }
 }
 
 
-/* ---- layout repairs -----------------------------------------------------
-   Everything below fixes geometry, not colour. style.css was written before
-   the shared shell existed, so it measures several things against the window
-   when it should measure them against the column the page actually gets. */
+/* ---- layout repairs ----------------------------------------------------- */
+/* Everything below fixes geometry, not colour. style.css was written before the shared shell existed, so it measures several things against the window when it should measure them against the column the page actually gets. */
 
-/* The 100vw breakout. `.section-head` and `.full-bleed` widened themselves to
-   the viewport and pulled back by -50vw — which assumes the page starts at the
-   screen edge. It starts 74px in, past the rail, so every heading and every
-   card grid on this page hung ~111px off the right. They are ordinary blocks
-   now and inherit the container's width. */
+/* The 100vw breakout. `.section-head` and `.full-bleed` widened themselves to the viewport and pulled back by -50vw — which assumes the page starts at the screen edge. It starts 74px in, past the rail, so every heading and every card grid on this page hung ~111px off the right. They are ordinary blocks now and inherit the container's width. */
 .section-head,
 .full-bleed {
   width: auto;
@@ -252,11 +225,7 @@ h1, h2, h3 { color: inherit; }
   padding-right: 0;
 }
 
-/* The card grids. `auto-fit` collapses empty tracks, so a row with two cards
-   in it stretched them to half the page — which is why every grid capped its
-   children at 230–310px and centred them, leaving the ragged gaps. `auto-fill`
-   keeps the tracks, so a card is the same width whether the row is full or
-   not, and the caps come off. */
+/* The card grids. `auto-fit` collapses empty tracks, so a row with two cards in it stretched them to half the page — which is why every grid capped its children at 230–310px and centred them, leaving the ragged gaps. `auto-fill` keeps the tracks, so a card is the same width whether the row is full or not, and the caps come off. */
 .visited-grid  { grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); }
 .wishlist-grid { grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); }
 .goals-grid-new { grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); }
@@ -274,38 +243,31 @@ h1, h2, h3 { color: inherit; }
   min-width: 0;
 }
 
-/* A grid holding a single empty-state message should not stripe it into one
-   track. */
+/* A grid holding a single empty-state message should not stripe it into one track. */
 .visited-grid .empty-state,
 .wishlist-grid .empty-state,
 .goals-grid-new .empty-state,
 .activity-grid .empty-state,
 .trek-grid .empty-state { grid-column: 1 / -1; max-width: none; }
 
-/* The bar padded itself and then the shared rule padded its inner row again,
-   so this module's brand sat 48px further in than every other module's. */
+/* The bar padded itself and then the shared rule padded its inner row again, so this module's brand sat 48px further in than every other module's. */
 .navbar, .navbar.scrolled { padding-inline: 0; }
 .nav-inner { max-width: none; }
 
 /* One content width, the same as every other room. */
 .container-full { max-width: var(--p-shell); padding-inline: var(--p-gutter); }
 
-/* The hero photograph is scaled 1.05 for its slow zoom, which pushed the page
-   sideways until the band clipped it. */
+/* The hero photograph is scaled 1.05 for its slow zoom, which pushed the page sideways until the band clipped it. */
 .hero { overflow: hidden; }
 
-/* Section rhythm, so the bands are not 4rem apart in one place and 8 in the
-   next. */
+/* Section rhythm, so the bands are not 4rem apart in one place and 8 in the next. */
 section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .section-head { margin-bottom: clamp(1.2rem, 2vw, 1.8rem); }
 
-/* A long subtitle was held on one line, so it either overflowed or forced the
-   heading block wider than the column. */
+/* A long subtitle was held on one line, so it either overflowed or forced the heading block wider than the column. */
 .section-head p { white-space: normal; max-width: 62ch; }
 
-/* The diagnostic panel only shows when a sheet tab fails, which is exactly
-   when it has to be readable. Terracotta on white measured 2.8:1, and its
-   header put white on the same terracotta. */
+/* The diagnostic panel only shows when a sheet tab fails, which is exactly when it has to be readable. Terracotta on white measured 2.8:1, and its header put white on the same terracotta. */
 .diag-panel { border-color: var(--p-danger); }
 .diag-head { background: var(--p-danger); color: #3d1620; }
 .diag-head strong { color: inherit; }
@@ -318,17 +280,11 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 }
 
 
-/* ---- section bands ------------------------------------------------------
-   "Journey in numbers" painted itself a pale blue wash of its own, so it read
-   as a different page. It takes the same paper as every other band. */
+/* ---- section bands ------------------------------------------------------ */
+/* "Journey in numbers" painted itself a pale blue wash of its own, so it read as a different page. It takes the same paper as every other band. */
 #wrapped.tw-section, #wrapped { background: transparent; }
 
-/* The contact band is the one that should stand apart: it is the only place on
-   the page asking for something. A deep plate, full width, in both themes.
-
-   LIGHT: a clean plum plate. No coloured glows across it — the depth comes
-   from the plate's own gradient and the card floating on top, which reads
-   clearer than a tinted wash. */
+/* The contact band is the one that should stand apart: it is the only place on the page asking for something. A deep plate, full width, in both themes. LIGHT: a clean plum plate. No coloured glows across it — the depth comes from the plate's own gradient and the card floating on top, which reads clearer than a tinted wash. */
 #contact.contact-section {
   position: relative;
   isolation: isolate;
@@ -337,8 +293,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
   border-block: 1px solid rgba(255, 255, 255, .10);
 }
 
-/* A hairline of light along the top edge reads as the plate catching the page
-   above it, which is what separates a highlight from a block of colour. */
+/* A hairline of light along the top edge reads as the plate catching the page above it, which is what separates a highlight from a block of colour. */
 #contact.contact-section::before {
   content: "";
   position: absolute;
@@ -350,10 +305,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
     transparent, rgba(255, 255, 255, .34) 22%, rgba(255, 255, 255, .34) 78%, transparent);
 }
 
-/* DARK: the same deep plate as the light theme, one step below the page rather
-   than above it. The page is already dark, so the band reads as a recess - a
-   hairline along the top edge and a faint neutral lift are enough to separate
-   it. No grey slab, no glass, no colour from outside the palette. */
+/* DARK: the same deep plate as the light theme, one step below the page rather than above it. The page is already dark, so the band reads as a recess - a hairline along the top edge and a faint neutral lift are enough to separate it. No grey slab, no glass, no colour from outside the palette. */
 [data-theme="dark"] #contact.contact-section {
   background:
     radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, .04) 0%, transparent 62%),
@@ -381,16 +333,8 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 #contact.contact-section .contact-sign { color: var(--p-on-deep-soft); }
 
 
-/* ---- state colour -------------------------------------------------------
-   Every card and chip that carries a state was a fixed pastel with --p-ink on
-   top. The ink flips with the theme and the pastel does not, so each one lost
-   its contrast in one theme or the other: dark-on-dark greens in light, and
-   muddy browns in dark.
-
-   Each state is a tint-and-ink PAIR built from the same hue. Both sides are
-   mixed against --p-surface and --p-ink, which already flip, so one definition
-   covers both themes. The mix strengths are variables because a pastel needs
-   to sit lighter on dark paper than on light to read as the same colour. */
+/* ---- state colour ------------------------------------------------------- */
+/* Every card and chip that carries a state was a fixed pastel with --p-ink on top. The ink flips with the theme and the pastel does not, so each one lost its contrast in one theme or the other: dark-on-dark greens in light, and muddy browns in dark. Each state is a tint-and-ink PAIR built from the same hue. Both sides are mixed against --p-surface and --p-ink, which already flip, so one definition covers both themes. The mix strengths are variables because a pastel needs to sit lighter on dark paper than on light to read as the same colour. */
 
 :root {
   --tv-wash: 15%;
@@ -409,11 +353,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
   --tv-band: 9%;
 }
 
-/* One derivation per pastel family: a wash to sit on and an ink to read on it.
-   Both are mixed against --p-surface and --p-ink, so a family needs defining
-   once and follows the theme on its own. style.css used a fixed deepened hex
-   for each of these, which is why the region pills and status chips went
-   dark-on-dark in one theme. */
+/* One derivation per pastel family: a wash to sit on and an ink to read on it. Both are mixed against --p-surface and --p-ink, so a family needs defining once and follows the theme on its own. style.css used a fixed deepened hex for each of these, which is why the region pills and status chips went dark-on-dark in one theme. */
 :root,
 [data-theme="dark"] {
   --tv-pink-wash:     color-mix(in srgb, var(--p-pink) var(--tv-chip), var(--p-surface));
@@ -430,9 +370,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
   --tv-coral-ink:     color-mix(in srgb, var(--p-danger) var(--tv-chip-ink), var(--p-ink));
   --tv-ok-wash:       color-mix(in srgb, var(--p-ok) var(--tv-chip), var(--p-surface));
   --tv-ok-ink:        color-mix(in srgb, var(--p-ok) var(--tv-chip-ink), var(--p-ink));
-  /* A badge that sits ON a photograph carries light text, so its fill has to
-     stay dark in BOTH themes — --p-ok-deep lifts to a pale mint in dark and
-     would put white on near-white. --p-deep is dark in both. */
+  /* A badge that sits ON a photograph carries light text, so its fill has to stay dark in BOTH themes — --p-ok-deep lifts to a pale mint in dark and would put white on near-white. --p-deep is dark in both. */
   --tv-ok-solid:      color-mix(in srgb, var(--p-ok) 46%, var(--p-deep));
 }
 
@@ -462,8 +400,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .goal-card.in-progress h4 { color: var(--p-ink); }
 .goal-card.in-progress .goal-meta .pct { color: var(--p-wait-deep); }
 
-/* The unstarted card keeps plain paper, so hovering it should not borrow the
-   rose edge the module used before the palette moved to green. */
+/* The unstarted card keeps plain paper, so hovering it should not borrow the rose edge the module used before the palette moved to green. */
 .goal-card:hover { border-color: var(--p-accent-soft); }
 
 /* Status pills and difficulty chips: the same pair, one hue each. */
@@ -496,8 +433,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
   color: color-mix(in srgb, var(--p-danger) var(--tv-chip-ink), var(--p-ink));
 }
 
-/* The notes pip sat on a 5% wash of the deep token, which is nearly the card
-   itself in dark. It takes the surface and the accent on hover. */
+/* The notes pip sat on a 5% wash of the deep token, which is nearly the card itself in dark. It takes the surface and the accent on hover. */
 .goal-card .notes-indicator {
   background: var(--p-surface-3);
   border-color: var(--p-line);
@@ -513,8 +449,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 /* The eyebrow was rose on every card; it reads as the module's own green. */
 .goal-card .cat { color: var(--p-accent-ink); }
 
-/* The empty half of a progress track was a deep-token wash that vanished on
-   dark paper, so a bar at 20% looked like a bar at 100%. */
+/* The empty half of a progress track was a deep-token wash that vanished on dark paper, so a bar at 20% looked like a bar at 100%. */
 .goal-progress { background: var(--p-surface-3); }
 .goal-progress-bar { background: linear-gradient(90deg, var(--p-accent), var(--p-accent-deep)); }
 .goal-card.completed .goal-progress-bar { background: linear-gradient(90deg, var(--p-ok), var(--p-ok-deep)); }
@@ -527,17 +462,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 }
 
 
-/* ---- captions that sit ON a photograph ----------------------------------
-   components.css has `.trek-card h3, .place-card h3 { color: inherit }` so a
-   card's text follows the card. For the body that is right; for the caption
-   over the picture it is not — the title inherited --ink and flipped to near
-   black in light, while the location line was written as a wash of
-   --p-surface-rgb and flipped to near black in dark. One of the two was
-   unreadable in each theme.
-
-   A photograph is dark under the scrim in both themes, so both lines take the
-   on-deep ink and keep it. Scoped one level deeper than the components rule so
-   it wins on specificity rather than order. */
+/* ---- captions that sit ON a photograph ---------------------------------- components.css has `.trek-card h3, .place-card h3 { color: inherit }` so a card's text follows the card. For the body that is right; for the caption over the picture it is not — the title inherited --ink and flipped to near black in light, while the location line was written as a wash of --p-surface-rgb and flipped to near black in dark. One of the two was unreadable in each theme. A photograph is dark under the scrim in both themes, so both lines take the on-deep ink and keep it. Scoped one level deeper than the components rule so it wins on specificity rather than order. */
 .trek-card .tc-caption h3,
 .visited-card .image-place h3,
 .trek-card .tc-caption .tc-loc,
@@ -551,8 +476,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
   color: rgba(255, 255, 255, .92);
 }
 
-/* Under 600px style.css moves both captions off the picture and onto the card,
-   so they stop being text-on-a-photograph and take the card's own ink again. */
+/* Under 600px style.css moves both captions off the picture and onto the card, so they stop being text-on-a-photograph and take the card's own ink again. */
 @media (max-width: 600px) {
   .trek-card .tc-caption h3,
   .visited-card .image-place h3,
@@ -566,8 +490,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
   }
 }
 
-/* The scrim is what makes them readable, so it has to reach far enough up the
-   picture to sit under both lines rather than only the last one. */
+/* The scrim is what makes them readable, so it has to reach far enough up the picture to sit under both lines rather than only the last one. */
 .visited-card .image-overlay {
   background: linear-gradient(180deg,
     rgba(0, 0, 0, 0) 34%,
@@ -587,10 +510,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
     rgba(0, 0, 0, .72) 100%);
 }
 
-/* Under 600px the caption leaves the picture and the media box grows to hold
-   it, so this scrim has to stop at the photo instead of running the full box -
-   otherwise it paints a dark band behind the caption. Only the tags sit on the
-   picture now, so it lightens and moves to the top. */
+/* Under 600px the caption leaves the picture and the media box grows to hold it, so this scrim has to stop at the photo instead of running the full box - otherwise it paints a dark band behind the caption. Only the tags sit on the picture now, so it lightens and moves to the top. */
 @media (max-width: 600px) {
   .trek-card .tc-media::after {
     inset: 0 0 auto 0;
@@ -604,11 +524,8 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .visited-card .image-fallback { color: rgba(255, 255, 255, .55); }
 
 
-/* ---- the bucket list ----------------------------------------------------
-   The title was clamped to two lines AND floored at exactly two, so a goal
-   whose name runs to three ("Experience a Northeast India road trip") lost its
-   last words with no way to see them. Three lines on a phone, where the card
-   is narrowest, and the floor drops away so a short goal keeps no dead space. */
+/* ---- the bucket list ---------------------------------------------------- */
+/* The title was clamped to two lines AND floored at exactly two, so a goal whose name runs to three ("Experience a Northeast India road trip") lost its last words with no way to see them. Three lines on a phone, where the card is narrowest, and the floor drops away so a short goal keeps no dead space. */
 @media (max-width: 720px) {
   .goal-card h4 {
     -webkit-line-clamp: 3;
@@ -635,9 +552,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .featured-journey .fj-title { color: var(--p-ink); }
 .featured-journey .fj-sub { color: var(--p-muted); }
 
-/* The unfilled pips were a 10% wash of --p-deep. On dark paper --p-deep is
-   DARKER than the surface, so ten of the twelve disappeared and the tracker
-   read as "2 of 2". They take surface and line tokens, which flip. */
+/* The unfilled pips were a 10% wash of --p-deep. On dark paper --p-deep is DARKER than the surface, so ten of the twelve disappeared and the tracker read as "2 of 2". They take surface and line tokens, which flip. */
 .fj-dot {
   background: var(--p-surface-3);
   border: 1.5px solid var(--p-line);
@@ -658,9 +573,8 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .goals-stat-pill .gsp-label { color: var(--p-muted); }
 
 
-/* ---- the six counters ---------------------------------------------------
-   Each tile takes one hue from the site's pastel family rather than a fixed
-   pale wash, so the row reads as a set and stays legible on dark paper. */
+/* ---- the six counters --------------------------------------------------- */
+/* Each tile takes one hue from the site's pastel family rather than a fixed pale wash, so the row reads as a set and stays legible on dark paper. */
 
 .kpi-card {
   --kpi: var(--p-accent);
@@ -690,30 +604,23 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 .kpi-card .kpi-go { color: var(--p-ink-soft); }
 
 
-/* ---- the bar and the fold ----------------------------------------------
-   The bar padded itself 1.4rem at rest and 0.85rem once scrolled, and both
-   values moved the wordmark sideways as well as up. Only the height changes
-   now; the brand stays put. */
-/* Only the block padding is reset. Setting padding-inline here too outranked
-   the shared band rule for `.scrolled` but not for the resting state, which is
-   what slid the wordmark 74px sideways on scroll. */
+/* ---- the bar and the fold ---------------------------------------------- */
+/* The bar padded itself 1.4rem at rest and 0.85rem once scrolled, and both values moved the wordmark sideways as well as up. Only the height changes now; the brand stays put. */
+/* Only the block padding is reset. Setting padding-inline here too outranked the shared band rule for `.scrolled` but not for the resting state, which is what slid the wordmark 74px sideways on scroll. */
 .navbar, .navbar.scrolled { padding-block: 0; }
 .navbar .nav-inner { min-height: var(--p-bar-h); transition: none; }
 
 /* The opening screen is the whole screen, not most of it. */
 .hero { min-height: 100vh; min-height: 100svh; }
 
-/* The rooms below it use the full page rather than a centred column: with the
-   shell cap the wishlist and place cards sat in the middle third of a wide
-   monitor with bare paper either side. */
+/* The rooms below it use the full page rather than a centred column: with the shell cap the wishlist and place cards sat in the middle third of a wide monitor with bare paper either side. */
 .container { max-width: none; padding-inline: clamp(1.1rem, 3vw, 2.6rem); }
 
 /* Prose still reads in a column — a 1900px line of body copy is unreadable. */
 .section-head .title-block { max-width: 720px; margin-inline: auto; }
 .hero .hero-text { max-width: 620px; }
 
-/* The gallery's bar had no inner row, so it never picked up the shared
-   geometry and its wordmark sat at the screen edge. */
+/* The gallery's bar had no inner row, so it never picked up the shared geometry and its wordmark sat at the screen edge. */
 .navbar .nav-links .back-link {
   display: inline-flex;
   align-items: center;
@@ -731,9 +638,7 @@ section { padding-block: clamp(2.4rem, 4vw, 3.6rem); }
 
 .navbar .nav-links .back-link:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); border-color: transparent; }
 
-/* The gallery loads gallery.css after this module's own bar rules, and it sets
-   its own padding and flex on .navbar. The band geometry is restated here so
-   both pages measure the same. */
+/* The gallery loads gallery.css after this module's own bar rules, and it sets its own padding and flex on .navbar. The band geometry is restated here so both pages measure the same. */
 body:has(.gallery-grid) .navbar {
   display: block;
   padding: 0;
@@ -742,15 +647,12 @@ body:has(.gallery-grid) .navbar {
 }
 body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center; min-height: var(--p-bar-h); }
 
-/* The old wordmark drew a dot before the name; the shared mark has its own
-   icon tile, so the dot is a leftover. */
+/* The old wordmark drew a dot before the name; the shared mark has its own icon tile, so the dot is a leftover. */
 .logo::before, .logo .dot { display: none; }
 
 
-/* ---- reading widths -----------------------------------------------------
-   With the container uncapped, three blocks that are read rather than browsed
-   were running the full width of a wide monitor. They take one shared column
-   so the tab row sits directly over its table and the form does not stretch. */
+/* ---- reading widths ----------------------------------------------------- */
+/* With the container uncapped, three blocks that are read rather than browsed were running the full width of a wide monitor. They take one shared column so the tab row sits directly over its table and the form does not stretch. */
 :root { --tv-read: 1180px; }
 
 .mon-tabs,
@@ -760,8 +662,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   margin-inline: auto;
 }
 
-/* The map and the postcard form sit in the same column as the monuments table,
-   which takes the shared shell width rather than the narrower reading one. */
+/* The map and the postcard form sit in the same column as the monuments table, which takes the shared shell width rather than the narrower reading one. */
 .map-section .section-head,
 .map-section .map-wrap,
 .contact-section .contact-wrap-grid {
@@ -769,18 +670,14 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   margin-inline: auto;
 }
 
-/* The hero keeps its own left inset so the headline does not start at the
-   rail, and its two halves stay side by side rather than splitting apart on a
-   wide screen. */
+/* The hero keeps its own left inset so the headline does not start at the rail, and its two halves stay side by side rather than splitting apart on a wide screen. */
 .hero .container { max-width: 1500px; }
 .hero .hero-grid { gap: clamp(2rem, 4vw, 4.5rem); align-items: center; }
 .hero .hero-text { padding-left: clamp(0px, 2.4vw, 46px); }
 
 
-/* ---- the contact band ---------------------------------------------------
-   The band is deep in both themes, so everything on it takes the on-deep ink.
-   The sign-off and the vibe pill were still module black, which on the dark
-   plate was unreadable. */
+/* ---- the contact band --------------------------------------------------- */
+/* The band is deep in both themes, so everything on it takes the on-deep ink. The sign-off and the vibe pill were still module black, which on the dark plate was unreadable. */
 #contact.contact-section .contact-signoff,
 #contact.contact-section .contact-signoff *,
 #contact.contact-section .vibe-line,
@@ -797,9 +694,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 #contact.contact-section .contact-signoff strong,
 #contact.contact-section .contact-sign-name { color: var(--p-on-deep); }
 
-/* The card is the page's own card surface, sitting a clear step above the
-   recessed band. Flat, bordered, with a real shadow under it - the same object
-   every other card on the site is, not a pane of glass. */
+/* The card is the page's own card surface, sitting a clear step above the recessed band. Flat, bordered, with a real shadow under it - the same object every other card on the site is, not a pane of glass. */
 [data-theme="dark"] #contact.contact-section .contact-form-card {
   background: var(--p-surface-2);
   border: 1px solid var(--p-line);
@@ -816,9 +711,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-sub,
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-group label { color: var(--p-on-deep-soft); }
 
-/* A field is a hole in the panel, not another panel on top of it: darker than
-   what holds it, with the light catching its top edge. They had been lighter
-   than the card, which is why the form read as flat. */
+/* A field is a hole in the panel, not another panel on top of it: darker than what holds it, with the light catching its top edge. They had been lighter than the card, which is why the form read as flat. */
 [data-theme="dark"] #contact.contact-section .contact-form-card .form-control {
   background: rgba(var(--p-bg-rgb), .55);
   border: 1px solid var(--p-line);
@@ -838,8 +731,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
     0 0 0 3px rgba(var(--p-accent-rgb), .28);
 }
 
-/* LIGHT: crisp paper floating on the plate. A card on a deep band needs a
-   shadow deep enough to read against it, which the default one was not. */
+/* LIGHT: crisp paper floating on the plate. A card on a deep band needs a shadow deep enough to read against it, which the default one was not. */
 #contact.contact-section .contact-form-card {
   background: var(--p-surface);
   color: var(--p-ink);
@@ -849,9 +741,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
     0 34px 74px -28px rgba(0, 0, 0, .55);
 }
 
-/* The seven-colour bar across the top of the card belonged to an older
-   palette. Two stops from the room's own accent into the site's pink says the
-   same thing without the rainbow. */
+/* The seven-colour bar across the top of the card belonged to an older palette. Two stops from the room's own accent into the site's pink says the same thing without the rainbow. */
 #contact.contact-section .contact-form-card::before {
   height: 3px;
   background: linear-gradient(90deg,
@@ -877,43 +767,34 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 #contact.contact-section .contact-form-card label { color: var(--p-ink); }
 #contact.contact-section .contact-form-card .form-sub { color: var(--p-muted); }
 
-/* A textarea's placeholder sits on the first line by default, which read as
-   mis-aligned against the short fields beside it. */
+/* A textarea's placeholder sits on the first line by default, which read as mis-aligned against the short fields beside it. */
 #contact.contact-section textarea.form-control { padding-block: 14px; }
 
 
-/* ---- the hero fan -------------------------------------------------------
-   The angled stack is the design and is left alone. The fan sits inside a
-   window of a fixed size, and the cards move between the fan's four places
-   rather than the row sliding past: a card coming forward takes the size of
-   the place it arrives at. style.css owns the places; this owns the window. */
+/* ---- the hero fan ------------------------------------------------------- */
+/* The angled stack is the design and is left alone. The fan sits inside a window of a fixed size, and the cards move between the fan's four places rather than the row sliding past: a card coming forward takes the size of the place it arrives at. style.css owns the places; this owns the window. */
 .fan-window { position: relative; width: 100%; }
 
-/* Only once there are more pictures than the fan holds does anything change,
-   and then only inside the window. */
+/* Only once there are more pictures than the fan holds does anything change, and then only inside the window. */
 @media (min-width: 901px) {
-  /* No clip: a card outside the fan is faded rather than cut, so a card
-     lifting on hover at either edge is never sliced. */
+  /* No clip: a card outside the fan is faded rather than cut, so a card lifting on hover at either edge is never sliced. */
   .hero-visual.is-carousel .fan-window {
     width: var(--fan-page, 678px);
     flex: 0 0 auto;
   }
 
-  /* Clipped to one fan's width, so the row runs from the window's left edge
-     rather than being centred inside it. */
+  /* Clipped to one fan's width, so the row runs from the window's left edge rather than being centred inside it. */
   .hero-visual.is-carousel .hero-fan { justify-content: flex-start; }
   .hero-visual.is-carousel .fan-card img { user-select: none; -webkit-user-drag: none; }
 }
 
-/* The 1100px breakpoint scales the fan down. With a window in play that scale
-   moves out to the window, so the clip scales with what it is clipping. */
+/* The 1100px breakpoint scales the fan down. With a window in play that scale moves out to the window, so the clip scales with what it is clipping. */
 @media (min-width: 901px) and (max-width: 1100px) {
   .hero-visual.is-carousel .hero-fan { transform: none; }
   .hero-visual.is-carousel .fan-window { transform: scale(.85); }
 }
 
-/* The control: two small arrows and a dot per page, sitting under the fan
-   without taking any height from it. */
+/* The control: two small arrows and a dot per page, sitting under the fan without taking any height from it. */
 .fan-nav {
   position: absolute;
   left: 50%;
@@ -927,8 +808,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 
 .fan-nav[hidden] { display: none; }
 
-/* The dots are the control. The arrows are a hint that surfaces while the
-   gallery is in use and fades back out once it is left alone. */
+/* The dots are the control. The arrows are a hint that surfaces while the gallery is in use and fades back out once it is left alone. */
 .fan-nav__btn {
   display: grid;
   place-items: center;
@@ -977,16 +857,13 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 
 .fan-nav__dot.is-on { width: 16px; border-radius: 999px; background: var(--p-on-deep); }
 
-/* The photo modal is a dark overlay in both themes, so its caption takes the
-   on-deep ink. It had been inheriting the page's own — invisible on dark. */
+/* The photo modal is a dark overlay in both themes, so its caption takes the on-deep ink. It had been inheriting the page's own — invisible on dark. */
 .act-modal-info h3,
 .act-modal-info .am-title-row h3 { color: var(--p-on-deep); }
 .act-modal-info { color: var(--p-on-deep-soft); }
 .act-modal-info p, .act-modal-info .am-sub { color: var(--p-on-deep-soft); }
 
-/* On a phone the stack is dropped for what a phone is good at: one picture at a
-   time, swiped sideways, with a sliver of the neighbours showing so it reads as
-   a gallery. The card's own frame, border and shadow are kept. */
+/* On a phone the stack is dropped for what a phone is good at: one picture at a time, swiped sideways, with a sliver of the neighbours showing so it reads as a gallery. The card's own frame, border and shadow are kept. */
 @media (max-width: 900px) {
   .hero-visual { display: block; min-height: 0; margin-top: 1.4rem; }
 
@@ -1005,8 +882,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 
   .hero-visual .hero-fan {
     display: flex !important;
-    /* Centred, a strip wider than its scroller overflows BOTH ways and the
-       first picture starts off the left edge. It runs from the start. */
+    /* Centred, a strip wider than its scroller overflows BOTH ways and the first picture starts off the left edge. It runs from the start. */
     justify-content: flex-start;
     align-items: stretch;
     gap: 12px;
@@ -1017,8 +893,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
     transform: none;
   }
 
-  /* End margins rather than padding on the track: a scroll container drops its
-     trailing padding, which would stop the last picture short of centre. */
+  /* End margins rather than padding on the track: a scroll container drops its trailing padding, which would stop the last picture short of centre. */
   .hero-visual .hero-fan .fan-card:first-child { margin-left: 13%; }
   .hero-visual .hero-fan .fan-card:last-child { margin-right: 13%; }
 
@@ -1049,8 +924,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   /* The arrows are for a pointer; a thumb has the whole strip. */
   .fan-nav { display: none; }
 
-  /* Floating over the foot of the gallery, the way it does on a wide screen,
-     rather than dropping into the flow underneath it. */
+  /* Floating over the foot of the gallery, the way it does on a wide screen, rather than dropping into the flow underneath it. */
   .hero-float-card {
     position: absolute;
     left: 50%;
@@ -1061,8 +935,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   }
 }
 
-/* The stamp card is a footnote on a phone, not a panel: centred under the
-   gallery, with room above it and little below. */
+/* The stamp card is a footnote on a phone, not a panel: centred under the gallery, with room above it and little below. */
 @media (max-width: 720px) {
   .hero-float-card {
     padding: 9px 16px !important;
@@ -1077,9 +950,8 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
   .hero-float-card .hfc-label, .hero-float-card .hfc-sub { font-size: 10.5px; }
 }
 
-/* ---- the postcard band --------------------------------------------------
-   Same deep plate, read more clearly: the perk rows lift off it instead of
-   dissolving into it, and the form card is plain paper. */
+/* ---- the postcard band -------------------------------------------------- */
+/* Same deep plate, read more clearly: the perk rows lift off it instead of dissolving into it, and the form card is plain paper. */
 #contact.contact-section .contact-perks li {
   background: rgba(255, 255, 255, .1);
   border: 1px solid rgba(255, 255, 255, .18);
@@ -1114,16 +986,12 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
 #contact.contact-section .vibe-line { color: var(--p-on-deep); font-style: normal; }
 
 
-/* ---- the bar on a phone -------------------------------------------------
-   The site's own page menu takes the module's links into its sheet, which left
-   the module's hamburger toggling a list that is no longer beside it. One
-   control, and it is the one that works. */
+/* ---- the bar on a phone ------------------------------------------------- */
+/* The site's own page menu takes the module's links into its sheet, which left the module's hamburger toggling a list that is no longer beside it. One control, and it is the one that works. */
 @media (max-width: 720px) {
   .navbar .nav-toggle { display: none; }
 
-  /* The list is the module's own dropdown, which sits hidden until its toggle
-     opens it. Inside the page sheet it is already open, so it drops the panel
-     and simply lists. */
+  /* The list is the module's own dropdown, which sits hidden until its toggle opens it. Inside the page sheet it is already open, so it drops the panel and simply lists. */
   .pmenu__sheet .nav-links {
     position: static;
     display: flex;
@@ -1141,9 +1009,7 @@ body:has(.gallery-grid) .navbar .nav-inner { display: flex; align-items: center;
     pointer-events: auto;
   }
 
-  /* The sheet sits inside the bar, so the bar's light-on-dark hero rules still
-     reach these links and left them white on a white panel. Only !important
-     clears them: they are scoped to .navbar:not(.scrolled) and outrank this. */
+  /* The sheet sits inside the bar, so the bar's light-on-dark hero rules still reach these links and left them white on a white panel. Only !important clears them: they are scoped to .navbar:not(.scrolled) and outrank this. */
   .pmenu__sheet .nav-links li { list-style: none; width: 100%; }
 
   .pmenu__sheet .nav-links a {

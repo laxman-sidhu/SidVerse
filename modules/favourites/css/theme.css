@@ -1,7 +1,4 @@
-/* SidPicks - retargeted onto the SidVerse palette. Loaded after this module's
-   own stylesheets so these win. The five pastel washes stay, because they are
-   how one collection is told from another, but they are re-pointed onto the
-   shared palette's hues. */
+/* SidPicks - retargeted onto the SidVerse palette. Loaded after this module's own stylesheets so these win. The five pastel washes stay, because they are how one collection is told from another, but they are re-pointed onto the shared palette's hues. */
 
 :root {
   --cream:            var(--p-bg);
@@ -92,10 +89,7 @@
   color-scheme: dark;
 }
 
-/* The museum's bar was `fixed`, with `body` padded by --nav-height to clear it.
-   Fixed at top:0 would sit over the site chrome, so it becomes `sticky`: the
-   same behaviour once you scroll, but it starts in flow and takes its own
-   space, which is why the body padding goes with it. */
+/* The museum's bar was `fixed`, with `body` padded by --nav-height to clear it. Fixed at top:0 would sit over the site chrome, so it becomes `sticky`: the same behaviour once you scroll, but it starts in flow and takes its own space, which is why the body padding goes with it. */
 .nav {
   position: sticky;
   top: 0;
@@ -111,8 +105,7 @@ body { padding-top: 0; }
 }
 
 @media (max-width: 860px) {
-  /* The phone menu is a full-screen overlay padded past a bar that is no longer
-     fixed, and it painted its own copy of the old wash. */
+  /* The phone menu is a full-screen overlay padded past a bar that is no longer fixed, and it painted its own copy of the old wash. */
   .nav__links {
     padding-top: calc(var(--safe-top) + 1rem);
     background: linear-gradient(165deg,
@@ -123,25 +116,18 @@ body { padding-top: 0; }
 }
 
 
-/* The decorative rings are `position: absolute` with no positioned ancestor, so
-   they anchor to the page box and drift over the content — that stray smudge
-   left behind on hover. They are ornament, and the wash below already carries
-   the same idea. */
+/* The decorative rings are `position: absolute` with no positioned ancestor, so they anchor to the page box and drift over the content — that stray smudge left behind on hover. They are ornament, and the wash below already carries the same idea. */
 .glow-ring, .sparkle { display: none !important; }
 
-/* The drifting colour blobs were the museum's own weather, and the one thing
-   that still made this page read as a different site. The paper carries a
-   faint wash of the module's accent instead. */
+/* The drifting colour blobs were the museum's own weather, and the one thing that still made this page read as a different site. The paper carries a faint wash of the module's accent instead. */
 .blob { display: none !important; }
 
 
 
 
 
-/* ---- readability and rhythm --------------------------------------------
-   The hero title was a four-stop pastel gradient on pastel paper, which put
-   the museum's own name at roughly 2:1. It keeps the gradient — it is the
-   module's signature — but starts from the ink so the letterforms hold. */
+/* ---- readability and rhythm -------------------------------------------- */
+/* The hero title was a four-stop pastel gradient on pastel paper, which put the museum's own name at roughly 2:1. It keeps the gradient — it is the module's signature — but starts from the ink so the letterforms hold. */
 :root {
   --grad-hero-text: linear-gradient(96deg,
                       var(--p-ink) 0%, var(--p-accent-ink) 46%, var(--p-accent-deep) 100%);
@@ -152,8 +138,7 @@ body { padding-top: 0; }
                       var(--p-ink) 0%, var(--p-accent-ink) 52%, var(--p-accent) 100%);
 }
 
-/* A full screen of empty paper before the first exhibit. The hero says what
-   the room is; it does not need the whole fold to do it. */
+/* A full screen of empty paper before the first exhibit. The hero says what the room is; it does not need the whole fold to do it. */
 .hero {
   min-height: 0;
   padding-block: clamp(3rem, 7vw, 5.5rem) clamp(3.5rem, 7vw, 6rem);
@@ -162,8 +147,8 @@ body { padding-top: 0; }
 .hero__scroll-hint { position: static; transform: none; margin: 2.2rem auto 0; }
 
 
-/* ---- the gallery menu ---------------------------------------------------
-   At .86 alpha the panel read as a ghost over whatever was behind it. */
+/* ---- the gallery menu --------------------------------------------------- */
+/* At .86 alpha the panel read as a ghost over whatever was behind it. */
 .nav__dropdown-panel {
   background: color-mix(in srgb, var(--p-surface) 97%, transparent);
   border-color: var(--p-line);
@@ -174,10 +159,8 @@ body { padding-top: 0; }
 .nav__dropdown-item:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
 
 
-/* ---- a collection page --------------------------------------------------
-   The title wall sat a full screen down the page; it opens closer to the bar
-   now, with the search bar drawn as one clear control rather than a bare
-   underline. */
+/* ---- a collection page -------------------------------------------------- */
+/* The title wall sat a full screen down the page; it opens closer to the bar now, with the search bar drawn as one clear control rather than a bare underline. */
 .exhibition-head { padding-block: clamp(26px, 4vw, 46px) clamp(20px, 3vw, 34px); }
 .title-wall { margin: 0; }
 .title-wall__eyebrow { color: var(--p-accent-ink); }
@@ -221,9 +204,8 @@ body { padding-top: 0; }
 .search-count { margin-top: 12px; color: var(--p-muted); font-size: var(--p-text-sm); }
 
 
-/* ---- the hero on a phone ------------------------------------------------
-   The room's introduction sat high with the fold empty beneath it. It reads
-   centred in the opening screen instead. */
+/* ---- the hero on a phone ------------------------------------------------ */
+/* The room's introduction sat high with the fold empty beneath it. It reads centred in the opening screen instead. */
 @media (max-width: 860px) {
   .hero {
     min-height: calc(100svh - var(--nav-height));
@@ -238,10 +220,8 @@ body { padding-top: 0; }
 }
 
 
-/* ---- the module's own menu inside the page sheet ------------------------
-   .nav__links is a full-screen fixed panel on a phone. Moved into the page
-   sheet it kept that, so an invisible full-viewport layer sat over the rows
-   and swallowed every tap. Inside the sheet it is a plain list. */
+/* ---- the module's own menu inside the page sheet ------------------------ */
+/* .nav__links is a full-screen fixed panel on a phone. Moved into the page sheet it kept that, so an invisible full-viewport layer sat over the rows and swallowed every tap. Inside the sheet it is a plain list. */
 @media (max-width: 767px) {
   .pmenu__sheet .nav__links {
     position: static;
@@ -278,8 +258,7 @@ body { padding-top: 0; }
 
   .pmenu__sheet .nav__link:hover { background: var(--p-accent-tint); }
 
-  /* The galleries are the point of this menu, so they are listed rather than
-     folded behind a toggle that has nowhere to open. */
+  /* The galleries are the point of this menu, so they are listed rather than folded behind a toggle that has nowhere to open. */
   .pmenu__sheet .nav__dropdown { width: 100%; }
   .pmenu__sheet .nav__dropdown-toggle { display: none; }
 
@@ -295,14 +274,11 @@ body { padding-top: 0; }
     transform: none;
     opacity: 1;
     visibility: visible;
-    /* The panel is only clickable while the dropdown is open, and in the sheet
-       it is always open. */
+    /* The panel is only clickable while the dropdown is open, and in the sheet it is always open. */
     pointer-events: auto;
   }
 
-  /* The module collapses this panel on hover and on focus-within, which are its
-     way of neutralising the desktop dropdown inside its own sheet. Here it made
-     the list vanish the moment a thumb touched it. */
+  /* The module collapses this panel on hover and on focus-within, which are its way of neutralising the desktop dropdown inside its own sheet. Here it made the list vanish the moment a thumb touched it. */
   .pmenu__sheet .nav__dropdown:hover .nav__dropdown-panel,
   .pmenu__sheet .nav__dropdown:focus-within .nav__dropdown-panel,
   .pmenu__sheet .nav__dropdown.is-open .nav__dropdown-panel {

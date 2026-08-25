@@ -2,8 +2,7 @@ import { esc } from "../core/util.js";
 import { authorText } from "../data/identity.js";
 import { cardBar, versionNote, versionTag, versionKind } from "./cardactions.js";
 
-// The fallback sits BEHIND the image and <img> is only emitted with a URL, so a
-// dead link and an absent one both reveal the title.
+// The fallback sits BEHIND the image and <img> is only emitted with a URL, so a dead link and an absent one both reveal the title.
 export function cover(book, { size = "card" } = {}) {
   const url = size === "large" ? (book.coverAlt || book.cover) : (book.cover || book.coverAlt);
   const alt = book.coverAlt && book.coverAlt !== url ? book.coverAlt : (book.cover !== url ? book.cover : "");
@@ -30,8 +29,7 @@ export function cardMarkup(book, options = {}) {
   const queued = book.queued ? '<span class="card__tag card__tag--queued">Readlist</span>' : "";
   const read = book.read && !options.hideReadTag ? '<span class="card__tag card__tag--read">Read</span>' : "";
 
-  // The tag carries the sentence on hover. The button carries the same one on a
-  // tap, and is the only one of the two a phone shows.
+  // The tag carries the sentence on hover. The button carries the same one on a tap, and is the only one of the two a phone shows.
   const note = versionNote(book);
   const kind = versionKind(book);
   const tag = note ? versionTag(note, kind) : "";
@@ -70,8 +68,7 @@ export function wireCoverFallbacks(root) {
   });
 }
 
-// An empty <p> still takes its margin, so a blank note leaves a gap that looks
-// like something failed to render.
+// An empty <p> still takes its margin, so a blank note leaves a gap that looks like something failed to render.
 export function emptyState(title, note) {
   const line = note ? `<p class="empty__note">${esc(note)}</p>` : "";
   return `<div class="empty"><p class="empty__title">${esc(title)}</p>${line}</div>`;

@@ -1,8 +1,4 @@
-/* SidCinemas - retargeted onto the SidVerse palette. Loaded after style.css so
-   these win; only variables are re-pointed, which is why 4,000 lines of it
-   still work untouched. The dark block is restated rather than left to
-   style.css: both are one attribute deep, so the later file has to carry it or
-   the light mapping outranks style.css's own dark tokens. */
+/* SidCinemas - retargeted onto the SidVerse palette. Loaded after style.css so these win; only variables are re-pointed, which is why 4,000 lines of it still work untouched. The dark block is restated rather than left to style.css: both are one attribute deep, so the later file has to carry it or the light mapping outranks style.css's own dark tokens. */
 
 :root {
   --paper:        var(--p-bg);
@@ -49,8 +45,7 @@
   --ease:         var(--p-ease);
 }
 
-/* Same mapping, dark values. They come from tokens.css, so the sidebar and the
-   page turn over together. */
+/* Same mapping, dark values. They come from tokens.css, so the sidebar and the page turn over together. */
 [data-theme="dark"] {
   --paper:        var(--p-bg);
   --card:         var(--p-surface);
@@ -103,8 +98,7 @@
   color-scheme: dark;
 }
 
-/* The page is unscaled, so it clears the rail in plain pixels and the footer
-   reaches back by the same amount. */
+/* The page is unscaled, so it clears the rail in plain pixels and the footer reaches back by the same amount. */
 @media (min-width: 721px) {
   .footer {
     margin-left: calc(-1 * var(--p-rail-clear));
@@ -116,8 +110,7 @@
 .topbar { top: 0; }
 
 
-/* Below the zoom breakpoint the page is unscaled but still padded, so the
-   footer reaches back in plain units there. */
+/* Below the zoom breakpoint the page is unscaled but still padded, so the footer reaches back in plain units there. */
 @media (max-width: 1023.98px) and (min-width: 721px) {
   .footer {
     margin-left: calc(-1 * var(--p-rail-clear));
@@ -126,16 +119,13 @@
 }
 
 
-/* The toast said its message in --p-danger on a --p-danger tint: 2.41:1. The
-   plate keeps the tint; the words take ink so they can be read. */
+/* The toast said its message in --p-danger on a --p-danger tint: 2.41:1. The plate keeps the tint; the words take ink so they can be read. */
 .toast__text { color: var(--p-ink); }
 .toast__icon { color: var(--p-danger); }
 
 
-/* ---- the title screen ---------------------------------------------------
-   A title used to open in a centred dialog. It is a screen of its own now:
-   full bleed, with a bar carrying the room's name and the way back. The body
-   below it is untouched, so everything the modal drew still draws. */
+/* ---- the title screen --------------------------------------------------- */
+/* A title used to open in a centred dialog. It is a screen of its own now: full bleed, with a bar carrying the room's name and the way back. The body below it is untouched, so everything the modal drew still draws. */
 #detailModal .modal-dialog {
   max-width: none;
   width: 100%;
@@ -204,11 +194,8 @@
   .detail__back span { display: none; }
 }
 
-/* The site rail and its button stay: they are the way out of the module, not
-   just out of this screen. The screen's own content clears them; only the
-   backdrop runs the full width, underneath. */
-/* The rail is cleared and the module's own 34px gutter kept on top of it, so
-   the text starts clear of the rail rather than up against it. */
+/* The site rail and its button stay: they are the way out of the module, not just out of this screen. The screen's own content clears them; only the backdrop runs the full width, underneath. */
+/* The rail is cleared and the module's own 34px gutter kept on top of it, so the text starts clear of the rail rather than up against it. */
 #detailModal .detail__topbar { padding-left: calc(var(--p-rail-clear) + 4px); }
 #detailModal .detail__body > *:not(.detail__hero) {
   padding-left: calc(var(--p-rail-clear) + 34px);
@@ -221,6 +208,5 @@
   #detailModal .detail__body > *:not(.detail__hero) { padding-left: 24px; padding-right: 24px; }
 }
 
-/* The page sheet already lists every destination, so the narrow-screen
-   dropdown trigger inside it would name the current page a second time. */
+/* The page sheet already lists every destination, so the narrow-screen dropdown trigger inside it would name the current page a second time. */
 .pmenu__sheet .navmenu { display: none; }

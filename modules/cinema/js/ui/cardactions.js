@@ -28,9 +28,6 @@ export function badgeMarkup(item) {
   return "";
 }
 
-const DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true">'
-  + '<circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>';
-
 // Which toggles a card shows follows what the sheet can record; the watched tick is always last, in the same place on every card.
 export function barFor(item) {
   const watched = item.watched === true;

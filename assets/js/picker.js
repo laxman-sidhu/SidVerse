@@ -1,12 +1,4 @@
-// A styled option list, shared by every module. The CLOSED control was already
-// ours; the open one never was - the browser draws that popup and honours almost
-// nothing, so the items sat hard against its left edge with no padding to give
-// and no rule that could. On a pointer device the native popup is suppressed and
-// this is drawn instead.
-//
-// The <select> stays exactly where it is and remains the state: it keeps its
-// label, its value, its change event and its 16px, so every caller that reads or
-// writes .value is untouched and nothing here has to be told when options change.
+// A styled option list, shared by every module. The CLOSED control was already ours; the open one never was - the browser draws that popup and honours almost nothing, so the items sat hard against its left edge with no padding to give and no rule that could. On a pointer device the native popup is suppressed and this is drawn instead. The <select> stays exactly where it is and remains the state: it keeps its label, its value, its change event and its 16px, so every caller that reads or writes .value is untouched and nothing here has to be told when options change.
 
 const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 
@@ -24,8 +16,7 @@ function pageScale(element) {
   return scale;
 }
 
-// Which selects get the treatment. An explicit list, so a <select> added later
-// is plain until someone decides otherwise.
+// Which selects get the treatment. An explicit list, so a <select> added later is plain until someone decides otherwise.
 const UPGRADE = ".facets__select, .scopepick__select, .scopepick select, .gate__select, .selectwrap select, #sortSelect";
 
 const GAP = 6;
@@ -41,8 +32,7 @@ let wired = false;
 let typed = "";
 let typedAt = 0;
 
-// A finger cannot hover. The platform picker on a phone is better than anything
-// here - a wheel on iOS, a dialog on Android - so touch is left alone entirely.
+// A finger cannot hover. The platform picker on a phone is better than anything here - a wheel on iOS, a dialog on Android - so touch is left alone entirely.
 function isTouch() {
   return window.matchMedia("(hover: none)").matches;
 }
@@ -57,8 +47,7 @@ function options(select) {
   }));
 }
 
-// The box the menu lines up with: the wrapper is the visible control wherever
-// there is one, and the select itself is only the visible control when there is not.
+// The box the menu lines up with: the wrapper is the visible control wherever there is one, and the select itself is only the visible control when there is not.
 function anchorFor(select) {
   return select.closest(".facets__wrap, .scopepick, .sortfield, .selectwrap") || select;
 }
@@ -79,8 +68,7 @@ function close({ focus = false } = {}) {
 function place() {
   if (!menu || !owner) return;
 
-  // The rect is in viewport pixels and the menu writes its px into the zoomed
-  // space it lives in, so every measurement crosses over here and nowhere else.
+  // The rect is in viewport pixels and the menu writes its px into the zoomed space it lives in, so every measurement crosses over here and nowhere else.
   const scale = pageScale(menu);
   const box = anchorFor(owner).getBoundingClientRect();
   const viewWidth = window.innerWidth / scale;
@@ -88,8 +76,7 @@ function place() {
   const top = box.top / scale;
   const bottom = box.bottom / scale;
 
-  // The control is the floor and not the ceiling: a long option widens the menu
-  // rather than being cut down to "All indu...".
+  // The control is the floor and not the ceiling: a long option widens the menu rather than being cut down to "All indu...".
   const room = Math.min(MAX_WIDTH, viewWidth - MARGIN * 2);
   menu.style.maxWidth = `${room}px`;
   menu.style.minWidth = `${Math.min(box.width / scale, room)}px`;
@@ -109,8 +96,7 @@ function place() {
   const bar = menu.offsetWidth - menu.clientWidth - edges;
   if (bar > 0) menu.style.minWidth = `${Math.min(menu.offsetWidth + bar, room)}px`;
 
-  // Wider than its control and up against the edge - as in the right-hand drawer -
-  // so it grows leftward from that control instead of flattening against the window.
+  // Wider than its control and up against the edge - as in the right-hand drawer - so it grows leftward from that control instead of flattening against the window.
   const anchorLeft = box.left / scale;
   const wanted = anchorLeft + menu.offsetWidth > viewWidth - MARGIN
     ? box.right / scale - menu.offsetWidth
@@ -131,16 +117,14 @@ function paintActive({ reveal = true } = {}) {
 
 function choose(index) {
   if (!owner) return;
-  // Held before close(), which clears owner: dispatching on it afterwards threw,
-  // and the change event is the only thing that tells the page to repaint.
+  // Held before close(), which clears owner: dispatching on it afterwards threw, and the change event is the only thing that tells the page to repaint.
   const select = owner;
   const option = select.options[index];
   if (!option || option.disabled) return;
   const changed = select.selectedIndex !== index;
   select.selectedIndex = index;
   close({ focus: true });
-  // Built in the element's OWN realm: a page rendered inside another window has
-  // a different Event constructor, and dispatchEvent rejects a foreign one.
+  // Built in the element's OWN realm: a page rendered inside another window has a different Event constructor, and dispatchEvent rejects a foreign one.
   const view = select.ownerDocument.defaultView || window;
   // Setting .value in script does not fire this, and every caller listens for it.
   if (changed) select.dispatchEvent(new view.Event("change", { bubbles: true }));
@@ -150,8 +134,7 @@ function open(select) {
   close();
   owner = select;
 
-  // On <body> and fixed, not inside the control: .panel__body scrolls, .topbar
-  // has a backdrop-filter, and either would clip this away or trap it.
+  // On <body> and fixed, not inside the control: .panel__body scrolls, .topbar has a backdrop-filter, and either would clip this away or trap it.
   menu = document.createElement("div");
   menu.className = "pickmenu";
   menu.setAttribute("role", "listbox");
@@ -163,10 +146,7 @@ function open(select) {
   document.body.appendChild(menu);
   select.setAttribute("aria-expanded", "true");
 
-  // The pointer drives the SAME highlight the arrow keys do, so the row under the
-  // mouse lights up without a second :hover state lighting a second row. On the
-  // menu itself, so it is dropped with it. No reveal: scrolling the list to a row
-  // the mouse is already on would then shift it out from under the pointer.
+  // The pointer drives the SAME highlight the arrow keys do, so the row under the mouse lights up without a second :hover state lighting a second row. On the menu itself, so it is dropped with it. No reveal: scrolling the list to a row the mouse is already on would then shift it out from under the pointer.
   menu.addEventListener("mousemove", event => {
     const item = event.target.closest(".pickmenu__item");
     if (!item || item.classList.contains("is-off")) return;
@@ -181,8 +161,7 @@ function open(select) {
   paintActive();
 }
 
-// Native selects stop at the ends rather than wrapping, and a wrap from the last
-// option round to "All ..." would clear the filter on one extra keypress.
+// Native selects stop at the ends rather than wrapping, and a wrap from the last option round to "All ..." would clear the filter on one extra keypress.
 function moveTo(from, by) {
   if (!owner) return;
   for (let next = from; next >= 0 && next < owner.options.length; next += by) {
@@ -268,9 +247,7 @@ export function attach() {
     else if (event.key.length === 1) jump(event.key.toLowerCase());
   });
 
-  // Capture, or a scroll inside the drawer never reaches this and the menu is
-  // left floating where the control used to be. Its OWN scroll is the list being
-  // read, though, and closing on that made the list unreadable past its first screen.
+  // Capture, or a scroll inside the drawer never reaches this and the menu is left floating where the control used to be. Its OWN scroll is the list being read, though, and closing on that made the list unreadable past its first screen.
   window.addEventListener("scroll", event => {
     const where = event.target;
     if (menu && where && where.nodeType && menu.contains(where)) return;

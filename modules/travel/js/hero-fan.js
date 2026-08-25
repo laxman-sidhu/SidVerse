@@ -1,9 +1,4 @@
-/* The hero fan.
-
-   Reads assets/hero-index.json — the list the .bat writes — and lays every
-   picture in assets/hero/ into the track. The fan itself never changes shape:
-   four cards fill the window, and the rest wait outside it. The track moves one
-   picture at a time, by drag or by the dots below it. */
+// The hero fan. Reads assets/hero-index.json — the list the .bat writes — and lays every picture in assets/hero/ into the track. The fan itself never changes shape: four cards fill the window, and the rest wait outside it. The track moves one picture at a time, by drag or by the dots below it.
 
 (function () {
   "use strict";
@@ -45,10 +40,7 @@
     return track.children;
   }
 
-  // Where a slot sits and how big it reads. Slot 0 is the front of the fan and
-  // each step back is 10px narrower at 9:16, 4% smaller and 30px further away -
-  // the sizes the design already had, written as a step rather than a table so
-  // any slot before or after the four visible ones follows the same run.
+  // Where a slot sits and how big it reads. Slot 0 is the front of the fan and each step back is 10px narrower at 9:16, 4% smaller and 30px further away - the sizes the design already had, written as a step rather than a table so any slot before or after the four visible ones follows the same run.
   function slotBox(slot) {
     var w = BOX - 10 * slot;
     return { w: w, h: Math.round(w * 16 / 9), k: 1.04 - 0.04 * slot };
@@ -63,8 +55,7 @@
     return x;
   }
 
-  // The card takes the look of the slot it is in, so moving up a place is a
-  // card growing into that place rather than the place moving.
+  // The card takes the look of the slot it is in, so moving up a place is a card growing into that place rather than the place moving.
   function place(cardEl, slot, first, animate) {
     var style = cardEl.style;
     if (!animate) style.transition = "none";
@@ -74,12 +65,9 @@
     style.setProperty("--fk", box.k.toFixed(4));
     style.setProperty("--fz", -30 * slot + "px");
     style.setProperty("--fi", String(10 - slot));
-    // The row starts at the first card, so its margin is where the row starts:
-    // sliding the row is a margin rather than a transform, because a transform
-    // on the row flattens the cards behind it out of the pointer's reach.
+    // The row starts at the first card, so its margin is where the row starts: sliding the row is a margin rather than a transform, because a transform on the row flattens the cards behind it out of the pointer's reach.
     style.setProperty("--fml", first ? slotX(-index) + "px" : -OVERLAP + "px");
-    // Only the fan's own four places are drawn; a card outside them fades, which
-    // is what lets the window go unclipped and hover grow past either edge.
+    // Only the fan's own four places are drawn; a card outside them fades, which is what lets the window go unclipped and hover grow past either edge.
     style.opacity = slot < 0 || slot >= PER_VIEW ? "0" : "1";
     style.animation = "none";
     if (!animate) {
@@ -147,8 +135,7 @@
     shift();
   }
 
-  // The arrows are a hint, not furniture: they surface while the gallery is
-  // being used and fade back out once it is left alone.
+  // The arrows are a hint, not furniture: they surface while the gallery is being used and fade back out once it is left alone.
   function wake() {
     if (!visual.classList.contains("is-carousel")) return;
     visual.classList.add("is-awake");
@@ -160,8 +147,7 @@
     track.textContent = "";
     files.forEach(function (name, i) { track.appendChild(card(name, i === 0)); });
     measure();
-    // Card widths are fixed in CSS, but a late web font or a slow image can
-    // still land after the first measure.
+    // Card widths are fixed in CSS, but a late web font or a slow image can still land after the first measure.
     window.addEventListener("load", measure, { once: true });
   }
 
@@ -185,8 +171,7 @@
     resizeTimer = setTimeout(measure, 180);
   });
 
-  // Dragging moves the fan a picture at a time, in whichever direction the
-  // pointer went, and settles the moment the step is taken.
+  // Dragging moves the fan a picture at a time, in whichever direction the pointer went, and settles the moment the step is taken.
   function bindDrag() {
     var startX = 0;
     var taken = 0;

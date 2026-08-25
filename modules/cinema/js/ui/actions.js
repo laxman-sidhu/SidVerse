@@ -400,9 +400,7 @@ export async function addToWatchlist(item) {
     || await firstGenre(item.id, item.media_type);
 
   return writer.addWatchlist(rowFor(item, {
-    // Type records film-versus-series and nothing else. Industry is left alone:
-    // TMDB knows a production country, not whether something is Bollywood, and
-    // that column is the one the watchlist page groups by.
+    // Type records film-versus-series and nothing else. Industry is left alone: TMDB knows a production country, not whether something is Bollywood, and that column is the one the watchlist page groups by.
     type: mediaWanted(item) === "tv" ? SERIES_INDUSTRY : MOVIE_INDUSTRY,
     genre
   }));

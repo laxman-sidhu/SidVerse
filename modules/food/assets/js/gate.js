@@ -1,8 +1,4 @@
-/* The owner gate.
-
-   A bare password box reads as a wall, so the question comes first and the
-   field only appears after Yes. Same two steps, same wording and same button
-   order as the film diary and the book diary. */
+// The owner gate. A bare password box reads as a wall, so the question comes first and the field only appears after Yes. Same two steps, same wording and same button order as the film diary and the book diary.
 
 import { ADMIN_PASSWORD, SITE } from "./config.js";
 

@@ -1,5 +1,4 @@
-/* SidVerse - the one palette. Every module maps its own variables onto these,
-   so a colour is changed here once and the whole site follows. */
+/* SidVerse - the one palette. Every module maps its own variables onto these, so a colour is changed here once and the whole site follows. */
 
 :root {
   /* Paper and ink — soft lavender-white paper, deep plum ink */
@@ -19,8 +18,7 @@
   --p-bg-rgb:      251, 248, 254;
   --p-surface-rgb: 255, 255, 255;
 
-  /* The pastel family the whole site is drawn from: the washes on the paper
-     and the tints inside cards, so a page reads pastel even when it is bare. */
+  /* The pastel family the whole site is drawn from: the washes on the paper and the tints inside cards, so a page reads pastel even when it is bare. */
   --p-pink:        #f2a3c0;
   --p-lilac:       #c3aef0;
   --p-lavender:    #b09ce6;
@@ -57,13 +55,16 @@
   --p-accent-rgb:  176, 156, 230;
   --p-on-accent:   #ffffff;
 
-  /* The accent is too light to read as text on paper. This is the same hue
-     pushed dark enough to be a link or a label. */
+  /* The accent is too light to read as text on paper. This is the same hue pushed dark enough to be a link or a label. */
   --p-accent-ink:  #6a4fae;
 
-  /* ---- Type scale ------------------------------------------------------
-     One 16px root, one ratio. Fluid sizes clamp so a heading is never larger
-     than its line can carry on a phone, and never smaller than it is legible. */
+  /* The translation bubble carries its own pair. --p-accent-ink is re-set by every section AND by the theme, while what sits on it was only ever set by the theme, so the two could drift apart and leave the text unreadable. These two are theme-only, so they always match. */
+  --p-gloss-bg:    var(--p-accent-ink);
+  --p-gloss-ink:   #ffffff;
+  --p-gloss-line:  transparent;
+
+  /* ---- Type scale ------------------------------------------------------ */
+  /* One 16px root, one ratio. Fluid sizes clamp so a heading is never larger than its line can carry on a phone, and never smaller than it is legible. */
   --p-text-2xs: 11px;
   --p-text-xs:  12px;
   --p-text-sm:  13.5px;
@@ -92,8 +93,8 @@
   --p-space-2xl: 56px;
   --p-space-3xl: 84px;
 
-  /* ---- Controls ---------------------------------------------------------
-     Every bar, button and field on the site measures from these. */
+  /* ---- Controls --------------------------------------------------------- */
+  /* Every bar, button and field on the site measures from these. */
   --p-bar-h:      64px;
   --p-control-h:  40px;
   --p-control-sm: 32px;
@@ -121,15 +122,12 @@
 
   --p-ease: cubic-bezier(.22, 1, .36, 1);
 
-  /* The sidebar is site chrome and keeps its own two colours, so it does not
-     invert when --p-ink does. */
+  /* The sidebar is site chrome and keeps its own two colours, so it does not invert when --p-ink does. */
   --p-nav-bg:   #ffffff;
   --p-nav-ink:  #2e2740;
   --p-nav-line: #e9e0f4;
 
-  /* Sections that are dark ON PURPOSE in both themes — Travel's hero band,
-     Cinema's shelf strips. White text sits on these in light mode and must
-     keep sitting on them in dark, so they darken rather than invert. */
+  /* Sections that are dark ON PURPOSE in both themes — Travel's hero band, Cinema's shelf strips. White text sits on these in light mode and must keep sitting on them in dark, so they darken rather than invert. */
   --p-deep:      #342c47;
   --p-deep-2:    #453b5c;
   --p-deep-rgb:  52, 44, 71;
@@ -195,6 +193,11 @@
   --p-accent-rgb:  191, 172, 237;
   --p-accent-ink:  #cbbcf0;
 
+  /* Inverted for dark: the pale section accent becomes the text and the bubble goes dark, so the accent survives and the contrast is guaranteed. */
+  --p-gloss-bg:    #201a2c;
+  --p-gloss-ink:   var(--p-accent-ink);
+  --p-gloss-line:  rgba(var(--p-accent-rgb), 0.34);
+
   --p-nav-bg:   #1c1826;
   --p-nav-ink:  #f2eff8;
   --p-nav-line: #352e46;
@@ -212,8 +215,7 @@
   color-scheme: dark;
 }
 
-/* One accent per module — lavender, rose, violet, meadow, apricot, sky,
-   orchid. Nothing else about a module's colour differs. */
+/* One accent per module — lavender, rose, violet, meadow, apricot, sky, orchid. Nothing else about a module's colour differs. */
 [data-section="home"]       { --p-accent:#b09ce6; --p-accent-deep:#7a5fc0; --p-accent-soft:#d5c9f2; --p-accent-tint:#f1ecfb; --p-accent-rgb:176,156,230; --p-accent-ink:#6a4fae; }
 [data-section="cinema"]     { --p-accent:#f2a3c0; --p-accent-deep:#c85f8c; --p-accent-soft:#fac9dc; --p-accent-tint:#fdeef5; --p-accent-rgb:242,163,192; --p-accent-ink:#b34c79; }
 [data-section="books"]      { --p-accent:#b598e8; --p-accent-deep:#8259c9; --p-accent-soft:#d9c9f5; --p-accent-tint:#f3edfc; --p-accent-rgb:181,152,232; --p-accent-ink:#7146bb; }

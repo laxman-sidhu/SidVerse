@@ -1,8 +1,4 @@
-// SidPicks - the only file to edit to change the collections. Append an object
-// to `categories` ({ title, icon, gid }) and its homepage card, category page,
-// navbar dropdown, footer link, URL slug and colour theme all follow. A tab
-// with columns Name | Image Url must exist for that gid. The slug drops the
-// leading "Favourite", so "Favourite Actors" opens at ?category=actors.
+// SidPicks - the only file to edit to change the collections. Append an object to `categories` ({ title, icon, gid }) and its homepage card, category page, navbar dropdown, footer link, URL slug and colour theme all follow. A tab with columns Name | Image Url must exist for that gid. The slug drops the leading "Favourite", so "Favourite Actors" opens at ?category=actors.
 
 export const CONFIG = {
   sheetBaseUrl:
@@ -16,10 +12,7 @@ export const CONFIG = {
   ],
 };
 
-/**
- * Pastel washes cycled across collection cards. Categories pick theirs
- * by index, so new collections are styled automatically.
- */
+// Pastel washes cycled across collection cards. Categories pick theirs by index, so new collections are styled automatically.
 export const CARD_THEMES = [
   { wash: "var(--grad-lavender)", glow: "0 14px 40px rgba(160, 138, 240, 0.30)" },
   { wash: "var(--grad-mint)",     glow: "0 14px 40px rgba(102, 194, 160, 0.30)" },
@@ -28,17 +21,13 @@ export const CARD_THEMES = [
   { wash: "var(--grad-butter)",   glow: "0 14px 40px rgba(230, 195, 100, 0.30)" },
 ];
 
-/**
- * Short display label — drops a leading "Favourite"/"Favorite" so labels
- * read "Actors", "Superheroes", etc. The full title is kept for page
- * headings; the slug is built from this short form.
- */
+// Short display label — drops a leading "Favourite"/"Favorite" so labels read "Actors", "Superheroes", etc. The full title is kept for page headings; the slug is built from this short form.
 export function displayTitle(category) {
   const title = typeof category === "string" ? category : category.title;
   return String(title).replace(/^\s*favou?rite\s+/i, "").trim();
 }
 
-/** Turn a label into a clean URL slug. */
+// Turn a label into a clean URL slug.
 function slugify(text) {
   return String(text).toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "");
 }
@@ -48,14 +37,14 @@ CONFIG.categories.forEach((category) => {
   if (!category.slug) category.slug = slugify(displayTitle(category));
 });
 
-/** Find a category by its URL slug. */
+// Find a category by its URL slug.
 export function findCategoryBySlug(slug) {
   if (!slug) return null;
   const wanted = slugify(slug);
   return CONFIG.categories.find((c) => c.slug === wanted) || null;
 }
 
-/** Build the public URL for a category page. */
+// Build the public URL for a category page.
 export function categoryUrl(category) {
   return `category.html?category=${encodeURIComponent(category.slug)}`;
 }

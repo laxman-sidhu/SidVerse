@@ -15,7 +15,7 @@ let folderPath = CLOUDINARY.baseFolder;
 
 const rating = $("#fRating");
 
-/* ---------- boot ---------- */
+// ---------- boot ----------
 
 bindLock();
 bindForm();
@@ -50,10 +50,9 @@ async function loadKnownValues() {
   } catch (_) {}
 }
 
-/* ---------- unlock ---------- */
+// ---------- unlock ----------
 
-// The gate asks who you are, then the password. Apps Script still checks every
-// write, so the copy in config.js only decides whether the form opens.
+// The gate asks who you are, then the password. Apps Script still checks every write, so the copy in config.js only decides whether the form opens.
 async function bindLock() {
   if (hasKey()) return showForm();
   if (!(await askOwner())) {
@@ -83,7 +82,7 @@ function showForm() {
   $("#fDish").focus();
 }
 
-/* ---------- form ---------- */
+// ---------- form ----------
 
 function paintRating() {
   $("#ratingOut").textContent = rating.value;
@@ -112,7 +111,7 @@ function bindForm() {
   $("#againBtn").addEventListener("click", () => { resetForm(); show("#formPanel"); $("#fDish").focus(); });
 }
 
-/* ---------- folders ---------- */
+// ---------- folders ----------
 
 function renderFolders() {
   const crumbs = folderPath.split("/");
@@ -171,7 +170,7 @@ async function addFolder() {
   await createFolder(path, key());
 }
 
-/* ---------- files ---------- */
+// ---------- files ----------
 
 function bindFiles() {
   const drop = $("#drop");
@@ -201,7 +200,7 @@ function preview(src) {
   if (src) $("#previewImg").src = src;
 }
 
-/* ---------- cloudinary ---------- */
+// ---------- cloudinary ----------
 
 async function uploadToCloudinary(file, publicId, onProgress) {
   const form = new FormData();
@@ -245,7 +244,7 @@ async function uploadToCloudinary(file, publicId, onProgress) {
   });
 }
 
-/* ---------- save ---------- */
+// ---------- save ----------
 
 function saving(on, step, pct) {
   $("#saving").hidden = !on;

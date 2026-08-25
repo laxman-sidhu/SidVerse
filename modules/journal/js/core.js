@@ -1,25 +1,12 @@
-/* Journal — the reader's half of the engine.
-
-   The editor lives in its own project and publishes JSON into data/. Nothing
-   here writes: these pages only ever read data/index.json and
-   data/posts/<id>.json and draw them. */
+// Journal — the reader's half of the engine. The editor lives in its own project and publishes JSON into data/. Nothing here writes: these pages only ever read data/index.json and data/posts/<id>.json and draw them.
 window.JOURNAL = (function(){
   const CONFIG = { TITLE: (window.JOURNAL_TITLE || "Journal") };
   const PAGE_W = 760;
 
-  /* ---- fonts ----
-     A curated set where every font renders VISUALLY UNIQUE for visitors. Most entries are
-     free Google web fonts (loaded on every page, identical on every device); the rest are
-     classic system / Office / Adobe families that are widely installed (Times New Roman,
-     Cambria, Courier New, Daun Penh, Bodoni MT, ...) with sensible fallbacks.
-
-     Decorative named fonts from the inspiration sheets (Naive, Icing, Fontleroy, Belluccia,
-     and dozens more) were removed on purpose: they are not installed on most devices, so
-     they all rendered as their shared fallback web font and appeared as identical
-     duplicates in the dropdown. FONT_ALIASES below maps every removed key to the kept font
-     it used to fall back to, so any already-published story keeps rendering pixel-for-pixel. */
+  // ---- fonts ----
+  // A curated set where every font renders VISUALLY UNIQUE for visitors. Most entries are free Google web fonts (loaded on every page, identical on every device); the rest are classic system / Office / Adobe families that are widely installed (Times New Roman, Cambria, Courier New, Daun Penh, Bodoni MT, ...) with sensible fallbacks. Decorative named fonts from the inspiration sheets (Naive, Icing, Fontleroy, Belluccia, and dozens more) were removed on purpose: they are not installed on most devices, so they all rendered as their shared fallback web font and appeared as identical duplicates in the dropdown. FONT_ALIASES below maps every removed key to the kept font it used to fall back to, so any already-published story keeps rendering pixel-for-pixel.
   const FONTS = {
-    /* handwritten & casual */
+    // handwritten & casual
     gaegu:    { css:"'Gaegu', cursive",          label:"Gaegu" },
     caveat:   { css:"'Caveat', cursive",         label:"Caveat" },
     patrick:  { css:"'Patrick Hand', cursive",   label:"Patrick Hand" },
@@ -31,7 +18,7 @@ window.JOURNAL = (function(){
     cedarville: { css:"'Cedarville Cursive', cursive",  label:"Cedarville Cursive" },
     mvboli:   { css:"'MV Boli', 'Kalam', cursive",      label:"MV Boli" },
 
-    /* elegant script & calligraphy */
+    // elegant script & calligraphy
     greatvibes:{ css:"'Great Vibes', cursive",          label:"Great Vibes" },
     sacramento:{ css:"'Sacramento', cursive",           label:"Sacramento" },
     dancing:  { css:"'Dancing Script', cursive",        label:"Dancing Script" },
@@ -40,13 +27,13 @@ window.JOURNAL = (function(){
     herrvon:  { css:"'Herr Von Muellerhoff', cursive",  label:"Herr Von Muellerhoff" },
     corsiva:  { css:"'Monotype Corsiva', 'Dancing Script', cursive", label:"Monotype Corsiva" },
 
-    /* brush & retro script */
+    // brush & retro script
     grandhotel: { css:"'Grand Hotel', cursive",         label:"Grand Hotel" },
     lobstertwo: { css:"'Lobster Two', cursive",         label:"Lobster Two" },
     sail:       { css:"'Sail', cursive",                label:"Sail" },
     gluten:     { css:"'Gluten', cursive",              label:"Gluten" },
 
-    /* serif & classic */
+    // serif & classic
     playfair: { css:"'Playfair Display', serif",        label:"Playfair Display" },
     cormorant:{ css:"'Cormorant Garamond', serif",      label:"Cormorant Garamond" },
     bodonimt: { css:"'Bodoni MT', 'Didot', 'Playfair Display', serif", label:"Bodoni MT" },
@@ -58,7 +45,7 @@ window.JOURNAL = (function(){
     chaparral:{ css:"'Chaparral Pro Light', 'Chaparral Pro', Georgia, serif", label:"Chaparral Pro Light" },
     adobearabic:{ css:"'Adobe Arabic', 'Times New Roman', serif", label:"Adobe Arabic" },
 
-    /* clean & modern */
+    // clean & modern
     quicksand:{ css:"'Quicksand', sans-serif",   label:"Quicksand" },
     nunito:   { css:"'Nunito', sans-serif",      label:"Nunito" },
     calibri:  { css:"'Calibri', 'Segoe UI', sans-serif",          label:"Calibri" },
@@ -67,12 +54,11 @@ window.JOURNAL = (function(){
     segoefluent:{ css:"'Segoe Fluent Icons', 'Segoe UI', sans-serif", label:"Segoe Fluent Icons" },
     bebas:    { css:"'Bebas Neue', sans-serif",  label:"Bebas Neue" },
 
-    /* monospace */
+    // monospace
     couriernew: { css:"'Courier New', Courier, monospace", label:"Courier New" }
   };
 
-  /* removed duplicate-looking keys → the kept font they fell back to.
-     resolveFontKey() keeps every already-published story rendering exactly as before. */
+  // removed duplicate-looking keys → the kept font they fell back to. resolveFontKey() keeps every already-published story rendering exactly as before.
   const FONT_ALIASES = {
     naive:"amatic", icing:"amatic", northwest:"amatic", hammock:"amatic", barocca:"amatic",
     everafter:"amatic", matilde:"amatic", windsorpark:"amatic",
@@ -107,11 +93,8 @@ window.JOURNAL = (function(){
   function resolveFontKey(k){ if(FONTS[k]) return k; if(FONT_ALIASES[k] && FONTS[FONT_ALIASES[k]]) return FONT_ALIASES[k]; return 'gaegu'; }
   function getFont(k){ return FONTS[resolveFontKey(k)]; }
 
-  /* ---- font groups ----
-     Order for the editor's font dropdowns: similar styles sit together, one after the
-     other, under a labelled heading (rendered as <optgroup>). Every FONTS key appears in
-     exactly one group; any key added later but forgotten here is appended automatically
-     to a trailing "More" group by the dropdown builder, so nothing can go missing. */
+  // ---- font groups ----
+  // Order for the editor's font dropdowns: similar styles sit together, one after the other, under a labelled heading (rendered as <optgroup>). Every FONTS key appears in exactly one group; any key added later but forgotten here is appended automatically to a trailing "More" group by the dropdown builder, so nothing can go missing.
   const FONT_GROUPS = [
     { label:"Handwritten & Casual", keys:[
       "gaegu","caveat","patrick","indie","kalam","shadows","amatic","walterturncoat","cedarville","mvboli" ]},
@@ -126,11 +109,8 @@ window.JOURNAL = (function(){
     { label:"Monospace", keys:[ "couriernew" ]}
   ];
 
-  /* ---- page backgrounds ----
-     Built-in styles (grid / dot / plain) plus image backgrounds stored as small files
-     under assets/backgrounds/. A page only stores its background KEY (e.g. "bg04"), so
-     story files stay tiny; the image itself is fetched once and cached by the browser,
-     and only when a page actually uses it. `thumb` is a tiny inline preview for the picker. */
+  // ---- page backgrounds ----
+  // Built-in styles (grid / dot / plain) plus image backgrounds stored as small files under assets/backgrounds/. A page only stores its background KEY (e.g. "bg04"), so story files stay tiny; the image itself is fetched once and cached by the browser, and only when a page actually uses it. `thumb` is a tiny inline preview for the picker.
   const BACKGROUNDS = [
     {key:"bg01", label:"Cinnamoroll Paris", file:"assets/backgrounds/bg01.jpg", thumb:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCABwAFQDASIAAhEBAxEB/8QAGgABAQADAQEAAAAAAAAAAAAAAAMBBAUCB//EAC8QAAIBAwEGBAUFAQAAAAAAAAABAgMEESESFDE0gbFBUVKhEyIyYZEFI0Jx8DP/xAAYAQEBAQEBAAAAAAAAAAAAAAAABAEDAv/EABwRAQACAgMBAAAAAAAAAAAAAAABAhIxESFRMv/aAAwDAQACEQMRAD8A+jUKVOdFP4blLzzhHqNC321CWZSec4zhYJzpSnYRcNptSzsrXOp6t7ZwinUi9V/F+fmba9s5hkVjHl6dCgquzFSemca6r7MpG2oSWVF/lmaVNycpSUo5xst8V9v6LRjsri234sZW9MYS3Sj6fdjdKPp92XBuVvTGEN0o+n3Y3Sj6PdlwMremMNeVtQjFylHCXjlknRpLOIpv+EdrDlobVXOzp5664PMY52XhPC0k+KMyt6Yx451ZKNRqMXFaaPw0Bm5io15JcECuuocJ23rLl49e5chZcvHr3LktvqXeugAHloAAAAAw0nxRkADmXfMT6dgLvmJ/7wBXXUJ523LLl49e5chZcvHr3Lk1vqXeugAHloAAAAAAADmXfMT6dgLvmJ9OwK66hPO25ZcvHr3LkLLl49e5cmt9S710AA8tAAAAAAAAcy75ifTsBd8xP/eAK66hPO25ZcvHr3LkLLl49e5cmt9S710AA8tAAAAAAAAcy75ifTsBd8xPp2BXXUJ523LLl49e5mvcQoTpQlxqSwiVKbjZPY+tRbSx+DRryq07iy+K/n23JrjhaImnuZd46iHXnNQXm3wRmL2oprxWTxKO3LVfKvcoeO+WgANAAAAeHUivH8amYzjP6Wm14Ac675ifTsDF5zE+nYFddQnnbatUt3U5v7vyWDi3tbeLqrVjPKp/88p68OHudCrcunYfDpJuq8rRcPua1lZ2m7veI/uPho8xRxx4menSbcurY1lWtoSzmWEpf2bBxf0qpK1nOnUTVNvR49zp73R9XszxNJ509RaOFwQ3uj6vZje6Pq9mMbeNyhc1risqa/ck0m8bMVqz1vdH1ezI3VSjcUtj4mzrnOy2ZNbcdQRavPbNK6Ta2Y7NNJ6bL18uB7c3Kq22lGOilj6X5MlTlQpLFOo1ph5T1PdKtRp5bqOTeMvZxkRW3HcNm1WrcvNeTbT+8eAFxJTrSlF5TBXXUJ52/9k="},
     {key:"bg02", label:"Floral Border", file:"assets/backgrounds/bg02.jpg", thumb:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAB2AFQDASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAMCAQQH/8QALBAAAwACAQIFAgUFAAAAAAAAAAECAxEhEjEyQVFhcSJSBBNCgZEjM1Ohsf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAGBEBAAMBAAAAAAAAAAAAAAAAAAERIUH/2gAMAwEAAhEDEQA/APpeWW6yKsi1rWn5fwdxYblN/mtuq8SfcR+XlzWlFcr6tr/TPRK6ZSXZLRUSrFVLTva90a1kX6kUBFY6bfe9fCHRX+SjYAnrIv1J/scrHVNN0trtwVAEui/PI/20RWJxle8q1ttS+dcdz1k8kJ7vTdJcaLaUzgmnjW8jflxoGMGaJxpY4trz1O9MAbjHM5rpTpliWOurI3prc+ZUigAAAAAAAByluWvVep05T1La76AlhxQsa+hIHFmcTMrFdaXkgXUUXOWvZI2YjxX8myKAAAAAAAAHGtpr1OgDGN7hAYvC/kAJ4yUvXTNmF/dfwbAAAAAAAAAHHwtnTNeF/AHMS/pr35B2PAgByObt/sbMR4rXubAAAAAAAAAAADGLwJenAGLw79WAORSrI3L2mihOZSyvS0kktIoAAAAAAAAAOU9S2dOUtpr1AnGSJlJ2lr1YEY8dxLqJb1rlAqJ4cqyfiLlSuPPf/D0nmqujLTWLwLSfr7F4bqU2tMSQ0ACKAAAAABm+Ifnx5vRollt9XR07ml3Alg/Ey8fktPzpIFMKV406xqX200C4jGVXFW1b5nhLj2GKc26mrlua7tAF4O5XeKOp2++uEUUP72AQd6bXa9/KGsn3L+ACKdFfeyeR1FRPW/reuwBUa6Mn3p/KIS8vXt39NOkkn2AEC2Kck41u0/PlAAiv/9k="},
@@ -157,11 +137,8 @@ window.JOURNAL = (function(){
   const BG_MAP = {}; BACKGROUNDS.forEach(b=> BG_MAP[b.key]=b);
   const BUILTIN_PAPERS = ['grid','dot','plain'];
 
-  /* ---- doodles ----
-     Decorative line-art (stars, sparkles, arrows, lines, flourishes) drawn as inline SVG.
-     Each shape paints with `currentColor`, so the element's CSS colour recolours it.
-     `ratio` is width/height, used to reserve the right height as the width is scaled.
-     Stored on an element as { type:'doodle', key, w, rot, color }. */
+  // ---- doodles ----
+  // Decorative line-art (stars, sparkles, arrows, lines, flourishes) drawn as inline SVG. Each shape paints with `currentColor`, so the element's CSS colour recolours it. `ratio` is width/height, used to reserve the right height as the width is scaled. Stored on an element as { type:'doodle', key, w, rot, color }.
   const S='stroke="currentColor" fill="none" stroke-width="@W" stroke-linecap="round" stroke-linejoin="round"';
   const DOODLES = [
     {key:"star",   label:"Star",        ratio:1,    w:64,  svg:'<svg viewBox="0 0 100 100"><path fill="currentColor" d="M50 5l12 30 32 2-25 21 8 31-27-17-27 17 8-31-25-21 32-2z"/></svg>'},
@@ -206,24 +183,11 @@ window.JOURNAL = (function(){
     {key:"pin",         label:"Location pin",  ratio:0.71,w:40,  svg:'<svg viewBox="0 0 40 56"><path '+S+' d="M20 52C20 52 33 33 33 20 33 12 27 6 20 6 13 6 7 12 7 20 7 33 20 52 20 52z"/><circle cx="20" cy="20" r="6" '+S+'/></svg>'}
   ];
   const DOODLES_MAP = {}; DOODLES.forEach(d=> DOODLES_MAP[d.key]=d);
-  /* build a doodle's final SVG with a chosen colour + stroke weight baked in
-     (baking, rather than CSS, so the PDF export renders colour and weight too) */
+  // build a doodle's final SVG with a chosen colour + stroke weight baked in (baking, rather than CSS, so the PDF export renders colour and weight too)
   function doodleSVG(key, color, weight){ const dd=DOODLES_MAP[key]; if(!dd) return '';
     const w=(weight==null?6:weight); return dd.svg.split('@W').join(w).split('currentColor').join(color||'#4b4361'); }
 
-  /* photo looks: card (default), plain, shadow, frame (custom bg), border. Applied as classes
-     so existing photos (no style) stay exactly as the card look.
-
-     Two behaviours changed vs the original:
-       1. SHADOW is now INDEPENDENT of the look. Previously "shadow" was its own mutually
-          exclusive look, so you could not have, say, a framed photo that also casts a shadow.
-          Now any look can have a drop shadow via the separate `d.shadow` flag (class .has-shadow),
-          and turning it off removes the shadow entirely. The old style value "shadow" is still
-          understood (a bare image) for backwards compatibility with already-published stories.
-       2. PLAIN now keeps PNG transparency. A cut-out sticker-style image (e.g. an aeroplane with
-          no background) shows ONLY the subject — no filled box behind it. This is handled in CSS
-          (.style-plain has no background/padding); here we just make sure no inline background is
-          left over from a previous "frame" look. */
+  // photo looks: card (default), plain, shadow, frame (custom bg), border. Applied as classes so existing photos (no style) stay exactly as the card look. Two behaviours changed vs the original: 1. SHADOW is now INDEPENDENT of the look. Previously "shadow" was its own mutually exclusive look, so you could not have, say, a framed photo that also casts a shadow. Now any look can have a drop shadow via the separate `d.shadow` flag (class .has-shadow), and turning it off removes the shadow entirely. The old style value "shadow" is still understood (a bare image) for backwards compatibility with already-published stories. 2. PLAIN now keeps PNG transparency. A cut-out sticker-style image (e.g. an aeroplane with no background) shows ONLY the subject — no filled box behind it. This is handled in CSS (.style-plain has no background/padding); here we just make sure no inline background is left over from a previous "frame" look.
   const PHOTO_FRAME_DEFAULT='#e3e8f8';
   function applyPhotoStyle(el,d){
     ['card','plain','shadow','frame','border'].forEach(s=>el.classList.remove('style-'+s));
@@ -235,11 +199,7 @@ window.JOURNAL = (function(){
     el.style.background=''; el.style.padding=''; el.style.borderColor=''; el.style.borderWidth='';
     el.style.borderRadius='';
     const im=el.querySelector('img'); if(im) im.style.borderRadius='';
-    /* CORNER ROUNDING: d.radius (px) controls how rounded the photo's corners are —
-       0 = completely square, higher = rounder. Applies to every look. Unset keeps the
-       original CSS defaults, so existing photos are untouched. On padded looks (frame /
-       card / border) the inner image gets a slightly smaller radius so the band of
-       frame/border stays visually even around the corner. */
+    // CORNER ROUNDING: d.radius (px) controls how rounded the photo's corners are — 0 = completely square, higher = rounder. Applies to every look. Unset keeps the original CSS defaults, so existing photos are untouched. On padded looks (frame / card / border) the inner image gets a slightly smaller radius so the band of frame/border stays visually even around the corner.
     if(d.radius!=null){
       el.style.borderRadius=d.radius+'px';
       const padded=(st==='frame'||st==='card'||st==='border');
@@ -247,17 +207,14 @@ window.JOURNAL = (function(){
     }
     // only the custom "frame" look paints a background colour; everything else (incl. plain) stays clear
     if(st==='frame') el.style.background=(d.frameColor||PHOTO_FRAME_DEFAULT);
-    // BORDER look: optional colour + width. Defaults (white band, 6px, subtle 1px edge) come from
-    // CSS, so leaving these unset keeps the original look pixel-for-pixel; setting them overrides.
+    // BORDER look: optional colour + width. Defaults (white band, 6px, subtle 1px edge) come from CSS, so leaving these unset keeps the original look pixel-for-pixel; setting them overrides.
     if(st==='border'){
       if(d.borderColor){ el.style.background=d.borderColor; el.style.borderColor=d.borderColor; }
       if(d.borderWidth!=null){ el.style.padding=d.borderWidth+'px'; }
     }
   }
 
-  /* caption styling — font, colour and size are now fully controllable per photo.
-     Sensible defaults keep already-published captions looking exactly as before:
-     the handwritten caption font, the soft-ink colour, 18px. */
+  // caption styling — font, colour and size are now fully controllable per photo. Sensible defaults keep already-published captions looking exactly as before: the handwritten caption font, the soft-ink colour, 18px.
   const CAPTION_DEFAULTS={ font:'', color:'', size:0 };
   function applyCaptionStyle(cap, d){
     // font: a key into FONTS, or empty to inherit the theme's handwritten caption font (from CSS)
@@ -285,11 +242,7 @@ window.JOURNAL = (function(){
   function formatDate(iso){ if(!iso) return ''; try{ const [y,m,d]=iso.split('-'); const mn=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     return parseInt(d)+' '+mn[parseInt(m)-1]+' '+y; }catch(e){ return iso; } }
 
-  /* Encode a canvas to a data URL, automatically choosing PNG when the image has any
-     transparency and JPEG otherwise. This is what lets a cut-out image (e.g. an aeroplane
-     PNG with no background) keep its transparency instead of getting a black box baked in:
-     JPEG has no alpha channel, so transparent pixels become black. We detect alpha and switch
-     to PNG only when needed (PNG is lossless but bigger), keeping ordinary photos small as JPEG. */
+  // Encode a canvas to a data URL, automatically choosing PNG when the image has any transparency and JPEG otherwise. This is what lets a cut-out image (e.g. an aeroplane PNG with no background) keep its transparency instead of getting a black box baked in: JPEG has no alpha channel, so transparent pixels become black. We detect alpha and switch to PNG only when needed (PNG is lossless but bigger), keeping ordinary photos small as JPEG.
 
 
   function applyTextStyle(body, d){
@@ -301,21 +254,11 @@ window.JOURNAL = (function(){
     body.style.textAlign  = d.align||'left';
     body.style.color = d.color || '';
     body.style.background = d.fill || 'transparent';
-    /* paragraph / line spacing: a multiplier (1.0 – 3.0). Unset inherits the CSS
-       default (1.45), so every already-published story renders exactly as before. */
+    // paragraph / line spacing: a multiplier (1.0 – 3.0). Unset inherits the CSS default (1.45), so every already-published story renders exactly as before.
     body.style.lineHeight = d.spacing ? String(d.spacing) : '';
   }
 
-  /* INLINE FORMATTING
-     A text box can now carry per-word bold / italic / underline. When the user formats a
-     selection inside a box, the editor stores the box's `html` (rich markup) alongside the
-     plain `content` (used for previews/search and as a fallback). The block-level bold/italic/
-     underline buttons still work for whole-box styling via applyTextStyle; inline runs live
-     inside the html.
-
-     For safety we never inject arbitrary markup: setRichText whitelists only the formatting
-     tags <b> <strong> <i> <em> <u> <br> and escapes everything else. This keeps rendering
-     identical between the editor and the public reader, and keeps the PDF export correct. */
+  // INLINE FORMATTING A text box can now carry per-word bold / italic / underline. When the user formats a selection inside a box, the editor stores the box's `html` (rich markup) alongside the plain `content` (used for previews/search and as a fallback). The block-level bold/italic/ underline buttons still work for whole-box styling via applyTextStyle; inline runs live inside the html. For safety we never inject arbitrary markup: setRichText whitelists only the formatting tags <b> <strong> <i> <em> <u> <br> and escapes everything else. This keeps rendering identical between the editor and the public reader, and keeps the PDF export correct.
   function sanitizeRich(html){
     if(html==null) return '';
     const allowed={B:'b',STRONG:'b',I:'i',EM:'i',U:'u',BR:'br'};
@@ -341,7 +284,7 @@ window.JOURNAL = (function(){
     else { body.textContent = d.content||''; }
   }
 
-  /* rotation lives on the element wrapper for every type (now text too) */
+  // rotation lives on the element wrapper for every type (now text too)
   function applyRot(el, d){ el.style.transform = d.rot ? ('rotate('+d.rot+'deg)') : ''; }
 
   function buildElementRO(d){

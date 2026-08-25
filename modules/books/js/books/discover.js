@@ -33,8 +33,7 @@ export function looksLikeIsbn(phrase) {
 
 let lastGoogleError = null;
 
-// Google is the better index but the one that can refuse: a wrong country gets a
-// 403, its quota gets a 429. Only the failure of BOTH sources is an error.
+// Google is the better index but the one that can refuse: a wrong country gets a 403, its quota gets a 429. Only the failure of BOTH sources is an error.
 async function tryGoogle(query, options) {
   try {
     return await googleVolumes(query, options);
@@ -48,8 +47,7 @@ export function googleTrouble() {
   return lastGoogleError ? lastGoogleError.message : "";
 }
 
-// "Failed to fetch" and "signal is aborted without reason" are what a browser
-// says; neither tells anyone what to do about it. These do.
+// "Failed to fetch" and "signal is aborted without reason" are what a browser says; neither tells anyone what to do about it. These do.
 export function explain(message) {
   const text = String(message || "");
   if (/quota|rateLimitExceeded|429/i.test(text) && /books\.googleapis|Queries/i.test(text)) {
@@ -62,12 +60,7 @@ export function explain(message) {
   return text;
 }
 
-// Sort, language and year are Open Library parameters and Google has no
-// equivalent, so a search WITH a filter set is answered by Open Library. That
-// is a real change of index, so the note on screen says so.
-// "best short stories" asks for a shelf, not a title. Google ranks it as a
-// phrase and answers with novels that happen to carry those words, which is why
-// a search for short stories came back full of long ones.
+// Sort, language and year are Open Library parameters and Google has no equivalent, so a search WITH a filter set is answered by Open Library. That is a real change of index, so the note on screen says so. "best short stories" asks for a shelf, not a title. Google ranks it as a phrase and answers with novels that happen to carry those words, which is why a search for short stories came back full of long ones.
 const SUPERLATIVE = /^(?:the\s+)?(?:best|top|greatest|good|great|finest|popular|famous|classic|must[\s-]*read|recommended)\s+(.+)$/i;
 const FILLER = /\b(?:books?|novels?|stories collections?|reads?|of all time|ever|list)\b/gi;
 
@@ -77,9 +70,7 @@ export function asShelfRequest(phrase) {
   return clean(match[1].replace(FILLER, " "));
 }
 
-// The subjects index first, because it is a real shelf rather than a text
-// search for the shelf's name; the rated search behind it, which the subjects
-// endpoint cannot do.
+// The subjects index first, because it is a real shelf rather than a text search for the shelf's name; the rated search behind it, which the subjects endpoint cannot do.
 async function shelfSearch(shelf, page) {
   const rated = await openLibrarySearch({ subject: shelf }, { limit: PAGE_SIZE, page, sort: "rating" }).catch(() => ({ items: [], total: 0 }));
   if (rated.items.length) return { result: rated, note: `Read as a subject and sorted by rating, because "best" is a question about a shelf.` };
@@ -131,8 +122,7 @@ export async function search({ scope = "auto", phrase = "", page = 1 } = {}) {
 
   const result = await tryGoogle(query(), { start });
 
-  // A quoted field search can come back empty where the same words unquoted do
-  // not, so the narrow query runs first and the wide one only if needed.
+  // A quoted field search can come back empty where the same words unquoted do not, so the narrow query runs first and the wide one only if needed.
   if (!result.items.length && !result.failed && effective !== "auto") {
     const relaxed = await tryGoogle(text, { start });
     if (relaxed.items.length) return { items: relaxed.items, total: relaxed.total, scope: effective, headline: headlineFor(effective, text, relaxed.total) };
@@ -169,9 +159,7 @@ function subjectSlug(text) {
 
 // --- an ISBN names one printing ---------------------------------------------
 
-// Letting this widen was the worst bug the site had: the number found nothing,
-// the retry searched the digits as words, and a stranger's book came back
-// looking like an answer. Nothing failing the ISBN check is shown.
+// Letting this widen was the worst bug the site had: the number found nothing, the retry searched the digits as words, and a stranger's book came back looking like an answer. Nothing failing the ISBN check is shown.
 async function firstAnswer(forms, ask) {
   for (const form of forms) {
     try {
@@ -250,11 +238,7 @@ export const TRENDING_PERIODS = [
   { key: "yearly", label: "This year" }
 ];
 
-// The trending feed is the one endpoint here with no second opinion, so a bad
-// day for it used to mean a blank home page. Four sources now, ending with the
-// subjects index — the same endpoint the chips use, so it is known to work in
-// the browser. Whatever failed on the way is carried out with the result rather
-// than swallowed, because a silent fallback is a bug that cannot be reported.
+// The trending feed is the one endpoint here with no second opinion, so a bad day for it used to mean a blank home page. Four sources now, ending with the subjects index — the same endpoint the chips use, so it is known to work in the browser. Whatever failed on the way is carried out with the result rather than swallowed, because a silent fallback is a bug that cannot be reported.
 const LAST_GOOD = "sidbooks:trending:last";
 
 export async function trending(period = "weekly") {
@@ -290,17 +274,14 @@ export async function trending(period = "weekly") {
   }
   if (googleTrouble()) problems.push(googleTrouble());
 
-  // Everything is down. Yesterday's feed is stale, and stale beats a blank page
-  // with an apology on it.
+  // Everything is down. Yesterday's feed is stale, and stale beats a blank page with an apology on it.
   const kept = recall();
   if (kept.length) return { items: kept, source: "stale", problems };
 
   return { items: [], source: "none", problems };
 }
 
-// Only the trending feed is kept: it is the one view with nothing behind it.
-// The edition lists are trimmed on the way in, because a popular novel carries
-// hundreds of ISBNs and this has a storage quota to live inside.
+// Only the trending feed is kept: it is the one view with nothing behind it. The edition lists are trimmed on the way in, because a popular novel carries hundreds of ISBNs and this has a storage quota to live inside.
 function remember(items) {
   const light = items.slice(0, PAGE_SIZE).map(item => ({ ...item, editionIsbns: (item.editionIsbns || []).slice(0, 60) }));
   try { store.set(LAST_GOOD, JSON.stringify(light)); } catch { /* quota */ }
@@ -315,8 +296,7 @@ function recall() {
 
 // --- browsing ---------------------------------------------------------------
 
-// The subject chips. *:* is solr's match-all and the only spelling it accepts;
-// a bare * is parsed as a term and finds nothing.
+// The subject chips. *:* is solr's match-all and the only spelling it accepts; a bare * is parsed as a term and finds nothing.
 export async function browse({ subject = "", page = 1 } = {}) {
   const params = subject ? { subject } : { q: "*:*" };
   const result = await openLibrarySearch(params, { limit: PAGE_SIZE, page });
@@ -326,8 +306,7 @@ export async function browse({ subject = "", page = 1 } = {}) {
 
 // --- one book, fully filled in ----------------------------------------------
 
-// Google usually has the description and the page count, Open Library the
-// subjects and the rating, so each fills the other's gaps.
+// Google usually has the description and the page count, Open Library the subjects and the rating, so each fills the other's gaps.
 export async function details(entry) {
   const base = { ...entry };
 
@@ -352,8 +331,7 @@ export async function details(entry) {
       base.genres = unique([...(base.genres || []), ...(work.subjects || []).slice(0, 8)]);
     }
 
-    // As a set, and the search doc's publisher is overwritten: it belongs to
-    // whichever printing sorted first, not to the edition being shown.
+    // As a set, and the search doc's publisher is overwritten: it belongs to whichever printing sorted first, not to the edition being shown.
     const known = base.isbn13 || base.isbn10;
     applyEdition(base, pickEdition(editions?.entries, known), { keepIsbn: Boolean(known) });
 
@@ -383,8 +361,7 @@ function merge(target, source, { preferExisting = false, skip = [] } = {}) {
   return target;
 }
 
-// A record found by TITLE is the same book but not necessarily the same
-// edition, so it may not donate these to a book that already has them.
+// A record found by TITLE is the same book but not necessarily the same edition, so it may not donate these to a book that already has them.
 const EDITION_FIELDS = ["isbn13", "isbn10", "publisher", "pages", "edition", "editionKey", "language"];
 
 function fold(base, found) {
@@ -421,8 +398,7 @@ async function lookupOpenLibrary(entry) {
 
 // --- other editions of the same work ----------------------------------------
 
-// There is no arithmetic from one ISBN to the rest: editions are grouped by
-// WORK, so the work has to be resolved first and its editions listed.
+// There is no arithmetic from one ISBN to the rest: editions are grouped by WORK, so the work has to be resolved first and its editions listed.
 export async function workKeyFor(entry) {
   if (entry.workKey) return entry.workKey;
   if (typeof entry.id === "string" && entry.id.includes("/works/")) return entry.id.replace(/^ol:/, "");
@@ -461,9 +437,7 @@ export async function otherEditions(entry, limit = 50) {
     .sort((a, b) => (b.year || 0) - (a.year || 0));
 }
 
-// The Other Versions cell, written the same way OtherVersions.gs writes it:
-// ISBN first, then the human part. The two must agree or a row written by the
-// site and a row filled by the script would parse differently.
+// The Other Versions cell, written the same way OtherVersions.gs writes it: ISBN first, then the human part. The two must agree or a row written by the site and a row filled by the script would parse differently.
 export function editionLines(editions) {
   return editions
     .filter(edition => !edition.isMine)
@@ -479,9 +453,7 @@ export function editionIsbns(editions) {
 
 // --- reading it now ---------------------------------------------------------
 
-// Open Library hosts no files itself; a scanned copy lives at the Internet
-// Archive under the edition's ocaid. "public" is readable and downloadable,
-// anything else is lending-only and only a borrow link is honest.
+// Open Library hosts no files itself; a scanned copy lives at the Internet Archive under the edition's ocaid. "public" is readable and downloadable, anything else is lending-only and only a borrow link is honest.
 export function ebookLinks(entry) {
   const id = clean(entry.ocaid);
   if (!id) return null;
@@ -496,9 +468,7 @@ export function ebookLinks(entry) {
 
 // --- the two related strips -------------------------------------------------
 
-// No source has a "related books" endpoint, so these are what can honestly be
-// built. Each falls through to Open Library: a modal fires several requests at
-// once, and one 429 used to empty both strips.
+// No source has a "related books" endpoint, so these are what can honestly be built. Each falls through to Open Library: a modal fires several requests at once, and one 429 used to empty both strips.
 export async function moreByAuthor(entry, limit = 12) {
   const author = (entry.authors || [])[0] || entry.author || "";
   if (!author) return [];
@@ -513,8 +483,7 @@ export async function moreByAuthor(entry, limit = 12) {
   return items.slice(0, limit);
 }
 
-// inauthor: also returns books ABOUT a person, so the strip is filtered back
-// down to the name it promises.
+// inauthor: also returns books ABOUT a person, so the strip is filtered back down to the name it promises.
 function byAuthor(items, author) {
   const wanted = normaliseAuthor(author);
   if (!wanted) return items;
@@ -525,8 +494,7 @@ function byAuthor(items, author) {
   });
 }
 
-// "Fiction" is not a recommendation, and it is the root of almost every Google
-// category path, so the strongest subject is the most specific one.
+// "Fiction" is not a recommendation, and it is the root of almost every Google category path, so the strongest subject is the most specific one.
 const VAGUE = new Set([
   "fiction", "nonfiction", "non fiction", "general", "literature", "books",
   "novel", "novels", "english fiction", "juvenile fiction", "fictional",

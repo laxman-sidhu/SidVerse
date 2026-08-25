@@ -14,14 +14,11 @@ function button(action, glyph, label, on) {
   </button>`;
 }
 
-// A different printing of something on a shelf is not the same as having it,
-// so it gets its own colour and its own sentence rather than being quietly
-// counted as read.
+// A different printing of something on a shelf is not the same as having it, so it gets its own colour and its own sentence rather than being quietly counted as read.
 export function versionNote(book) {
   if (book.read || book.queued) return "";
   if (book.version_read) {
-    // A title-and-author match is a guess until the ISBN is filed, and the
-    // sentence says which of the two this is.
+    // A title-and-author match is a guess until the ISBN is filed, and the sentence says which of the two this is.
     if (book.version_via === "guess") return "Probably another edition of a book on the shelf";
     return "Another edition of this is on the shelf";
   }
@@ -32,9 +29,7 @@ export function versionNote(book) {
   return "";
 }
 
-// Which shelf the other edition sits on, and therefore which colour the card
-// takes. A printing of something QUEUED is still a queued book, so it keeps the
-// violet rather than borrowing the yellow that means "read another edition".
+// Which shelf the other edition sits on, and therefore which colour the card takes. A printing of something QUEUED is still a queued book, so it keeps the violet rather than borrowing the yellow that means "read another edition".
 export function versionKind(book) {
   if (book.read || book.queued) return "";
   if (book.version_read) return "version";
@@ -42,8 +37,7 @@ export function versionKind(book) {
   return "";
 }
 
-// The label and the button say the same thing to two different devices: the
-// label on hover, the button on a tap. The stylesheet shows one or the other.
+// The label and the button say the same thing to two different devices: the label on hover, the button on a tap. The stylesheet shows one or the other.
 export function versionTag(note, kind = "version") {
   const queued = kind === "queued";
   const tone = queued ? " card__tag--version-queued" : "";
@@ -60,8 +54,7 @@ function ratingChip(book) {
     + `${count ? `<span class="card__ratingn">(${count.toLocaleString()})</span>` : ""}</span>`;
 }
 
-// Filing a printing is only offered where it would mean something: not on a
-// book we have, and not on one the sheet already names by its ISBN.
+// Filing a printing is only offered where it would mean something: not on a book we have, and not on one the sheet already names by its ISBN.
 function filable(book) {
   return !book.read && !book.queued && book.version_via !== "isbn" && book.version_queued_via !== "isbn";
 }
