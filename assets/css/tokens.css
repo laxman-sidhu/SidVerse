@@ -193,10 +193,10 @@
   --p-accent-rgb:  191, 172, 237;
   --p-accent-ink:  #cbbcf0;
 
-  /* Inverted for dark: the pale section accent becomes the text and the bubble goes dark, so the accent survives and the contrast is guaranteed. */
-  --p-gloss-bg:    #201a2c;
-  --p-gloss-ink:   var(--p-accent-ink);
-  --p-gloss-line:  rgba(var(--p-accent-rgb), 0.34);
+  /* The light bubble is a saturated pill of the section's accent with white on it. Dark keeps the same idea the way this palette always inverts one: the accent is a pale pastel here, so the pill takes the pastel and the words take ink. A flat near-black bubble read as a tooltip the browser drew; this reads as the same colourful label the light theme has. */
+  --p-gloss-bg:    var(--p-accent);
+  --p-gloss-ink:   var(--p-on-accent);
+  --p-gloss-line:  transparent;
 
   --p-nav-bg:   #1c1826;
   --p-nav-ink:  #f2eff8;

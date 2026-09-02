@@ -71,8 +71,11 @@
     loading.style.display = "none";
 
     if (!Array.isArray(list) || list.length === 0) {
-      cards.innerHTML = '<div class="empty"><div class="big">No stories yet</div>'
-        + "<div>Publish one from the editor and it appears here.</div></div>";
+      const owner = (window.SIDVERSE && window.SIDVERSE.owner) || "Siddhesh";
+      cards.innerHTML = '<div class="empty empty--bare">'
+        + '<p class="empty__line">The first page is still blank</p>'
+        + '<p class="empty__sub">' + J.escapeHtml(owner) + " writes these one at a time. "
+        + "When the next one is finished, it will be sitting right here.</p></div>";
       return;
     }
 

@@ -130,8 +130,11 @@ a{color:inherit; text-decoration:none;}
   overflow-wrap:anywhere;
   display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2;
   overflow:hidden; min-height:2.24em;}
-.empty{text-align:center; color:var(--ink-soft); max-width:380px; margin:70px auto; padding:0 20px;}
-.empty .big{font-family:var(--serif); font-size:52px; color:var(--ink); margin-bottom:8px;}
+/* Nothing published yet. It spans the whole grid and carries no surface of its own: a blank shelf should read as a quiet line on the paper, not as an empty card. */
+.cards .empty{grid-column:1 / -1; padding:56px 20px 80px; background:none; box-shadow:none;}
+.empty__line{font-family:var(--serif); font-size:clamp(30px,6vw,46px); line-height:1.12; color:var(--ink); margin:0;}
+.empty__sub{font-family:var(--serif); font-style:italic; font-size:17px; line-height:1.5;
+  color:var(--ink-soft); max-width:34ch; margin:14px 0 0;}
 
 /* ===== reader ===== */
 .reader-top{padding:16px 20px 0; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}

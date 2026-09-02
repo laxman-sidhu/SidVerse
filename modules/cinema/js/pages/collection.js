@@ -434,24 +434,33 @@ function wire() {
   });
 
   detail.attach(dom.collGrid);
-  cardactions.attach(dom.collGrid, itemForCard, {
-    onChange: (item, action) => {
-      // Unmarking something watched takes it out of this collection, so the row has to leave.
-      if (PAGE.views && action === "watched" && !item.watched) {
-        state.all = state.all.filter(row => row !== item);
-      }
-      if (!PAGE.views && action === "watched" && item.watched) {
-        state.all = state.all.filter(row => row !== item);
-      }
-      if (!PAGE.views && action === "watchlist" && !item.watchlisted) {
-        state.all = state.all.filter(row => row !== item);
-      }
-      state.stats = PAGE.views ? watched.stats() : watchlist.stats(watched);
-      paintSummary();
-      paint();
-    }
-  });
+  cardactions.attach(dom.collGrid, itemForCard, { onChange: afterWrite });
 
+  // The title screen writes to its own copy of a title, so the collection's copy is brought level first.
+  window.addEventListener("cinema:write", event => {
+    const changed = event.detail.item;
+    const mine = state.all.find(item =>
+      String(item.id == null ? "" : item.id) === String(changed.id));
+    if (!mine || mine === changed) return;
+    cardactions.syncInto(mine, changed);
+    afterWrite(mine, event.detail.action);
+  });
+}
+
+function afterWrite(item, action) {
+  // Unmarking something watched takes it out of this collection, so the row has to leave.
+  if (PAGE.views && action === "watched" && !item.watched) {
+    state.all = state.all.filter(row => row !== item);
+  }
+  if (!PAGE.views && action === "watched" && item.watched) {
+    state.all = state.all.filter(row => row !== item);
+  }
+  if (!PAGE.views && action === "watchlist" && !item.watchlisted) {
+    state.all = state.all.filter(row => row !== item);
+  }
+  state.stats = PAGE.views ? watched.stats() : watchlist.stats(watched);
+  paintSummary();
+  paint();
 }
 
 export async function start() {

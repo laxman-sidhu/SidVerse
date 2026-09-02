@@ -1071,9 +1071,12 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   padding: 9px 11px;
   padding-right: 40px;          /* clear of the (i) button in the corner */
   border-radius: var(--radius-sm);
-  background: rgba(12, 16, 24, 0.94);
+  /* Theme tokens, not a fixed dark plate: on light paper the plate read as a smudge and the label inside it all but vanished. */
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--card) 94%, transparent);
   backdrop-filter: blur(10px);
-  color: #fff;
+  box-shadow: var(--shadow-lg);
+  color: var(--ink);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.35;
@@ -1087,10 +1090,10 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
 .card__notetip-label {
   font-family: var(--font-mono);
   font-size: 9px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.65;
+  color: var(--muted);
 }
 
 .card__notetip-source {
@@ -1098,10 +1101,12 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   margin-top: 4px;
   padding: 2px 7px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--accent-tint);
+  color: var(--accent-deep);
   font-family: var(--font-mono);
   font-size: 9.5px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1349,31 +1354,18 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   box-shadow: 0 0 0 4px rgba(var(--seen-rgb), 0.18), var(--shadow-lg);
 }
 
-.detail__headline { flex: 1 1 auto; padding-bottom: 4px; min-width: 0; }
-
-/* The kind and the watch state share one row: as separate blocks they ran together as "FilmOn the watchlist". */
-.detail__meta {
+/* The poster and the toggles under it read as one block: the writes are about this title, not about the paragraph beside it. */
+.detail__postercol {
+  flex: none;
+  align-self: flex-start;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  flex-direction: column;
+  gap: 12px;
+  width: 190px;
 }
+.detail__postercol .detail__poster { width: 100%; }
 
-.detail__kind {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--tint);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+.detail__headline { flex: 1 1 auto; padding-bottom: 4px; min-width: 0; }
 
 .detail__title {
   font-family: var(--font-display);
@@ -1399,43 +1391,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
 }
 .detail__facts .dot { color: var(--line); }
 .detail__facts .rating { color: var(--gold); font-weight: 700; }
-
-/* The watch state, as a pill with the glyph on its own tinted disc. */
-.detail__flag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 14px 4px 5px;
-  border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.detail__flag svg {
-  width: 22px;
-  height: 22px;
-  padding: 5px;
-  border-radius: 50%;
-  stroke-width: 3;
-  flex: 0 0 auto;
-}
-
-.detail__flag--seen {
-  background: var(--seen-tint);
-  border: 1px solid rgba(var(--seen-rgb), 0.38);
-  color: var(--seen-deep);
-}
-.detail__flag--seen svg { background: var(--seen); color: var(--on-seen); }
-
-.detail__flag--listed {
-  background: var(--gold-tint);
-  border: 1px solid var(--gold-line);
-  color: var(--gold-ink);
-}
-.detail__flag--listed svg { background: var(--gold); color: #fff; fill: currentColor; stroke: none; }
 
 .detail__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 
@@ -1642,20 +1597,13 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   .detail { border-radius: var(--radius); }
   .detail__hero { height: clamp(200px, 52vw, 300px); }
   .detail__head { flex-direction: column; align-items: flex-start; gap: 14px; padding: 0 18px; }
+  .detail__postercol { width: 112px; }
+  .detail__headline { width: 100%; }
   .detail__poster { width: 112px; margin-top: -58px; }
   .detail__title { font-size: 24px; }
   .detail__main { padding: 22px 18px 28px; }
   .detail__section { margin-top: 24px; }
   .detail__overview { font-size: 14.5px; line-height: 1.65; }
-  /* Two full-width buttons, the shape the library's own popup uses. The official site goes: it is a marketing page, unlike the trailer and the TMDB record. */
-  
-  .detail__actions { flex-direction: column; align-items: stretch; gap: 9px; }
-  .btn-outline {
-    width: 100%;
-    justify-content: center;
-    padding: 13px 20px;
-  }
-
   /* The library page's own phone rules are NOT here - see the block at the bottom of this file, where its base styles are declared. */
 
   .footer { padding: 24px 0 32px; }
@@ -1761,6 +1709,15 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round
   color: var(--ink);
   text-align: left;
 }
+
+/* A multi picks its own trigger: a button, so the summary can shorten to an ellipsis rather than pushing the caret off the control. */
+.facets__multi {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.facets__multi.is-empty { color: var(--muted); font-weight: 500; }
 
 .facets__caret {
   position: absolute;
@@ -2718,6 +2675,9 @@ body.panel-open { overflow: hidden; }
   background: var(--tint);
   transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
+/* The drawer keeps its captions at every width: once several values are picked a control reads "3 selected", which says nothing about which field it belongs to. */
+.panel__body .facets__label { display: block; }
+
 .panel__body .facets__wrap:hover { border-color: var(--muted); }
 .panel__body .facets__wrap:focus-within { border-color: var(--accent); background: var(--card); }
 .panel__body .facets__select {
@@ -2728,6 +2688,56 @@ body.panel-open { overflow: hidden; }
   text-align-last: left;
   /* 16px, never lower: iOS zooms on any focused control under it and never zooms back out, and a select counts. */
   font-size: 16px;
+}
+
+/* --- the write bar on the title screen: the same four toggles a card carries, labelled, because here there is room for the words --- */
+.detailbar {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+}
+
+.detailbar__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--tint);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease),
+              color 0.16s var(--ease), transform 0.16s var(--ease);
+}
+
+.detailbar__btn svg {
+  width: 18px;
+  height: 18px;
+  /* Outline when off, solid when on - the fill IS the state, exactly as on a card. */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.detailbar__btn:hover { border-color: var(--muted); color: var(--ink); transform: translateY(-1px); }
+.detailbar__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.detailbar__btn.is-on svg { fill: currentColor; }
+.detailbar__btn--watched.is-on { border-color: var(--seen); background: var(--seen-tint); color: var(--seen-deep); }
+.detailbar__btn--favorite.is-on { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-deep); }
+.detailbar__btn--must.is-on,
+.detailbar__btn--watchlist.is-on { border-color: var(--gold-line); background: var(--gold-tint); color: var(--gold-ink); }
+
+/* Mid-write. The button keeps its shape so the row does not reflow. */
+.detailbar__btn.is-working { pointer-events: none; opacity: 0.55; }
+
+@media (max-width: 599px) {
+  .detailbar { gap: 6px; }
+  .detailbar__btn { width: 32px; height: 32px; }
+  .detailbar__btn svg { width: 16px; height: 16px; }
 }
 
 /* --- the trailer / IMDb / TMDB row: the only actions in the modal, so they should look like actions rather than bordered text --- */
@@ -2882,25 +2892,6 @@ body.panel-open { overflow: hidden; }
   .stat__n { font-size: 20px; }
 }
 
-/* --- the modal action row: four pills wrapped one-per-line on a phone and read as a stack of unrelated links --- */
-@media (max-width: 599px) {
-  .detail__actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .detail__actions > * {
-    width: 100%;
-    justify-content: center;
-    padding: 0 10px;
-    /* The labels are short but "Official site" is not, and a pill that clips its own label is worse than one that shrinks its text. */
-    font-size: 12px;
-    white-space: nowrap;
-  }
-  /* An odd count leaves a gap, and the trailer is the primary action, so it takes the full width rather than sitting beside a hole. */
-  .detail__actions > .btn-solid:first-child:nth-last-child(odd) { grid-column: 1 / -1; }
-}
-
 /* === The card action bar, and the browse drawer moved to the right. === */
 
 /* The bottom row of a card, where the TMDB rating used to be. Filled means on, so the state is the icon rather than something you open a menu to read. */
@@ -2983,19 +2974,6 @@ body.panel-open { overflow: hidden; }
   .cardbar { margin-top: 10px; padding-top: 9px; min-height: 30px; }
   .cardbar__btn { width: 29px; height: 29px; }
   .cardbar__btn svg { width: 15px; height: 15px; }
-}
-
-/* --- the modal action row: the trailer takes the whole first row, the three reference links share the second --- */
-@media (max-width: 599px) {
-  .detail__actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .detail__actions > .btn-solid { grid-column: 1 / -1; }
-  .detail__actions > * {
-    width: 100%;
-    justify-content: center;
-    padding: 0 8px;
-    font-size: 12px;
-    white-space: nowrap;
-  }
 }
 
 /* Last in the row and set apart: it opens a drawer rather than navigating, so it should not read as another destination. */
@@ -3244,11 +3222,11 @@ body.panel-open { overflow: hidden; }
 }
 
 @media (max-width: 599px) {
-  /* Trailer across the top, the reference links sharing the row beneath. Three columns for IMDb, TMDB and Official site. */
-  .detail__actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .detail__actions > .btn-solid { grid-column: 1 / -1; }
+  /* Trailer across the top, the reference links sharing the row beneath. Flex rather than three fixed columns: a title with no official site left the third one empty and the row read as a missing button. Whatever links exist share the width between them. */
+  .detail__actions { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .detail__actions > .btn-solid { flex: 1 0 100%; }
+  .detail__actions > .btn-outline { flex: 1 1 0; width: auto; min-width: 0; }
   .detail__actions > * {
-    width: 100%;
     justify-content: center;
     padding: 0 6px;
     font-size: 11.5px;
@@ -3900,7 +3878,7 @@ a.detail__score:focus-visible { outline: 2px solid var(--accent); outline-offset
 /* --- where to watch: a column beside the headline, real provider artwork --- */
 .detail__watchcol {
   flex: 0 0 250px;
-  align-self: flex-end;
+  align-self: flex-start;
   min-width: 0;
   padding-bottom: 4px;
 }
@@ -3968,13 +3946,28 @@ a.detail__score:focus-visible { outline: 2px solid var(--accent); outline-offset
 }
 
 @media (max-width: 767px) {
-  .detail__scores { gap: 8px; margin-bottom: 15px; }
-  .detail__score { gap: 9px; padding: 7px 13px 7px 10px; }
-  .detail__score-mark { width: 26px; height: 26px; }
-  .detail__score-value { font-size: 15.5px; }
+  /* One row, always. The tiles shrink to fit and the strip scrolls sideways rather than dropping Metascore onto a line of its own. */
+  .detail__scores {
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .detail__scores::-webkit-scrollbar { display: none; }
+  .detail__score { flex: 0 0 auto; gap: 8px; padding: 6px 12px 6px 8px; }
+  .detail__score-mark { width: 24px; height: 24px; }
+  .detail__score-value { font-size: 14.5px; }
+  .detail__score-value i { margin-left: 4px; font-size: 10.5px; }
+  .detail__score-meta { font-size: 8.5px; letter-spacing: 0.06em; }
   .detail__provider { width: 42px; height: 42px; border-radius: 10px; }
   .detail__watch { padding: 13px; }
-  .detail__meta { gap: 7px; margin-bottom: 12px; }
-  .detail__flag { padding: 3px 12px 3px 4px; font-size: 9.5px; }
-  .detail__flag svg { width: 20px; height: 20px; }
+}
+
+@media (max-width: 420px) {
+  .detail__score { gap: 7px; padding: 6px 10px 6px 7px; }
+  .detail__score-mark { width: 22px; height: 22px; }
+  .detail__score-value { font-size: 13.5px; }
+  .detail__score-meta { font-size: 8px; }
 }

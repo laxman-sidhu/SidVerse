@@ -28,22 +28,26 @@ export function badgeMarkup(item) {
   return "";
 }
 
-// Which toggles a card shows follows what the sheet can record; the watched tick is always last, in the same place on every card.
+// Which toggles a card shows follows what the sheet can record; the watched tick is always last, in the same place on every card. `text` is what the title screen prints beside the icon, where there is room for words.
 export function barFor(item) {
   const watched = item.watched === true;
   const rows = [];
 
   if (watched) {
     rows.push({ act: "favorite", icon: "favorite", on: item.favorite === true, side: "left",
+      text: item.favorite ? "In Favourites" : "Add to Favourites",
       label: item.favorite ? "In Favourites - tap to remove" : "Add to Favourites" });
     rows.push({ act: "must", icon: "must", on: item.must_watch === true, side: "left",
+      text: item.must_watch ? "Must watch" : "Mark as Must watch",
       label: item.must_watch ? "In Must watch - tap to remove" : "Mark as Must watch" });
   } else {
     rows.push({ act: "watchlist", icon: "watchlist", on: item.watchlisted === true, side: "right",
+      text: item.watchlisted ? "On the watchlist" : "Add to watchlist",
       label: item.watchlisted ? "On the watchlist - tap to remove" : "Add to watchlist" });
   }
 
   rows.push({ act: "watched", icon: "watched", on: watched, side: "right",
+    text: watched ? "Watched" : "Mark as watched",
     label: watched ? "Watched - tap to undo" : "Mark as watched" });
 
   return rows;
@@ -62,6 +66,23 @@ export function barMarkup(item) {
     + `<div class="cardbar__side">${buttons.filter(b => b.side === "left").map(render).join("")}</div>`
     + `<div class="cardbar__side cardbar__side--end">${buttons.filter(b => b.side === "right").map(render).join("")}</div>`
     + "</div>";
+}
+
+// The same writes for the title screen, sat under the poster. Icons alone: the words are already in the tooltip and the accessible name, and a row of labelled pills competed with the trailer button for the eye.
+export function detailBarMarkup(item) {
+  if (!item || item.id == null || item.id === "") return "";
+
+  return '<div class="detailbar" data-detailbar>'
+    + barFor(item).map(button =>
+      `<button type="button" class="detailbar__btn detailbar__btn--${button.act}${button.on ? " is-on" : ""}" `
+      + `data-act="${button.act}" aria-pressed="${button.on}" `
+      + `title="${esc(button.label)}" aria-label="${esc(button.label)}">${ICONS[button.icon]}</button>`).join("")
+    + "</div>";
+}
+
+export function repaintDetail(root, item) {
+  const bar = root.querySelector("[data-detailbar]");
+  if (bar) bar.outerHTML = detailBarMarkup(item);
 }
 
 export function repaint(card, item) {
@@ -104,6 +125,31 @@ function pendingFor(key, title) {
   };
 }
 
+// A card and the title screen run the same writes. Each says which element goes busy, how its buttons are named, and how it repaints once the flags have moved.
+function cardHost(card, item) {
+  return { el: card, btn: "cardbar__btn", paint: () => repaint(card, item) };
+}
+
+function detailHost(root, item) {
+  return { el: root, btn: "detailbar__btn", paint: () => repaintDetail(root, item) };
+}
+
+// Everything the two surfaces have to agree on about one title.
+const FLAGS = [
+  "watched", "watchlisted", "favorite", "must_watch",
+  "category", "watched_source", "sheet_id", "watchlist_id"
+];
+
+export function syncInto(target, source) {
+  for (const key of FLAGS) target[key] = source[key];
+  return target;
+}
+
+// The title screen holds its own copy of a title, so a write started there has to reach the grid's copy behind it.
+function announce(item, action) {
+  window.dispatchEvent(new CustomEvent("cinema:write", { detail: { item, action } }));
+}
+
 export function attach(container, find, options = {}) {
   if (!container) return;
 
@@ -120,11 +166,30 @@ export function attach(container, find, options = {}) {
     const item = find(card);
     if (!item) return;
 
-    actions.withOwner(() => run(toggle.dataset.act, card, item, options));
+    actions.withOwner(() => run(toggle.dataset.act, cardHost(card, item), item, options));
   });
 }
 
-async function run(action, card, item, options) {
+// find() takes no argument here: the title screen shows one title at a time and already knows which.
+export function attachDetailBar(container, find, options = {}) {
+  if (!container) return;
+
+  container.addEventListener("click", event => {
+    const toggle = event.target.closest(".detailbar__btn");
+    if (!toggle) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if (toggle.disabled || toggle.classList.contains("is-working")) return;
+
+    const item = find();
+    if (!item) return;
+
+    actions.withOwner(() => run(toggle.dataset.act, detailHost(container, item), item, options));
+  });
+}
+
+async function run(action, host, item, options) {
   const before = {
     watched: item.watched,
     watchlisted: item.watchlisted,
@@ -137,9 +202,9 @@ async function run(action, card, item, options) {
     watchlist_id: item.watchlist_id
   };
 
-  // The toast carries the story; nothing else on the card is disabled, so a second title can be added while this one saves.
-  card.classList.add("is-saving");
-  const pressed = card.querySelector(`.cardbar__btn--${action}`);
+  // The toast carries the story; nothing else on the surface is disabled, so a second title can be added while this one saves.
+  host.el.classList.add("is-saving");
+  const pressed = host.el.querySelector(`.${host.btn}--${action}`);
   if (pressed) pressed.classList.add("is-working");
 
   let note = null;
@@ -151,14 +216,14 @@ async function run(action, card, item, options) {
         item.watched = false;
         item.favorite = false;
         item.must_watch = false;
-        repaint(card, item);
+        host.paint();
         await actions.unmarkWatched(item);
         item.sheet_id = null;
       } else {
         // The only action needing more than a click: TMDB knows a production country, not whether a film is Bollywood or Other Language.
         const choices = await actions.askWatchedDetails(item);
         if (!choices) {
-          card.classList.remove("is-saving");
+          host.el.classList.remove("is-saving");
           return;
         }
         note = pendingFor("watched_add", item.title);
@@ -170,7 +235,7 @@ async function run(action, card, item, options) {
         item.watched_source = choices.industry;
         item.genre = choices.genre;
         item.industry = choices.industry;
-        repaint(card, item);
+        host.paint();
         const saved = await actions.markWatched(item, choices);
         // The row that now exists in All Watched, which is what the next flag write has to address.
         if (saved && saved.row) item.sheet_id = saved.row.tmdb_id;
@@ -180,13 +245,13 @@ async function run(action, card, item, options) {
       if (item.watchlisted) {
         note = pendingFor("watchlist_remove", item.title);
         item.watchlisted = false;
-        repaint(card, item);
+        host.paint();
         await actions.removeFromWatchlist(item);
         item.watchlist_id = null;
       } else {
         note = pendingFor("watchlist_add", item.title);
         item.watchlisted = true;
-        repaint(card, item);
+        host.paint();
         const queued = await actions.addToWatchlist(item);
         // Either the row just appended or the one already there under TMDB's other id for this film.
         if (queued && queued.row) item.watchlist_id = queued.row.tmdb_id;
@@ -195,28 +260,29 @@ async function run(action, card, item, options) {
       const next = !item.favorite;
       note = pendingFor(next ? "favorite_add" : "favorite_remove", item.title);
       item.favorite = next;
-      repaint(card, item);
+      host.paint();
       await actions.setFlag(item, "favorite", next);
     } else if (action === "must") {
       const next = !item.must_watch;
       note = pendingFor(next ? "must_add" : "must_remove", item.title);
       item.must_watch = next;
-      repaint(card, item);
+      host.paint();
       await actions.setFlag(item, "must_watch", next);
     }
 
     if (note) note.ok();
+    announce(item, action);
     if (typeof options.onChange === "function") options.onChange(item, action);
   } catch (failure) {
     Object.assign(item, before);
-    repaint(card, item);
+    host.paint();
     const message = failure && failure.message ? failure.message : "That did not save.";
     if (note) note.no(message);
     else toast.error(message);
   } finally {
-    card.classList.remove("is-saving");
-    // repaint() replaced the button, so re-find it rather than reusing a handle that is now detached.
-    const again = card.querySelector(`.cardbar__btn--${action}`);
+    host.el.classList.remove("is-saving");
+    // The repaint replaced the button, so re-find it rather than reusing a handle that is now detached.
+    const again = host.el.querySelector(`.${host.btn}--${action}`);
     if (again) again.classList.remove("is-working");
   }
 }

@@ -17,8 +17,9 @@ export async function discover(options = {}) {
   const params = { include_adult: "false", language: "en-US" };
   if (!isTv) params.include_video = "false";
 
+  // A comma is an AND on TMDB and a pipe is an OR. Several genres picked at once means "any of these", so one genre joins with a comma and more join with a pipe.
   const ids = await tmdb.genreIdsFor(options.genreNames || [], media);
-  if (ids.length) params.with_genres = ids.join(",");
+  if (ids.length) params.with_genres = ids.join(ids.length > 1 ? "|" : ",");
 
   // Language and country over-filter each other, so language wins.
   if (options.language) {

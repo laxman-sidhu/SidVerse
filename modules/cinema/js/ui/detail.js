@@ -5,14 +5,12 @@ import { details } from "../tmdb/queries.js";
 import { ratingsFor } from "../omdb/client.js";
 import { watched } from "../data/watched.js";
 import { watchlist } from "../data/watchlist.js";
+import * as cardactions from "./cardactions.js";
 
 const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
 const OUT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 
 const TICK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11"/></svg>';
-
-const BOOKMARK = '<svg viewBox="0 0 24 24" aria-hidden="true">'
-  + '<path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.2a.3.3 0 0 1-.47.25L12 16.4l-6.03 4.05a.3.3 0 0 1-.47-.25V4a.5.5 0 0 1 .5-.5Z"/></svg>';
 
 // The score marks are drawn, not fetched, so the strip paints with the page.
 const MARK_TMDB = '<svg viewBox="0 0 44 22" aria-hidden="true">'
@@ -46,6 +44,8 @@ function markMetacritic(score) {
 let modal = null;
 let body = null;
 let requestId = 0;
+// The title on screen, which the action bar writes to.
+let current = null;
 
 function instance() {
   if (!modal) {
@@ -252,15 +252,8 @@ function numbersGrid(item, isTv) {
 function render(item) {
   const isTv = item.media_type === "tv";
   const seen = item.watched === true;
-  // The queue state belongs here too - this screen is the other place a title is looked at.
-  const queued = !seen && item.watchlisted === true;
-  const kind = isTv ? "Web series" : "Film";
 
   const heroStyle = item.backdrop ? `background-image:url('${esc(item.backdrop)}')` : "";
-
-  const flags = [];
-  if (seen) flags.push(`<span class="detail__flag detail__flag--seen">${TICK}Already watched</span>`);
-  if (queued) flags.push(`<span class="detail__flag detail__flag--listed">${BOOKMARK}On the watchlist</span>`);
 
   const facts = [];
   if (item.year) facts.push(`<span>${item.year}</span>`);
@@ -315,15 +308,14 @@ function render(item) {
   return ''
     + `<div class="detail__hero${item.backdrop ? "" : " is-blank"}" style="${heroStyle}"></div>`
     + '<div class="detail__head">'
+    + '<div class="detail__postercol">'
     + `<span class="detail__poster${seen ? " is-watched" : ""}">`
     + `<span class="detail__poster-alt">${esc(item.title)}</span>`
     + (item.poster ? `<img src="${esc(item.poster)}" alt="" loading="lazy">` : "")
     + "</span>"
-    + '<div class="detail__headline">'
-    + '<div class="detail__meta">'
-    + `<span class="detail__kind">${kind}</span>`
-    + flags.join("")
+    + cardactions.detailBarMarkup(item)
     + "</div>"
+    + '<div class="detail__headline">'
     + `<h2 class="detail__title" id="modalTitle">${esc(item.title)}</h2>`
     + (item.original_title && item.original_title !== item.title
       ? `<p class="detail__original">${esc(item.original_title)}</p>` : "")
@@ -434,6 +426,14 @@ function wire() {
     const jump = event.target.closest("[data-jump]");
     if (jump) open(jump.dataset.jump, jump.dataset.jumpMedia);
   });
+
+  // The bar rebuilds itself; the green edge on the poster is the only other thing a write changes.
+  cardactions.attachDetailBar(body, () => current, {
+    onChange: item => {
+      const poster = body.querySelector(".detail__poster");
+      if (poster) poster.classList.toggle("is-watched", item.watched === true);
+    }
+  });
 }
 
 export async function open(itemId, media) {
@@ -452,6 +452,7 @@ export async function open(itemId, media) {
 
     watched.annotate(item);
     watchlist.annotate(item);
+    current = item;
     item.similar = watchlist.annotateAll(watched.annotateAll(item.similar || []));
 
     body.innerHTML = render(item);
@@ -460,6 +461,7 @@ export async function open(itemId, media) {
     decorate(item);
   } catch (error) {
     if (ticket !== requestId) return;
+    current = null;
     body.innerHTML = '<div class="detail__loading"><p><strong>Could not load that title.</strong></p>'
       + `<p>${esc(error.message)}</p></div>`;
   }

@@ -310,22 +310,48 @@ async function openPanel() {
 
   try {
     const options = await filters.filterOptions(state.media);
-    dom.panelFields.innerHTML = options.groups.map(group => ''
-      + '<label class="facets">'
-      + `<span class="facets__label">${esc(group.label)}</span>`
-      + '<span class="facets__wrap">'
-      + `<select class="facets__select" data-key="${group.key}">`
-      + `<option value="">${esc(group.all_label)}</option>`
-      + group.options.map(option =>
-        `<option value="${esc(option.value)}"${state.selection[group.key] === option.value ? " selected" : ""}>`
-        + `${esc(option.label)}</option>`).join("")
-      + "</select>"
-      + '<svg class="facets__caret" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>'
-      + "</span></label>").join("");
+    dom.panelFields.innerHTML = options.groups
+      .map(group => (group.multi ? multiField(group) : singleField(group))).join("");
+    // The multi controls are buttons and start blank; this is what writes what they say.
+    picker.refresh(dom.panelFields);
     panelLoaded = true;
   } catch (error) {
     dom.panelFields.innerHTML = `<p class="note note--warn">${esc(error.message)}</p>`;
   }
+}
+
+const CARET = '<svg class="facets__caret" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+function singleField(group) {
+  return '<label class="facets">'
+    + `<span class="facets__label">${esc(group.label)}</span>`
+    + '<span class="facets__wrap">'
+    + `<select class="facets__select" data-key="${group.key}">`
+    + `<option value="">${esc(group.all_label)}</option>`
+    + group.options.map(option =>
+      `<option value="${esc(option.value)}"${state.selection[group.key] === option.value ? " selected" : ""}>`
+      + `${esc(option.label)}</option>`).join("")
+    + "</select>"
+    + CARET
+    + "</span></label>";
+}
+
+// A <div>, not a <label>: the visible control is a button, and a label wrapping one forwards its clicks as a plain click, which is not what opens the menu.
+function multiField(group) {
+  const picked = filters.valuesFor(state.selection, group.key);
+  return '<div class="facets">'
+    + `<span class="facets__label">${esc(group.label)}</span>`
+    + '<span class="facets__wrap">'
+    + '<button type="button" class="facets__select facets__multi" data-multi '
+    + `data-all="${esc(group.all_label)}" aria-label="${esc(group.label)}" `
+    + 'aria-haspopup="listbox" aria-expanded="false"></button>'
+    + `<select class="facets__store" data-key="${group.key}" multiple hidden>`
+    + group.options.map(option =>
+      `<option value="${esc(option.value)}"${picked.includes(option.value) ? " selected" : ""}>`
+      + `${esc(option.label)}</option>`).join("")
+    + "</select>"
+    + CARET
+    + "</span></div>";
 }
 
 function closePanel() {
@@ -345,32 +371,41 @@ function closePanel() {
 
 function readPanel() {
   const picked = {};
-  dom.panelFields.querySelectorAll("[data-key]").forEach(select => {
-    if (select.value) picked[select.dataset.key] = select.value;
+  dom.panelFields.querySelectorAll("[data-key]").forEach(field => {
+    if (field.multiple) {
+      const chosen = [...field.selectedOptions].map(option => option.value).filter(Boolean);
+      if (chosen.length) picked[field.dataset.key] = chosen;
+    } else if (field.value) {
+      picked[field.dataset.key] = field.value;
+    }
   });
   return filters.cleanSelection(picked);
 }
 
 function paintActiveFilters() {
-  const entries = Object.entries(state.selection);
-  // A non-default sort is a filter and counts on the badge. "Most popular" does not - that is what the catalogue does unasked.
-  const count = entries.filter(([key, value]) =>
-    key !== "sort" || (value && value !== "popularity")).length;
+  // One chip per value, not per field: three genres are three things to drop, and dropping one should not take the other two with it. "Most popular" is not a filter - it is what the catalogue does unasked.
+  const chips = [];
+  for (const key of Object.keys(state.selection)) {
+    for (const value of filters.valuesFor(state.selection, key)) {
+      if (key === "sort" && value === filters.DEFAULT_SORT) continue;
+      chips.push({ key, value });
+    }
+  }
 
-  dom.filterCount.hidden = count === 0;
-  dom.filterCount.textContent = String(count);
-  dom.panelClear.hidden = entries.length === 0;
+  dom.filterCount.hidden = chips.length === 0;
+  dom.filterCount.textContent = String(chips.length);
+  dom.panelClear.hidden = chips.length === 0;
 
-  if (!entries.length) {
+  if (!chips.length) {
     dom.activeFilters.hidden = true;
     dom.activeFilters.innerHTML = "";
     return;
   }
 
   dom.activeFilters.hidden = false;
-  dom.activeFilters.innerHTML = entries.map(([key, value]) =>
-    `<button type="button" class="chipx" data-drop="${key}">`
-    + `${esc(filters.labelFor(key, value))}`
+  dom.activeFilters.innerHTML = chips.map(chip =>
+    `<button type="button" class="chipx" data-drop="${chip.key}" data-value="${esc(chip.value)}">`
+    + `${esc(filters.labelFor(chip.key, chip.value))}`
     + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
     + "</button>").join("");
 }
@@ -393,7 +428,9 @@ async function runBrowse(page = 1, { more = false } = {}) {
   paintActiveFilters();
 
   if (dropped.length) {
-    toast.show(`That genre does not exist in the ${state.media === "tv" ? "series" : "film"} catalogue, so it was dropped.`);
+    const one = dropped.length === 1;
+    toast.show(`${dropped.join(", ")} ${one ? "is" : "are"} not in the `
+      + `${state.media === "tv" ? "series" : "film"} catalogue, so ${one ? "it was" : "they were"} dropped.`);
   }
 
   if (!filters.isActive(selection)) {
@@ -556,7 +593,7 @@ function wire() {
   dom.activeFilters.addEventListener("click", event => {
     const drop = event.target.closest("[data-drop]");
     if (!drop) return;
-    delete state.selection[drop.dataset.drop];
+    state.selection = filters.without(state.selection, drop.dataset.drop, drop.dataset.value);
     panelLoaded = false;
     paintActiveFilters();
     filters.isActive(state.selection) ? runBrowse(1) : loadHome();
@@ -572,12 +609,23 @@ function wire() {
   wireRefresh(reload);
 
   detail.attach(dom.resultSections);
-  cardactions.attach(dom.resultSections, itemForCard, {
-    onChange: () => {
-      paintCoverage(state.items);
-      if (dom.libraryDot) dom.libraryDot.classList.add("is-on");
-    }
+  cardactions.attach(dom.resultSections, itemForCard, { onChange: afterWrite });
+
+  // The title screen writes to its own copy of a title, so the grid's copy is brought level and repainted behind it.
+  window.addEventListener("cinema:write", event => {
+    const changed = event.detail.item;
+    const mine = state.items.find(item =>
+      item.id === changed.id && item.media_type === changed.media_type);
+    if (!mine || mine === changed) return;
+    cardactions.syncInto(mine, changed);
+    paintResults();
+    afterWrite();
   });
+}
+
+function afterWrite() {
+  paintCoverage(state.items);
+  if (dom.libraryDot) dom.libraryDot.classList.add("is-on");
 }
 
 // Returns the line the toast settles to; throwing is how it reports a failure. wireRefresh owns the spinner and the toast.

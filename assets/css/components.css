@@ -593,6 +593,10 @@ body > * { min-width: 0; }
   background: var(--p-surface);
 }
 
+/* Nothing to show is not a card. The words carry it, and a panel around them only draws a box around a blank. */
+[data-section] .empty--bare { background: transparent; }
+.empty--bare::before { content: none; }
+
 
 /* ---- 20. the page sits in the space beside the rail -------------------- */
 /* The rail floats over the left edge. Content is centred in what is left of the window, while the background and the footer run underneath it, so the colour reaches the screen edge and nothing shows a lighter column. */
@@ -1812,6 +1816,37 @@ body { padding-left: var(--p-rail-clear); }
   font-weight: 650;
 }
 .pickmenu__item.is-chosen.is-active { background: var(--p-accent-tint); }
+
+/* A multi has no single "chosen" row, so the state has to be drawn: a box per row, ticked or not, which also gives the list somewhere to say "none of these yet". */
+.pickmenu--multi .pickmenu__item { padding-left: 10px; }
+
+.pickmenu__tick {
+  position: relative;
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  border: 1.5px solid var(--p-line);
+  background: var(--p-surface);
+  transition: background .14s cubic-bezier(.2,.7,.2,1), border-color .14s cubic-bezier(.2,.7,.2,1);
+}
+
+.pickmenu__item.is-chosen .pickmenu__tick {
+  border-color: var(--p-accent-deep);
+  background: var(--p-accent-deep);
+}
+
+.pickmenu__item.is-chosen .pickmenu__tick::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1.5px;
+  width: 4px;
+  height: 9px;
+  border: solid var(--p-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
 
 /* A tick in the gutter would move every label along by its width; the weight and the colour already say which one it is. */
 .pickmenu__item.is-off {

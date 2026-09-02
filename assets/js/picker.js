@@ -19,6 +19,12 @@ function pageScale(element) {
 // Which selects get the treatment. An explicit list, so a <select> added later is plain until someone decides otherwise.
 const UPGRADE = ".facets__select, .scopepick__select, .scopepick select, .gate__select, .selectwrap select, #sortSelect";
 
+// A multi-pick control is a button, not a <select>: the browser draws `multiple` as a list box, which no bar on this site has room for. The hidden <select multiple> beside the button is still the state, so readers and writers work exactly as they do for a single pick.
+const MULTI = "[data-multi]";
+
+// Beyond this many the summary counts instead of naming, which is shorter than any list of three.
+const NAMED_PICKS = 2;
+
 const GAP = 6;
 const MARGIN = 10;
 
@@ -37,6 +43,32 @@ function isTouch() {
   return window.matchMedia("(hover: none)").matches;
 }
 
+function isMulti(node) {
+  return Boolean(node && node.matches && node.matches(MULTI));
+}
+
+// The <select> that carries the state: itself for a single pick, the hidden one beside the button for a multi.
+function storeFor(node) {
+  if (!isMulti(node)) return node;
+  const wrap = node.closest(".facets__wrap") || node.parentElement;
+  return wrap ? wrap.querySelector("select[multiple]") : null;
+}
+
+// What the closed control says: the fallback when nothing is picked, the names while there are few, a count once there are more.
+function summarise(trigger) {
+  const store = storeFor(trigger);
+  if (!store) return;
+  const picked = [...store.selectedOptions];
+  trigger.classList.toggle("is-empty", picked.length === 0);
+  if (!picked.length) trigger.textContent = trigger.dataset.all || "Any";
+  else if (picked.length <= NAMED_PICKS) trigger.textContent = picked.map(option => option.textContent).join(", ");
+  else trigger.textContent = `${picked.length} selected`;
+}
+
+export function refresh(root) {
+  (root || document).querySelectorAll(MULTI).forEach(summarise);
+}
+
 function options(select) {
   return [...select.options].map((option, index) => ({
     index,
@@ -50,6 +82,12 @@ function options(select) {
 // The box the menu lines up with: the wrapper is the visible control wherever there is one, and the select itself is only the visible control when there is not.
 function anchorFor(select) {
   return select.closest(".facets__wrap, .scopepick, .sortfield, .selectwrap") || select;
+}
+
+// Arrow keys and type-ahead walk the options either way, so they ask for the store rather than the owner.
+function ownerOptions() {
+  const store = owner ? storeFor(owner) : null;
+  return store ? store.options : [];
 }
 
 function close({ focus = false } = {}) {
@@ -115,6 +153,24 @@ function paintActive({ reveal = true } = {}) {
   });
 }
 
+// A multi stays open: picking three genres should be three clicks, not three round trips through the menu.
+function toggle(index) {
+  const store = storeFor(owner);
+  const option = store && store.options[index];
+  if (!option || option.disabled) return;
+
+  option.selected = !option.selected;
+  const item = menu ? menu.querySelector(`.pickmenu__item[data-index="${index}"]`) : null;
+  if (item) {
+    item.classList.toggle("is-chosen", option.selected);
+    item.setAttribute("aria-selected", String(option.selected));
+  }
+
+  summarise(owner);
+  const view = store.ownerDocument.defaultView || window;
+  store.dispatchEvent(new view.Event("change", { bubbles: true }));
+}
+
 function choose(index) {
   if (!owner) return;
   // Held before close(), which clears owner: dispatching on it afterwards threw, and the change event is the only thing that tells the page to repaint.
@@ -130,21 +186,29 @@ function choose(index) {
   if (changed) select.dispatchEvent(new view.Event("change", { bubbles: true }));
 }
 
-function open(select) {
+function open(control) {
   close();
-  owner = select;
+
+  const multi = isMulti(control);
+  const store = storeFor(control);
+  if (!store) return;
+  owner = control;
 
   // On <body> and fixed, not inside the control: .panel__body scrolls, .topbar has a backdrop-filter, and either would clip this away or trap it.
   menu = document.createElement("div");
-  menu.className = "pickmenu";
+  menu.className = multi ? "pickmenu pickmenu--multi" : "pickmenu";
   menu.setAttribute("role", "listbox");
-  menu.innerHTML = options(select).map(option =>
-    `<div class="pickmenu__item${option.chosen ? " is-chosen" : ""}${option.disabled ? " is-off" : ""}" `
-    + `role="option" aria-selected="${option.chosen}" data-index="${option.index}">`
-    + `<span class="pickmenu__label">${esc(option.label)}</span></div>`).join("");
+  if (multi) menu.setAttribute("aria-multiselectable", "true");
+  menu.innerHTML = options(store).map(option => {
+    const on = multi ? store.options[option.index].selected : option.chosen;
+    return `<div class="pickmenu__item${on ? " is-chosen" : ""}${option.disabled ? " is-off" : ""}" `
+      + `role="option" aria-selected="${on}" data-index="${option.index}">`
+      + (multi ? '<span class="pickmenu__tick" aria-hidden="true"></span>' : "")
+      + `<span class="pickmenu__label">${esc(option.label)}</span></div>`;
+  }).join("");
 
   document.body.appendChild(menu);
-  select.setAttribute("aria-expanded", "true");
+  control.setAttribute("aria-expanded", "true");
 
   // The pointer drives the SAME highlight the arrow keys do, so the row under the mouse lights up without a second :hover state lighting a second row. On the menu itself, so it is dropped with it. No reveal: scrolling the list to a row the mouse is already on would then shift it out from under the pointer.
   menu.addEventListener("mousemove", event => {
@@ -156,16 +220,18 @@ function open(select) {
     paintActive({ reveal: false });
   });
 
-  active = select.selectedIndex;
+  // Nothing is highlighted in a multi until a key moves: its "chosen" is every ticked row, not one.
+  active = multi ? -1 : store.selectedIndex;
   place();
   paintActive();
 }
 
 // Native selects stop at the ends rather than wrapping, and a wrap from the last option round to "All ..." would clear the filter on one extra keypress.
 function moveTo(from, by) {
-  if (!owner) return;
-  for (let next = from; next >= 0 && next < owner.options.length; next += by) {
-    if (!owner.options[next].disabled) {
+  const list = ownerOptions();
+  if (!list.length) return;
+  for (let next = from; next >= 0 && next < list.length; next += by) {
+    if (!list[next].disabled) {
       active = next;
       paintActive();
       return;
@@ -184,7 +250,7 @@ function jump(letter) {
   typed = now - typedAt > 900 ? letter : typed + letter;
   typedAt = now;
 
-  const list = [...owner.options];
+  const list = [...ownerOptions()];
   const from = typed.length === 1 ? active + 1 : active;
   for (let i = 0; i < list.length; i++) {
     const index = (from + i) % list.length;
@@ -202,6 +268,19 @@ export function attach() {
 
   // Delegated, so a rebuilt panel or a dialog opened later needs no re-wiring.
   document.addEventListener("mousedown", event => {
+    // A multi has no native popup to suppress, so touch gets this menu too rather than a list box nothing has room for.
+    const trigger = event.target.closest ? event.target.closest(MULTI) : null;
+    if (trigger) {
+      event.preventDefault();
+      const same = owner === trigger;
+      close();
+      if (!same) {
+        trigger.focus();
+        open(trigger);
+      }
+      return;
+    }
+
     const select = event.target.closest ? event.target.closest(UPGRADE) : null;
 
     if (select && !isTouch()) {
@@ -221,16 +300,20 @@ export function attach() {
 
   document.addEventListener("click", event => {
     const item = event.target.closest(".pickmenu__item");
-    if (item) choose(Number(item.dataset.index));
+    if (!item) return;
+    if (isMulti(owner)) toggle(Number(item.dataset.index));
+    else choose(Number(item.dataset.index));
   });
 
   document.addEventListener("keydown", event => {
-    const select = event.target.closest ? event.target.closest(UPGRADE) : null;
+    const control = event.target.closest
+      ? event.target.closest(`${MULTI}, ${UPGRADE}`)
+      : null;
 
-    if (select && !menu && !isTouch()) {
+    if (control && !menu && (isMulti(control) || !isTouch())) {
       if (["ArrowDown", "ArrowUp", "Enter", " "].includes(event.key)) {
         event.preventDefault();
-        open(select);
+        open(control);
       }
       return;
     }
@@ -241,8 +324,13 @@ export function attach() {
     else if (event.key === "ArrowDown") { event.preventDefault(); step(1); }
     else if (event.key === "ArrowUp") { event.preventDefault(); step(-1); }
     else if (event.key === "Home") { event.preventDefault(); moveTo(0, 1); }
-    else if (event.key === "End") { event.preventDefault(); moveTo(owner.options.length - 1, -1); }
-    else if (event.key === "Enter" || event.key === " ") { event.preventDefault(); choose(active); }
+    else if (event.key === "End") { event.preventDefault(); moveTo(ownerOptions().length - 1, -1); }
+    else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (active < 0) return;
+      if (isMulti(owner)) toggle(active);
+      else choose(active);
+    }
     else if (event.key === "Tab") close();
     else if (event.key.length === 1) jump(event.key.toLowerCase());
   });
