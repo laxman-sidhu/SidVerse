@@ -22,7 +22,7 @@ deployment and troubleshooting is here.
 | `travel/` | **SidTrails** | index, gallery | Sheet (6 tabs) + Leaflet + EmailJS |
 | `food/` | **SidBites** | index | Sheet (SidBites tab), read only |
 | `favourites/` | **SidPicks** | index, category | Sheet (SidPicks tab) |
-| `journal/` | **SidNotes** | index, story | JSON files on disk |
+| `journal/` | **SidNotes** | index, story | Journal-Writing editor (live) |
 
 The folder names are the original ones and do not always match the display
 names - `food/` is SidBites, `favourites/` is SidPicks. Display names live in
@@ -171,7 +171,7 @@ at the data layer.
 | Travel | `1CtRBUNbgxf-Z-pEfwoKW9O5NTCUxTsbpTGBrfox9gSk` | Places, Monuments, Goals, Activities, Treks, Photos (gid 472072756) |
 | Food | `1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk` | SidBites (gid 847926404) |
 | Favourites | `1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk` | SidPicks (gid 1397506388) |
-| Journal | none - JSON in `modules/journal/data/` | - |
+| Journal | none - Journal-Writing `Siddhesh-Journal/data/`, fallback `modules/journal/data/` | - |
 
 Books, Food and Favourites share one workbook, read through its published CSV (`2PACX-1vT-f1hm...`) with each tab's gid. SidPicks has one row per exhibit (`Name | Image Url | Industry | No. of Images | Category`); a collection is the rows whose Category matches its `key` in `modules/favourites/js/config.js`, and a Category no key claims gets a wing of its own. The travel Photos tab has two columns: `Gallery Images and Videos` feeds the gallery page, `Hero Carousel Images` the hero fan, both read by `modules/travel/js/photos.js`.
 
@@ -257,20 +257,29 @@ have read**.
 
 ### The journal
 
-The journal only ever **reads**. Stories are written in a separate editor that
-commits JSON through the GitHub API. Two files matter, under
-`modules/journal/data/`:
+The journal only ever **reads**. Stories are written in the Journal-Writing
+editor (`laxman-sidhu/Journal-Writing`, Siddhesh's folder), and SidNotes draws
+them with that editor's own engine, so a page reads here exactly as it was laid
+out there.
 
-- **`index.json`** - a flat list, one entry per story: `id`, `title`, `date`,
-  `thumb`. `date` must be `YYYY-MM-DD`, because sorting compares those strings
-  directly; any other format sorts wrongly and silently.
-- **`posts/<id>.json`** - one complete story, photographs embedded as data URLs.
+`modules/journal/js/engine.js` loads three things live from
+`https://laxman-sidhu.github.io/Journal-Writing/`:
 
-A page is drawn as light paper in both themes, because its colours are baked in by the editor. `js/core.js` loads only the Google fonts a page uses, draws photo and video elements, and matches a paper by key or by label.
+- **`assets/js/core.js`** - the shared renderer: fonts, text shapes, photo and
+  video looks, papers.
+- **`assets/js/bg-list.js`** - the paper library; the paper images themselves
+  are served from the editor's `assets/backgrounds/`.
+- **`Siddhesh-Journal/data/`** - `index.json` and `posts/<id>.json`.
 
-The two must agree. An index entry with no matching file opens onto *"Story not
-found."*; a file with no index entry is invisible. Deleting a story means
-removing both.
+A story published in the editor therefore appears here with no copying, and a
+new editor feature or paper arrives with it. If the editor's site is out of
+reach, `js/core.js`, `js/bg-list.js` and `data/` are the fallback; refresh them
+from the editor repo now and then. `css/journal.css` mirrors the editor's
+element styles, so a new element type added in the editor also needs its CSS
+copied here.
+
+`date` must be `YYYY-MM-DD`, because sorting compares those strings directly.
+An index entry with no matching post opens onto *"Story not found."*
 
 ---
 
@@ -452,8 +461,8 @@ state classes in `components.css` - `.state`, `.empty`, `.empty-state`,
 `.loading`, `.error-state` - which are styled as full-width panels. Give the
 element a name of its own rather than fighting the specificity. See §4.
 
-**A story shows "Story not found."** `index.json` has an entry whose `id` has no
-file in `posts/`. See §5.
+**A story shows "Story not found."** The editor's `index.json` lists an `id`
+with no file in its `posts/`. See §5.
 
 **Only the TMDB score shows on a title.** Either TMDB gave no `imdb_id` for it -
 common on obscure and very new titles - or OMDb has no record under that id. The

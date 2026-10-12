@@ -56,20 +56,16 @@
   <div id="cards" class="cards"></div>
   <div id="loading" class="loading">opening the journal...</div>
 
-<script src="js/core.js"></script>
+<script src="js/engine.js"></script>
 <script>
-/* Read-only. Stories are published from the editor, which lives elsewhere; all
-   this page ever does is fetch data/index.json and draw a card per entry. */
+// Read-only: the story list comes from the editor's own data, with data/index.json as the fallback.
 (async function () {
-  const J = window.JOURNAL;
+  const J = await window.SIDNOTES.engine();
   const cards = document.getElementById("cards");
   const loading = document.getElementById("loading");
-
   try {
-    const res = await fetch("data/index.json?t=" + Date.now(), { cache: "no-store" });
-    const list = res.ok ? await res.json() : [];
+    const list = await window.SIDNOTES.json("index.json").catch(() => []);
     loading.style.display = "none";
-
     if (!Array.isArray(list) || list.length === 0) {
       const owner = (window.SIDVERSE && window.SIDVERSE.owner) || "Siddhesh";
       cards.innerHTML = '<div class="empty empty--bare">'
@@ -78,7 +74,6 @@
         + "When the next one is finished, it will be sitting right here.</p></div>";
       return;
     }
-
     list.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
     cards.innerHTML = list.map(post => {
       const thumb = post.thumb

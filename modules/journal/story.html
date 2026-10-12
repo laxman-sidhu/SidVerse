@@ -29,6 +29,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<!-- The editor's story fonts, so text wraps exactly as it was laid out -->
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Bebas+Neue&family=Caveat:wght@400;600;700&family=Cedarville+Cursive&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@400;600;700&family=Gaegu:wght@400;700&family=Great+Vibes&family=Herr+Von+Muellerhoff&family=Indie+Flower&family=Gluten&family=Grand+Hotel&family=Kalam:wght@300;400;700&family=Lobster+Two:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700&family=Parisienne&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;600;700&family=Sacramento&family=Sail&family=Satisfy&family=Shadows+Into+Light&family=Walter+Turncoat&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/shell.css">
 <link rel="stylesheet" href="css/journal.css">
@@ -46,6 +48,7 @@
       <a class="wordmark" href="index.html"></a>
       <div class="topbar__tools">
         <a class="btn ghost" href="index.html">&larr; all stories</a>
+        <button class="btn ghost" id="viewBtn" style="display:none;">&#128214; Book view</button>
         <button class="btn primary" id="pdfBtn" style="display:none;">&darr; Download PDF</button>
       </div>
     </div>
@@ -58,45 +61,193 @@
   </div>
 
   <div id="stage" class="reader-stage">
-    <div class="loading" id="loading">turning the page...</div>
+    <div class="jw-loader" id="loading">
+      <div class="jw-book" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="jw-load-text" id="loadText">turning the page</div>
+      <div class="jw-load-bar" aria-hidden="true"><i></i></div>
+      <div class="jw-load-note">stories carry their photos with them, so this can take a moment</div>
+    </div>
   </div>
 
-<script src="js/core.js"></script>
+  <div class="book-nav" id="bookNav">
+    <button class="bk-arrow" id="bkPrev" aria-label="Previous page">&lsaquo;</button>
+    <div class="bk-count" id="bkCount">1 / 1</div>
+    <button class="bk-arrow" id="bkNext" aria-label="Next page">&rsaquo;</button>
+  </div>
+
+  <div class="jw-busy" id="busy">
+    <div class="jw-loader">
+      <div class="jw-book" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="jw-load-text">building your PDF</div>
+      <div class="jw-load-bar" aria-hidden="true"><i></i></div>
+      <div class="jw-load-note" id="busyNote">rendering the pages one by one</div>
+    </div>
+  </div>
+
+<script src="js/engine.js"></script>
 <script>
 (async function () {
-  const J = window.JOURNAL;
-  const stage = document.getElementById("stage");
-  const loading = document.getElementById("loading");
-  const pdfBtn = document.getElementById("pdfBtn");
-  const id = new URLSearchParams(location.search).get("id");
-  if (!id) { loading.textContent = "No story selected."; return; }
+  const stage = document.getElementById("stage"), loading = document.getElementById("loading");
+  const loadText = document.getElementById("loadText"), pdfBtn = document.getElementById("pdfBtn");
+  const viewBtn = document.getElementById("viewBtn"), bookNav = document.getElementById("bookNav");
+  const bkPrev = document.getElementById("bkPrev"), bkNext = document.getElementById("bkNext"), bkCount = document.getElementById("bkCount");
 
+  // The loader line cycles so a slow story reads as working, not stuck.
+  const LINES = ["turning the page", "unpacking the photos", "smoothing the creases", "almost there"];
+  let lineAt = 0;
+  const loadTimer = setInterval(() => { lineAt = (lineAt + 1) % LINES.length; loadText.textContent = LINES[lineAt]; }, 2400);
+  function endLoader(msg) {
+    clearInterval(loadTimer);
+    if (msg === undefined) { loading.remove(); return; }
+    loading.className = "loading";
+    loading.textContent = msg;
+  }
+
+  const id = new URLSearchParams(location.search).get("id");
+  if (!id) { endLoader("No story selected."); return; }
+
+  const J = await window.SIDNOTES.engine();
   let postTitle = "Story";
   try {
-    const res = await fetch("data/posts/" + encodeURIComponent(id) + ".json?t=" + Date.now(), { cache: "no-store" });
-    if (!res.ok) throw new Error("not found");
-    const post = await res.json();
-
+    const post = await window.SIDNOTES.json("posts/" + encodeURIComponent(id) + ".json");
     postTitle = post.title || "Story";
-    document.title = postTitle + " - Journal";
+    document.title = postTitle + " - SidNotes";
     document.getElementById("hlTitle").textContent = postTitle;
     document.getElementById("hlDate").textContent = J.formatDate(post.date);
     document.getElementById("headline").style.display = "block";
-    loading.remove();
-
-    (post.pages || []).forEach(page => J.renderPageRO(stage, page));
-    if (!post.pages || !post.pages.length) {
-      stage.innerHTML = '<div class="loading">This story has no pages yet.</div>';
-    } else {
-      pdfBtn.style.display = "inline-flex";
-    }
+    (post.pages || []).forEach(page => window.SIDNOTES.fixPaper(J.renderPageRO(stage, page)));
+    endLoader();
+    if (!post.pages || !post.pages.length) stage.innerHTML = '<div class="loading">This story has no pages yet.</div>';
+    else { pdfBtn.style.display = "inline-flex"; viewBtn.style.display = "inline-flex"; }
   } catch (error) {
-    loading.textContent = "Story not found.";
+    endLoader("Story not found.");
     return;
   }
 
-  // The PDF libraries are fetched on the click, so a reader who never exports
-  // never pays for them.
+  // A clip loads nothing until clicked, and starting one returns the others to their posters.
+  stage.addEventListener("click", e => {
+    const el = e.target.closest && e.target.closest(".el-video");
+    if (!el || !el.__data) return;
+    stage.querySelectorAll(".el-video").forEach(o => { if (o !== el) J.stopVideo(o, o.__data); });
+    J.playVideo(el, el.__data);
+  });
+  const stopAllVideos = () => stage.querySelectorAll(".el-video").forEach(o => J.stopVideo(o, o.__data));
+
+  // ----- book view: the same page nodes, one at a time -----
+  const book = { on: false, i: 0, busy: false };
+  const holders = () => [...stage.querySelectorAll(".page-holder")];
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const BOOK_FOOT = 104;
+
+  function paint() {
+    const hs = holders();
+    hs.forEach((h, k) => {
+      h.classList.toggle("is-current", k === book.i);
+      h.classList.remove("is-peer", "turning");
+      h.style.transform = "";
+      h.querySelectorAll(".leaf-back,.leaf-shade,.leaf-cast").forEach(n => n.remove());
+    });
+    bkPrev.disabled = book.i <= 0;
+    bkNext.disabled = book.i >= hs.length - 1;
+    bkCount.textContent = (book.i + 1) + " / " + hs.length;
+    sizeStage();
+  }
+
+  // Holders are absolute in book view, so the stage is sized and the book centred by hand.
+  function sizeStage() {
+    if (!book.on) { stage.style.height = ""; return; }
+    const hs = holders();
+    if (!hs.length) return;
+    const tall = Math.max.apply(null, hs.map(h => h.offsetHeight));
+    const room = Math.max(320, window.innerHeight - stage.offsetTop - BOOK_FOOT), band = Math.max(room, tall + 28);
+    stage.style.height = (band + (band > room ? BOOK_FOOT : 0)) + "px";
+    hs.forEach(h => { h.style.top = Math.max(14, Math.round((band - tall) / 2)) + "px"; });
+  }
+
+  const overlay = (host, cls) => { const n = document.createElement("div"); n.className = cls; host.appendChild(n); return n; };
+
+  function turn(dir) {
+    const hs = holders(), cur = hs[book.i], nxt = hs[book.i + dir];
+    if (book.busy || !cur || !nxt) return;
+    book.busy = true;
+    stopAllVideos();
+    cur.classList.add("is-current");
+    nxt.classList.add("is-peer");
+    const leaf = dir > 0 ? cur : nxt, under = dir > 0 ? nxt : cur;
+    leaf.classList.add("turning");
+    const back = overlay(leaf, "leaf-back"), shade = overlay(leaf, "leaf-shade"), cast = overlay(under, "leaf-cast");
+    const soft = reduced(), DUR = soft ? 240 : 820;
+    const opts = { duration: DUR, easing: soft ? "ease" : "cubic-bezier(.33,.66,.27,1)", fill: "forwards" };
+    const anims = [];
+    if (soft) {
+      anims.push(leaf.animate(dir > 0 ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }], opts));
+    } else {
+      const spin = [{ transform: "rotateY(0deg)" }, { transform: "rotateY(-174deg)" }];
+      anims.push(leaf.animate(dir > 0 ? spin : spin.slice().reverse(), opts));
+      anims.push(back.animate(dir > 0
+        ? [{ opacity: 0, offset: 0 }, { opacity: 0, offset: .47 }, { opacity: 1, offset: .55 }, { opacity: 1, offset: 1 }]
+        : [{ opacity: 1, offset: 0 }, { opacity: 1, offset: .45 }, { opacity: 0, offset: .53 }, { opacity: 0, offset: 1 }], opts));
+      anims.push(shade.animate(dir > 0
+        ? [{ opacity: 0 }, { opacity: .62, offset: .55 }, { opacity: .12 }]
+        : [{ opacity: .12 }, { opacity: .62, offset: .45 }, { opacity: 0 }], opts));
+      anims.push(cast.animate([{ opacity: 0 }, { opacity: .55, offset: .42 }, { opacity: 0 }], opts));
+    }
+    // fill:forwards holds the last frame, so the animations are cancelled once the turn lands
+    let ended = false;
+    const finish = () => {
+      if (ended) return;
+      ended = true;
+      anims.forEach(a => { try { a.cancel(); } catch (e) {} });
+      [back, shade, cast].forEach(n => n.remove());
+      book.i += dir;
+      paint();
+      book.busy = false;
+    };
+    anims[0].onfinish = finish;
+    setTimeout(finish, DUR + 300);
+  }
+
+  function setBook(on) {
+    book.on = on;
+    document.body.classList.toggle("book-mode", on);
+    bookNav.classList.toggle("open", on);
+    viewBtn.innerHTML = on ? "&#9776; Scroll view" : "&#128214; Book view";
+    if (on) {
+      stopAllVideos();
+      book.i = Math.min(book.i, holders().length - 1);
+      paint();
+      requestAnimationFrame(sizeStage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      stage.style.height = "";
+      holders().forEach(h => {
+        h.classList.remove("is-current", "is-peer", "turning");
+        h.style.transform = "";
+        h.style.top = "";
+        h.querySelectorAll(".leaf-back,.leaf-shade,.leaf-cast").forEach(n => n.remove());
+      });
+    }
+  }
+
+  viewBtn.onclick = () => setBook(!book.on);
+  bkPrev.onclick = () => turn(-1);
+  bkNext.onclick = () => turn(1);
+  window.addEventListener("keydown", e => {
+    if (!book.on || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); turn(1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); turn(-1); }
+  });
+  let sx = null, sy = null;
+  stage.addEventListener("touchstart", e => { if (!book.on || e.touches.length !== 1) return; sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener("touchend", e => {
+    if (!book.on || sx == null) return;
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    sx = null;
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) turn(dx < 0 ? 1 : -1);
+  }, { passive: true });
+  window.addEventListener("resize", () => setTimeout(sizeStage, 0));
+
+  // ----- PDF: libraries load on the click, and each page is captured from the document origin at natural size -----
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       const tag = document.createElement("script");
@@ -106,7 +257,6 @@
       document.head.appendChild(tag);
     });
   }
-
   let libsLoaded = false;
   async function ensureLibs() {
     if (libsLoaded) return;
@@ -114,54 +264,54 @@
     await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
     libsLoaded = true;
   }
-
+  const busy = document.getElementById("busy"), busyNote = document.getElementById("busyNote");
   pdfBtn.onclick = async () => {
+    const pages = [...stage.querySelectorAll(".page")];
+    if (!pages.length) return;
     const label = pdfBtn.textContent;
     pdfBtn.disabled = true;
     pdfBtn.textContent = "Preparing...";
+    const spots = pages.map(p => p.parentNode);
+    const savedOverflow = document.body.style.overflowX;
+    const host = document.createElement("div");
+    host.style.cssText = "position:absolute; left:0; top:0; margin:0; padding:0; width:" + J.PAGE_W + "px;";
+    const bare = p => { p.style.boxShadow = "none"; p.style.borderRadius = "0"; };
+    const dressed = p => { p.style.boxShadow = ""; p.style.borderRadius = ""; };
+    const restore = () => {
+      pages.forEach((p, i) => { dressed(p); spots[i].appendChild(p); });
+      host.remove();
+      document.body.style.overflowX = savedOverflow;
+      busy.classList.remove("open");
+      window.dispatchEvent(new Event("resize"));
+    };
     try {
       await ensureLibs();
+      stopAllVideos();
       if (document.fonts && document.fonts.ready) await document.fonts.ready;
-
-      // Each page is drawn scaled to fit the screen. Capturing it that way would
-      // bake the scale into the PDF, so the transforms come off for the capture
-      // and go back on afterwards.
-      const pages = [...stage.querySelectorAll(".page")];
-      const holders = [...stage.querySelectorAll(".page-holder")];
-      const scalers = [...stage.querySelectorAll(".page-scaler")];
-      const saved = holders.map((holder, i) => ({
-        w: holder.style.width, h: holder.style.height,
-        overflow: holder.style.overflow, transform: scalers[i].style.transform
-      }));
-      holders.forEach((holder, i) => {
-        holder.style.overflow = "visible";
-        holder.style.width = "auto";
-        holder.style.height = "auto";
-        scalers[i].style.transform = "none";
-      });
-
+      busy.classList.add("open");
+      document.body.style.overflowX = "visible";
+      document.body.insertBefore(host, document.body.firstChild);
+      const winW = Math.max(document.documentElement.clientWidth, J.PAGE_W + 80);
       const { jsPDF } = window.jspdf;
       let pdf = null;
       for (let i = 0; i < pages.length; i++) {
         pdfBtn.textContent = "Page " + (i + 1) + "/" + pages.length;
-        const canvas = await html2canvas(pages[i], { scale: 2, backgroundColor: null, useCORS: true, logging: false });
-        const w = canvas.width, h = canvas.height;
-        const image = canvas.toDataURL("image/jpeg", 0.92);
-        const orientation = w > h ? "l" : "p";
+        busyNote.textContent = "page " + (i + 1) + " of " + pages.length;
+        host.appendChild(pages[i]);
+        bare(pages[i]);
+        const canvas = await html2canvas(pages[i], { scale: 2, backgroundColor: "#ffffff", useCORS: true, logging: false,
+          width: J.PAGE_W, height: pages[i].offsetHeight, windowWidth: winW, scrollX: 0, scrollY: 0 });
+        dressed(pages[i]);
+        spots[i].appendChild(pages[i]);
+        const w = canvas.width, h = canvas.height, image = canvas.toDataURL("image/jpeg", 0.92), orientation = w > h ? "l" : "p";
         if (!pdf) pdf = new jsPDF({ orientation, unit: "px", format: [w, h] });
         else pdf.addPage([w, h], orientation);
         pdf.addImage(image, "JPEG", 0, 0, w, h);
       }
-
-      holders.forEach((holder, i) => {
-        holder.style.width = saved[i].w;
-        holder.style.height = saved[i].h;
-        holder.style.overflow = saved[i].overflow;
-        scalers[i].style.transform = saved[i].transform;
-      });
-      window.dispatchEvent(new Event("resize"));
+      restore();
       pdf.save((postTitle || "journal").replace(/[^a-z0-9]+/gi, "-").toLowerCase() + ".pdf");
     } catch (error) {
+      restore();
       alert("Sorry, the PDF could not be generated. " + (error.message || ""));
     }
     pdfBtn.disabled = false;
