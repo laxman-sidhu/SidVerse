@@ -20,7 +20,7 @@ deployment and troubleshooting is here.
 | `cinema/` | **SidCinemas** | index, watched, watchlist | TMDB + OMDb + Google Sheet (3 tabs) |
 | `books/` | **SidBooks** | index, library, readlist, editions | Google Books + Open Library + Sheet (Sidbooks tab) |
 | `travel/` | **SidTrails** | index, gallery | Sheet (6 tabs) + Leaflet + EmailJS |
-| `food/` | **SidBites** | index, add | Sheet (SidBites tab) + Cloudinary |
+| `food/` | **SidBites** | index | Sheet (SidBites tab), read only |
 | `favourites/` | **SidPicks** | index, category | Sheet (SidPicks tab) |
 | `journal/` | **SidNotes** | index, story | JSON files on disk |
 
@@ -40,14 +40,12 @@ Both registers are in use on purpose, so the rule is:
   selectors, and the selector is the folder name.
 
 Storage keys follow the display name, lowercased, as `<module>:<thing>` -
-`sidbooks:cache:`, `sidcinemas:owner`, `sidbites:key`, `sidpicks:sheet:`. The
+`sidbooks:cache:`, `sidcinemas:owner`, `sidpicks:sheet:`. The
 one site-wide key is `sidverse:theme`.
 
 Earlier names - Pitara, Swaad, BookVerse, SidCinema, Museum of Favorites,
-Wanderlog, Marquee - are gone from the codebase. Two deliberate exceptions
-remain, both in `modules/food/assets/js/config.js`: `baseFolder: "Swaad"` and
-`uploadPreset: "swaad_uploads"` name resources that live in the Cloudinary
-account, and renaming them here without renaming them there breaks uploads.
+Wanderlog, Marquee - are gone from the codebase. Older SidBites photos still
+live under a `Swaad` folder in Cloudinary; the links in the sheet point there.
 
 ---
 
@@ -188,18 +186,17 @@ field, the **first wins** - so delete the old column when you rename one.
 | File | Does |
 |---|---|
 | `modules/cinema/assets/apps_script/SidCinemas_Bridge.gs` | reads all three tabs in one request; writes ticks and rows |
-| `modules/books/assets/apps_script/Code.gs` | reads both tabs; writes rows and edition marks |
+| `modules/books/assets/apps_script/Code.gs` | reads the Sidbooks tab; writes rows, Status and edition marks |
 | `modules/books/assets/apps_script/OtherVersions.gs` | a manual job: fills `Other Versions` and `Count` from Open Library |
-| `modules/food/assets/apps_script/Code.gs` | reads the sheet; writes dishes; signs Cloudinary uploads |
 
 Each script's `SECRET` must equal `APPS_SCRIPT_TOKEN` in that module's
 `config.js`. Both pairs currently match. Cinema's token reads like a
 placeholder - `THIS-IS-A-LONG-RANDOM-STRING-FOR-APPS-SCRIPT-TOKEN` - but it is
 the live value; change it in **both** files together or writes stop.
 
-Food is the exception to the pair: it has no token. Its Apps Script checks
-the password on every write instead, reading a Script Property named
-`ADMIN_PASSWORD` in preference to the constant in `Code.gs`.
+SidBites, SidPicks and SidTrails have no Apps Script: they only read the
+published sheet, and dishes, picks and trips are added in the sheet itself.
+The books scripts live in the shared workbook's own Extensions > Apps Script.
 
 **After every script edit:** Deploy → Manage deployments → pencil → New version
 → Deploy. The site sees the last *deployed* version, not the last saved one.
@@ -279,29 +276,22 @@ removing both.
 
 ## 6. Passwords
 
-`LaxSid@12345` opens all three writable modules.
+`LaxSid@12345` opens both writable modules.
 
 | Module | Constant | File |
 |---|---|---|
 | Cinema | `OWNER_PASSWORD` | `modules/cinema/js/config.js` |
 | Books | `OWNER_PASSWORD` | `modules/books/js/config.js` |
-| Food | `ADMIN_PASSWORD` | `modules/food/assets/js/config.js` |
 
 The browser check only decides whether the form opens. **Every write is checked
 again server-side** by the Apps Script, so the password in these files is a
 gate, not the lock.
 
-Food's Apps Script reads a Script Property named `ADMIN_PASSWORD` in
-preference to the constant in `Code.gs`, so setting that property keeps the
-password out of the file if you'd rather.
-
 ### The gate
 
-All three ask the same way, in two steps: **"This is Siddhesh's …"** with
+Both ask the same way, in two steps: **"This is Siddhesh's …"** with
 **No, go back** / **Yes, I'm Siddhesh**, then the password. On a phone the
-buttons stack with the affirmative on top. Cinema and Books draw it as a modal
-over the page; Food draws the same modal from
-`modules/food/assets/js/gate.js`.
+buttons stack with the affirmative on top.
 
 ---
 

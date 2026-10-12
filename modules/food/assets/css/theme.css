@@ -106,28 +106,6 @@ body { color: var(--ink); }
 .hero__stat b { color: var(--p-accent-ink); font-weight: 600; }
 .hero__stat em { color: var(--p-accent-ink); font-weight: 600; }
 
-.form input[type=text],
-.form input[type=url],
-.form input[type=date],
-.form input[type=password],
-.form textarea,
-.form select {
-  background: var(--p-surface);
-  color: var(--p-ink);
-  border-color: var(--p-line);
-}
-
-.form input:focus, .form textarea:focus, .form select:focus {
-  border-color: var(--p-accent);
-  box-shadow: 0 0 0 3px rgba(var(--p-accent-rgb), .22);
-}
-
-.form input[type=range]::-webkit-slider-thumb,
-.form input[type=range]::-moz-range-thumb {
-  background: var(--p-accent-ink);
-  border-color: var(--p-surface);
-}
-
 /* Filled controls take the accent pair, so what sits on them is always its opposite in either theme. */
 .tab.is-on,
 .crumb.is-last,
@@ -143,109 +121,6 @@ body { color: var(--ink); }
 .card__score { background: var(--p-accent-tint); color: var(--p-accent-ink); }
 .card__score.is-top { background: var(--p-accent-ink); color: var(--p-on-accent); }
 
-
-/* ---- the entry form ----------------------------------------------------- */
-/* It read as one long unbroken scroll of labels on bare paper. Each step is a panel now, so the page has four clear stages instead of a column of fields, and the actions sit on a bar of their own at the end. */
-
-/* The form read in a 470px column on a 1440px screen. It reads in a proper two-column layout on a wide screen and stacks on a narrow one. */
-.page { max-width: 1080px; }
-
-.form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-  gap: 20px;
-}
-
-/* The photo step is the tall one, so it takes a column of its own and the action bar spans the full width beneath both. */
-.form .group:nth-of-type(4) { grid-row: span 3; }
-.form__actions, .form .actions { grid-column: 1 / -1; }
-
-@media (max-width: 900px) {
-  .form { grid-template-columns: 1fr; }
-  .form .group:nth-of-type(4) { grid-row: auto; }
-}
-
-.page__head { border-bottom: 0; padding-bottom: 0; margin-bottom: clamp(20px, 3vw, 30px); }
-.page__title { font-weight: 600; letter-spacing: -.02em; font-size: clamp(2rem, 4.4vw, 2.6rem); }
-
-.form .group {
-  gap: 18px;
-  margin-bottom: 20px;
-  padding: clamp(20px, 2.6vw, 28px);
-  background: var(--p-surface);
-  border: 1px solid var(--p-line);
-  border-radius: var(--p-radius-lg);
-  box-shadow: var(--p-shadow-sm);
-}
-
-.form .group__label {
-  border-bottom: 0;
-  padding-bottom: 0;
-  font-size: var(--p-text-2xs);
-  letter-spacing: .16em;
-  color: var(--p-accent-ink);
-}
-
-.field label { font-size: var(--p-text-2xs); letter-spacing: .12em; }
-
-/* Rows collapse rather than squeezing two fields into a phone's width. */
-@media (max-width: 620px) { .field-row { grid-template-columns: 1fr; } }
-
-/* The verdict row: a date and a slider are different shapes, so they get their own widths instead of an even split. */
-.form .group:nth-of-type(3) .field-row { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
-
-.rating-out { color: var(--p-accent-ink); font-weight: 700; font-size: 1.3rem; }
-.rating-of { color: var(--p-muted); font-size: .8rem; margin-left: 2px; }
-.rating-scale { display: flex; justify-content: space-between; color: var(--p-muted); font-size: var(--p-text-2xs); }
-
-/* The photo step */
-.tabs { display: flex; gap: 6px; padding: 4px; background: var(--p-surface-3); border-radius: var(--p-pill); }
-.tab { flex: 1; border: 0; border-radius: var(--p-pill); background: transparent; color: var(--p-ink-soft);
-       font: inherit; font-size: var(--p-text-sm); font-weight: 600; padding: 9px 12px; cursor: pointer; }
-
-.drop {
-  display: grid;
-  place-items: center;
-  gap: 6px;
-  padding: clamp(26px, 4vw, 40px);
-  border: 1.5px dashed color-mix(in srgb, var(--p-accent) 52%, var(--p-line));
-  border-radius: var(--p-radius);
-  background: var(--p-accent-tint);
-  cursor: pointer;
-  transition: border-color .2s var(--p-ease), background .2s var(--p-ease);
-}
-
-.drop:hover, .drop.is-over { border-color: var(--p-accent-ink); background: color-mix(in srgb, var(--p-accent) 18%, var(--p-surface)); }
-.drop__icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%;
-              background: var(--p-surface); color: var(--p-accent-ink); font-size: 1.1rem; }
-.drop__title { font-weight: 600; color: var(--p-ink); }
-.drop__note { font-family: var(--p-mono); font-size: var(--p-text-2xs); letter-spacing: .1em; color: var(--p-muted); }
-
-.folder {
-  display: grid;
-  gap: 10px;
-  padding: 14px;
-  border: 1px solid var(--p-line);
-  border-radius: var(--p-radius);
-  background: var(--p-surface-2);
-}
-
-.folder__list:empty { display: none; }
-.folder__new { display: flex; gap: 8px; }
-
-/* The actions ride at the end on a bar of their own rather than floating. */
-.form__actions, .actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 4px;
-  padding: 16px clamp(20px, 2.6vw, 28px);
-  background: var(--p-surface);
-  border: 1px solid var(--p-line);
-  border-radius: var(--p-radius-lg);
-  box-shadow: var(--p-shadow-sm);
-}
 
 /* The page's own wash is the site's now. */
 .wash { display: none; }
@@ -365,32 +240,7 @@ body { color: var(--ink); }
 }
 
 
-/* ---- the lock ---------------------------------------------------------- */
-/* The form inherits the entry form's two-column grid, which put the password beside the button. It is one column: field, then button under it. */
-#lockPanel .form {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  width: min(380px, 100%);
-  margin-inline: auto;
-}
-
-#lockPanel .form input { width: 100%; }
-#lockPanel .btn--wide { width: 100%; }
-#lockPanel .form__error { grid-column: 1; margin: 0; color: var(--p-danger); font-size: var(--p-text-sm); }
-
-/* The date field and its slider are different shapes; the slider needs the room, and the two should not sit on the same baseline by accident. */
-.form input[type=date] { width: 100%; }
-
 @media (max-width: 720px) {
-  /* A back link on a phone is a way out, not a headline. */
-  .btn-back, .btn-add {
-    min-height: 32px !important;
-    padding: 0 12px !important;
-    font-size: var(--p-text-sm) !important;
-    white-space: nowrap;
-  }
-
   /* The byline's rule reads as a stray dash once the line is centred. */
   .hero__by::before { display: none; }
   .hero__by { justify-content: center; }
@@ -402,33 +252,6 @@ body { color: var(--ink); }
 .hero__line.langline { position: relative; z-index: 4; }
 
 
-/* ---- the entry form, laid out ------------------------------------------ */
-/* Panels were flowing into two columns by source order, which left one column short and the row ragged. Each panel is placed, so the form reads as two even columns with the actions across the foot. */
-@media (min-width: 901px) {
-  .form {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-  }
-
-  .form .group:nth-of-type(1) { grid-column: 1; }   /* what you ate */
-  .form .group:nth-of-type(2) { grid-column: 1; }   /* where you ate it */
-  .form .group:nth-of-type(3) { grid-column: 1; }   /* the verdict */
-  .form .group:nth-of-type(4) { grid-column: 2; grid-row: 1 / span 3; }
-  .form .group:nth-of-type(4) { align-self: stretch; }
-  .form__actions, .form .actions { grid-column: 1 / -1; }
-}
-
-/* The verdict row: a date and a slider are different shapes and must not be forced to share a column ratio that squeezes either. */
-.form .group:nth-of-type(3) .field-row {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-}
-
-@media (min-width: 760px) {
-  .form .group:nth-of-type(3) .field-row { grid-template-columns: minmax(150px, .7fr) minmax(0, 1fr); }
-}
-
-
 /* The headline reveals itself with `clip-path: inset(0 0 100% 0)` animating open. A clip-path clips EVERYTHING outside the element's box, including the translation bubble that hangs above it — which is why the tooltip measured correctly, reported full opacity, and still painted nothing. The reveal is kept; it just finishes at an inset large enough to clip nothing, instead of at the element's own edges. */
 .hero__line { animation-name: food-headline-reveal; }
 
@@ -436,10 +259,3 @@ body { color: var(--ink); }
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(-400px -400px -400px -400px); }
 }
-
-/* The page's own heading reads centred, and its line is not held to a column narrower than the form beneath it. */
-.page__head { text-align: center; }
-.page__head .page__sub, .page__head p { max-width: none; margin-inline: auto; }
-
-/* The two actions sit together in the middle of their bar. */
-.form__actions, .form .actions { justify-content: center; }

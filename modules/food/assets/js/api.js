@@ -1,4 +1,4 @@
-import { CSV_URL, APPS_SCRIPT_URL, READ_FROM } from "./config.js";
+import { CSV_URL } from "./config.js";
 
 const MONTHS = ["january","february","march","april","may","june","july","august","september","october","november","december"];
 
@@ -74,14 +74,6 @@ export function parseDate(str) {
   return isNaN(d) ? null : d;
 }
 
-// "2026-08-12" -> "12 August 2026", matching what is already in the sheet
-export function formatDate(iso) {
-  const d = parseDate(iso);
-  if (!d) return iso;
-  const month = MONTHS[d.getMonth()];
-  return `${d.getDate()} ${month[0].toUpperCase() + month.slice(1)} ${d.getFullYear()}`;
-}
-
 export function shortDate(d) {
   if (!d) return "";
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -94,50 +86,9 @@ export function cdn(url, transform) {
   return url.replace("/upload/", `/upload/${transform}/`);
 }
 
-export const isScriptReady = () => /^https:\/\/script\.google\.com\//.test(APPS_SCRIPT_URL);
-
+// The published CSV is the only source; the cache-buster keeps a fresh edit from waiting on the browser.
 export async function fetchDishes() {
-  if (READ_FROM === "script" && isScriptReady()) {
-    const res = await fetch(`${APPS_SCRIPT_URL}?action=list&t=${Date.now()}`);
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || "Could not read the sheet");
-    return rowsToDishes(data.rows);
-  }
   const res = await fetch(`${CSV_URL}&t=${Date.now()}`);
   if (!res.ok) throw new Error("Could not reach the sheet");
   return rowsToDishes(parseCSV(await res.text()));
-}
-
-// a new row takes a few minutes to reach the published CSV, so hold it locally until then
-const PENDING = "sidbites:pending";
-
-export function readPending() {
-  try { return JSON.parse(localStorage.getItem(PENDING) || "[]"); }
-  catch (_) { return []; }
-}
-
-export function addPending(dish) {
-  const list = readPending();
-  list.unshift(dish);
-  localStorage.setItem(PENDING, JSON.stringify(list));
-}
-
-export function prunePending(liveImages) {
-  const waiting = readPending().filter(d => !liveImages.has(d.image));
-  localStorage.setItem(PENDING, JSON.stringify(waiting));
-  return waiting;
-}
-
-// text/plain keeps this a simple request, so Apps Script answers without a preflight
-export async function post(body) {
-  if (!isScriptReady()) throw new Error("Apps Script URL is not set in config.js");
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(body),
-    redirect: "follow"
-  });
-  const data = await res.json();
-  if (!data.ok) throw new Error(data.error || "The sheet rejected that");
-  return data;
 }

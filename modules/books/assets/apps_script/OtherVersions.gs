@@ -1,60 +1,40 @@
-// SidBooks - fills an "Other Versions" column from Open Library.
-//
-// Paste this into Extensions > Apps Script as a NEW file (File > + > Script,
-// name it OtherVersions). Leave Code.gs alone; the two do not touch.
-//
-// To run it: pick fillOtherVersions in the toolbar dropdown and press Run.
-//
-// There is no arithmetic from one ISBN to another. Editions are grouped under a
-// WORK, so each book is resolved to its work first and the work's editions are
-// listed. Rows with no ISBN fall back to a title and author search.
+// SidBooks - fills Other Versions and Count from Open Library. Add beside Code.gs, then run fillOtherVersions from the toolbar.
 
 // --- settings ---------------------------------------------------------------
 
-// Opened by id so it runs bound or standalone. Every book, read or queued, lives in the one tab.
-var SHEET_ID = '1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk';
+// SHEET_ID comes from Code.gs, which sits in the same project.
 var SHEETS_TO_FILL = ['Sidbooks'];
 var VERSIONS_HEADER = 'Other Versions';
 var COUNT_HEADER = 'Count';
 
-// Written when a book has no other editions. An empty cell reads as "not looked
-// at yet"; this says the lookup ran and the answer was none.
+// Written when the lookup ran and found no other editions; an empty cell means not looked up yet.
 var NONE_TEXT = 'None';
 
-// Editions per book. 0 means every one Open Library has, which is the point:
-// the more ISBNs a book is known by, the more likely a shelf recognises a
-// printing somebody is actually holding.
+// Editions per book; 0 keeps every one Open Library has.
 var MAX_VERSIONS = 0;
 
-// A hard stop, not a preference. Nothing has this many real editions, and it
-// keeps a bad work id from paging forever.
+// Hard stop so a bad work id never pages forever.
 var EDITION_CEILING = 1000;
 
-// A Google Sheets cell holds 50,000 characters. Truncating at 45,000 leaves
-// room and never silently loses the end of a line.
+// A cell holds 50,000 characters; whole lines are kept under this.
 var CELL_LIMIT = 45000;
 
-// Hundreds of lines with wrap on makes a row hundreds of lines tall and the
-// sheet unusable. Clipped, the cell shows one line and the whole value is still
-// there — in the formula bar, in the CSV, and to the site. Set true to wrap.
+// Clipped cells keep rows one line tall; the full value is still in the cell. Set true to wrap.
 var WRAP_VERSIONS = false;
 
-// Rows already filled are skipped. Set true to rebuild every row from scratch.
+// Filled rows are skipped; set true to rebuild every row.
 var FORCE_REFILL = false;
 
-// Apps Script stops a script at 6 minutes. This leaves room to schedule the
-// continuation before that happens.
+// Apps Script stops at 6 minutes; this leaves room to schedule the next run.
 var TIME_BUDGET_MS = 4.5 * 60 * 1000;
 
-// Open Library asks for a contactable agent and a gentle pace. Both are polite
-// and both keep this from being throttled halfway through a long run.
+// Open Library asks for a contactable agent and a gentle pace.
 var USER_AGENT = 'SidVerse-Books/1.0 (personal reading log; contact: laxman19.sawant@gmail.com)';
 var PAUSE_MS = 350;
 
 // --- the run ----------------------------------------------------------------
 
-// Resumable without remembering anything: a filled row is skipped on sight, so
-// a continuation can start from the top and cost nothing to reach where it was.
+// Resumable: filled rows are skipped, so a continuation simply starts from the top.
 function fillOtherVersions() {
   var started = Date.now();
   var book = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
@@ -88,9 +68,7 @@ function fillOtherVersions() {
       var count = text ? text.split('\n').length : 0;
       if (!count) text = NONE_TEXT;
 
-      // Both cells together, then one flush. flush() is what makes this
-      // visible: without it Apps Script batches every write to the end and a
-      // long run looks like nothing is happening.
+      // Flushed per row so progress shows while it runs.
       sheet.getRange(row, plan.versionsCol).setValue(text);
       sheet.getRange(row, plan.countCol).setValue(count);
       SpreadsheetApp.flush();
@@ -115,8 +93,7 @@ function versionsFor_(title, author, isbn) {
   var entries = editionsOf_(workKey);
   if (!entries.length) return '';
 
-  // Both forms of this row's own ISBN, so its own printing is never listed as
-  // an alternative to itself.
+  // Both forms of this row's own ISBN, so its own printing is never listed as an alternative to itself.
   var mine = {};
   var thirteen = toIsbn13_(isbn);
   var ten = toIsbn10_(isbn);
@@ -154,8 +131,7 @@ function versionsFor_(title, author, isbn) {
   return kept.join('\n');
 }
 
-// ISBN first and always, so anything reading this cell can find it without
-// having to understand the rest of the line.
+// ISBN first and always, so anything reading this cell can find it without having to understand the rest of the line.
 function formatLine_(isbn, edition) {
   var bits = [isbn];
   var language = languageName_(firstOf_(edition.languages));
@@ -190,8 +166,7 @@ function workKeyFor_(title, author, isbn) {
     if (works && works.length && works[0].key) key = works[0].key;
   }
 
-  // No ISBN in the sheet, or no edition record for it. Title and author is the
-  // only thing left, and it is why the Author column is read at all.
+  // No ISBN or no edition record: fall back to title and author.
   if (!key && title) {
     var query = 'https://openlibrary.org/search.json?limit=1&fields=key'
       + '&title=' + encodeURIComponent(title)
@@ -204,8 +179,7 @@ function workKeyFor_(title, author, isbn) {
   return key;
 }
 
-// Paged. editions.json answers 100 at a time however large a limit is asked
-// for, so a work with 300 printings needs three calls, not one.
+// Paged: editions.json answers 100 at a time.
 function editionsOf_(workKey) {
   if (EDITION_CACHE[workKey]) return EDITION_CACHE[workKey];
 
@@ -220,8 +194,7 @@ function editionsOf_(workKey) {
 
     entries = entries.concat(batch);
 
-    // size is the true total. Stop on it rather than on a short page, which a
-    // slow shard can return early.
+    // size is the true total. Stop on it rather than on a short page, which a slow shard can return early.
     var total = payload && Number(payload.size);
     if (total && entries.length >= total) break;
     if (batch.length < 100) break;
@@ -230,8 +203,7 @@ function editionsOf_(workKey) {
     Utilities.sleep(PAUSE_MS);
   }
 
-  // Newest first, so the printings someone might actually be holding come up
-  // before a 1954 hardback nobody can buy.
+  // Newest first, so the printings someone might actually be holding come up before a 1954 hardback nobody can buy.
   entries.sort(function (a, b) { return (yearOf_(b.publish_date) || 0) - (yearOf_(a.publish_date) || 0); });
 
   EDITION_CACHE[workKey] = entries;
@@ -255,8 +227,7 @@ function fetchJson_(url) {
 
 // --- the sheet --------------------------------------------------------------
 
-// Columns are found by HEADER NAME, never by position, and the new one is added
-// on the end when it is missing. Same rule as Code.gs, for the same reason.
+// Columns are found by header name; a missing one is added on the end.
 function prepare_(sheet) {
   var lastRow = sheet.getLastRow();
   if (lastRow < 2) return null;
@@ -277,8 +248,7 @@ function prepare_(sheet) {
 
   if (!titleCol) throw new Error('No "Title" column on "' + sheet.getName() + '".');
 
-  // Added in order, so Count lands immediately after Other Versions when
-  // neither exists yet.
+  // Added in order, so Count lands immediately after Other Versions when neither exists yet.
   if (!versionsCol) {
     versionsCol = ++width;
     sheet.getRange(1, versionsCol).setValue(VERSIONS_HEADER);
@@ -335,8 +305,7 @@ function yearOf_(value) {
   return match ? Number(match[1]) : null;
 }
 
-// Both forms convert to 13 before anything is compared, exactly as
-// js/data/identity.js and Code.gs do. The three must agree.
+// Both forms convert to 13 before anything is compared, exactly as js/data/identity.js and Code.gs do. The three must agree.
 function toIsbn13_(value) {
   var bare = String(value == null ? '' : value).replace(/[^0-9Xx]/g, '').toUpperCase();
   if (bare.length === 13) return bare;

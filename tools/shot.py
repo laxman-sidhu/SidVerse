@@ -13,7 +13,6 @@ PAGES = [
     ("travel",          "/modules/travel/index.html"),
     ("travel-gallery",  "/modules/travel/gallery.html"),
     ("food",           "/modules/food/index.html"),
-    ("food-add",       "/modules/food/add.html"),
     ("fav",             "/modules/favourites/index.html"),
     ("fav-category",    "/modules/favourites/category.html?category=actors"),
     ("journal",         "/modules/journal/index.html"),

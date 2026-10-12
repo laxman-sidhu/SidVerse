@@ -16,7 +16,7 @@ export const PUBLISHED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX
 
 // --- the write bridge -------------------------------------------------------
 // The /exec URL from Deploy > Manage deployments. Empty means read-only.
-export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycr1caYZOYFICMoDufUx1V0f2gp3fypzP9ysdW1rtgkSXiRABe8-v1U13PQl71DYrqBQ/exec";
+export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKKorwGe_QLK_GPHyjyE_8gBvISmn2s_hJiu0f5ik4bmBAGZ-QRbI0dKA9plCcFOqZSQ/exec";
 // Must match SECRET in Code.gs. Change both together.
 export const APPS_SCRIPT_TOKEN = "sidverse-books-u81apw9xjBIM2AGt8dlx_0mJvwEvCZpZSBsuzbiq8E_42_Rk";
 

@@ -1,4 +1,4 @@
-// SidBooks - the read and write bridge for the one-tab workbook. Paste into Apps Script, deploy as a web app, see docs/PROJECT.md section 5.
+// SidBooks - the read and write bridge. Lives in the shared workbook's Extensions > Apps Script beside OtherVersions.gs; deploy as a web app (Execute as: Me, Who has access: Anyone).
 
 // Must match APPS_SCRIPT_TOKEN in js/config.js.
 var SECRET = 'sidverse-books-u81apw9xjBIM2AGt8dlx_0mJvwEvCZpZSBsuzbiq8E_42_Rk';

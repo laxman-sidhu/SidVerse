@@ -3,7 +3,7 @@ PAGES=[("home","/index.html"),("cinema","/modules/cinema/index.html"),
 ("cinema-watched","/modules/cinema/watched.html"),("books","/modules/books/index.html"),
 ("books-library","/modules/books/library.html"),("travel","/modules/travel/index.html"),
 ("travel-gallery","/modules/travel/gallery.html"),("food","/modules/food/index.html"),
-("food-add","/modules/food/add.html"),("fav","/modules/favourites/index.html"),
+("fav","/modules/favourites/index.html"),
 ("journal","/modules/journal/index.html")]
 JS="""() => { const out=[];
  document.querySelectorAll('*').forEach(el=>{ if(el.children.length) return;

@@ -570,7 +570,6 @@ body > * { min-width: 0; }
 [data-section] .keeper,
 [data-section] .reader-cut,
 [data-section] main,
-[data-section="food"] .page,
 [data-section] section {
   background: transparent;
 }
@@ -1713,20 +1712,6 @@ body { padding-left: var(--p-rail-clear); }
 
 /* ---- 34. consistency between the two sizes ----------------------------- */
 /* Several things had been stated for phones only and so changed appearance between the two. They are stated once, for both. */
-
-/* Food's "Add a dish" is a filled button at every width. */
-[data-section="food"] .btn-add {
-  background: var(--p-accent-ink);
-  color: var(--p-on-accent);
-  border: 0;
-  border-radius: var(--p-pill);
-  padding: 0 18px;
-  min-height: var(--p-control-h);
-  font-weight: 600;
-}
-
-[data-section="food"] .btn-add:hover { background: var(--p-ink); color: var(--p-bg); }
-[data-section="food"] .btn-add__plus { color: inherit; }
 
 /* Two dishes a row on a phone. The module's own grid rule is more specific than a bare class, so the section is named here too. */
 @media (max-width: 720px) {

@@ -1,6 +1,5 @@
 import { SITE } from "./config.js";
-import { fetchDishes, parseDate, shortDate, cdn, prunePending } from "./api.js";
-import { learnFromUrls } from "./folders.js";
+import { fetchDishes, shortDate, cdn } from "./api.js";
 
 const $ = s => document.querySelector(s);
 const grid = $("#grid");
@@ -37,12 +36,8 @@ function measureTopbar() {
 
 async function load() {
   try {
-    const rows = await fetchDishes();
-    const waiting = prunePending(new Set(rows.map(r => r.image)));
-    state.all = waiting.map(hydrate).concat(rows);
-    learnFromUrls(state.all.map(d => d.image));
+    state.all = await fetchDishes();
     buildChips();
-    fillDatalists();
     paintHero();
     buildReel();
     apply();
@@ -55,10 +50,6 @@ async function load() {
     emptyEl.querySelector(".empty__note").textContent =
       "The sheet did not answer. It may be offline, or this network may be blocking it. Try again in a moment.";
   }
-}
-
-function hydrate(d) {
-  return { ...d, ratingNum: parseFloat(d.rating) || 0, dateObj: parseDate(d.date) };
 }
 
 // ---------- filters ----------
@@ -324,14 +315,3 @@ async function paintLightbox() {
 
 // ---------- shared ----------
 
-function fillDatalists() {
-  const fill = (id, key) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const values = [...new Set(state.all.map(d => d[key]).filter(Boolean))].sort();
-    el.innerHTML = values.map(v => `<option value="${esc(v)}">`).join("");
-  };
-  fill("placeList", "place");
-  fill("locList", "location");
-  fill("cuisineList", "cuisine");
-}
