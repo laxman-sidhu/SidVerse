@@ -602,6 +602,8 @@
 </a>
 `).join('');
 
+    swipeDots($('#kpiGrid'));
+
     // Animate KPI numbers
     $$('#kpiGrid .num').forEach(el => {
       const tgt = el.dataset.target;
@@ -947,7 +949,7 @@
       grid.after(dots);
       grid.addEventListener('scroll', () => paintSwipe(grid, dots), { passive: true });
     }
-    const count = grid.querySelectorAll(':scope > .visited-card, :scope > .trek-card').length;
+    const count = grid.querySelectorAll(':scope > :not(.empty-state)').length;
     dots.hidden = count < 2;
     dots.innerHTML = count > 10
       ? '<span class="swipe-dots__count"></span>'
@@ -1039,6 +1041,7 @@
 
     // Click handling is delegated from #wishlistGrid (wired once in bindEvents).
     placesState.wishlistRendered = list;
+    swipeDots(grid);
   }
 
   // ===========================================================================
@@ -1340,6 +1343,7 @@
   </div>
 `;
     }).join('');
+    swipeDots($('#goalsGrid'));
 
     setTimeout(() => {
       $$('.goal-progress-bar').forEach(bar => {
@@ -1420,6 +1424,7 @@
 
     // Click/keyboard handling is delegated from #activitiesGrid (wired once in bindEvents); arrows browse the currently visible (filtered) activities.
     activitiesRendered = activities;
+    swipeDots($('#activitiesGrid'));
   }
 
   // Activity photo modal - photo + name + status, nothing else

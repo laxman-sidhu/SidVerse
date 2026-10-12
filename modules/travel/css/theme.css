@@ -1245,3 +1245,127 @@ html[data-section="travel"] .goal-card .notes-indicator { cursor: pointer; z-ind
 .hero-visual.is-empty .fan-nav { display: none; }
 
 #contact.contact-section .vibe-line span { color: var(--p-accent-ink); }
+
+
+/* ---- more swipe rows on a phone ----------------------------------------- */
+/* The stat tiles, wishlist, bucket list and activities were squeezed two and three across. On a phone each becomes a swipe row sized to what its card needs. */
+@media (max-width: 720px) {
+  html[data-section="travel"] #kpiGrid.kpi-grid,
+  html[data-section="travel"] .wishlist-grid,
+  html[data-section="travel"] .goals-grid-new,
+  html[data-section="travel"] .activity-grid {
+    display: grid;
+    grid-template-columns: none !important;
+    grid-auto-flow: column;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 6px 2px 10px;
+    max-width: none;
+    justify-content: start;
+  }
+
+  html[data-section="travel"] #kpiGrid.kpi-grid { grid-auto-columns: calc(50% - 22px); }
+  html[data-section="travel"] .wishlist-grid { grid-auto-columns: calc(50% - 22px); }
+  html[data-section="travel"] .goals-grid-new { grid-auto-columns: calc(100% - 56px); }
+  html[data-section="travel"] .activity-grid { grid-auto-columns: calc(66% - 10px); }
+
+  html[data-section="travel"] #kpiGrid.kpi-grid::-webkit-scrollbar,
+  html[data-section="travel"] .wishlist-grid::-webkit-scrollbar,
+  html[data-section="travel"] .goals-grid-new::-webkit-scrollbar,
+  html[data-section="travel"] .activity-grid::-webkit-scrollbar { display: none; }
+
+  html[data-section="travel"] #kpiGrid.kpi-grid > *,
+  html[data-section="travel"] .wishlist-grid > *,
+  html[data-section="travel"] .goals-grid-new > *,
+  html[data-section="travel"] .activity-grid > * {
+    scroll-snap-align: start;
+    max-width: none;
+    width: auto;
+    min-width: 0;
+    margin: 0;
+  }
+
+  html[data-section="travel"] .wishlist-grid > .empty-state,
+  html[data-section="travel"] .goals-grid-new > .empty-state,
+  html[data-section="travel"] .activity-grid > .empty-state { grid-column: auto; }
+
+  html[data-section="travel"] .kpi-card:hover,
+  html[data-section="travel"] .goal-card:hover,
+  html[data-section="travel"] .wishlist-card:hover,
+  html[data-section="travel"] .activity-card:hover { transform: none; }
+
+  /* Cards keep the proportions they have on a desktop instead of the shrunken two-up ones. */
+  html[data-section="travel"] .goal-card { min-height: 200px; padding: 16px 16px 14px; }
+  html[data-section="travel"] .goal-card h4 { font-size: 1.02rem; -webkit-line-clamp: 3; }
+  html[data-section="travel"] .goal-badge { font-size: 9.5px; padding: 4px 9px; letter-spacing: .06em; }
+  html[data-section="travel"] .goal-diff { font-size: 11px; }
+  html[data-section="travel"] .goal-footer { gap: 8px; flex-wrap: nowrap; }
+
+  html[data-section="travel"] .wishlist-card { padding: 14px 14px 12px; min-height: 104px; }
+  html[data-section="travel"] .wishlist-card h4 { font-size: 1rem; line-height: 1.2; }
+  html[data-section="travel"] .wishlist-card .wl-loc { font-size: 12px; }
+
+  html[data-section="travel"] .activity-card { padding: 12px 14px; gap: 12px; align-items: center; }
+  html[data-section="travel"] .activity-card h5 { font-size: 14px; white-space: normal; overflow: visible; text-overflow: clip; }
+  html[data-section="travel"] .activity-card .meta-text { font-size: 12px; white-space: normal; overflow: visible; text-overflow: clip; }
+
+  html[data-section="travel"] .kpi-card { min-height: 0; }
+
+  /* Inside a sideways scroller a note above the card would be cut off, so on a phone it opens over the card itself. */
+  html[data-section="travel"] .goal-card[data-notes].show-notes::after {
+    top: 10px;
+    bottom: auto;
+    left: 10px;
+    right: 10px;
+  }
+}
+
+
+/* ---- the contact band on light paper ------------------------------------ */
+/* In the light theme the band is a deep plate with soft pastel light across it, and the form card stays white on top. The band's own tokens are flipped, and the card puts the light ones back. */
+:root:not([data-theme="dark"]) #contact.contact-section {
+  --p-ink: #f6f3fb;
+  --p-ink-soft: #d9d3e7;
+  --p-muted: #b7afca;
+  --p-accent-ink: #b9e6cf;
+  background:
+    radial-gradient(55% 75% at 0% 0%, rgba(var(--p-mint-rgb), .22), transparent 62%),
+    radial-gradient(50% 70% at 100% 6%, rgba(var(--p-sky-rgb), .18), transparent 60%),
+    radial-gradient(60% 80% at 70% 100%, rgba(var(--p-pink-rgb), .18), transparent 64%),
+    linear-gradient(165deg, #2f2945 0%, #3b3256 55%, #2a2440 100%);
+  border-block: 0;
+}
+
+:root:not([data-theme="dark"]) #contact.contact-section .vibe-line {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(255, 255, 255, .22);
+  box-shadow: none;
+}
+
+:root:not([data-theme="dark"]) #contact.contact-section .contact-perks li {
+  background: rgba(255, 255, 255, .07);
+  border-color: rgba(255, 255, 255, .14);
+  box-shadow: none;
+}
+
+:root:not([data-theme="dark"]) #contact.contact-section .contact-perks li:hover {
+  background: rgba(255, 255, 255, .12);
+  border-color: rgba(255, 255, 255, .24);
+}
+
+:root:not([data-theme="dark"]) #contact.contact-section .contact-perks .perk-icon { background: rgba(255, 255, 255, .12); }
+:root:not([data-theme="dark"]) #contact.contact-section .signoff-line { background: rgba(255, 255, 255, .35); }
+
+:root:not([data-theme="dark"]) #contact.contact-section .contact-form-card {
+  --p-ink: #2c2840;
+  --p-ink-soft: #57516e;
+  --p-muted: #6e6889;
+  --p-accent-ink: #276448;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .18), 0 36px 70px -30px rgba(0, 0, 0, .6);
+  border-color: rgba(255, 255, 255, .6);
+}
