@@ -949,7 +949,7 @@
       grid.after(dots);
       grid.addEventListener('scroll', () => paintSwipe(grid, dots), { passive: true });
     }
-    const count = grid.querySelectorAll(':scope > :not(.empty-state)').length;
+    const count = Math.ceil(grid.querySelectorAll(':scope > :not(.empty-state)').length / swipeRows(grid));
     dots.hidden = count < 2;
     dots.innerHTML = count > 10
       ? '<span class="swipe-dots__count"></span>'
@@ -958,13 +958,20 @@
     paintSwipe(grid, dots);
   }
 
+  // A row that stacks its cards (activities, three to a column) counts columns, not cards.
+  function swipeRows(grid) {
+    const rows = getComputedStyle(grid).gridTemplateRows;
+    return rows && rows !== 'none' ? rows.split(' ').length : 1;
+  }
+
   function paintSwipe(grid, dots) {
     const cards = grid.children;
     if (!cards.length) return;
+    const columns = Math.ceil(cards.length / swipeRows(grid));
     const step = cards[0].getBoundingClientRect().width + parseFloat(getComputedStyle(grid).columnGap || 0);
-    const at = Math.min(cards.length - 1, Math.round(grid.scrollLeft / (step || 1)));
+    const at = Math.min(columns - 1, Math.round(grid.scrollLeft / (step || 1)));
     const counter = dots.querySelector('.swipe-dots__count');
-    if (counter) counter.textContent = `${at + 1} / ${cards.length}`;
+    if (counter) counter.textContent = `${at + 1} / ${columns}`;
     Array.prototype.forEach.call(dots.children, (dot, i) => dot.classList.toggle('is-on', i === at));
   }
 

@@ -96,8 +96,13 @@ window.JOURNAL = (function(){
     grandhotel:"Grand Hotel", lobstertwo:"Lobster Two", sail:"Sail", gluten:"Gluten", playfair:"Playfair Display", cormorant:"Cormorant Garamond", bodonimt:"Playfair Display", daunpenh:"Cormorant Garamond",
     quicksand:"Quicksand", nunito:"Nunito", bebas:"Bebas Neue" };
   const loadedFonts = new Set();
-  function loadFonts(keys){
-    const families = [...new Set(keys.map(k=>GOOGLE_FONTS[resolveFontKey(k)]).filter(f=>f && !loadedFonts.has(f)))];
+  const GOOGLE_FAMILIES = new Set(Object.values(GOOGLE_FONTS));
+  function inlineFamilies(html){
+    return [...String(html||'').matchAll(/font-family:\s*(?:&quot;|["'])?([^;"',&]+)/gi)].map(m=>m[1].trim()).filter(f=>GOOGLE_FAMILIES.has(f));
+  }
+  function loadFonts(keys, extra){
+    const named = keys.map(k=>GOOGLE_FONTS[resolveFontKey(k)]).concat(extra||[]);
+    const families = [...new Set(named.filter(f=>f && !loadedFonts.has(f)))];
     if(!families.length) return;
     families.forEach(f=>loadedFonts.add(f));
     const link=document.createElement('link'); link.rel='stylesheet';
@@ -248,6 +253,8 @@ window.JOURNAL = (function(){
     return BACKGROUNDS.find(b=>b.label.toLowerCase()===want) || null;
   }
   function washFor(paper){
+    const fade=String(paper||'').toLowerCase().match(/([a-z]+)\s+to\s+([a-z]+)/);
+    if(fade && WASH_COLOURS[fade[1]] && WASH_COLOURS[fade[2]]) return 'linear-gradient(180deg, '+WASH_COLOURS[fade[1]]+' 0%, '+WASH_COLOURS[fade[2]]+' 100%)';
     const words=String(paper||'').toLowerCase().split(/[^a-z]+/);
     const hit=words.find(w=>WASH_COLOURS[w]);
     if(!hit) return '';
@@ -262,7 +269,7 @@ window.JOURNAL = (function(){
     const wash = bg ? '' : washFor(paper);
     if(bg){ pageEl.classList.add('bg'); pageEl.style.backgroundImage = 'url("'+bg.file+'")'; }
     else if(wash){ pageEl.classList.add('plain'); pageEl.style.backgroundImage = wash; }
-    else { pageEl.classList.add(BUILTIN_PAPERS.indexOf(paper)!==-1 ? paper : 'grid'); }
+    else { pageEl.classList.add(BUILTIN_PAPERS.indexOf(paper)!==-1 ? paper : (/[A-Z ]/.test(paper) ? 'plain' : 'grid')); }
   }
   function normalizePaper(p){ return (BUILTIN_PAPERS.indexOf(p)!==-1 || findPaper(p)) ? p : 'grid'; }
 
@@ -287,6 +294,11 @@ window.JOURNAL = (function(){
     body.style.background = d.fill || 'transparent';
     // paragraph / line spacing: a multiplier (1.0 – 3.0). Unset inherits the CSS default (1.45), so every already-published story renders exactly as before.
     body.style.lineHeight = d.spacing ? String(d.spacing) : '';
+    // Box options the editor added later: padding, border, corners and the box's own height.
+    body.style.padding = d.pad != null ? d.pad+'px' : '';
+    body.style.border = d.bw ? (d.bw+'px solid '+(d.bc||'#4b4361')) : '';
+    body.style.borderRadius = d.radius != null ? d.radius+'px' : '';
+    body.style.minHeight = d.h ? d.h+'px' : '';
   }
 
   // INLINE FORMATTING A text box can now carry per-word bold / italic / underline. When the user formats a selection inside a box, the editor stores the box's `html` (rich markup) alongside the plain `content` (used for previews/search and as a fallback). The block-level bold/italic/ underline buttons still work for whole-box styling via applyTextStyle; inline runs live inside the html. For safety we never inject arbitrary markup: setRichText whitelists only the formatting tags <b> <strong> <i> <em> <u> <br> and escapes everything else. This keeps rendering identical between the editor and the public reader, and keeps the PDF export correct.
@@ -353,14 +365,48 @@ window.JOURNAL = (function(){
     return el;
   }
 
+  // A shaped text box flows around the pictures placed on it: each picture becomes a float whose shape only covers the picture's own rows.
+  function wrapShapedText(built){
+    const media = built.filter(b=>b.d.type==='photo'||b.d.type==='video');
+    built.filter(b=>b.d.type==='text' && b.d.shape).forEach(({ el })=>{
+      const body = el.querySelector('.text-body');
+      if(!body) return;
+      body.querySelectorAll('.wrap-float').forEach(f=>f.remove());
+      const cs = getComputedStyle(body);
+      const x0 = el.offsetLeft + body.offsetLeft + parseFloat(cs.borderLeftWidth) + parseFloat(cs.paddingLeft);
+      const y0 = el.offsetTop + body.offsetTop + parseFloat(cs.borderTopWidth) + parseFloat(cs.paddingTop);
+      const cw = body.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const used = { left: false, right: false };
+      media.map(m=>({ x: m.el.offsetLeft - x0, y: m.el.offsetTop - y0, w: m.el.offsetWidth, h: m.el.offsetHeight }))
+        .filter(r=>r.x < cw && r.x + r.w > 0 && r.y + r.h > 0 && r.y < body.scrollHeight)
+        .sort((a,b)=>(b.w*b.h)-(a.w*a.h))
+        .forEach(r=>{
+          const side = (r.x + r.w/2) < cw/2 ? 'left' : 'right';
+          const width = side==='left' ? r.x + r.w : cw - r.x;
+          if(used[side] || width <= 0 || width > cw*0.8) return;
+          used[side] = true;
+          const top = Math.max(0, r.y);
+          const f = document.createElement('span');
+          f.className = 'wrap-float';
+          f.style.cssText = 'float:'+side+';width:'+Math.round(width)+'px;height:'+Math.round(r.y + r.h)+'px;shape-outside:inset('+Math.round(top)+'px 0 0 0);shape-margin:8px;';
+          body.insertBefore(f, body.firstChild);
+        });
+    });
+  }
+
   // overflow-safe: holder reserves the SCALED footprint; scaler is absolutely placed inside it
   function renderPageRO(mount, page){
     const holder=document.createElement('div'); holder.className='page-holder';
     const scaler=document.createElement('div'); scaler.className='page-scaler';
     const pg=document.createElement('div'); pg.className='page'; applyPaper(pg, page.paper);
-    loadFonts((page.elements||[]).flatMap(d=>[d.type==='text'?(d.font||'gaegu'):'', d.capFont||'']).filter(Boolean));
-    (page.elements||[]).forEach(d=> pg.appendChild(buildElementRO(d)));
+    const els = page.elements||[];
+    loadFonts(els.flatMap(d=>[d.type==='text'?(d.font||'gaegu'):'', d.capFont||'']).filter(Boolean), els.flatMap(d=>inlineFamilies(d.html)));
+    const built = els.map(d=>{ const el=buildElementRO(d); pg.appendChild(el); return { d, el }; });
     scaler.appendChild(pg); holder.appendChild(scaler); mount.appendChild(holder);
+    const wrap=()=>wrapShapedText(built);
+    requestAnimationFrame(wrap);
+    pg.querySelectorAll('img,video').forEach(m=>m.addEventListener(m.tagName==='VIDEO'?'loadedmetadata':'load', wrap));
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(wrap);
     const fit=()=>{ const cs=getComputedStyle(mount); const pad=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
       const avail=Math.min(mount.clientWidth-pad, 800); const sc=Math.min(1, avail/PAGE_W);
       scaler.style.transform='scale('+sc+')'; holder.style.width=(PAGE_W*sc)+'px'; holder.style.height=(pg.offsetHeight*sc)+'px'; };

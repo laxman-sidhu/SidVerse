@@ -1369,3 +1369,30 @@ html[data-section="travel"] .goal-card .notes-indicator { cursor: pointer; z-ind
   box-shadow: 0 2px 6px rgba(0, 0, 0, .18), 0 36px 70px -30px rgba(0, 0, 0, .6);
   border-color: rgba(255, 255, 255, .6);
 }
+
+
+/* ---- activities: three to a column -------------------------------------- */
+/* A card off screen inside a sideways row was held at the shared 280px placeholder height, which is what made each tile so tall. Swipe rows draw their cards normally, and activities stack three to a column. */
+@media (max-width: 720px) {
+  html[data-section="travel"] .visited-grid > *,
+  html[data-section="travel"] .trek-grid > *,
+  html[data-section="travel"] #kpiGrid.kpi-grid > *,
+  html[data-section="travel"] .wishlist-grid > *,
+  html[data-section="travel"] .goals-grid-new > *,
+  html[data-section="travel"] .activity-grid > * {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  html[data-section="travel"] .activity-grid {
+    grid-template-rows: repeat(3, auto);
+    grid-auto-columns: calc(100% - 44px);
+    align-items: stretch;
+  }
+
+  html[data-section="travel"] .activity-grid .activity-card {
+    min-height: 0;
+    height: auto;
+    padding: 12px 14px;
+  }
+}
