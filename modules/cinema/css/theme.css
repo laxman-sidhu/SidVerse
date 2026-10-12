@@ -210,3 +210,7 @@
 
 /* The page sheet already lists every destination, so the narrow-screen dropdown trigger inside it would name the current page a second time. */
 .pmenu__sheet .navmenu { display: none; }
+
+/* Box office sort: the gross leads the facts line, and the sort control pulses while figures load. */
+.card__gross { color: var(--p-accent-ink); font-weight: 700; }
+.sortfield.is-busy select { animation: p-pulse 1.2s var(--p-ease) infinite; }

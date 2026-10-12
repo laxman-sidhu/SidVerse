@@ -1,4 +1,4 @@
-import { READ_GID, READLIST_GID, READ_TAB, READLIST_TAB, APPS_SCRIPT_URL, PUBLISHED_CSV_URL } from "../config.js";
+import { BOOKS_GID, BOOKS_TAB, READLIST_WORDS, APPS_SCRIPT_URL, PUBLISHED_CSV_URL } from "../config.js";
 import { getJSON, getText } from "../core/http.js";
 import { parseCSV } from "../core/csv.js";
 import { normaliseHeader } from "../core/util.js";
@@ -19,7 +19,8 @@ const READ_ALIASES = {
   year: ["year", "published", "publish year", "first published"],
   date_read: ["date read", "read on", "finished", "date"],
   versions: ["other versions", "other version", "other editions", "editions"],
-  version_count: ["count", "versions count", "edition count", "editions count"]
+  version_count: ["count", "versions count", "edition count", "editions count"],
+  status: ["status", "shelf", "state"]
 };
 
 const READLIST_ALIASES = {
@@ -32,13 +33,19 @@ const READLIST_ALIASES = {
   book_id: READ_ALIASES.book_id,
   year: READ_ALIASES.year,
   versions: READ_ALIASES.versions,
-  version_count: READ_ALIASES.version_count
+  version_count: READ_ALIASES.version_count,
+  status: READ_ALIASES.status
 };
 
+// Both shelves live in one tab and are told apart by Status.
 const TABS = {
-  read: { gid: READ_GID, aliases: READ_ALIASES, label: READ_TAB },
-  readlist: { gid: READLIST_GID, aliases: READLIST_ALIASES, label: READLIST_TAB }
+  read: { aliases: READ_ALIASES, keep: row => !onReadlist(row) },
+  readlist: { aliases: READLIST_ALIASES, keep: onReadlist }
 };
+
+function onReadlist(row) {
+  return READLIST_WORDS.includes(String(row.status || "").trim().toLowerCase());
+}
 
 export { READ_ALIASES, READLIST_ALIASES };
 
@@ -46,7 +53,7 @@ export { READ_ALIASES, READLIST_ALIASES };
 export function shapeTab(which, header, rows) {
   const tab = TABS[which];
   if (!tab) throw new SheetError(`No tab called "${which}".`);
-  return shapeRows(header, rows, tab.aliases);
+  return shapeRows(header, rows, tab.aliases).filter(tab.keep);
 }
 
 // The FIRST column naming a field wins, which is the rule Code.gs follows too.
@@ -85,30 +92,39 @@ export function shapeRows(header, rows, aliases) {
 
 let bridgeRead = null;
 
-// One request for both tabs: two would each pay the script's cold start.
+// Only the one-tab bridge counts; an older deployment still answering for the old workbook is skipped.
 function readBridge() {
   if (!bridgeRead) {
     if (!APPS_SCRIPT_URL) return Promise.reject(new SheetError("No bridge configured."));
     bridgeRead = getJSON(`${APPS_SCRIPT_URL}?action=read`, { timeout: 25000 })
       .then(payload => {
-        if (!payload || payload.ok !== true || !payload.tabs) throw new SheetError("The bridge answered, but not with sheet data.");
-        return payload.tabs;
+        const books = payload && payload.ok === true && payload.tabs && payload.tabs.books;
+        if (!books || !Array.isArray(books.header)) throw new SheetError("The bridge answered, but not with the Sidbooks tab.");
+        return books;
       })
       .catch(error => { bridgeRead = null; throw error; });
   }
   return bridgeRead;
 }
 
-// --- the fallback -----------------------------------------------------------
+// --- the published sheet ----------------------------------------------------
+
+let csvRead = null;
 
 // Google caches this for a few minutes, so a fresh write can be invisible here.
-async function readCSV(gid) {
-  if (!PUBLISHED_CSV_URL) throw new SheetError("No published CSV is configured.");
-  const joiner = PUBLISHED_CSV_URL.includes("?") ? "&" : "?";
-  const text = await getText(`${PUBLISHED_CSV_URL}${joiner}gid=${encodeURIComponent(gid)}`, { timeout: 20000 });
-  const rows = parseCSV(text);
-  if (!rows.length) throw new SheetError("The published sheet came back empty.");
-  return { header: rows[0], rows: rows.slice(1) };
+function readCSV() {
+  if (!csvRead) {
+    if (!PUBLISHED_CSV_URL) return Promise.reject(new SheetError("No published CSV is configured."));
+    const joiner = PUBLISHED_CSV_URL.includes("?") ? "&" : "?";
+    csvRead = getText(`${PUBLISHED_CSV_URL}${joiner}gid=${encodeURIComponent(BOOKS_GID)}&single=true`, { timeout: 20000 })
+      .then(text => {
+        const rows = parseCSV(text);
+        if (!rows.length) throw new SheetError("The published sheet came back empty.");
+        return { header: rows[0], rows: rows.slice(1) };
+      })
+      .catch(error => { csvRead = null; throw error; });
+  }
+  return csvRead;
 }
 
 export async function fetchTab(which) {
@@ -116,21 +132,21 @@ export async function fetchTab(which) {
   if (!tab) throw new SheetError(`No tab called "${which}".`);
 
   try {
-    const tabs = await readBridge();
-    const payload = tabs[which];
-    if (payload && Array.isArray(payload.header)) return shapeRows(payload.header, payload.rows || [], tab.aliases);
+    const books = await readBridge();
+    return shapeRows(books.header, books.rows || [], tab.aliases).filter(tab.keep);
   } catch {
     // A missing deployment should cost the write buttons, not the whole site.
   }
 
   try {
-    const table = await readCSV(tab.gid);
-    return shapeRows(table.header, table.rows, tab.aliases);
+    const table = await readCSV();
+    return shapeRows(table.header, table.rows, tab.aliases).filter(tab.keep);
   } catch (error) {
-    throw new SheetError(`Could not read ${tab.label}. Check APPS_SCRIPT_URL in js/config.js, or that the sheet is still published to the web. (${error.message})`);
+    throw new SheetError(`Could not read ${BOOKS_TAB}. Check that the sheet is still published to the web. (${error.message})`);
   }
 }
 
 export function invalidate() {
   bridgeRead = null;
+  csvRead = null;
 }

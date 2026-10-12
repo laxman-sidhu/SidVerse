@@ -1,16 +1,18 @@
 // Books — every credential and constant. Nothing else in this section hardcodes one.
 
 // --- the spreadsheet --------------------------------------------------------
-export const SHEET_ID = "1SPNRwytBNr4b5OtTnKe1kkH9nU0w8UEt4LWl4bVKte8";
-export const READ_GID = "0";
-export const READLIST_GID = "294473504";
+// One tab holds every book; the Status column says which shelf it sits on.
+export const SHEET_ID = "1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk";
+export const BOOKS_GID = "1874000210";
+export const BOOKS_TAB = "Sidbooks";
 
-// Tab names, as Code.gs sees them. Must match the workbook exactly.
-export const READ_TAB = "Books Read";
-export const READLIST_TAB = "Want to Read";
+// Status values, compared lowercased. Anything not on the readlist counts as read.
+export const STATUS_READ = "Done";
+export const STATUS_READLIST = "Readlist";
+export const READLIST_WORDS = ["readlist", "read list", "want to read", "to read", "queued", "wishlist", "tbr"];
 
-// File > Share > Publish to web, CSV. Used only when the bridge is unreachable, and cached by Google for a few minutes.
-export const PUBLISHED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQDtgfekQMFcgM54hlEfdxQ64E1LFHxaTrqtKSMEESEagmO8-FY_UpOu4hzZamJlfviv-yOct1Wrbxx/pub?output=csv";
+// File > Share > Publish to web, CSV. Read first, and whenever the bridge is unreachable.
+export const PUBLISHED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-f1hmsMFY9vJRgLnh_hPRxKC3xj2flti_hNWEhwUEkP8hcjDExPXRMZO2PiLywXSKL0WhzrAQh2pk/pub?output=csv";
 
 // --- the write bridge -------------------------------------------------------
 // The /exec URL from Deploy > Manage deployments. Empty means read-only.

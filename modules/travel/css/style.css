@@ -3806,73 +3806,6 @@
     }
 
     @media (max-width: 600px) {
-      .trek-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.7rem;
-        justify-content: stretch;
-      }
-
-      .trek-grid>* {
-        max-width: none;
-        width: auto;
-        margin: 0;
-        min-width: 0;
-      }
-
-      .tc-media {
-        height: 135px;
-      }
-
-      .tc-tag {
-        font-size: 0.46rem;
-        padding: 0.2rem 0.42rem;
-        top: 0.45rem;
-        right: 0.45rem;
-        letter-spacing: 0.04em;
-      }
-
-      .tc-latest,
-      .latest-sticker {
-        top: 0.45rem;
-        font-size: 0.44rem;
-        padding: 0.2rem 0.42rem 0.2rem 0.45rem;
-      }
-
-      .tc-caption {
-        left: 0.65rem;
-        right: 0.65rem;
-        bottom: 0.55rem;
-      }
-
-      .tc-caption h3 {
-        font-size: 0.98rem;
-      }
-
-      .tc-caption .tc-loc {
-        font-size: var(--p-text-2xs);
-      }
-
-      .tc-body {
-        padding: 0.7rem 0.75rem 0.75rem;
-      }
-
-      .region-pill.tc-region {
-        font-size: 0.5rem;
-        margin-bottom: 0.4rem;
-      }
-
-      .tc-famous {
-        font-size: 0.71rem;
-      }
-
-      .tc-foot {
-        padding-top: 0.6rem;
-      }
-
-      .tc-date {
-        font-size: var(--p-text-2xs);
-      }
-
       .tp-ridge {
         height: 84px;
       }
@@ -3883,15 +3816,6 @@
       }
     }
 
-    @media (max-width: 380px) {
-      .trek-grid {
-        gap: 0.55rem;
-      }
-
-      .tc-media {
-        height: 122px;
-      }
-    }
 
     /* North-east needs its own colour (the shared set stops at the 5 compass regions) */
     .region-northeast {
@@ -5527,7 +5451,6 @@
     /* (2) Phone (≤600px): card grids pack neatly - bigger cards (visited photos + bucket-list) go two-up; the lighter cards (wishlist + activities) go three-up. */
     @media (max-width: 600px) {
 
-      .visited-grid,
       .goals-grid-new {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.7rem;
@@ -5542,7 +5465,6 @@
       }
 
       /* Drop the per-card max-width caps so both columns fill the row evenly */
-      .visited-grid>*,
       .wishlist-grid>*,
       .goals-grid-new>*,
       .activity-grid>* {
@@ -5556,145 +5478,6 @@
       .kpi-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         max-width: none;
-      }
-
-      /* Tighten card internals so two fit comfortably side-by-side */
-      .visited-card .image {
-        height: 132px;
-      }
-
-      .visited-card .image-place h3 {
-        font-size: 0.95rem;
-      }
-
-      .visited-card .body {
-        padding: 0.7rem 0.8rem 0.85rem;
-      }
-
-      .visited-card .memory {
-        font-size: 0.78rem;
-      }
-
-      .visited-card .meta {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        gap: 0.3rem 0.6rem;
-        font-size: var(--p-text-xs);
-        overflow-x: auto;
-        overflow-y: hidden;
-      }
-
-      .visited-card .meta .m-dur,
-      .visited-card .meta .m-with {
-        justify-self: auto;
-      }
-
-      /* Type chip now lives in the body - just trim it slightly on the two-up layout. */
-      .visited-card .place-type {
-        font-size: 0.52rem;
-        letter-spacing: 0.06em;
-        padding: 0.22rem 0.5rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .goal-card {
-        padding: 0.85rem 0.85rem 0.8rem;
-        min-height: auto;
-      }
-
-      .goal-card h4 {
-        font-size: 0.86rem;
-      }
-
-      /* Difficulty chip + status pill share a single row: difficulty pinned left, status pinned right. Chips shrink a touch so both fit on a narrow card. */
-      .goal-footer {
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.35rem;
-        margin-top: 0.7rem;
-        padding-top: 0.7rem;
-      }
-
-      .goal-diff {
-        font-size: 0.5rem;
-        padding: 0.2rem 0.42rem;
-        gap: 0.2rem;
-        letter-spacing: 0.02em;
-        flex-shrink: 0;
-      }
-
-      .goal-badge {
-        font-size: 0.46rem;
-        padding: 0.2rem 0.42rem;
-        letter-spacing: 0.04em;
-        flex-shrink: 0;
-      }
-
-      /* Notes tooltip - on narrow screens a centered tooltip wider than the card ran off the screen edge. Pin it to the card's own width (left:0/right:0) so it always stays on-screen; the note simply wraps to more lines. */
-      .goal-card[data-notes]:hover::after {
-        left: 0;
-        right: 0;
-        transform: none;
-        width: auto;
-        max-width: none;
-        font-size: var(--p-text-xs);
-        line-height: 1.4;
-        padding: 0.55rem 0.7rem;
-        animation: none;
-      }
-
-      /* Activity tiles (now three-up): compact, icon stacked on top of the text */
-      .activity-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.35rem;
-        padding: 0.6rem 0.55rem;
-      }
-
-      .activity-card .icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-      }
-
-      .activity-card .card-body {
-        width: 100%;
-      }
-
-      .activity-card h5 {
-        font-size: 0.74rem;
-        line-height: 1.15;
-      }
-
-      .activity-card .meta-text,
-      .activity-card .meta-text.done-meta {
-        font-size: var(--p-text-2xs);
-      }
-
-      .activity-card .done-tick {
-        width: 16px;
-        height: 16px;
-        font-size: 0.55rem;
-        top: 0.45rem;
-        right: 0.45rem;
-      }
-
-      /* Wishlist tiles (now three-up): shrink type/name/blurb so three fit cleanly, and drop the decorative hover-only corner arrow (no hover on touch). */
-      .wishlist-card {
-        padding: 0.6rem 0.6rem;
-      }
-
-      .wishlist-card .wl-corner {
-        display: none;
-      }
-
-      .wishlist-card .wl-type {
-        font-size: 0.52rem;
-        letter-spacing: 0.06em;
-        margin-bottom: 0.25rem;
       }
 
       .wishlist-card h4 {
@@ -5716,7 +5499,6 @@
     /* Small phone (≤380px): keep the grids as-is (2-up / 3-up), just a touch tighter */
     @media (max-width: 380px) {
 
-      .visited-grid,
       .goals-grid-new {
         gap: 0.55rem;
       }
@@ -6624,113 +6406,4 @@ section[id] {
 }
 
 
-/* ══════════════════════════════════════════════════════════════════════════ §19 PHONE: CAPTIONS OFF THE THUMBNAIL The grids go two-up on a phone, leaving the photo about 165px wide - not enough to read a name over. The caption comes off the picture and onto the card: name on one line, place on the next, each scrolling sideways on its own when the words are longer than the card. No markup moves. The image box keeps the photo in a padding band at the top and every picture layer is pinned to that band, so the caption - still a child of the box - simply flows underneath it. Colours are in theme.css. ══════════════════════════════════════════════════════════════════════════ */
 
-@media (max-width: 600px) {
-
-  /* ---- treks ---- */
-  .tc-media {
-    height: auto;
-    padding-top: 135px;
-    background: none;
-  }
-
-  .tc-media img,
-  .tc-fallback,
-  .tc-shade,
-  .tc-shine {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    width: 100%;
-    height: 135px;
-  }
-
-  /* Nothing sits on the picture now, so the scrim only has to carry the tags. */
-  .tc-shade {
-    background: linear-gradient(180deg,
-        rgba(var(--p-deep-rgb), 0.30) 0%,
-        rgba(0, 0, 0, 0) 55%);
-  }
-
-  .tc-caption {
-    position: static;
-    padding: 0.5rem 0.75rem 0;
-    left: auto;
-    right: auto;
-    bottom: auto;
-  }
-
-  /* ---- places ---- */
-  .visited-card .image {
-    height: auto;
-    padding-top: 132px;
-    background: none;
-  }
-
-  .visited-card .image img,
-  .visited-card .image-fallback,
-  .visited-card .image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    width: 100%;
-    height: 132px;
-  }
-
-  .visited-card .image-overlay {
-    background: linear-gradient(180deg,
-        rgba(0, 0, 0, 0.28) 0%,
-        rgba(0, 0, 0, 0) 55%);
-  }
-
-  .visited-card .image-place {
-    position: static;
-    padding: 0.5rem 0.8rem 0;
-    left: auto;
-    right: auto;
-    bottom: auto;
-  }
-
-  /* ---- both: one line each, scrolled sideways rather than wrapped ---- */
-  .tc-caption h3,
-  .tc-caption .tc-loc,
-  .visited-card .image-place h3,
-  .visited-card .image-place .loc {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    text-shadow: none;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .tc-caption h3::-webkit-scrollbar,
-  .tc-caption .tc-loc::-webkit-scrollbar,
-  .visited-card .image-place h3::-webkit-scrollbar,
-  .visited-card .image-place .loc::-webkit-scrollbar { display: none; }
-
-  .tc-caption h3,
-  .visited-card .image-place h3 {
-    font-size: 0.95rem;
-    line-height: 1.3;
-  }
-
-  .tc-caption .tc-loc,
-  .visited-card .image-place .loc {
-    font-size: var(--p-text-2xs);
-    margin-top: 0.1rem;
-    line-height: 1.4;
-  }
-
-  .tc-body,
-  .visited-card .body { padding-top: 0.55rem; }
-}

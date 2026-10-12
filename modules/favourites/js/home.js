@@ -3,7 +3,7 @@
 import { CONFIG, CARD_THEMES, categoryUrl, displayTitle } from "./config.js";
 import { fetchAllCategories } from "./api.js";
 import { qs, cloneTpl, hydrateImage } from "./utils.js";
-import { initChrome, observeReveals, staggerReveals } from "./animations.js";
+import { initChrome, observeReveals, staggerReveals, syncCategoryLinks } from "./animations.js";
 
 const PLACEHOLDER = "assets/placeholders/exhibit.svg";
 
@@ -13,7 +13,7 @@ function buildCard(category, index) {
   const card = cloneTpl("tpl-collection-card");
 
   card.href = categoryUrl(category);
-  card.dataset.gid = category.gid;
+  card.dataset.slug = category.slug;
   card.setAttribute("aria-label", `Open the ${category.title} collection`);
   card.style.setProperty("--card-wash", theme.wash);
   card.style.setProperty("--card-glow", theme.glow);
@@ -36,10 +36,14 @@ function renderCards() {
 
 // Fill counts + preview portraits once sheet data arrives.
 async function hydrateCards() {
-  const results = await fetchAllCategories();
+  const { results, grew } = await fetchAllCategories();
+  if (grew) {
+    renderCards();
+    syncCategoryLinks();
+  }
 
   for (const card of document.querySelectorAll(".collection-card")) {
-    const result = results.get(String(card.dataset.gid));
+    const result = results.get(card.dataset.slug);
     const countEl = qs("[data-count]", card);
     const previewsEl = qs("[data-previews]", card);
 

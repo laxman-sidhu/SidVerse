@@ -570,7 +570,7 @@ body > * { min-width: 0; }
 [data-section] .keeper,
 [data-section] .reader-cut,
 [data-section] main,
-[data-section] .page,
+[data-section="food"] .page,
 [data-section] section {
   background: transparent;
 }
@@ -740,6 +740,14 @@ body { padding-left: var(--p-rail-clear); }
   background: transparent;
   box-shadow: none;
   min-height: 0;
+}
+
+/* A rounded field clips its own caret at the corners, so the input inside a pill stays square and tall enough for the caret. */
+.searchbox input, .search input, .collbar__search input, .gallery-search input {
+  border-radius: 0;
+  min-height: 40px;
+  line-height: 1.5;
+  caret-color: var(--p-accent-ink);
 }
 
 .searchbox input:focus, .search input:focus,
@@ -1270,7 +1278,7 @@ body { padding-left: var(--p-rail-clear); }
   transition: background .18s var(--p-ease), color .18s var(--p-ease);
 }
 
-[data-section="books"] .searchbox__go:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); }
+[data-section="books"] .searchbox__go:hover { background: var(--p-accent-tint); color: var(--p-accent-ink); box-shadow: none; transform: none; }
 [data-section="books"] .searchbox__go svg { width: 19px; height: 19px; position: static; }
 
 
@@ -1612,10 +1620,6 @@ body { padding-left: var(--p-rail-clear); }
   [data-section="food"] .hero__stat { font-size: var(--p-text-md); gap: 6px; }
   [data-section="food"] .hero__text { text-align: center; }
   [data-section="food"] .hero__by { justify-content: center; }
-
-  /* Travel: places and treks two a row. */
-  [data-section="travel"] .visited-grid,
-  [data-section="travel"] .trek-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 
   /* A search field's own dropdown centres its word. */
   .scopepick, .scopepick select, .scopepick__select { text-align: center; text-align-last: center; }

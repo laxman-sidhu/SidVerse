@@ -289,6 +289,21 @@ export async function normaliseItem(raw, media = MOVIE) {
   };
 }
 
+// Box office only comes on the details call, so each film is looked up once and the cache keeps the answer.
+export async function fillRevenue(items, workers = 6) {
+  const todo = items.filter(item => item.media_type === MOVIE && item.revenue === undefined);
+  let next = 0;
+  async function work() {
+    while (next < todo.length) {
+      const item = todo[next++];
+      try { item.revenue = Number((await get(`/movie/${item.id}`)).revenue) || 0; }
+      catch { item.revenue = 0; }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(workers, todo.length) }, work));
+  return items;
+}
+
 export async function pack(rawList, media) {
   const items = await Promise.all((rawList || []).map(raw => normaliseItem(raw, media)));
   return dropJunk(dedupe(items));

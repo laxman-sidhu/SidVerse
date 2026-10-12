@@ -937,10 +937,40 @@
     renderWishlistCards(wishlist);
   }
 
+  // On a phone the places and treks rows scroll sideways; the dots under a row follow the card in view.
+  function swipeDots(grid) {
+    let dots = grid.nextElementSibling;
+    if (!dots || !dots.classList.contains('swipe-dots')) {
+      dots = document.createElement('div');
+      dots.className = 'swipe-dots';
+      dots.setAttribute('aria-hidden', 'true');
+      grid.after(dots);
+      grid.addEventListener('scroll', () => paintSwipe(grid, dots), { passive: true });
+    }
+    const count = grid.querySelectorAll(':scope > .visited-card, :scope > .trek-card').length;
+    dots.hidden = count < 2;
+    dots.innerHTML = count > 10
+      ? '<span class="swipe-dots__count"></span>'
+      : Array.from({ length: count }, () => '<span class="swipe-dots__dot"></span>').join('');
+    grid.scrollLeft = 0;
+    paintSwipe(grid, dots);
+  }
+
+  function paintSwipe(grid, dots) {
+    const cards = grid.children;
+    if (!cards.length) return;
+    const step = cards[0].getBoundingClientRect().width + parseFloat(getComputedStyle(grid).columnGap || 0);
+    const at = Math.min(cards.length - 1, Math.round(grid.scrollLeft / (step || 1)));
+    const counter = dots.querySelector('.swipe-dots__count');
+    if (counter) counter.textContent = `${at + 1} / ${cards.length}`;
+    Array.prototype.forEach.call(dots.children, (dot, i) => dot.classList.toggle('is-on', i === at));
+  }
+
   function renderVisitedCards(list) {
     const grid = $('#visitedGrid');
     if (list.length === 0) {
       grid.innerHTML = `<div class="empty-state"><p>No visited places match these filters.</p></div>`;
+      swipeDots(grid);
       return;
     }
     grid.innerHTML = list.map((p, i) => {
@@ -985,6 +1015,7 @@
 
     // Click handling is delegated from #visitedGrid (wired once in bindEvents); we just record the list the cards were rendered from.
     placesState.visitedRendered = list;
+    swipeDots(grid);
   }
 
   function renderWishlistCards(list) {
@@ -1706,10 +1737,12 @@
     if (!list.length) {
       grid.innerHTML = `<div class="empty-state"><p>No treks match these filters.</p></div>`;
       trekState.rendered = [];
+      swipeDots(grid);
       return;
     }
     grid.innerHTML = list.map((t, i) => trekCard(t, i, truthy(t.Status))).join('');
     trekState.rendered = list;
+    swipeDots(grid);
   }
 
   // Trek photo modal - photo + name + status. Prev/Next still browses whatever filtered trek list you opened it from.
@@ -1992,6 +2025,14 @@
     const isActivationKey = (e) => e.key === 'Enter' || e.key === ' ';
 
     // Places - visited grid
+    // Touch has no hover, so the (i) on a bucket-list card opens its note on tap.
+    $('#goalsGrid').addEventListener('click', (e) => {
+      const pip = e.target.closest('.notes-indicator');
+      const open = pip ? pip.closest('.goal-card') : null;
+      $$('#goalsGrid .goal-card.show-notes').forEach(card => { if (card !== open) card.classList.remove('show-notes'); });
+      if (open) open.classList.toggle('show-notes');
+    });
+
     $('#visitedGrid').addEventListener('click', (e) => {
       const card = e.target.closest('.visited-card');
       if (!card) return;

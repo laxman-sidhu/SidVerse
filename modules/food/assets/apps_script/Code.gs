@@ -2,8 +2,9 @@
 // set ADMIN_PASSWORD, deploy as a web app. It also signs Cloudinary uploads.
 // See docs/PROJECT.md section 5.
 
-const SHEET_ID = "1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0";
-const SHEET_NAME = "";
+const SHEET_ID = "1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk";
+// The workbook also holds Sidbooks and SidPicks, so the tab is named rather than taken first.
+const SHEET_NAME = "SidBites";
 // A Script Property of the same name still wins, so the secret can stay out of this file.
 const ADMIN_PASSWORD = "LaxSid@12345";
 const CLOUDINARY_CLOUD_NAME = "dadtqawh5";
@@ -19,7 +20,10 @@ function setting(name, fallback) {
 
 function sheet() {
   const book = SpreadsheetApp.openById(SHEET_ID);
-  return (SHEET_NAME && book.getSheetByName(SHEET_NAME)) || book.getSheets()[0];
+  if (!SHEET_NAME) return book.getSheets()[0];
+  const tab = book.getSheetByName(SHEET_NAME);
+  if (!tab) throw new Error('No tab named "' + SHEET_NAME + '" in this workbook.');
+  return tab;
 }
 
 function out(obj) {

@@ -1,14 +1,16 @@
-// SidPicks - the only file to edit to change the collections. Append an object to `categories` ({ title, icon, gid }) and its homepage card, category page, navbar dropdown, footer link, URL slug and colour theme all follow. A tab with columns Name | Image Url must exist for that gid. The slug drops the leading "Favourite", so "Favourite Actors" opens at ?category=actors.
+// SidPicks - the only file to edit to change the collections. Every exhibit lives in one tab (Name | Image Url | Industry | No. of Images | Category); a collection is the rows whose Category matches its `key`. A Category the list below does not name still gets its own wing, with a default icon. The slug drops the leading "Favourite", so "Favourite Actors" opens at ?category=actors.
 
 export const CONFIG = {
-  sheetBaseUrl:
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbfhZ3WRK8s_9_B8vbfo92cLprTbaY1OHl_HT2kjYvYV6u2ycqHKsIqpUAXuhQAmWbk1kXAPLHfW_Q/pub",
+  sheetUrl:
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-f1hmsMFY9vJRgLnh_hPRxKC3xj2flti_hNWEhwUEkP8hcjDExPXRMZO2PiLywXSKL0WhzrAQh2pk/pub?gid=1397506388&single=true&output=csv",
+
+  defaultIcon: "✦",
 
   categories: [
-    { title: "Favourite Actors",        icon: "🎬", gid: "0" },
-    { title: "Favourite Actress",       icon: "✨", gid: "516486146" },
-    { title: "Favourite Superheroes",   icon: "🦸", gid: "1154234558" },
-    { title: "Favourite Supervillains", icon: "😈", gid: "455423366" },
+    { title: "Favourite Actors",        icon: "🎬", key: "Actors" },
+    { title: "Favourite Actress",       icon: "✨", key: "Actress" },
+    { title: "Favourite Superheroes",   icon: "🦸", key: "Superheroes" },
+    { title: "Favourite Supervillains", icon: "😈", key: "Supervillains" },
   ],
 };
 
@@ -32,16 +34,39 @@ function slugify(text) {
   return String(text).toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "");
 }
 
+// Plural and spelling slips in the sheet still land in the right wing: "Superheros" and "Superheroes" share a stem.
+export function stem(text) {
+  const slug = slugify(text);
+  return slug.endsWith("ss") ? slug : slug.replace(/(es|s)$/, "");
+}
+
+export function sameCategory(category, value) {
+  const wanted = stem(value);
+  return Boolean(wanted) && (wanted === stem(category.key || displayTitle(category)) || wanted === stem(displayTitle(category)));
+}
+
 // Give every category a clean slug once, at load.
 CONFIG.categories.forEach((category) => {
   if (!category.slug) category.slug = slugify(displayTitle(category));
 });
 
+// A Category value no configured wing claims becomes a wing of its own. Returns true when the list grew.
+export function registerCategories(values) {
+  let grew = false;
+  values.forEach((value) => {
+    const name = String(value || "").trim();
+    if (!name || CONFIG.categories.some((c) => sameCategory(c, name))) return;
+    CONFIG.categories.push({ title: name, icon: CONFIG.defaultIcon, key: name, slug: slugify(name) });
+    grew = true;
+  });
+  return grew;
+}
+
 // Find a category by its URL slug.
 export function findCategoryBySlug(slug) {
   if (!slug) return null;
   const wanted = slugify(slug);
-  return CONFIG.categories.find((c) => c.slug === wanted) || null;
+  return CONFIG.categories.find((c) => c.slug === wanted) || CONFIG.categories.find((c) => stem(c.slug) === stem(wanted)) || null;
 }
 
 // Build the public URL for a category page.

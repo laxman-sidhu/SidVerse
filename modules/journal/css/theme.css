@@ -61,6 +61,14 @@
 }
 
 
+/* The shared sheets must not repaint a page: its paper, grid and art are part of the story. */
+[data-section="journal"] .page { background-color: var(--paper); }
+[data-section="journal"] .page.grid { background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 26px 26px; }
+[data-section="journal"] .page.dot { background-image: radial-gradient(var(--grid) 1.4px, transparent 1.4px); background-size: 24px 24px; }
+[data-section="journal"] .page.plain { background-image: none; background-size: 100% 100%; }
+[data-section="journal"] .page.bg { background-repeat: no-repeat; background-position: center; background-size: 100% 100%; }
+[data-section="journal"] .page img { max-width: none; }
+
 /* The polaroid cards read wrong on the dark paper: the frame follows the surface, the ink follows the theme, and the date keeps its accent. */
 .card {
   background: var(--p-surface) !important;

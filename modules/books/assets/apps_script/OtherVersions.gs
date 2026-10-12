@@ -11,7 +11,9 @@
 
 // --- settings ---------------------------------------------------------------
 
-var SHEETS_TO_FILL = ['Books Read', 'Want to Read'];
+// Opened by id so it runs bound or standalone. Every book, read or queued, lives in the one tab.
+var SHEET_ID = '1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk';
+var SHEETS_TO_FILL = ['Sidbooks'];
 var VERSIONS_HEADER = 'Other Versions';
 var COUNT_HEADER = 'Count';
 
@@ -55,7 +57,7 @@ var PAUSE_MS = 350;
 // a continuation can start from the top and cost nothing to reach where it was.
 function fillOtherVersions() {
   var started = Date.now();
-  var book = SpreadsheetApp.getActiveSpreadsheet();
+  var book = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
   var done = 0;
   var filled = 0;
 

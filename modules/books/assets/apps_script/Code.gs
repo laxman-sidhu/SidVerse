@@ -1,16 +1,18 @@
-// SidBooks - the read and write bridge. Paste into Extensions > Apps Script,
-// set SECRET, deploy as a web app. Columns are found by header name, never by
-// position. See docs/PROJECT.md section 5.
+// SidBooks - the read and write bridge for the one-tab workbook. Paste into Apps Script, deploy as a web app, see docs/PROJECT.md section 5.
 
 // Must match APPS_SCRIPT_TOKEN in js/config.js.
 var SECRET = 'sidverse-books-u81apw9xjBIM2AGt8dlx_0mJvwEvCZpZSBsuzbiq8E_42_Rk';
 
-var READ_SHEET = 'Books Read';
-var READLIST_SHEET = 'Want to Read';
+// Opened by id, so the script works bound to the workbook or standalone.
+var SHEET_ID = '1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk';
+var BOOKS_SHEET = 'Sidbooks';
 
-// Header text -> field, compared lowercased with whitespace collapsed.
-// Add a spelling here if a column is ever renamed. Where two columns name the
-// same field, the FIRST wins — which is what a half-finished rename creates.
+// Status values written by the site. Reading treats only the readlist words as queued.
+var STATUS_READ = 'Done';
+var STATUS_READLIST = 'Readlist';
+var READLIST_WORDS = ['readlist', 'read list', 'want to read', 'to read', 'queued', 'wishlist', 'tbr'];
+
+// Header text -> field, compared lowercased with whitespace collapsed. The FIRST column naming a field wins.
 var COLUMN_ALIASES = {
   title:    ['title', 'book', 'book name', 'name'],
   isbn:     ['isbn', 'isbn13', 'isbn 13', 'isbn-13', 'isbn10', 'isbn 10', 'isbn-10'],
@@ -20,6 +22,7 @@ var COLUMN_ALIASES = {
   versions: ['other versions', 'other version', 'other editions', 'editions'],
   version_count: ['count', 'versions count', 'edition count', 'editions count'],
   summary:  ['summary', 'description', 'about', 'blurb'],
+  status:   ['status', 'shelf', 'state'],
   book_id:  ['book id', 'bookid', 'book_id', 'id', 'google id', 'olid'],
   year:     ['year', 'published', 'publish year', 'first published'],
   date_read: ['date read', 'read on', 'finished', 'date']
@@ -29,24 +32,18 @@ var COLUMN_ALIASES = {
 // ENTRY POINTS
 // ============================================================================
 
-// Reading. No token: the same rows are public through the published sheet, and
-// one request returns both tabs so a first load pays the cold start once.
+// Reading needs no token: the same rows are public through the published sheet.
 function doGet(e) {
   try {
     var action = (e && e.parameter && e.parameter.action) || 'read';
     if (action === 'ping') return reply(ping());
-
-    return reply({
-      ok: true,
-      tabs: { read: readTab(READ_SHEET), readlist: readTab(READLIST_SHEET) }
-    });
+    return reply({ ok: true, tabs: { books: readTab(BOOKS_SHEET) } });
   } catch (error) {
     return reply({ ok: false, error: String(error && error.message || error) });
   }
 }
 
-// Writing. Apps Script cannot answer a CORS preflight, so the body arrives as
-// text/plain and is parsed here. Changing that header breaks every write.
+// The body arrives as text/plain because Apps Script cannot answer a CORS preflight.
 function doPost(e) {
   try {
     var body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
@@ -63,7 +60,11 @@ function doPost(e) {
 
     var handler = actions[body.action];
     if (!handler) return reply({ ok: false, error: 'Unknown action: ' + body.action });
-    return reply(handler(payload));
+
+    var lock = LockService.getScriptLock();
+    lock.waitLock(20000);
+    try { return reply(handler(payload)); }
+    finally { lock.releaseLock(); }
   } catch (error) {
     return reply({ ok: false, error: String(error && error.message || error) });
   }
@@ -78,8 +79,12 @@ function reply(payload) {
 // SHEET PLUMBING
 // ============================================================================
 
+function workbook() {
+  return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
 function readTab(name) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name);
+  var sheet = workbook().getSheetByName(name);
   if (!sheet) return { header: [], rows: [] };
   var values = sheet.getDataRange().getDisplayValues();
   if (!values.length) return { header: [], rows: [] };
@@ -87,16 +92,16 @@ function readTab(name) {
 }
 
 function normaliseHeader(text) {
-  return String(text == null ? '' : text).replace(/\uFEFF/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  return String(text == null ? '' : text).replace(/﻿/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
-function getSheet(name) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name);
-  if (!sheet) throw new Error('No tab named "' + name + '" in this workbook.');
+function getSheet() {
+  var sheet = workbook().getSheetByName(BOOKS_SHEET);
+  if (!sheet) throw new Error('No tab named "' + BOOKS_SHEET + '" in this workbook.');
   return sheet;
 }
 
-// Canonical field -> 1-based column index. The first column naming a field wins.
+// Canonical field -> 1-based column index.
 function columnMap(sheet) {
   var header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   var map = {};
@@ -112,9 +117,7 @@ function columnMap(sheet) {
 }
 
 function requireColumn(map, field, sheet) {
-  if (map[field] === undefined) {
-    throw new Error('The "' + sheet.getName() + '" tab has no column for ' + field + '. Expected a header naming it.');
-  }
+  if (map[field] === undefined) throw new Error('The "' + sheet.getName() + '" tab has no column for ' + field + '.');
   return map[field];
 }
 
@@ -126,7 +129,7 @@ var STRIP = (function () {
 
 function normaliseTitle(text) {
   return String(text == null ? '' : text)
-    .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
     .toLowerCase().replace(STRIP, ' ').replace(/\s+/g, ' ').trim();
 }
 
@@ -134,41 +137,36 @@ function normaliseAuthorText(text) {
   return normaliseTitle(text).replace(/\s+/g, '');
 }
 
-// The filing form, and the one every TITLE comparison uses. A leading article
-// is not part of a title — "The Metamorphosis" shelves under M — and the sheet
-// and the APIs disagree about whether to type it. js/data/identity.js holds the
-// same rule; the two have to agree or a write lands on a row the site cannot
-// find. Deliberately NOT folded into normaliseTitle: normaliseAuthorText is
-// built on that one, and stripping a leading article from a name turns
-// A. A. Milne into A. Milne.
+// A leading article is not part of a title; js/data/identity.js holds the same rule.
 function filingTitle(text) {
   return normaliseTitle(text).replace(/^(?:the|a|an)\s+/, '');
 }
 
-// Both forms convert to 13 before comparison, exactly as identity.js does.
+// Both ISBN forms convert to 13 before comparison, exactly as identity.js does.
 function normaliseIsbn(value) {
   var bare = String(value == null ? '' : value).replace(/[^0-9Xx]/g, '').toUpperCase();
   if (bare.length === 13) return bare;
   if (bare.length !== 10) return '';
-
   var body = '978' + bare.slice(0, 9);
   var sum = 0;
   for (var i = 0; i < 12; i++) sum += Number(body.charAt(i)) * (i % 2 ? 3 : 1);
   return body + String((10 - (sum % 10)) % 10);
 }
 
+function isReadlist(status) {
+  return READLIST_WORDS.indexOf(String(status || '').trim().toLowerCase()) !== -1;
+}
+
 // ============================================================================
 // FINDING A ROW
 // ============================================================================
 
-// Every matching row, not the first, or an old duplicate comes straight back.
-function findRows(sheet, map, payload) {
+// Every matching row on one shelf ("read", "readlist" or "any"), not just the first.
+function findRows(sheet, map, payload, shelf) {
   var last = sheet.getLastRow();
   if (last < 2) return [];
 
-  var width = sheet.getLastColumn();
-  var values = sheet.getRange(2, 1, last - 1, width).getDisplayValues();
-
+  var values = sheet.getRange(2, 1, last - 1, sheet.getLastColumn()).getDisplayValues();
   var wantId = String(payload.book_id || '').trim();
   var wantIsbn = normaliseIsbn(payload.isbn);
   var wantTitle = filingTitle(payload.title);
@@ -182,16 +180,18 @@ function findRows(sheet, map, payload) {
       return at === undefined ? '' : String(row[at - 1] == null ? '' : row[at - 1]).trim();
     };
 
+    var queued = isReadlist(cell('status'));
+    if (shelf === 'read' && queued) continue;
+    if (shelf === 'readlist' && !queued) continue;
+
     var matched = false;
     var rowIsbn = normaliseIsbn(cell('isbn'));
-    // An ISBN on both sides settles it outright, and the title is not consulted.
     if (wantIsbn && rowIsbn) {
       matched = wantIsbn === rowIsbn;
     } else if (wantId && cell('book_id') && cell('book_id') === wantId) {
       matched = true;
     } else if (wantTitle && filingTitle(cell('title')) === wantTitle) {
       var rowAuthor = normaliseAuthorText(cell('author'));
-      // A blank author on either side says nothing, so it matches either way.
       matched = !wantAuthor || !rowAuthor || rowAuthor === wantAuthor;
     }
     if (matched) hits.push(i + 2);
@@ -211,48 +211,18 @@ function appendRow(sheet, map, fields) {
   var row = new Array(width).fill('');
   for (var field in fields) {
     var at = map[field];
-    // A field with no column is skipped rather than shifting everything along.
     if (at !== undefined && at <= width) row[at - 1] = fields[field];
   }
   sheet.appendRow(row);
   return sheet.getLastRow();
 }
 
-// ============================================================================
-// ACTIONS
-// ============================================================================
-
-function ping() {
-  var read = getSheet(READ_SHEET);
-  var readlist = getSheet(READLIST_SHEET);
-  var map = columnMap(read);
-  var found = [];
-  for (var field in map) found.push(field);
-  return {
-    ok: true,
-    bridge: {
-      read_rows: Math.max(read.getLastRow() - 1, 0),
-      readlist_rows: Math.max(readlist.getLastRow() - 1, 0),
-      columns_found: found,
-      secret_is_placeholder: SECRET.indexOf('change-this') !== -1
-    }
-  };
+function setCell(sheet, map, row, field, value) {
+  if (map[field] !== undefined) sheet.getRange(row, map[field]).setValue(value);
 }
 
-// One call appends the row AND clears the readlist: two can half-fail and leave
-// a book in both places.
-function markRead(payload) {
-  var sheet = getSheet(READ_SHEET);
-  var map = columnMap(sheet);
-  requireColumn(map, 'title', sheet);
-
-  // The duplicate check exists twice on purpose; this is the half that holds,
-  // because a second device or a hand edit only goes through here.
-  if (findRows(sheet, map, payload).length) {
-    return { ok: false, error: 'That book is already on the shelf.' };
-  }
-
-  appendRow(sheet, map, {
+function rowFields(payload, status) {
+  return {
     title: payload.title,
     isbn: payload.isbn,
     author: payload.author,
@@ -261,26 +231,58 @@ function markRead(payload) {
     versions: payload.versions,
     version_count: payload.version_count,
     summary: payload.summary,
+    status: status,
     book_id: payload.book_id,
-    year: payload.year,
-    date_read: new Date().toISOString().slice(0, 10)
-  });
-
-  var removed = 0;
-  try {
-    var queue = getSheet(READLIST_SHEET);
-    removed = deleteRows(queue, findRows(queue, columnMap(queue), payload));
-  } catch (error) {
-    // No readlist tab is not a reason to undo a good write.
-  }
-
-  return { ok: true, row: sheet.getLastRow(), removed_from_readlist: removed > 0 };
+    year: payload.year
+  };
 }
 
-// One more printing filed against a book already read. Every row for that book
-// gets the line, because each row carries its own copy of the cell.
+// ============================================================================
+// ACTIONS
+// ============================================================================
+
+function ping() {
+  var sheet = getSheet();
+  var map = columnMap(sheet);
+  var found = [];
+  for (var field in map) found.push(field);
+  return {
+    ok: true,
+    bridge: {
+      rows: Math.max(sheet.getLastRow() - 1, 0),
+      columns_found: found,
+      secret_is_placeholder: SECRET.indexOf('change-this') !== -1
+    }
+  };
+}
+
+// A queued row is moved to the shelf in place, so a book is never in both lists.
+function markRead(payload) {
+  var sheet = getSheet();
+  var map = columnMap(sheet);
+  requireColumn(map, 'title', sheet);
+  requireColumn(map, 'status', sheet);
+
+  if (findRows(sheet, map, payload, 'read').length) return { ok: false, error: 'That book is already on the shelf.' };
+
+  var queued = findRows(sheet, map, payload, 'readlist');
+  if (queued.length) {
+    for (var i = 0; i < queued.length; i++) {
+      setCell(sheet, map, queued[i], 'status', STATUS_READ);
+      setCell(sheet, map, queued[i], 'date_read', new Date().toISOString().slice(0, 10));
+    }
+    if (queued.length > 1) deleteRows(sheet, queued.slice(1));
+    return { ok: true, row: queued[0], removed_from_readlist: true };
+  }
+
+  var fields = rowFields(payload, STATUS_READ);
+  fields.date_read = new Date().toISOString().slice(0, 10);
+  return { ok: true, row: appendRow(sheet, map, fields), removed_from_readlist: false };
+}
+
+// One more printing filed against a book already read; every row for that book gets the line.
 function addVersion(payload) {
-  var sheet = getSheet(READ_SHEET);
+  var sheet = getSheet();
   var map = columnMap(sheet);
   requireColumn(map, 'versions', sheet);
 
@@ -289,7 +291,7 @@ function addVersion(payload) {
   if (!isbn || !line) return { ok: false, error: 'That edition has no ISBN to file.' };
   if (normaliseIsbn(payload.isbn) === isbn) return { ok: false, error: 'That is the printing already on the shelf.' };
 
-  var rows = findRows(sheet, map, payload);
+  var rows = findRows(sheet, map, payload, 'read');
   if (!rows.length) return { ok: false, error: 'No row matched that book.' };
 
   var updated = 0;
@@ -299,7 +301,6 @@ function addVersion(payload) {
     var lines = versionLines(cell.getValue());
     count = lines.length;
     if (listsIsbn(lines, isbn)) continue;
-
     lines.push(line);
     cell.setValue(lines.join('\n'));
     if (map.version_count !== undefined) sheet.getRange(rows[i], map.version_count).setValue(lines.length);
@@ -315,13 +316,7 @@ function addVersion(payload) {
 function versionLines(value) {
   var text = String(value == null ? '' : value).trim();
   if (!text || text.toLowerCase() === 'none') return [];
-  var out = [];
-  var parts = text.split(/\r?\n/);
-  for (var i = 0; i < parts.length; i++) {
-    var line = parts[i].trim();
-    if (line) out.push(line);
-  }
-  return out;
+  return text.split(/\r?\n/).map(function (line) { return line.trim(); }).filter(Boolean);
 }
 
 // Only the ISBN is read off a line; the rest is for a human.
@@ -333,40 +328,27 @@ function listsIsbn(lines, isbn) {
 }
 
 function removeRead(payload) {
-  var sheet = getSheet(READ_SHEET);
-  var rows = findRows(sheet, columnMap(sheet), payload);
+  var sheet = getSheet();
+  var rows = findRows(sheet, columnMap(sheet), payload, 'read');
   if (!rows.length) return { ok: false, error: 'No row matched that book.' };
   return { ok: true, removed: deleteRows(sheet, rows) };
 }
 
 function addReadlist(payload) {
-  var sheet = getSheet(READLIST_SHEET);
+  var sheet = getSheet();
   var map = columnMap(sheet);
   requireColumn(map, 'title', sheet);
+  requireColumn(map, 'status', sheet);
 
-  if (findRows(sheet, map, payload).length) return { ok: false, error: 'That book is already on the readlist.' };
+  if (findRows(sheet, map, payload, 'readlist').length) return { ok: false, error: 'That book is already on the readlist.' };
+  if (findRows(sheet, map, payload, 'read').length) return { ok: false, error: 'That one has already been read.' };
 
-  var read = getSheet(READ_SHEET);
-  if (findRows(read, columnMap(read), payload).length) return { ok: false, error: 'That one has already been read.' };
-
-  appendRow(sheet, map, {
-    title: payload.title,
-    isbn: payload.isbn,
-    author: payload.author,
-    cover: payload.cover,
-    genre: payload.genre,
-    versions: payload.versions,
-    version_count: payload.version_count,
-    summary: payload.summary,
-    book_id: payload.book_id,
-    year: payload.year
-  });
-  return { ok: true, row: sheet.getLastRow() };
+  return { ok: true, row: appendRow(sheet, map, rowFields(payload, STATUS_READLIST)) };
 }
 
 function removeReadlist(payload) {
-  var sheet = getSheet(READLIST_SHEET);
-  var rows = findRows(sheet, columnMap(sheet), payload);
+  var sheet = getSheet();
+  var rows = findRows(sheet, columnMap(sheet), payload, 'readlist');
   if (!rows.length) return { ok: false, error: 'No row matched that book.' };
   return { ok: true, removed: deleteRows(sheet, rows) };
 }
@@ -378,27 +360,20 @@ function removeReadlist(payload) {
 // Select this in the toolbar and press Run. It reports and changes nothing.
 function testSetup() {
   var report = ping();
-  Logger.log('Books Read rows:   ' + report.bridge.read_rows);
-  Logger.log('Want to Read rows: ' + report.bridge.readlist_rows);
-  Logger.log('Columns found:     ' + report.bridge.columns_found.join(', '));
+  Logger.log('Sidbooks rows:  ' + report.bridge.rows);
+  Logger.log('Columns found:  ' + report.bridge.columns_found.join(', '));
 
-  var needed = ['title', 'isbn', 'author', 'cover', 'genre', 'versions', 'version_count', 'summary'];
+  var needed = ['title', 'isbn', 'author', 'cover', 'genre', 'versions', 'version_count', 'summary', 'status'];
   for (var i = 0; i < needed.length; i++) {
-    if (report.bridge.columns_found.indexOf(needed[i]) === -1) {
-      Logger.log('MISSING COLUMN: ' + needed[i] + ' — check the header row.');
-    }
+    if (report.bridge.columns_found.indexOf(needed[i]) === -1) Logger.log('MISSING COLUMN: ' + needed[i]);
   }
-  if (report.bridge.secret_is_placeholder) {
-    Logger.log('WARNING: SECRET is still the placeholder. Replace it, put the same value in js/config.js, then redeploy.');
-  }
+  if (report.bridge.secret_is_placeholder) Logger.log('WARNING: SECRET is still the placeholder.');
   Logger.log('Remember: the site sees the last DEPLOYED version, not the last saved one.');
 }
 
-// Removes a second row for a book already on the shelf, keeping the first.
-// Only needed for duplicates that predate the check above, since the bridge
-// refuses to create new ones. File > Version history undoes it.
+// Removes a second read row for the same book, keeping the first. File > Version history undoes it.
 function cleanDuplicates() {
-  var sheet = getSheet(READ_SHEET);
+  var sheet = getSheet();
   var map = columnMap(sheet);
   var last = sheet.getLastRow();
   if (last < 3) { Logger.log('Nothing to clean.'); return; }
@@ -406,18 +381,17 @@ function cleanDuplicates() {
   var values = sheet.getRange(2, 1, last - 1, sheet.getLastColumn()).getDisplayValues();
   var seen = {};
   var doomed = [];
-
   for (var i = 0; i < values.length; i++) {
     var row = values[i];
     var at = function (field) {
       var col = map[field];
       return col === undefined ? '' : String(row[col - 1] == null ? '' : row[col - 1]).trim();
     };
-    var key = filingTitle(at('title')) + '|' + normaliseAuthorText(at('author'));
+    var key = (isReadlist(at('status')) ? 'q|' : 'r|') + filingTitle(at('title')) + '|' + normaliseAuthorText(at('author'));
     if (seen[key]) { doomed.push(i + 2); Logger.log('Duplicate: ' + at('title')); }
     else seen[key] = true;
   }
 
   deleteRows(sheet, doomed);
-  Logger.log('Removed ' + doomed.length + ' duplicate row(s). File > Version history undoes this.');
+  Logger.log('Removed ' + doomed.length + ' duplicate row(s).');
 }

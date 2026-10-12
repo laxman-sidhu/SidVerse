@@ -90,6 +90,21 @@ window.JOURNAL = (function(){
     bodoniathome:"bodonimt",
     italicc:"corsiva"
   };
+  // Google families behind the web-font keys; the rest are system fonts. Only the families a page uses are requested.
+  const GOOGLE_FONTS = { gaegu:"Gaegu", caveat:"Caveat", patrick:"Patrick Hand", indie:"Indie Flower", kalam:"Kalam", shadows:"Shadows Into Light", amatic:"Amatic SC", walterturncoat:"Walter Turncoat", cedarville:"Cedarville Cursive", mvboli:"Kalam",
+    greatvibes:"Great Vibes", sacramento:"Sacramento", dancing:"Dancing Script", satisfy:"Satisfy", parisienne:"Parisienne", herrvon:"Herr Von Muellerhoff", corsiva:"Dancing Script",
+    grandhotel:"Grand Hotel", lobstertwo:"Lobster Two", sail:"Sail", gluten:"Gluten", playfair:"Playfair Display", cormorant:"Cormorant Garamond", bodonimt:"Playfair Display", daunpenh:"Cormorant Garamond",
+    quicksand:"Quicksand", nunito:"Nunito", bebas:"Bebas Neue" };
+  const loadedFonts = new Set();
+  function loadFonts(keys){
+    const families = [...new Set(keys.map(k=>GOOGLE_FONTS[resolveFontKey(k)]).filter(f=>f && !loadedFonts.has(f)))];
+    if(!families.length) return;
+    families.forEach(f=>loadedFonts.add(f));
+    const link=document.createElement('link'); link.rel='stylesheet';
+    link.href='https://fonts.googleapis.com/css?family='+families.map(f=>encodeURIComponent(f)+':400,400i,700,700i').join('|')+'&display=swap';
+    document.head.appendChild(link);
+  }
+
   function resolveFontKey(k){ if(FONTS[k]) return k; if(FONT_ALIASES[k] && FONTS[FONT_ALIASES[k]]) return FONT_ALIASES[k]; return 'gaegu'; }
   function getFont(k){ return FONTS[resolveFontKey(k)]; }
 
@@ -198,7 +213,7 @@ window.JOURNAL = (function(){
     // reset any inline overrides each call so switching looks stays clean (CSS governs unless set below)
     el.style.background=''; el.style.padding=''; el.style.borderColor=''; el.style.borderWidth='';
     el.style.borderRadius='';
-    const im=el.querySelector('img'); if(im) im.style.borderRadius='';
+    const im=el.querySelector('img,video,iframe'); if(im) im.style.borderRadius='';
     // CORNER ROUNDING: d.radius (px) controls how rounded the photo's corners are — 0 = completely square, higher = rounder. Applies to every look. Unset keeps the original CSS defaults, so existing photos are untouched. On padded looks (frame / card / border) the inner image gets a slightly smaller radius so the band of frame/border stays visually even around the corner.
     if(d.radius!=null){
       el.style.borderRadius=d.radius+'px';
@@ -225,15 +240,31 @@ window.JOURNAL = (function(){
     cap.style.fontSize = d.capSize ? (d.capSize+'px') : '';
   }
 
+  // Papers the editor names rather than keys ("Coral Watercolour") are matched by label, then drawn as a soft wash of their colour.
+  const WASH_COLOURS = { coral:'#f6b3a7', peach:'#f8cdb0', rose:'#f4b6c8', pink:'#f5bcd2', blush:'#f3c6d3', lavender:'#cdbdf1', lilac:'#d8c8f4', purple:'#c9b4ee', mint:'#b7e3cd', sage:'#c4dcc4', green:'#b9e0c4', sky:'#b4d8f2', blue:'#b1cdf0', ocean:'#a9d3e6', lemon:'#f6e7a6', butter:'#f4e1a8', yellow:'#f5df98', sand:'#eedcbf', cream:'#f6ecd8', grey:'#dcdbe3', gray:'#dcdbe3' };
+  function findPaper(paper){
+    if(BG_MAP[paper]) return BG_MAP[paper];
+    const want=String(paper||'').trim().toLowerCase();
+    return BACKGROUNDS.find(b=>b.label.toLowerCase()===want) || null;
+  }
+  function washFor(paper){
+    const words=String(paper||'').toLowerCase().split(/[^a-z]+/);
+    const hit=words.find(w=>WASH_COLOURS[w]);
+    if(!hit) return '';
+    const c=WASH_COLOURS[hit];
+    return 'radial-gradient(70% 55% at 18% 12%, '+c+'cc, transparent 70%), radial-gradient(60% 50% at 88% 30%, '+c+'88, transparent 70%), radial-gradient(75% 60% at 50% 100%, '+c+'aa, transparent 72%)';
+  }
   function applyPaper(pageEl, paper){
     paper = paper || 'grid';
     pageEl.classList.remove('grid','dot','plain','bg');
     pageEl.style.backgroundImage = '';
-    const bg = BG_MAP[paper];
+    const bg = findPaper(paper);
+    const wash = bg ? '' : washFor(paper);
     if(bg){ pageEl.classList.add('bg'); pageEl.style.backgroundImage = 'url("'+bg.file+'")'; }
+    else if(wash){ pageEl.classList.add('plain'); pageEl.style.backgroundImage = wash; }
     else { pageEl.classList.add(BUILTIN_PAPERS.indexOf(paper)!==-1 ? paper : 'grid'); }
   }
-  function normalizePaper(p){ return (BUILTIN_PAPERS.indexOf(p)!==-1 || BG_MAP[p]) ? p : 'grid'; }
+  function normalizePaper(p){ return (BUILTIN_PAPERS.indexOf(p)!==-1 || findPaper(p)) ? p : 'grid'; }
 
   function uid(){ return Math.random().toString(36).slice(2,9); }
   function today(){ return new Date().toISOString().slice(0,10); }
@@ -297,6 +328,15 @@ window.JOURNAL = (function(){
       const img=document.createElement('img'); img.src=d.src; img.draggable=false; el.appendChild(img);
       const cap=document.createElement('div'); cap.className='cap'; cap.textContent=d.caption||''; applyCaptionStyle(cap,d); el.appendChild(cap);
       applyPhotoStyle(el,d); applyRot(el,d);
+    } else if(d.type==='video'){
+      el.classList.add('el-photo');
+      const yt=String(d.src||'').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+      let media;
+      if(yt){ media=document.createElement('iframe'); media.src='https://www.youtube.com/embed/'+yt[1]; media.allow='autoplay; encrypted-media; picture-in-picture'; media.allowFullscreen=true; }
+      else { media=document.createElement('video'); media.src=d.src||''; media.controls=true; media.playsInline=true; media.preload='metadata'; if(d.poster) media.poster=d.poster; }
+      el.appendChild(media);
+      const cap=document.createElement('div'); cap.className='cap'; cap.textContent=d.caption||''; applyCaptionStyle(cap,d); el.appendChild(cap);
+      applyPhotoStyle(el,d); applyRot(el,d);
     } else if(d.type==='sticker'){
       const s=document.createElement('span'); s.className='s-emoji'; s.textContent=d.emoji; if(d.size) s.style.fontSize=d.size+'px'; el.appendChild(s);
       applyRot(el,d);
@@ -318,6 +358,7 @@ window.JOURNAL = (function(){
     const holder=document.createElement('div'); holder.className='page-holder';
     const scaler=document.createElement('div'); scaler.className='page-scaler';
     const pg=document.createElement('div'); pg.className='page'; applyPaper(pg, page.paper);
+    loadFonts((page.elements||[]).flatMap(d=>[d.type==='text'?(d.font||'gaegu'):'', d.capFont||'']).filter(Boolean));
     (page.elements||[]).forEach(d=> pg.appendChild(buildElementRO(d)));
     scaler.appendChild(pg); holder.appendChild(scaler); mount.appendChild(holder);
     const fit=()=>{ const cs=getComputedStyle(mount); const pad=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
@@ -329,5 +370,5 @@ window.JOURNAL = (function(){
 
   return { CONFIG, PAGE_W, FONTS, FONT_GROUPS, FONT_ALIASES, resolveFontKey, getFont, BACKGROUNDS, BG_MAP, BUILTIN_PAPERS, DOODLES, DOODLES_MAP, doodleSVG, applyPhotoStyle, applyCaptionStyle, applyPaper, normalizePaper,
            uid, today, escapeHtml, slugify, formatDate, applyTextStyle, sanitizeRich, hasRich, setTextContent, applyRot,
-           buildElementRO, renderPageRO };
+           buildElementRO, renderPageRO, loadFonts };
 })();

@@ -251,10 +251,9 @@ a { color: inherit; }
   font-weight: 600;
   font-size: 14.5px;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(139, 127, 217, 0.34);
-  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  box-shadow: none;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
-.searchbox__go:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(139, 127, 217, 0.42); }
 
 /* --- chips and pills ------------------------------------------------------- */
 

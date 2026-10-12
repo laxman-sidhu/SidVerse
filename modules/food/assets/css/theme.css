@@ -72,6 +72,13 @@ body { color: var(--ink); }
   opacity: .85;
 }
 
+.blob--plum {
+  background: radial-gradient(circle at 38% 32%,
+    color-mix(in srgb, var(--p-lilac) 70%, #fff),
+    var(--p-lavender));
+  opacity: .8;
+}
+
 .blob--warm {
   background: radial-gradient(circle at 50% 46%,
     rgba(var(--p-accent-rgb), .45), rgba(var(--p-accent-rgb), 0) 66%);

@@ -5,9 +5,11 @@ export const SITE = {
   author: "Siddhesh"
 };
 
-export const SHEET_ID = "1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0";
+// The SidBites tab of the shared Books, Picks and Bites workbook.
+export const SHEET_ID = "1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk";
+export const SHEET_GID = "847926404";
 
-export const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRM2JjutcvNiBRUq28iNVXN36tneqDaDHlfvhLCvhVq6BfpG2DIOQGEa7LWe-L_r_EwmB_ESJRsaR9b/pub?output=csv";
+export const CSV_URL = `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-f1hmsMFY9vJRgLnh_hPRxKC3xj2flti_hNWEhwUEkP8hcjDExPXRMZO2PiLywXSKL0WhzrAQh2pk/pub?gid=${SHEET_GID}&single=true&output=csv`;
 
 export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIqOzeqIq2XT3SIKFKYB6iM2g90J2L-VYHKB_Fnw4iCZBCNBOq4A-9jQdNTxY174A6vg/exec";
 

@@ -1,11 +1,10 @@
-// The hero fan. Reads assets/hero-index.json — the list the .bat writes — and lays every picture in assets/hero/ into the track. The fan itself never changes shape: four cards fill the window, and the rest wait outside it. The track moves one picture at a time, by drag or by the dots below it.
+// The hero fan. Reads the Hero Carousel Images column of the Photos tab and lays every picture into the track. The fan itself never changes shape: four cards fill the window, and the rest wait outside it. The track moves one picture at a time, by drag or by the dots below it.
 
 (function () {
   "use strict";
 
   var PER_VIEW = 4;
   var IDLE = 2000;
-  var FALLBACK = ["1.webp", "2.webp", "3.webp", "4.webp"];
 
   var visual = document.getElementById("heroVisual");
   var track = document.getElementById("heroFan");
@@ -21,11 +20,11 @@
   var stops = 1;
   var idleTimer = null;
 
-  function card(name, eager) {
+  function card(photo, eager) {
     var fig = document.createElement("figure");
     fig.className = "fan-card";
     var img = document.createElement("img");
-    img.src = "assets/hero/" + name;
+    img.src = window.SidPhotos.cdn(photo.url, "f_auto,q_auto,w_600");
     img.alt = "";
     img.loading = eager ? "eager" : "lazy";
     img.decoding = "async";
@@ -145,7 +144,8 @@
 
   function paint(files) {
     track.textContent = "";
-    files.forEach(function (name, i) { track.appendChild(card(name, i === 0)); });
+    visual.classList.toggle("is-empty", !files.length);
+    files.forEach(function (photo, i) { track.appendChild(card(photo, i === 0)); });
     measure();
     // Card widths are fixed in CSS, but a late web font or a slow image can still land after the first measure.
     window.addEventListener("load", measure, { once: true });
@@ -206,13 +206,10 @@
     track.addEventListener("dragstart", function (event) { event.preventDefault(); });
   }
 
-  fetch("assets/hero-index.json", { cache: "no-store" })
-    .then(function (r) { return r.ok ? r.json() : null; })
+  if (!window.SidPhotos) return paint([]);
+  window.SidPhotos.load()
     .then(function (data) {
-      var files = data && Array.isArray(data.files) ? data.files : null;
-      paint(files && files.length ? files : FALLBACK);
+      paint(data.hero.filter(function (photo) { return photo.kind === "image"; }));
     })
-    .catch(function () {
-      paint(FALLBACK);
-    });
+    .catch(function () { paint([]); });
 })();

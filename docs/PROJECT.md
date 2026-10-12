@@ -18,10 +18,10 @@ deployment and troubleshooting is here.
 | Module | Name | Pages | Data behind it |
 |---|---|---|---|
 | `cinema/` | **SidCinemas** | index, watched, watchlist | TMDB + OMDb + Google Sheet (3 tabs) |
-| `books/` | **SidBooks** | index, library, readlist, editions | Google Books + Open Library + Sheet (2 tabs) |
-| `travel/` | **SidTrails** | index, gallery | Sheet (5 tabs) + Leaflet + EmailJS |
-| `food/` | **SidBites** | index, add | Sheet + Cloudinary |
-| `favourites/` | **SidPicks** | index, category | one published Sheet |
+| `books/` | **SidBooks** | index, library, readlist, editions | Google Books + Open Library + Sheet (Sidbooks tab) |
+| `travel/` | **SidTrails** | index, gallery | Sheet (6 tabs) + Leaflet + EmailJS |
+| `food/` | **SidBites** | index, add | Sheet (SidBites tab) + Cloudinary |
+| `favourites/` | **SidPicks** | index, category | Sheet (SidPicks tab) |
 | `journal/` | **SidNotes** | index, story | JSON files on disk |
 
 The folder names are the original ones and do not always match the display
@@ -169,11 +169,13 @@ at the data layer.
 | Section | Sheet ID | Tabs |
 |---|---|---|
 | Cinema | `1UhTK_0IqotZila6-SFMVYtmP863qcWAt4Jk1JBj3ETs` | All Watched, Watchlist, People |
-| Books | `1SPNRwytBNr4b5OtTnKe1kkH9nU0w8UEt4LWl4bVKte8` | Books Read, Want to Read |
-| Travel | `1CtRBUNbgxf-Z-pEfwoKW9O5NTCUxTsbpTGBrfox9gSk` | Places, Monuments, Goals, Activities, Treks |
-| Food | `1feutMD3Idg8OTc8fBBKnquIPxRD-pj0Wg6BSgrQpPK0` | one tab |
-| Favourites | published link only | Actors, Actress, Superheroes, Supervillains |
+| Books | `1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk` | Sidbooks (gid 1874000210) |
+| Travel | `1CtRBUNbgxf-Z-pEfwoKW9O5NTCUxTsbpTGBrfox9gSk` | Places, Monuments, Goals, Activities, Treks, Photos (gid 472072756) |
+| Food | `1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk` | SidBites (gid 847926404) |
+| Favourites | `1L-c3xiSpec_l2Vd8ctJGGsl_46mm3Z_XBuPwzf2FAJk` | SidPicks (gid 1397506388) |
 | Journal | none - JSON in `modules/journal/data/` | - |
+
+Books, Food and Favourites share one workbook, read through its published CSV (`2PACX-1vT-f1hm...`) with each tab's gid. SidPicks has one row per exhibit (`Name | Image Url | Industry | No. of Images | Category`); a collection is the rows whose Category matches its `key` in `modules/favourites/js/config.js`, and a Category no key claims gets a wing of its own. The travel Photos tab has two columns: `Gallery Images and Videos` feeds the gallery page, `Hero Carousel Images` the hero fan, both read by `modules/travel/js/photos.js`.
 
 **Columns are matched by header name, never by position.** Reorder them freely.
 Renaming one is safe only if the new spelling is already in that section's alias
@@ -234,23 +236,21 @@ enough to matter, that is the thing to put back.
 
 ### The books edition model
 
-Both books tabs carry the same eight columns:
+Every book lives in the one Sidbooks tab:
 
 ```
-Title | ISBN | Author | Thumbnail Url | Genre | Other Versions | Count | Summary
+Title | ISBN | Author | Thumbnail Url | Genre | Other Versions | Count | Summary | Status
 ```
 
-`Other Versions` holds one line per edition, formatted
-`ISBN · Language · Publisher · Year`. `Count` is the number of those lines, and
-`OtherVersions.gs` maintains it.
+`Status` says which shelf a row sits on: `Done` is read, `Readlist` is waiting (any other readlist spelling in `READLIST_WORDS` counts too). Marking a queued book read flips its Status in place. `Other Versions` holds one line per edition, formatted `ISBN · Language · Publisher · Year`. `Count` is the number of those lines, and `OtherVersions.gs` maintains it.
 
 This drives four card states:
 
 | State | Colour | Meaning |
 |---|---|---|
-| `is-read` | green | a book on **Books Read**, one ISBN per book |
+| `is-read` | green | a book marked **Done**, one ISBN per book |
 | `is-version` | yellow | another edition of a book already read |
-| `is-queued` | purple | a book on **Want to Read** |
+| `is-queued` | purple | a book marked **Readlist** |
 | `is-queued` + note | purple | another edition of a readlist book; hovering says so |
 
 A match is either by ISBN or, failing that, by title and author - the code keeps
@@ -268,6 +268,8 @@ commits JSON through the GitHub API. Two files matter, under
   `thumb`. `date` must be `YYYY-MM-DD`, because sorting compares those strings
   directly; any other format sorts wrongly and silently.
 - **`posts/<id>.json`** - one complete story, photographs embedded as data URLs.
+
+A page is drawn as light paper in both themes, because its colours are baked in by the editor. `js/core.js` loads only the Google fonts a page uses, draws photo and video elements, and matches a paper by key or by label.
 
 The two must agree. An index entry with no matching file opens onto *"Story not
 found."*; a file with no index entry is invisible. Deleting a story means
@@ -314,8 +316,8 @@ the look of the place it is in, so moving up a place means a card *grows into*
 it - the places never move.
 
 `modules/travel/js/hero-fan.js` writes `--fw`, `--fh`, `--fk`, `--fz`, `--fi`
-and `--fml` onto each card. Adding photographs to `assets/hero/` and rerunning
-the `.bat` is all that is needed; the fan's geometry never changes.
+and `--fml` onto each card. Adding a link to the Photos tab's `Hero Carousel Images`
+column is all that is needed; the fan's geometry never changes.
 
 Four things will break it:
 

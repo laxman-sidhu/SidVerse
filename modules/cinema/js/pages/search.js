@@ -86,9 +86,28 @@ function visibleItems() {
   if (state.sort === "rating") items = [...items].sort((a, b) => b.rating - a.rating);
   else if (state.sort === "newest") items = [...items].sort((a, b) => String(b.release_date || "").localeCompare(String(a.release_date || "")));
   else if (state.sort === "oldest") items = [...items].sort((a, b) => String(a.release_date || "9999").localeCompare(String(b.release_date || "9999")));
+  else if (state.sort === "boxoffice") items = [...items].sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
   else if (state.sort === "alpha") items = [...items].sort((a, b) => a.title.localeCompare(b.title));
 
   return items;
+}
+
+let grossJob = null;
+
+// Box office needs one details call per film, so the grid repaints once the figures are in.
+async function rankByGross() {
+  if (grossJob) return;
+  const field = dom.sortSelect.closest(".sortfield");
+  if (field) field.classList.add("is-busy");
+  grossJob = tmdb.fillRevenue(state.items).catch(() => null);
+  await grossJob;
+  grossJob = null;
+  if (field) field.classList.remove("is-busy");
+  if (state.sort === "boxoffice") paintResults();
+}
+
+function needsGross() {
+  return state.sort === "boxoffice" && state.items.some(item => item.media_type === "movie" && item.revenue === undefined);
 }
 
 // Upcoming titles are excluded: nothing unreleased can have been seen, so counting them only drags the share down.
@@ -108,7 +127,7 @@ function sectionMarkup(section) {
       ? `<h2 class="sect__head">${section.icon ? `<span class="sect__icon">${section.icon}</span>` : ""}`
         + `${esc(section.title)}<span class="sect__n">${section.count}</span></h2>`
       : "")
-    + gridMarkup(section.movies, { showDate: section.key === "upcoming" })
+    + gridMarkup(section.movies, { showDate: section.key === "upcoming", gross: state.sort === "boxoffice" })
     + "</section>";
 }
 
@@ -131,7 +150,7 @@ function growSections(sections) {
   for (const [section, grid] of plan) {
     const extra = section.movies.slice(grid.children.length);
     if (extra.length) {
-      grid.insertAdjacentHTML("beforeend", cardsMarkup(extra, { showDate: section.key === "upcoming" }));
+      grid.insertAdjacentHTML("beforeend", cardsMarkup(extra, { showDate: section.key === "upcoming", gross: state.sort === "boxoffice" }));
     }
     const count = grid.parentElement.querySelector(".sect__n");
     if (count) count.textContent = section.count;
@@ -140,6 +159,7 @@ function growSections(sections) {
 }
 
 function paintResults({ grow = false } = {}) {
+  if (needsGross()) rankByGross();
   const items = visibleItems();
   state.sections = buildSections(items, {
     media: state.media,

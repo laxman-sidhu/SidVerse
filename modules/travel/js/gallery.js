@@ -1,86 +1,21 @@
-// --------------------------------------------------------------------------
-// GALLERY LOGIC - windowed / virtualized grid -------------------------------------------------------------------------- The page can hold hundreds of photos and videos and stay smooth because it never loads them all at once. Three ideas do the heavy lifting: 1. RESERVE HEIGHT UP FRONT. Every tile is given its final height the moment the page builds - from real dimensions if the manifest provides them, or from a neutral square placeholder otherwise. So the page has its correct total height (and an accurate scrollbar) before a single image downloads. 2. MOUNT ON DEMAND. A tile only attaches its real <img>/<video> when it is about to scroll into view (an IntersectionObserver watches each tile with a ~1.5-screen lookahead). Tiles far below the fold cost almost nothing. 3. UNMOUNT WHEN FAR AWAY. Tiles that scroll more than ~6 screens off get their media detached again, so memory stays flat even with 300+ items. Their reserved height never changes, so nothing shifts. Media is loaded from the `assets/gallery/` folder using one of two strategies: 1. Directory listing - fetch `assets/gallery/` and parse the HTML index (works on Apache/nginx static servers with autoindex on). 2. File-list JSON - fetch `assets/gallery-index.json`. Works on every static host (GitHub Pages, Netlify, Vercel). Two accepted shapes: { "files": ["a.webp", "b.mp4", ...] } (current) { "files": [{ "name": "a.webp", "w": 1200, "h": 800 }, ...] } (optional) Adding w/h is OPTIONAL - when present, tiles get their exact height with zero layout shift and off-screen images never need to load just to be measured. Plain filename strings keep working exactly as before. Tries (1) first; falls back to (2). If both fail, shows the empty state. To regenerate assets/gallery-index.json, run this in cmd from the assets/ folder: (echo {"files":[ & (for %F in (Gallery\*.jpg Gallery\*.jpeg Gallery\*.png Gallery\*.gif Gallery\*.webp Gallery\*.avif Gallery\*.mp4 Gallery\*.webm Gallery\*.mov Gallery\*.m4v) do @echo "%~nxF",) & echo ]}) > gallery-index.json (then remove the trailing comma after the last entry, or use the .bat helper.) --------------------------------------------------------------------------
+// SidTrails gallery - a windowed grid: every tile reserves its height up front, mounts its media near the viewport and drops it again far away, so hundreds of items stay smooth. Media comes from the Photos tab through js/photos.js.
 
-const IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
-const VIDEO_EXT = ['.mp4', '.webm', '.mov', '.m4v'];
-
-// How far ahead of the viewport (in screen-heights) to start loading a tile, and how far behind to unload it again. Mount window is generous enough that tiles are ready before you reach them; unmount window is large enough that normal scrolling never tears down something you're about to see again.
+// How far ahead of the viewport (in screen-heights) to mount a tile, and how far behind to unmount it.
 const MOUNT_SCREENS  = 1.5;
 const UNMOUNT_SCREENS = 6;
 
-// Default placeholder shape used to reserve a tile's height before its real dimensions are known (1 = square). Snapped to the true ratio once loaded.
+// Placeholder shape before a tile's real ratio is known (1 = square).
 const DEFAULT_ASPECT = 1;
 
-function classify(filename) {
-  const ext = (String(filename).toLowerCase().match(/\.[^.]+$/) || [''])[0];
-  if (IMAGE_EXT.includes(ext)) return 'image';
-  if (VIDEO_EXT.includes(ext)) return 'video';
-  return null;
-}
-
-// Normalize one manifest entry to { name, w, h }. Accepts a bare filename string, or an object carrying optional width/height under several key names.
-function normalizeEntry(entry) {
-  if (typeof entry === 'string') return { name: entry, w: 0, h: 0 };
-  if (entry && typeof entry === 'object') {
-    const name = entry.name || entry.file || entry.filename;
-    if (!name) return null;
-    const w = Number(entry.w || entry.width)  || 0;
-    const h = Number(entry.h || entry.height) || 0;
-    return { name: String(name), w, h };
-  }
-  return null;
-}
-
-// ─── FILE-LIST LOADERS ───
-
-// Strategy 1: parse a server-side directory listing. Returns [{name,w,h}].
-async function fetchByDirectoryListing() {
-  try {
-    const res = await fetch('assets/gallery/');
-    if (!res.ok) return [];
-    const html = await res.text();
-    if (html.trim().startsWith('{') || html.trim().startsWith('[')) return [];
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const out = [];
-    doc.querySelectorAll('a[href]').forEach(a => {
-      const href = a.getAttribute('href');
-      if (!href || href.startsWith('?') || href.startsWith('#')) return;
-      if (href === '../' || href === './' || href.endsWith('/')) return;
-      if (/^[a-z]+:\/\//i.test(href) && !href.includes(location.host)) return;
-      const name = decodeURIComponent(href.split('/').pop().split('?')[0]);
-      if (classify(name)) out.push({ name, w: 0, h: 0 });
-    });
-    return out;
-  } catch (e) {
-    return [];
-  }
-}
-
-// Strategy 2: read assets/gallery-index.json. Returns [{name,w,h}].
-async function fetchByManifest() {
-  try {
-    const res = await fetch('assets/gallery-index.json', { cache: 'no-store' });
-    if (!res.ok) return [];
-    const data = await res.json();
-    const list = Array.isArray(data) ? data
-               : (data && Array.isArray(data.files) ? data.files : null);
-    if (!list) return [];
-    const out = [];
-    list.forEach(e => {
-      const n = normalizeEntry(e);
-      if (n && classify(n.name)) out.push(n);
-    });
-    return out;
-  } catch (e) {
-    return [];
-  }
-}
-
-// Load the file list using both strategies (directory listing first).
+// Gallery column of the Photos tab, as [{ name, url, kind }].
 async function loadGallery() {
-  let files = await fetchByDirectoryListing();
-  if (files.length === 0) files = await fetchByManifest();
-  return files;
+  if (!window.SidPhotos) return [];
+  try {
+    const data = await window.SidPhotos.load();
+    return data.gallery;
+  } catch (e) {
+    return [];
+  }
 }
 
 // ─── LAYOUT METRICS ─── Read the grid's row unit, gap and a real column width ONCE (and again on resize). Everything downstream computes spans from these cached numbers, so loading an image never forces a per-image layout read - the old code's main source of jank.
@@ -157,7 +92,7 @@ function mountMedia(it) {
       img.classList.add('loaded');
     }, { once: true });
     img.addEventListener('error', () => { it.el.style.display = 'none'; }, { once: true });
-    img.src = it.url;
+    img.src = window.SidPhotos.cdn(it.url, 'f_auto,q_auto,w_900');
     it.media = img;
     it.el.appendChild(img);
   } else {
@@ -165,6 +100,8 @@ function mountMedia(it) {
     video.className = 'media';
     video.src = it.url;
     video.preload = 'metadata';
+    const still = window.SidPhotos.poster(it.url);
+    if (still) video.poster = still;
     video.muted = true;
     video.playsInline = true;
     video.addEventListener('loadedmetadata', () => {
@@ -248,7 +185,7 @@ function preloadNeighbors() {
   if (n < 2) return;
   [1, -1].forEach(d => {
     const it = galleryState.items[((galleryState.index + d) % n + n) % n];
-    if (it && it.kind === 'image') { const im = new Image(); im.src = it.url; }
+    if (it && it.kind === 'image') { const im = new Image(); im.src = window.SidPhotos.cdn(it.url, 'f_auto,q_auto,w_2000'); }
   });
 }
 
@@ -261,7 +198,7 @@ function openModalAt(index) {
   stage.innerHTML = '';
   if (item.kind === 'image') {
     const img = document.createElement('img');
-    img.src = item.url;
+    img.src = window.SidPhotos.cdn(item.url, 'f_auto,q_auto,w_2000');
     img.alt = item.name;
     stage.appendChild(img);
   } else {
@@ -314,10 +251,10 @@ async function init() {
 
   ITEMS = files.map((f, i) => ({
     name: f.name,
-    url: 'assets/gallery/' + f.name,
-    kind: classify(f.name),
-    w: f.w || 0,
-    h: f.h || 0,
+    url: f.url,
+    kind: f.kind,
+    w: 0,
+    h: 0,
     el: null,
     media: null,
     mounted: false,

@@ -24,7 +24,13 @@ function prettyDate(date) {
   return parsed.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
 
-function cardMarkup(item, { index = 0, showDate = false } = {}) {
+function grossLabel(value) {
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
+  if (value >= 1e6) return `$${Math.round(value / 1e6)}M`;
+  return `$${Math.round(value / 1e3)}K`;
+}
+
+function cardMarkup(item, { index = 0, showDate = false, gross = false } = {}) {
   const watched = item.watched === true;
   const delay = Math.min(index * 26, 420);
 
@@ -59,6 +65,7 @@ function cardMarkup(item, { index = 0, showDate = false } = {}) {
   if (isSeries(item) && item.seasons) facts.push(`<span>${plural(item.seasons, "season")}</span>`);
   if (item.language) facts.push(`<span>${esc(item.language)}</span>`);
   if (item.runtime) facts.push(`<span>${runtimeLabel(item.runtime)}${isSeries(item) ? " ep" : ""}</span>`);
+  if (gross && item.revenue > 0) facts.unshift(`<span class="card__gross">${grossLabel(item.revenue)}</span>`);
 
   const genres = (item.genres || []).slice(0, 3)
     .map(genre => `<span class="card__genre">${esc(genre)}</span>`).join("");
@@ -122,9 +129,9 @@ function sheetCardMarkup(item, { index = 0 } = {}) {
 }
 
 // Just the cards. Load more appends these to the grid already on screen, so the stagger restarts at zero and only the arrivals animate.
-export function cardsMarkup(items, { showDate = false, sheet = false } = {}) {
+export function cardsMarkup(items, { showDate = false, sheet = false, gross = false } = {}) {
   const render = sheet ? sheetCardMarkup : cardMarkup;
-  return items.map((item, index) => render(item, { index, showDate })).join("");
+  return items.map((item, index) => render(item, { index, showDate, gross })).join("");
 }
 
 export function gridMarkup(items, options = {}) {

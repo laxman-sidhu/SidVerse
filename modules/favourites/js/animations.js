@@ -44,18 +44,11 @@ export function staggerReveals(elements, step = 60, cap = 480) {
 }
 
 // --------------------------------------------------------------------------
-// Galleries dropdown (populated from CONFIG so it stays automatic) ------------------------------------------------------------------------
-
-// --------------------------------------------------------------------------
 // Galleries dropdown (built from CONFIG so it stays automatic) ------------------------------------------------------------------------
 
-function initDropdown() {
-  const dropdown = qs("[data-dropdown]");
-  if (!dropdown) return;
-
-  const toggle = qs(".nav__dropdown-toggle", dropdown);
-  const panel = qs("[data-category-menu]", dropdown);
-
+function fillDropdown() {
+  const panel = qs("[data-category-menu]");
+  if (!panel) return;
   panel.replaceChildren(
     ...CONFIG.categories.map((category) => {
       const item = cloneTpl("tpl-nav-dropdown-item");
@@ -65,6 +58,21 @@ function initDropdown() {
       return item;
     })
   );
+}
+
+// Called again once the sheet has added wings the config did not name.
+export function syncCategoryLinks() {
+  fillDropdown();
+  populateFooterCategories();
+}
+
+function initDropdown() {
+  const dropdown = qs("[data-dropdown]");
+  if (!dropdown) return;
+
+  const toggle = qs(".nav__dropdown-toggle", dropdown);
+  const panel = qs("[data-category-menu]", dropdown);
+  fillDropdown();
 
   const setOpen = (open) => {
     toggle.setAttribute("aria-expanded", String(open));

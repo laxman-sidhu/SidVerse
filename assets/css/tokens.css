@@ -1,62 +1,62 @@
 /* SidVerse - the one palette. Every module maps its own variables onto these, so a colour is changed here once and the whole site follows. */
 
 :root {
-  /* Paper and ink — soft lavender-white paper, deep plum ink */
-  --p-bg:          #fbf8fe;
-  --p-bg-2:        #f4eefa;
+  /* Paper and ink - soft lavender-white paper, deep plum ink */
+  --p-bg:          #fcfaff;
+  --p-bg-2:        #f6f2fd;
   --p-surface:     #ffffff;
-  --p-surface-2:   #faf6fd;
-  --p-surface-3:   #f2ebfa;
-  --p-ink:         #2e2740;
-  --p-ink-soft:    #5b5273;
-  --p-muted:       #6f6688;
-  --p-line:        #e9e0f4;
-  --p-line-soft:   #f3edfa;
+  --p-surface-2:   #fbf9ff;
+  --p-surface-3:   #f3effc;
+  --p-ink:         #2c2840;
+  --p-ink-soft:    #57516e;
+  --p-muted:       #6e6889;
+  --p-line:        #ece6f7;
+  --p-line-soft:   #f4f0fb;
 
   /* Bare channels, for rgba() with a variable alpha */
-  --p-ink-rgb:     46, 39, 64;
-  --p-bg-rgb:      251, 248, 254;
+  --p-ink-rgb:     44, 40, 64;
+  --p-bg-rgb:      252, 250, 255;
   --p-surface-rgb: 255, 255, 255;
 
   /* The pastel family the whole site is drawn from: the washes on the paper and the tints inside cards, so a page reads pastel even when it is bare. */
-  --p-pink:        #f2a3c0;
-  --p-lilac:       #c3aef0;
-  --p-lavender:    #b09ce6;
-  --p-mint:        #8ecfae;
-  --p-butter:      #f0d68a;
-  --p-sky:         #8fc4ea;
+  --p-pink:        #f5b5cc;
+  --p-lilac:       #cbb9f2;
+  --p-lavender:    #b8a6ec;
+  --p-mint:        #9fd8bd;
+  --p-butter:      #f3dd9c;
+  --p-sky:         #a4cfef;
 
   /* Bare channels for the same six, so a rule can set its own alpha. */
-  --p-pink-rgb:     242, 163, 192;
-  --p-lilac-rgb:    195, 174, 240;
-  --p-lavender-rgb: 176, 156, 230;
-  --p-mint-rgb:     142, 207, 174;
-  --p-butter-rgb:   240, 214, 138;
-  --p-sky-rgb:      143, 196, 234;
+  --p-pink-rgb:     245, 181, 204;
+  --p-lilac-rgb:    203, 185, 242;
+  --p-lavender-rgb: 184, 166, 236;
+  --p-mint-rgb:     159, 216, 189;
+  --p-butter-rgb:   243, 221, 156;
+  --p-sky-rgb:      164, 207, 239;
 
   /* Meaning, not decoration. Green is done, amber is waiting, red is wrong. */
-  --p-ok:          #6fbb94;
+  --p-ok:          #7cc4a0;
   --p-ok-deep:     #31734f;
-  --p-ok-tint:     #e7f6ee;
-  --p-ok-rgb:      111, 187, 148;
-  --p-wait:        #e0b455;
+  --p-ok-tint:     #eaf7f0;
+  --p-ok-rgb:      124, 196, 160;
+  --p-wait:        #e8c06a;
   --p-wait-deep:   #8a6420;
-  --p-wait-tint:   #fbf2dc;
-  --p-wait-rgb:    224, 180, 85;
-  --p-danger:      #e2798c;
-  --p-danger-rgb:  226, 121, 140;
+  --p-wait-tint:   #fcf4e0;
+  --p-wait-rgb:    232, 192, 106;
+  --p-danger:      #e8899b;
+  --p-danger-rgb:  232, 137, 155;
   --p-star:        #e6bb5d;
 
   /* The accent is the only thing a module changes. Set by [data-section]. */
-  --p-accent:      #b09ce6;
-  --p-accent-deep: #7a5fc0;
-  --p-accent-soft: #d5c9f2;
-  --p-accent-tint: #f1ecfb;
-  --p-accent-rgb:  176, 156, 230;
+  --p-accent:      #b8a6ec;
+  --p-accent-deep: #7d63c4;
+  --p-accent-soft: #ddd2f6;
+  --p-accent-tint: #f4f0fd;
+  --p-accent-rgb:  184, 166, 236;
   --p-on-accent:   #ffffff;
 
   /* The accent is too light to read as text on paper. This is the same hue pushed dark enough to be a link or a label. */
-  --p-accent-ink:  #6a4fae;
+  --p-accent-ink:  #6650b0;
 
   /* The translation bubble carries its own pair. --p-accent-ink is re-set by every section AND by the theme, while what sits on it was only ever set by the theme, so the two could drift apart and leave the text unreadable. These two are theme-only, so they always match. */
   --p-gloss-bg:    var(--p-accent-ink);
@@ -116,21 +116,21 @@
   --p-pill:      999px;
 
   /* Shadows are tinted with the ink, never neutral grey */
-  --p-shadow-sm: 0 1px 2px rgba(var(--p-ink-rgb), .04), 0 2px 10px rgba(var(--p-ink-rgb), .05);
-  --p-shadow:    0 2px 6px rgba(var(--p-ink-rgb), .05), 0 14px 32px -14px rgba(var(--p-ink-rgb), .16);
-  --p-shadow-lg: 0 4px 14px rgba(var(--p-ink-rgb), .06), 0 30px 60px -20px rgba(var(--p-ink-rgb), .22);
+  --p-shadow-sm: 0 1px 2px rgba(var(--p-ink-rgb), .04), 0 4px 14px rgba(var(--p-lavender-rgb), .14);
+  --p-shadow:    0 2px 6px rgba(var(--p-ink-rgb), .05), 0 16px 34px -16px rgba(var(--p-lavender-rgb), .42);
+  --p-shadow-lg: 0 4px 14px rgba(var(--p-ink-rgb), .06), 0 32px 60px -22px rgba(var(--p-lavender-rgb), .5);
 
   --p-ease: cubic-bezier(.22, 1, .36, 1);
 
   /* The sidebar is site chrome and keeps its own two colours, so it does not invert when --p-ink does. */
   --p-nav-bg:   #ffffff;
-  --p-nav-ink:  #2e2740;
-  --p-nav-line: #e9e0f4;
+  --p-nav-ink:  #2c2840;
+  --p-nav-line: #ece6f7;
 
   /* Sections that are dark ON PURPOSE in both themes — Travel's hero band, Cinema's shelf strips. White text sits on these in light mode and must keep sitting on them in dark, so they darken rather than invert. */
-  --p-deep:      #342c47;
-  --p-deep-2:    #453b5c;
-  --p-deep-rgb:  52, 44, 71;
+  --p-deep:      #332d48;
+  --p-deep-2:    #443c5e;
+  --p-deep-rgb:  51, 45, 72;
   --p-on-deep:   #ffffff;
   --p-on-deep-soft: rgba(255, 255, 255, .74);
 
@@ -141,22 +141,22 @@
   --p-rail-clear: 74px;
 }
 
-/* Dark paper — a deep plum night rather than flat black. */
+/* Dark paper - a clean, cool night with a faint violet cast, so the pastels read clearly on it. */
 [data-theme="dark"] {
-  --p-bg:          #15121c;
-  --p-bg-2:        #1b1724;
-  --p-surface:     #221d2d;
-  --p-surface-2:   #292336;
-  --p-surface-3:   #332c42;
-  --p-ink:         #f2eff8;
-  --p-ink-soft:    #c6bfd4;
-  --p-muted:       #a79eb9;
-  --p-line:        #3a3350;
-  --p-line-soft:   #2d2739;
+  --p-bg:          #121118;
+  --p-bg-2:        #17161e;
+  --p-surface:     #1d1c26;
+  --p-surface-2:   #24232f;
+  --p-surface-3:   #2d2b39;
+  --p-ink:         #f4f2f9;
+  --p-ink-soft:    #cfcadc;
+  --p-muted:       #aaa4bc;
+  --p-line:        #353343;
+  --p-line-soft:   #282733;
 
-  --p-ink-rgb:     242, 239, 248;
-  --p-bg-rgb:      21, 18, 28;
-  --p-surface-rgb: 34, 29, 45;
+  --p-ink-rgb:     244, 242, 249;
+  --p-bg-rgb:      18, 17, 24;
+  --p-surface-rgb: 29, 28, 38;
 
   --p-pink:        #f0aac5;
   --p-lilac:       #cbb8f3;
@@ -174,22 +174,22 @@
 
   --p-ok:          #86ceaa;
   --p-ok-deep:     #a6dcc2;
-  --p-ok-tint:     #1c2f27;
+  --p-ok-tint:     #1a2c24;
   --p-ok-rgb:      134, 206, 170;
   --p-wait:        #e8c579;
   --p-wait-deep:   #f2d79c;
-  --p-wait-tint:   #2e2718;
+  --p-wait-tint:   #2c2617;
   --p-wait-rgb:    232, 197, 121;
   --p-danger:      #ef97a7;
   --p-danger-rgb:  239, 151, 167;
   --p-star:        #ecc873;
 
   /* Dark accents are lifted pastels, so what sits on them must be ink. */
-  --p-on-accent:   #191426;
+  --p-on-accent:   #16141f;
   --p-accent:      #bfaced;
   --p-accent-deep: #d5c9f5;
   --p-accent-soft: #cdbef2;
-  --p-accent-tint: #272033;
+  --p-accent-tint: #26223a;
   --p-accent-rgb:  191, 172, 237;
   --p-accent-ink:  #cbbcf0;
 
@@ -198,15 +198,15 @@
   --p-gloss-ink:   var(--p-on-accent);
   --p-gloss-line:  transparent;
 
-  --p-nav-bg:   #1c1826;
-  --p-nav-ink:  #f2eff8;
-  --p-nav-line: #352e46;
+  --p-nav-bg:   #191821;
+  --p-nav-ink:  #f4f2f9;
+  --p-nav-line: #302e3d;
 
-  --p-deep:      #100d17;
-  --p-deep-2:    #1c1826;
-  --p-deep-rgb:  16, 13, 23;
-  --p-on-deep:   #f2eff8;
-  --p-on-deep-soft: rgba(242, 239, 248, .72);
+  --p-deep:      #0e0d13;
+  --p-deep-2:    #1a1922;
+  --p-deep-rgb:  14, 13, 19;
+  --p-on-deep:   #f4f2f9;
+  --p-on-deep-soft: rgba(244, 242, 249, .74);
 
   --p-shadow-sm: 0 1px 2px rgba(0, 0, 0, .44), 0 2px 10px rgba(0, 0, 0, .34);
   --p-shadow:    0 2px 6px rgba(0, 0, 0, .5), 0 14px 32px -14px rgba(0, 0, 0, .74);
@@ -216,19 +216,19 @@
 }
 
 /* One accent per module — lavender, rose, violet, meadow, apricot, sky, orchid. Nothing else about a module's colour differs. */
-[data-section="home"]       { --p-accent:#b09ce6; --p-accent-deep:#7a5fc0; --p-accent-soft:#d5c9f2; --p-accent-tint:#f1ecfb; --p-accent-rgb:176,156,230; --p-accent-ink:#6a4fae; }
-[data-section="cinema"]     { --p-accent:#f2a3c0; --p-accent-deep:#c85f8c; --p-accent-soft:#fac9dc; --p-accent-tint:#fdeef5; --p-accent-rgb:242,163,192; --p-accent-ink:#b34c79; }
-[data-section="books"]      { --p-accent:#b598e8; --p-accent-deep:#8259c9; --p-accent-soft:#d9c9f5; --p-accent-tint:#f3edfc; --p-accent-rgb:181,152,232; --p-accent-ink:#7146bb; }
-[data-section="travel"]     { --p-accent:#7fcaa8; --p-accent-deep:#3f9370; --p-accent-soft:#bde7d2; --p-accent-tint:#e9f7f0; --p-accent-rgb:127,202,168; --p-accent-ink:#276448; }
-[data-section="food"]      { --p-accent:#f5b78d; --p-accent-deep:#cb7639; --p-accent-soft:#fbd7bb; --p-accent-tint:#fdf1e8; --p-accent-rgb:245,183,141; --p-accent-ink:#9d5626; }
-[data-section="favourites"] { --p-accent:#8fc4ea; --p-accent-deep:#4b8bc0; --p-accent-soft:#c3dff4; --p-accent-tint:#ecf5fc; --p-accent-rgb:143,196,234; --p-accent-ink:#356d9c; }
-[data-section="journal"]    { --p-accent:#dfa4d6; --p-accent-deep:#ab5c9e; --p-accent-soft:#f0cbeb; --p-accent-tint:#fbeff9; --p-accent-rgb:223,164,214; --p-accent-ink:#984b8c; }
+[data-section="home"]       { --p-accent:#b8a6ec; --p-accent-deep:#7d63c4; --p-accent-soft:#ddd2f6; --p-accent-tint:#f4f0fd; --p-accent-rgb:184,166,236; --p-accent-ink:#6650b0; }
+[data-section="cinema"]     { --p-accent:#f4aec8; --p-accent-deep:#c9638f; --p-accent-soft:#f9d0df; --p-accent-tint:#fdf0f5; --p-accent-rgb:244,174,200; --p-accent-ink:#a84873; }
+[data-section="books"]      { --p-accent:#bea5ec; --p-accent-deep:#865fcc; --p-accent-soft:#ddd0f6; --p-accent-tint:#f5f0fd; --p-accent-rgb:190,165,236; --p-accent-ink:#6f48b6; }
+[data-section="travel"]     { --p-accent:#8fd3b2; --p-accent-deep:#439a74; --p-accent-soft:#c4ead7; --p-accent-tint:#ecf8f2; --p-accent-rgb:143,211,178; --p-accent-ink:#276448; }
+[data-section="food"]       { --p-accent:#f6be98; --p-accent-deep:#c97a40; --p-accent-soft:#fbdac4; --p-accent-tint:#fef3ea; --p-accent-rgb:246,190,152; --p-accent-ink:#985323; }
+[data-section="favourites"] { --p-accent:#9ccbec; --p-accent-deep:#4e8dc1; --p-accent-soft:#c9e3f6; --p-accent-tint:#eef6fd; --p-accent-rgb:156,203,236; --p-accent-ink:#356d9c; }
+[data-section="journal"]    { --p-accent:#e3b0db; --p-accent-deep:#ad62a1; --p-accent-soft:#f2d1ed; --p-accent-tint:#fcf1fa; --p-accent-rgb:227,176,219; --p-accent-ink:#93478a; }
 
 /* Lifted on dark paper: the pastels wash out against it. */
-[data-theme="dark"][data-section="home"]       { --p-accent:#c6b5f0; --p-accent-deep:#ddd2f8; --p-accent-soft:#d3c6f5; --p-accent-tint:#282034; --p-accent-rgb:198,181,240; --p-accent-ink:#d0c2f4; }
-[data-theme="dark"][data-section="cinema"]     { --p-accent:#f4b6cd; --p-accent-deep:#f9d4e2; --p-accent-soft:#f7c8da; --p-accent-tint:#33222b; --p-accent-rgb:244,182,205; --p-accent-ink:#f7c4d6; }
-[data-theme="dark"][data-section="books"]      { --p-accent:#c8b0f0; --p-accent-deep:#ded0f9; --p-accent-soft:#d4c1f5; --p-accent-tint:#2a2239; --p-accent-rgb:200,176,240; --p-accent-ink:#d2c0f5; }
-[data-theme="dark"][data-section="travel"]     { --p-accent:#93d8b6; --p-accent-deep:#bde9d1; --p-accent-soft:#aee0c7; --p-accent-tint:#1c2e26; --p-accent-rgb:147,216,182; --p-accent-ink:#a5e0c3; }
-[data-theme="dark"][data-section="food"]      { --p-accent:#f7c6a4; --p-accent-deep:#fbdcc4; --p-accent-soft:#f9d3b7; --p-accent-tint:#332619; --p-accent-rgb:247,198,164; --p-accent-ink:#fad2b3; }
-[data-theme="dark"][data-section="favourites"] { --p-accent:#a3d1f0; --p-accent-deep:#c8e4f8; --p-accent-soft:#b8dcf5; --p-accent-tint:#1d2b36; --p-accent-rgb:163,209,240; --p-accent-ink:#b5daf5; }
-[data-theme="dark"][data-section="journal"]    { --p-accent:#e6b8de; --p-accent-deep:#f2d5ec; --p-accent-soft:#edc9e6; --p-accent-tint:#2f2232; --p-accent-rgb:230,184,222; --p-accent-ink:#eec7e7; }
+[data-theme="dark"][data-section="home"]       { --p-accent:#c6b5f0; --p-accent-deep:#ddd2f8; --p-accent-soft:#d3c6f5; --p-accent-tint:#262139; --p-accent-rgb:198,181,240; --p-accent-ink:#d0c2f4; }
+[data-theme="dark"][data-section="cinema"]     { --p-accent:#f5b9d0; --p-accent-deep:#f9d4e2; --p-accent-soft:#f7c8da; --p-accent-tint:#33212c; --p-accent-rgb:245,185,208; --p-accent-ink:#f7c4d6; }
+[data-theme="dark"][data-section="books"]      { --p-accent:#c9b2f1; --p-accent-deep:#ded0f9; --p-accent-soft:#d4c1f5; --p-accent-tint:#282139; --p-accent-rgb:201,178,241; --p-accent-ink:#d2c0f5; }
+[data-theme="dark"][data-section="travel"]     { --p-accent:#9adbbb; --p-accent-deep:#bde9d1; --p-accent-soft:#aee0c7; --p-accent-tint:#1a2c25; --p-accent-rgb:154,219,187; --p-accent-ink:#a5e0c3; }
+[data-theme="dark"][data-section="food"]       { --p-accent:#f8c9a8; --p-accent-deep:#fbdcc4; --p-accent-soft:#f9d3b7; --p-accent-tint:#312419; --p-accent-rgb:248,201,168; --p-accent-ink:#fad2b3; }
+[data-theme="dark"][data-section="favourites"] { --p-accent:#a8d4f2; --p-accent-deep:#c8e4f8; --p-accent-soft:#b8dcf5; --p-accent-tint:#1b2a36; --p-accent-rgb:168,212,242; --p-accent-ink:#b5daf5; }
+[data-theme="dark"][data-section="journal"]    { --p-accent:#e8bde1; --p-accent-deep:#f2d5ec; --p-accent-soft:#edc9e6; --p-accent-tint:#2e2131; --p-accent-rgb:232,189,225; --p-accent-ink:#eec7e7; }

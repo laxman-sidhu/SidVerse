@@ -1,9 +1,9 @@
 // SidPicks - the category page. Reads ?category=<slug>, resolves the collection from CONFIG, then renders the gallery with search, skeletons, empty and error states and the exhibit modal. All markup lives in category.html's <template>s.
 
 import { findCategoryBySlug } from "./config.js";
-import { fetchCategory } from "./api.js";
+import { fetchCategory, loadCategories } from "./api.js";
 import { qs, cloneTpl, getQueryParam, hydrateImage } from "./utils.js";
-import { initChrome, observeReveals, staggerReveals } from "./animations.js";
+import { initChrome, observeReveals, staggerReveals, syncCategoryLinks } from "./animations.js";
 import { initModal, openModal } from "./modal.js";
 import { initSearch } from "./search.js";
 
@@ -92,6 +92,11 @@ function buildExhibitCard(exhibit, index) {
   qs(".exhibit-card__count", card).textContent =
     (exhibit.images && exhibit.images.length) || (exhibit.image ? 1 : 0);
   qs(".exhibit-card__name", card).textContent = exhibit.name;
+  const tag = qs(".exhibit-card__tag", card);
+  if (tag) {
+    tag.textContent = exhibit.industry || "";
+    tag.hidden = !exhibit.industry;
+  }
 
   return card;
 }
@@ -128,7 +133,7 @@ function updateCounts(visible, total, query) {
 
 function handleQuery(query) {
   const filtered = query
-    ? exhibits.filter(({ name }) => name.toLowerCase().includes(query))
+    ? exhibits.filter(({ name, industry }) => `${name} ${industry || ""}`.toLowerCase().includes(query))
     : exhibits;
 
   renderGallery(filtered);
@@ -152,7 +157,7 @@ async function loadExhibits() {
   showSkeletons();
 
   try {
-    exhibits = await fetchCategory(category.gid);
+    exhibits = await fetchCategory(category);
   } catch {
     countEl.textContent = "";
     showErrorState();
@@ -175,11 +180,21 @@ function applyCategoryChrome() {
   document.title = `${category.title} - SidPicks`;
 }
 
-function init() {
+async function init() {
   initChrome();
   initModal();
 
-  category = findCategoryBySlug(getQueryParam("category"));
+  const slug = getQueryParam("category");
+  category = findCategoryBySlug(slug);
+
+  // A wing that exists only in the sheet is known once the sheet is in.
+  try {
+    const { grew } = await loadCategories();
+    if (grew) syncCategoryLinks();
+    if (!category) category = findCategoryBySlug(slug);
+  } catch {
+    // loadExhibits reports the failure.
+  }
 
   if (!category) {
     qs("#category-title").textContent = "Unknown collection";

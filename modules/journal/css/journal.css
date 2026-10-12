@@ -44,6 +44,9 @@ a{color:inherit; text-decoration:none;}
 .btn.primary:hover{background:var(--primary-hover);}
 
 /* ===== journal page + elements ===== */
+/* A page is an object with its own colours baked in by the editor, so it stays light paper in both themes. */
+.page{--paper:#fbf8ff; --paper-edge:#e8def8; --ink:#4b4361; --ink-soft:#8d82ab; --grid:#eae1f8; --shadow:rgba(81,70,105,.16);
+  color:var(--ink); color-scheme:light;}
 .page{position:relative; width:760px; min-height:1000px; background:var(--paper);
   background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size:26px 26px; border-radius:8px;
@@ -74,7 +77,7 @@ a{color:inherit; text-decoration:none;}
 .el-photo img{display:block; width:100%; height:auto; border-radius:1px; pointer-events:none;}
 .el-photo .cap{font-family:var(--hand); font-size:18px; color:var(--ink-soft); text-align:center; margin-top:4px; outline:none; min-height:18px; display:none;}
 
-.el-photo.style-card{padding:8px 8px 28px; background: color-mix(in srgb, rgb(255 253 251) 10%, var(--p-surface));}
+.el-photo.style-card{padding:8px 8px 28px; background:#fffdfb;}
 .el-photo.style-card .cap{display:block;}
 .el-photo.style-frame{padding:8px 8px 28px;}
 .el-photo.style-frame .cap{display:block;}
@@ -89,19 +92,21 @@ a{color:inherit; text-decoration:none;}
 .el-photo.style-shadow{padding:0; background:none; border-radius:3px;}
 .el-photo.style-shadow img{border-radius:3px;}
 
-.el-photo.style-border{padding:6px; background: var(--p-surface); border:1px solid var(--paper-edge); border-radius:7px;}
+.el-photo.style-border{padding:6px; background:#ffffff; border:1px solid var(--paper-edge); border-radius:7px;}
 .el-photo.style-border img{border-radius:3px;}
 
 /* the independent shadow toggle */
 .el-photo.has-shadow{box-shadow:0 9px 24px var(--shadow);}
 .el-photo.style-border.has-shadow{box-shadow:0 6px 16px var(--shadow);}
 
+.el-video video, .el-video iframe{display:block; width:100%; height:auto; border:0; border-radius:1px; background:#000;}
+.el-video iframe{aspect-ratio:16/9;}
 .el-sticker .s-emoji{font-size:54px; line-height:1; display:block; filter:drop-shadow(0 3px 4px var(--shadow));}
 .el-imgsticker img{display:block; width:100%; height:auto; pointer-events:none; filter:drop-shadow(0 4px 6px var(--shadow));}
 .el-doodle{color:var(--ink);}
 .el-doodle svg{display:block; width:100%; height:auto; overflow:visible; filter:drop-shadow(0 2px 3px var(--shadow));}
 .el-washi .tape{width:120px;height:30px; border-radius:2px; opacity:.86; box-shadow:0 2px 6px var(--shadow); position:relative; overflow:hidden;}
-.el-washi .tape:after{content:""; position:absolute; inset:0; background-image: repeating-linear-gradient(45deg, rgba(var(--p-surface-rgb),.32) 0 6px, transparent 6px 12px);}
+.el-washi .tape:after{content:""; position:absolute; inset:0; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.32) 0 6px, transparent 6px 12px);}
 .el-washi .tape.plain:after{content:none;}
 
 /* ===== homepage ===== */

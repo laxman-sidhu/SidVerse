@@ -158,7 +158,7 @@ function next() { goTo(current + 1, 1); }
 function prev() { goTo(current - 1, -1); }
 
 // Open the modal for one exhibit. `image` may be a URL or an array.
-export function openModal({ name, image, images: imageList }, trigger = null) {
+export function openModal({ name, image, images: imageList, industry }, trigger = null) {
   if (!modal && !ensureRefs()) return;
 
   lastTrigger = trigger;
@@ -170,6 +170,11 @@ export function openModal({ name, image, images: imageList }, trigger = null) {
 
   current = 0;
   nameEl.textContent = name;
+  const industryEl = modal.querySelector("[data-modal-industry]");
+  if (industryEl) {
+    industryEl.textContent = industry || "";
+    industryEl.hidden = !industry;
+  }
   // The card no longer prints these, so the popup carries them.
   if (countEl) {
     countEl.textContent = images.length > 1 ? `${images.length} photographs` : "1 photograph";
